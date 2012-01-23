@@ -1,0 +1,17 @@
+[Oo]bj/
+[Bb]in/
+*.user
+/TestResults
+*.vspscc
+*.vssscc
+deploy
+deploy/*
+*.suo
+*.cache
+packages/
+msbuild.log
+artifacts/log
+artifacts/
+post-build*
+_ReSharper.*
+deploy-to-ec2*
