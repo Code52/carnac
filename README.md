@@ -1,6 +1,6 @@
-## {{Your Project Here}}
+## Carnac the Magnificent Keyboard Utility
 
-Description
+A keyboard logging and presentation utility for presentations, screencasts, and to help you become a better keyboard user.
 
 ### Getting started
 
@@ -14,5 +14,5 @@ Once you're familiar with Git and GitHub, clone the repository and run the ```.\
 
 ### Discussing ideas 
 
-* [Trello Board](https://trello.com/board/samurai/4f1d3d847a38f6221f1d9354) - add ideas, or claim an idea and start working on it!
+* [Trello Board](https://trello.com/board/carnac/4f38fe6ec2fe26391c4e7d34) - add ideas, or claim an idea and start working on it!
 * [JabbR Chatroom](http://jabbr.net/#/rooms/code52) - discuss things in real-time with people all over the world!
