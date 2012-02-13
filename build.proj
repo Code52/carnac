@@ -4,14 +4,7 @@
 
   <Target Name="Compile">
     <Message Text=" ===========Building Website===========" Importance="High" />
-    <MSBuild Projects="./src/Ideastrike.sln" Properties="Configuration=$(Configuration)" />
-  </Target>
-
-  
-  <Target Name="AppHarbor" DependsOnTargets="Compile">
-  	<Message Text="===========Testing AppHarbor Build===========" Importance="High" />
-
-    <MSBuild Projects="./src/AppHarbor.sln" Properties="Configuration=$(Configuration)" />
+    <MSBuild Projects="./src/Carnac.sln" Properties="Configuration=$(Configuration)" />
   </Target>
 
 </Project>
