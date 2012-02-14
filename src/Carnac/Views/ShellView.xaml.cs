@@ -51,5 +51,12 @@ namespace Carnac.Views
             if(this.WindowState == WindowState.Minimized)
                 Hide();
         }
+
+        protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
+        {
+            base.OnClosing(e);
+
+            System.Windows.Application.Current.Shutdown();
+        }
     }
 }

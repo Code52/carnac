@@ -80,6 +80,9 @@ namespace Carnac.ViewModels
                 s.RelativeHeight = s.RelativeWidth * (s.Height / s.Width);
                 s.Top *= (s.RelativeHeight / s.Height);
             }
+
+            WindowManager manager = new WindowManager();
+            manager.ShowWindow(new KeyShowViewModel(Keys));
         }
 
         public ObservableCollection<string> Keys { get; private set; }
@@ -97,7 +100,7 @@ namespace Carnac.ViewModels
         public void OnNext(InterceptKeyEventArgs value)
         {
             if (value.KeyDirection != KeyDirection.Up) return;
-            if (Keys.Count > 3)
+            if (Keys.Count > 10)
                 Keys.RemoveAt(0);
 
             if (value.AltPressed && value.ControlPressed)
