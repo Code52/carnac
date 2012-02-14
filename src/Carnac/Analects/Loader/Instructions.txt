@@ -1,0 +1,5 @@
+﻿To use the EmbedAssemblies.targets file, 
+put the following line in your project file 
+(usually near the bottom after any other imports):
+
+<Import Project="$(MSBuildProjectDirectory)\Analects\Loader\EmbedAssemblies.targets" />
