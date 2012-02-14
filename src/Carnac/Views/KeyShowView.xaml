@@ -1,7 +1,7 @@
 ﻿<Window x:Class="Carnac.Views.KeyShowView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="KeyShowView" Height="300" Width="300"
+        Title="KeyShowView" Height="400" Width="300"
         ShowInTaskbar="False"
         AllowsTransparency="True"
         Background="Transparent"
@@ -16,12 +16,16 @@
               BorderThickness="0">
         <ListView.ItemTemplate>
             <DataTemplate>
-                <TextBlock HorizontalAlignment="Stretch" Foreground="White" FontWeight="Bold" Text="{Binding}"
-                           Focusable="False" IsHitTestVisible="False">
+                <Border Opacity="0.5" BorderBrush="Black" IsHitTestVisible="False" Focusable="False"
+                        HorizontalAlignment="Stretch" BorderThickness="4" CornerRadius="2" Margin="0, 0, 0, 3" Padding="2" Background="Black"
+                        SnapsToDevicePixels="True">
+                    <TextBlock HorizontalAlignment="Stretch" Foreground="White" FontWeight="Bold" Text="{Binding}"
+                           Focusable="False" IsHitTestVisible="False" TextWrapping="Wrap" SnapsToDevicePixels="True">
                     <TextBlock.Background>
                         <SolidColorBrush Color="Black" Opacity="0.5" />
                     </TextBlock.Background>
-                </TextBlock>
+                    </TextBlock>
+                </Border>
             </DataTemplate>
         </ListView.ItemTemplate>
     </ListView>
