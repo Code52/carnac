@@ -38,11 +38,11 @@ namespace Carnac.ViewModels
 
         private IDisposable keySubscription;
 
-        private Dictionary<int, string> _processes;
+        private Dictionary<int, Process> _processes;
 
         public ShellViewModel()
         {
-            _processes = new Dictionary<int, string>();
+            _processes = new Dictionary<int, Process>();
 
             Keys = new ObservableCollection<string>();
             Screens = new ObservableCollection<DetailedScreen>();
@@ -112,20 +112,20 @@ namespace Carnac.ViewModels
 
         public void OnNext(InterceptKeyEventArgs value)
         {
-            string process;
+            Process process;
 
             int handle = 0;
             handle = GetForegroundWindow();
-            uint processID = 0;
-            uint threadID = GetWindowThreadProcessId(new IntPtr(handle), out processID);
 
-            if (!_processes.ContainsKey(Convert.ToInt32(processID)))
+            if (!_processes.ContainsKey(handle))
             {
+                uint processID = 0;
+                uint threadID = GetWindowThreadProcessId(new IntPtr(handle), out processID);
                 var p = Process.GetProcessById(Convert.ToInt32(processID));
-                _processes.Add(Convert.ToInt32(processID), p.ProcessName);
-                process = p.ProcessName;
+                _processes.Add(handle, p);
+                process = p;
             }
-            else process = _processes[Convert.ToInt32(processID)];
+            else process = _processes[handle];
 
 
             if (value.KeyDirection != KeyDirection.Up) return;
@@ -139,7 +139,7 @@ namespace Carnac.ViewModels
             else if (value.ControlPressed)
                 Keys.Add(string.Format("Ctrl + {0}", value.Key));
             else
-                Keys.Add(string.Format("{0} - {1}", process, value.Key.ToString()));
+                Keys.Add(string.Format("{0} - {1}", process.ProcessName, value.Key.ToString()));
         }
         public void OnError(Exception error){}
         public void OnCompleted(){}
