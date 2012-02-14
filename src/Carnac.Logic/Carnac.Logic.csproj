@@ -42,6 +42,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DetailedScreen.cs" />
+    <Compile Include="DEVMODE.cs" />
+    <Compile Include="DisplayDeviceStateFlags.cs" />
+    <Compile Include="DISPLAY_DEVICE.cs" />
+    <Compile Include="POINTL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
