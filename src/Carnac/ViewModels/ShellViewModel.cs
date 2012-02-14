@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using Caliburn.Micro;
@@ -16,6 +18,12 @@ namespace Carnac.ViewModels
 
         [DllImport("User32.dll")]
         static extern bool EnumDisplaySettings(string lpszDeviceName, int iModeNum, ref DEVMODE lpDevMode);
+        
+        [DllImport("User32.dll")]
+        static extern int GetForegroundWindow();
+
+        [DllImport("user32.dll")]
+        static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
 
         private ObservableCollection<DetailedScreen> _screens;
 
@@ -27,10 +35,15 @@ namespace Carnac.ViewModels
             }
             set { _screens = value; }
         }
+
         private IDisposable keySubscription;
+
+        private Dictionary<int, string> _processes;
 
         public ShellViewModel()
         {
+            _processes = new Dictionary<int, string>();
+
             Keys = new ObservableCollection<string>();
             Screens = new ObservableCollection<DetailedScreen>();
 
@@ -99,6 +112,22 @@ namespace Carnac.ViewModels
 
         public void OnNext(InterceptKeyEventArgs value)
         {
+            string process;
+
+            int handle = 0;
+            handle = GetForegroundWindow();
+            uint processID = 0;
+            uint threadID = GetWindowThreadProcessId(new IntPtr(handle), out processID);
+
+            if (!_processes.ContainsKey(Convert.ToInt32(processID)))
+            {
+                var p = Process.GetProcessById(Convert.ToInt32(processID));
+                _processes.Add(Convert.ToInt32(processID), p.ProcessName);
+                process = p.ProcessName;
+            }
+            else process = _processes[Convert.ToInt32(processID)];
+
+
             if (value.KeyDirection != KeyDirection.Up) return;
             if (Keys.Count > 10)
                 Keys.RemoveAt(0);
@@ -110,7 +139,7 @@ namespace Carnac.ViewModels
             else if (value.ControlPressed)
                 Keys.Add(string.Format("Ctrl + {0}", value.Key));
             else
-                Keys.Add(value.Key.ToString());
+                Keys.Add(string.Format("{0} - {1}", process, value.Key.ToString()));
         }
         public void OnError(Exception error){}
         public void OnCompleted(){}
