@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using Caliburn.Micro;
@@ -16,6 +18,12 @@ namespace Carnac.ViewModels
 
         [DllImport("User32.dll")]
         static extern bool EnumDisplaySettings(string lpszDeviceName, int iModeNum, ref DEVMODE lpDevMode);
+        
+        [DllImport("User32.dll")]
+        static extern int GetForegroundWindow();
+
+        [DllImport("user32.dll")]
+        static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
 
         private ObservableCollection<DetailedScreen> _screens;
 
@@ -27,11 +35,16 @@ namespace Carnac.ViewModels
             }
             set { _screens = value; }
         }
+
         private IDisposable keySubscription;
+
+        private Dictionary<int, Process> _processes;
 
         public ShellViewModel()
         {
-            Keys = new ObservableCollection<string>();
+            _processes = new Dictionary<int, Process>();
+
+            Keys = new ObservableCollection<Message>();
             Screens = new ObservableCollection<DetailedScreen>();
 
             int index = 1;
@@ -80,9 +93,13 @@ namespace Carnac.ViewModels
                 s.RelativeHeight = s.RelativeWidth * (s.Height / s.Width);
                 s.Top *= (s.RelativeHeight / s.Height);
             }
+
+            WindowManager manager = new WindowManager();
+            manager.ShowWindow(new KeyShowViewModel(Keys));
         }
 
-        public ObservableCollection<string> Keys { get; private set; }
+        public ObservableCollection<Message> Keys { get; private set; }
+        public Message CurrentMessage { get; private set; }
 
         protected override void OnActivate()
         {
@@ -96,20 +113,79 @@ namespace Carnac.ViewModels
 
         public void OnNext(InterceptKeyEventArgs value)
         {
+            Process process;
+
+            int handle = 0;
+            handle = GetForegroundWindow();
+
+            if (!_processes.ContainsKey(handle))
+            {
+                uint processID = 0;
+                uint threadID = GetWindowThreadProcessId(new IntPtr(handle), out processID);
+                var p = Process.GetProcessById(Convert.ToInt32(processID));
+                _processes.Add(handle, p);
+                process = p;
+            }
+            else process = _processes[handle];
+
+
             if (value.KeyDirection != KeyDirection.Up) return;
-            if (Keys.Count > 3)
+            if (Keys.Count > 10)
                 Keys.RemoveAt(0);
 
+            string message;
+
             if (value.AltPressed && value.ControlPressed)
-                Keys.Add(string.Format("Ctrl + Alt + {0}", value.Key));
+                message = string.Format("Ctrl + Alt + {0}", value.Key);
             else if (value.AltPressed)
-                Keys.Add(string.Format("Alt + {0}", value.Key));
+                message = string.Format("Alt + {0}", value.Key);
             else if (value.ControlPressed)
-                Keys.Add(string.Format("Ctrl + {0}", value.Key));
+                message = string.Format("Ctrl + {0}", value.Key);
             else
-                Keys.Add(value.Key.ToString());
+                message = string.Format(value.Key.ToString());
+
+            Message m;
+
+            if (CurrentMessage == null || CurrentMessage.ProcessName != process.ProcessName || CurrentMessage.LastMessage < DateTime.Now.AddSeconds(-1))
+            {
+                m = new Message { StartingTime = DateTime.Now, ProcessName = process.ProcessName };
+                
+                CurrentMessage = m;
+                Keys.Add(m);
+            }
+            else m = CurrentMessage;
+
+            m.LastMessage = DateTime.Now;
+            m.Text += message;
+            m.Count++;
+            Console.WriteLine("\n" + m.Count + " - " + m.Text);
         }
+
         public void OnError(Exception error){}
         public void OnCompleted(){}
+    }
+
+    public class Message: PropertyChangedBase
+    {
+        public string ProcessName { get; set; }
+
+        public DateTime StartingTime { get; set; }
+        public DateTime LastMessage { get; set; }
+        
+        private string _text;
+        public string Text
+        {
+            get { return _text; }
+            set 
+            { 
+                _text = value;
+
+                NotifyOfPropertyChange(() => Text);
+                NotifyOfPropertyChange(() => Count);
+                NotifyOfPropertyChange(() => LastMessage);
+            }
+        }
+
+        public int Count { get; set; }
     }
 }
