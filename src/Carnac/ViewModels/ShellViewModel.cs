@@ -4,10 +4,14 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Threading;
+using System.Windows;
+using System.Windows.Threading;
 using Caliburn.Micro;
 using Carnac.KeyMonitor;
 using System.ComponentModel.Composition;
 using Message = Carnac.Models.Message;
+using Timer = System.Timers.Timer;
 
 namespace Carnac.ViewModels
 {
@@ -68,7 +72,6 @@ namespace Carnac.ViewModels
                         screen.Width = (int)mode.dmPelsWidth;
                         screen.Height = (int)mode.dmPelsHeight;
                         screen.Top = (int)mode.dmPosition.y;
-
                     }
 
                     Screens.Add(screen);
@@ -89,6 +92,23 @@ namespace Carnac.ViewModels
 
             WindowManager manager = new WindowManager();
             manager.ShowWindow(new KeyShowViewModel(Keys));
+
+            var timer = new Timer(1000);
+            timer.Elapsed += (s, e) => Application.Current.Dispatcher.BeginInvoke((ThreadStart)(Cleanup), DispatcherPriority.Background, null);
+            timer.Start();
+        }
+
+        private readonly TimeSpan fiveseconds = TimeSpan.FromSeconds(5);
+        private readonly TimeSpan sixseconds = TimeSpan.FromSeconds(6);
+        public void Cleanup()
+        {
+            var deleting = Keys.Where(k => DateTime.Now.Subtract(k.LastMessage) > fiveseconds && k.IsDeleting == false).ToList();
+            foreach (var y in deleting)
+                y.IsDeleting = true;
+
+            var deleted = Keys.Where(k => DateTime.Now.Subtract(k.LastMessage) > sixseconds && k.IsDeleting == true).ToList();
+            foreach (var y in deleted)
+                Keys.Remove(y);
         }
 
         public ObservableCollection<Message> Keys { get; private set; }
@@ -108,13 +128,12 @@ namespace Carnac.ViewModels
         {
             Process process;
 
-            int handle = 0;
-            handle = GetForegroundWindow();
+            int handle = GetForegroundWindow();
 
             if (!processes.ContainsKey(handle))
             {
-                uint processID = 0;
-                uint threadID = GetWindowThreadProcessId(new IntPtr(handle), out processID);
+                uint processID;
+                GetWindowThreadProcessId(new IntPtr(handle), out processID);
                 var p = Process.GetProcessById(Convert.ToInt32(processID));
                 processes.Add(handle, p);
                 process = p;
@@ -141,12 +160,17 @@ namespace Carnac.ViewModels
 
             if (CurrentMessage == null || CurrentMessage.ProcessName != process.ProcessName || CurrentMessage.LastMessage < DateTime.Now.AddSeconds(-1))
             {
-                m = new Message { StartingTime = DateTime.Now, ProcessName = process.ProcessName };
+                m = new Message
+                        {
+                            StartingTime = DateTime.Now, 
+                            ProcessName = process.ProcessName
+                        };
                 
                 CurrentMessage = m;
                 Keys.Add(m);
             }
-            else m = CurrentMessage;
+            else 
+                m = CurrentMessage;
 
             m.LastMessage = DateTime.Now;
             m.Text += message;
@@ -157,4 +181,5 @@ namespace Carnac.ViewModels
         public void OnError(Exception error){}
         public void OnCompleted(){}
     }
+
 }

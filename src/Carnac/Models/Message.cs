@@ -13,7 +13,8 @@ namespace Carnac.Models
 
         [NotifyProperty(AlsoNotifyFor = new[] {"Count", "LastMessage"})]
         public string Text { get; set; }
-
         public int Count { get; set; }
+
+        public bool IsDeleting { get; set; }
     }
 }

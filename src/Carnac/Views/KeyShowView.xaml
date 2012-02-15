@@ -35,6 +35,7 @@
         <ListView.ItemTemplate>
             <DataTemplate>
                 <Border Opacity="0.5" 
+                        x:Name="Border"
                         BorderBrush="Black" 
                         IsHitTestVisible="False" 
                         Focusable="False"
@@ -43,6 +44,21 @@
                         CornerRadius="2" Margin="0, 0, 0, 3"
                         Padding="2" 
                         Background="Black">
+                    <Border.Style>
+                        <Style>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsDeleting}" Value="True">
+                                    <DataTrigger.EnterActions>
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <DoubleAnimation Storyboard.TargetProperty="Opacity" To="0" Duration="0:0:0.125"/>
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </DataTrigger.EnterActions>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Border.Style>
                     <Border.LayoutTransform>
                         <ScaleTransform ScaleY="-1" />
                     </Border.LayoutTransform>
@@ -60,6 +76,7 @@
                             <SolidColorBrush Color="Black" Opacity="0.5" />
                         </TextBlock.Background>
                     </TextBlock>
+
                 </Border>
             </DataTemplate>
         </ListView.ItemTemplate>
