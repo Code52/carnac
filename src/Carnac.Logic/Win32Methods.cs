@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace Carnac.KeyMonitor
+namespace Carnac.Logic
 {
-    static class NativeMethods
+    public static class Win32Methods
     {
         public delegate IntPtr LowLevelKeyboardProc(int nCode, IntPtr wParam, IntPtr lParam);
 
@@ -13,7 +13,9 @@ namespace Carnac.KeyMonitor
         public const int WH_KEYBOARD_LL = 13;
         public const int WM_KEYDOWN = 0x0100;
         public const int WM_KEYUP = 0x0101;
-        
+        public const int WS_EX_TRANSPARENT = 0x00000020;
+        public  const int GWL_EXSTYLE = (-20);
+
         //
         // ReSharper restore InconsistentNaming
 
@@ -29,5 +31,19 @@ namespace Carnac.KeyMonitor
 
         [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         public static extern IntPtr GetModuleHandle(string lpModuleName);
+
+
+
+        [DllImport("user32.dll")]
+        static extern int GetWindowLong(IntPtr hwnd, int index);
+
+        [DllImport("user32.dll")]
+        static extern int SetWindowLong(IntPtr hwnd, int index, int newStyle);
+
+        public static void SetWindowExTransparent(IntPtr hwnd)
+        {
+            var extendedStyle = GetWindowLong(hwnd, GWL_EXSTYLE);
+            SetWindowLong(hwnd, GWL_EXSTYLE, extendedStyle | WS_EX_TRANSPARENT);
+        }
     }
 }

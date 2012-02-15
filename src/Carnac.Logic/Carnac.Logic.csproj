@@ -42,11 +42,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DetailedScreen.cs" />
-    <Compile Include="DEVMODE.cs" />
-    <Compile Include="DisplayDeviceStateFlags.cs" />
-    <Compile Include="DISPLAY_DEVICE.cs" />
-    <Compile Include="POINTL.cs" />
+    <Compile Include="Win32Methods.cs" />
+    <Compile Include="Native\DetailedScreen.cs" />
+    <Compile Include="Native\DEVMODE.cs" />
+    <Compile Include="Native\DisplayDeviceStateFlags.cs" />
+    <Compile Include="Native\DISPLAY_DEVICE.cs" />
+    <Compile Include="Native\POINTL.cs" />
+    <Compile Include="NotifyProperty.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
