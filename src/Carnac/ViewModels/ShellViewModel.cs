@@ -44,7 +44,7 @@ namespace Carnac.ViewModels
         {
             _processes = new Dictionary<int, Process>();
 
-            Keys = new ObservableCollection<string>();
+            Keys = new ObservableCollection<Message>();
             Screens = new ObservableCollection<DetailedScreen>();
 
             int index = 1;
@@ -98,7 +98,8 @@ namespace Carnac.ViewModels
             manager.ShowWindow(new KeyShowViewModel(Keys));
         }
 
-        public ObservableCollection<string> Keys { get; private set; }
+        public ObservableCollection<Message> Keys { get; private set; }
+        public Message CurrentMessage { get; private set; }
 
         protected override void OnActivate()
         {
@@ -132,16 +133,59 @@ namespace Carnac.ViewModels
             if (Keys.Count > 10)
                 Keys.RemoveAt(0);
 
+            string message;
+
             if (value.AltPressed && value.ControlPressed)
-                Keys.Add(string.Format("Ctrl + Alt + {0}", value.Key));
+                message = string.Format("Ctrl + Alt + {0}", value.Key);
             else if (value.AltPressed)
-                Keys.Add(string.Format("Alt + {0}", value.Key));
+                message = string.Format("Alt + {0}", value.Key);
             else if (value.ControlPressed)
-                Keys.Add(string.Format("Ctrl + {0}", value.Key));
+                message = string.Format("Ctrl + {0}", value.Key);
             else
-                Keys.Add(string.Format("{0} - {1}", process.ProcessName, value.Key.ToString()));
+                message = string.Format(value.Key.ToString());
+
+            Message m;
+
+            if (CurrentMessage == null || CurrentMessage.ProcessName != process.ProcessName || CurrentMessage.LastMessage < DateTime.Now.AddSeconds(-1))
+            {
+                m = new Message { StartingTime = DateTime.Now, ProcessName = process.ProcessName };
+                
+                CurrentMessage = m;
+                Keys.Add(m);
+            }
+            else m = CurrentMessage;
+
+            m.LastMessage = DateTime.Now;
+            m.Text += message;
+            m.Count++;
+            Console.WriteLine("\n" + m.Count + " - " + m.Text);
         }
+
         public void OnError(Exception error){}
         public void OnCompleted(){}
+    }
+
+    public class Message: PropertyChangedBase
+    {
+        public string ProcessName { get; set; }
+
+        public DateTime StartingTime { get; set; }
+        public DateTime LastMessage { get; set; }
+        
+        private string _text;
+        public string Text
+        {
+            get { return _text; }
+            set 
+            { 
+                _text = value;
+
+                NotifyOfPropertyChange(() => Text);
+                NotifyOfPropertyChange(() => Count);
+                NotifyOfPropertyChange(() => LastMessage);
+            }
+        }
+
+        public int Count { get; set; }
     }
 }

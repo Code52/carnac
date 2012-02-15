@@ -9,11 +9,11 @@ namespace Carnac.ViewModels
 {
     public class KeyShowViewModel: Screen
     {
-        public KeyShowViewModel(ObservableCollection<string> keys)
+        public KeyShowViewModel(ObservableCollection<Message> keys)
         {
             Keys = keys;
         }
 
-        public ObservableCollection<string> Keys { get; private set; } 
+        public ObservableCollection<Message> Keys { get; private set; } 
     }
 }

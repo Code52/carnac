@@ -59,13 +59,15 @@
             </ListBox>
         </TabItem>
         <TabItem Header="Keys">
-            <ItemsControl Margin="12" ItemsSource="{Binding Keys}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <ItemsControl Margin="12" ItemsSource="{Binding Keys}" DisplayMemberPath="Text" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                 <ItemsControl.Foreground>
                     <SolidColorBrush Color="White" />
                 </ItemsControl.Foreground>
             </ItemsControl>
         </TabItem>
-        <TabItem Header="Recording"/>
+        <TabItem Header="Recording">
+            <TextBlock x:Name="CurrentMessage_Text" Foreground="White" Background="DarkBlue" HorizontalAlignment="Stretch" Width="200"/>
+        </TabItem>
         <TabItem Header="Appearance"/>
         <TabItem Header="About"/>
     </TabControl>
