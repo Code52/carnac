@@ -42,6 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Win32Methods.cs" />
     <Compile Include="Native\DetailedScreen.cs" />
     <Compile Include="Native\DEVMODE.cs" />
     <Compile Include="Native\DisplayDeviceStateFlags.cs" />

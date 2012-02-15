@@ -34,6 +34,7 @@ namespace Carnac.ViewModels
 
         public ShellViewModel()
         {
+            DisplayName = "Carnac";
             processes = new Dictionary<int, Process>();
 
             Keys = new ObservableCollection<Message>();

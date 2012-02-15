@@ -4,6 +4,7 @@ using System.Reactive.Subjects;
 using System.Runtime.InteropServices;
 using System.Security.Permissions;
 using System.Windows.Forms;
+using Carnac.Logic;
 
 namespace Carnac.KeyMonitor
 {
@@ -13,7 +14,7 @@ namespace Carnac.KeyMonitor
     {
         static volatile InterceptKeys current;
         static readonly object CurrentLock = new object();
-        readonly NativeMethods.LowLevelKeyboardProc callback;
+        readonly Win32Methods.LowLevelKeyboardProc callback;
         readonly Subject<InterceptKeyEventArgs> subject;
         bool disposed;
         IntPtr hookId = IntPtr.Zero;
@@ -60,7 +61,7 @@ namespace Carnac.KeyMonitor
                                               {
                                                   subscriberCount--;
                                                   if (subscriberCount == 0)
-                                                      NativeMethods.UnhookWindowsHookEx(hookId);
+                                                      Win32Methods.UnhookWindowsHookEx(hookId);
                                                   dispose.Dispose();
                                               });
         }
@@ -71,8 +72,8 @@ namespace Carnac.KeyMonitor
             {
                 bool alt = (Control.ModifierKeys & Keys.Alt) != 0;
                 bool control = (Control.ModifierKeys & Keys.Control) != 0;
-                bool keyDown = wParam == (IntPtr)NativeMethods.WM_KEYDOWN;
-                bool keyUp = wParam == (IntPtr)NativeMethods.WM_KEYUP;
+                bool keyDown = wParam == (IntPtr)Win32Methods.WM_KEYDOWN;
+                bool keyUp = wParam == (IntPtr)Win32Methods.WM_KEYUP;
                 int vkCode = Marshal.ReadInt32(lParam);
                 var key = (Keys)vkCode;
 
@@ -92,18 +93,18 @@ namespace Carnac.KeyMonitor
                 }
             }
 
-            return NativeMethods.CallNextHookEx(hookId, nCode, wParam, lParam);
+            return Win32Methods.CallNextHookEx(hookId, nCode, wParam, lParam);
         }
 
-        static IntPtr SetHook(NativeMethods.LowLevelKeyboardProc proc)
+        static IntPtr SetHook(Win32Methods.LowLevelKeyboardProc proc)
         {
             //TODO: This requires FullTrust to use the Process class - is there any options for doing this in MediumTrust?
             //
             using (Process curProcess = Process.GetCurrentProcess())
             using (ProcessModule curModule = curProcess.MainModule)
             {
-                return NativeMethods.SetWindowsHookEx(NativeMethods.WH_KEYBOARD_LL, proc,
-                                                      NativeMethods.GetModuleHandle(curModule.ModuleName), 0);
+                return Win32Methods.SetWindowsHookEx(Win32Methods.WH_KEYBOARD_LL, proc,
+                                                      Win32Methods.GetModuleHandle(curModule.ModuleName), 0);
             }
         }
 

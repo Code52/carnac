@@ -82,7 +82,6 @@
     <Compile Include="KeyMonitor\InterceptKeyEventArgs.cs" />
     <Compile Include="KeyMonitor\InterceptKeys.cs" />
     <Compile Include="KeyMonitor\KeyDirection.cs" />
-    <Compile Include="KeyMonitor\NativeMethods.cs" />
     <Compile Include="ViewModels\KeyShowViewModel.cs" />
     <Compile Include="Models\Message.cs" />
     <Compile Include="ViewModels\ShellViewModel.cs" />

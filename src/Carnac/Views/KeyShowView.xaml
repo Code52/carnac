@@ -7,23 +7,44 @@
         Background="Transparent"
         BorderBrush="Transparent"
         BorderThickness="0"
+        MaxWidth="200"
         WindowStyle="None"
+        SnapsToDevicePixels="True"
+        FontSize="40"
         Focusable="False"
         Topmost="True">
-    <ListView x:Name="Keys" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-              Background="Transparent" Focusable="False" IsHitTestVisible="False"
+    <ListView x:Name="Keys" 
+              HorizontalAlignment="Stretch" 
+              VerticalAlignment="Stretch"
+              Background="Transparent" 
+              Focusable="False" 
+              IsHitTestVisible="False"
               BorderBrush="Transparent"
               BorderThickness="0">
         <ListView.ItemTemplate>
             <DataTemplate>
-                <Border Opacity="0.5" BorderBrush="Black" IsHitTestVisible="False" Focusable="False"
-                        HorizontalAlignment="Stretch" BorderThickness="4" CornerRadius="2" Margin="0, 0, 0, 3" Padding="2" Background="Black"
-                        SnapsToDevicePixels="True">
-                    <TextBlock x:Name="Text" HorizontalAlignment="Stretch" Foreground="White" FontWeight="Bold" Text="{Binding Text}"
-                           Focusable="False" IsHitTestVisible="False" TextWrapping="WrapWithOverflow" SnapsToDevicePixels="True">
-                    <TextBlock.Background>
-                        <SolidColorBrush Color="Black" Opacity="0.5" />
-                    </TextBlock.Background>
+                <Border Opacity="0.5" 
+                        BorderBrush="Black" 
+                        IsHitTestVisible="False" 
+                        Focusable="False"
+                        HorizontalAlignment="Stretch" 
+                        BorderThickness="4"
+                        CornerRadius="2" Margin="0, 0, 0, 3"
+                        Padding="2" 
+                        Background="Black">
+                    <TextBlock
+                        x:Name="Text"
+                        MaxWidth="200"
+                        HorizontalAlignment="Stretch" 
+                        Foreground="White"
+                        FontWeight="Bold" 
+                        Text="{Binding Text}"
+                        Focusable="False" 
+                        IsHitTestVisible="False" 
+                        TextWrapping="Wrap" >
+                        <TextBlock.Background>
+                            <SolidColorBrush Color="Black" Opacity="0.5" />
+                        </TextBlock.Background>
                     </TextBlock>
                 </Border>
             </DataTemplate>

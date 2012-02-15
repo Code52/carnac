@@ -19,24 +19,21 @@ namespace Carnac.Views
 
             item.Click += (sender, args) => this.Close();
 
-            var _ni = new NotifyIcon()
-                          {
+            var ni = new NotifyIcon
+                         {
                               Icon = new Icon(@"..\..\icon.ico"),
-
                               ContextMenu =  new ContextMenu(new[] { item })
                           };
 
-            _ni.Click += NotifyIcon_Click;
-            _ni.Visible = true;
+            ni.Click += NotifyIconClick;
+            ni.Visible = true;
         }
 
-        private void NotifyIcon_Click(object sender, EventArgs e)
+        private void NotifyIconClick(object sender, EventArgs e)
         {
-            this.Show();
-            this.WindowState = WindowState.Normal;
+            Show();
+            WindowState = WindowState.Normal;
         }
-
-        private NotifyIcon _ni;
 
         private void OnMouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -44,18 +41,17 @@ namespace Carnac.Views
                 DragMove();
         }
 
-        protected override void OnStateChanged(System.EventArgs e)
+        protected override void OnStateChanged(EventArgs e)
         {
             base.OnStateChanged(e);
 
-            if(this.WindowState == WindowState.Minimized)
+            if(WindowState == WindowState.Minimized)
                 Hide();
         }
 
         protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
         {
             base.OnClosing(e);
-
             System.Windows.Application.Current.Shutdown();
         }
     }
