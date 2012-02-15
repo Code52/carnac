@@ -7,6 +7,7 @@ using System.Runtime.InteropServices;
 using Caliburn.Micro;
 using Carnac.KeyMonitor;
 using System.ComponentModel.Composition;
+using Message = Carnac.Models.Message;
 
 namespace Carnac.ViewModels
 {
@@ -25,24 +26,15 @@ namespace Carnac.ViewModels
         [DllImport("user32.dll")]
         static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
 
-        private ObservableCollection<DetailedScreen> _screens;
-
-        public ObservableCollection<DetailedScreen> Screens
-        {
-            get
-            {
-                return _screens;
-            }
-            set { _screens = value; }
-        }
+        public ObservableCollection<DetailedScreen> Screens { get; set; }
 
         private IDisposable keySubscription;
 
-        private Dictionary<int, Process> _processes;
+        private readonly Dictionary<int, Process> processes;
 
         public ShellViewModel()
         {
-            _processes = new Dictionary<int, Process>();
+            processes = new Dictionary<int, Process>();
 
             Keys = new ObservableCollection<Message>();
             Screens = new ObservableCollection<DetailedScreen>();
@@ -118,15 +110,15 @@ namespace Carnac.ViewModels
             int handle = 0;
             handle = GetForegroundWindow();
 
-            if (!_processes.ContainsKey(handle))
+            if (!processes.ContainsKey(handle))
             {
                 uint processID = 0;
                 uint threadID = GetWindowThreadProcessId(new IntPtr(handle), out processID);
                 var p = Process.GetProcessById(Convert.ToInt32(processID));
-                _processes.Add(handle, p);
+                processes.Add(handle, p);
                 process = p;
             }
-            else process = _processes[handle];
+            else process = processes[handle];
 
 
             if (value.KeyDirection != KeyDirection.Up) return;
@@ -163,29 +155,5 @@ namespace Carnac.ViewModels
 
         public void OnError(Exception error){}
         public void OnCompleted(){}
-    }
-
-    public class Message: PropertyChangedBase
-    {
-        public string ProcessName { get; set; }
-
-        public DateTime StartingTime { get; set; }
-        public DateTime LastMessage { get; set; }
-        
-        private string _text;
-        public string Text
-        {
-            get { return _text; }
-            set 
-            { 
-                _text = value;
-
-                NotifyOfPropertyChange(() => Text);
-                NotifyOfPropertyChange(() => Count);
-                NotifyOfPropertyChange(() => LastMessage);
-            }
-        }
-
-        public int Count { get; set; }
     }
 }
