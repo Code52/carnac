@@ -10,6 +10,7 @@ using System.Windows.Threading;
 using Caliburn.Micro;
 using Carnac.KeyMonitor;
 using System.ComponentModel.Composition;
+using Carnac.Utilities;
 using Message = Carnac.Models.Message;
 using Timer = System.Timers.Timer;
 
@@ -38,6 +39,7 @@ namespace Carnac.ViewModels
 
         public ShellViewModel()
         {
+
             DisplayName = "Carnac";
             processes = new Dictionary<int, Process>();
 
