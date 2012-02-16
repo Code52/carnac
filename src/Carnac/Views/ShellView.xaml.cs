@@ -3,6 +3,8 @@ using System.Drawing;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
+using Carnac.Utilities;
+using Application = System.Windows.Application;
 
 namespace Carnac.Views
 {
@@ -11,6 +13,13 @@ namespace Carnac.Views
         public ShellView()
         {
             InitializeComponent();
+
+            // Check if there was instance before this. If there was-close the current one.  
+            if (ProcessUtilities.ThisProcessIsAlreadyRunning())
+            {
+                ProcessUtilities.SetFocusToPreviousInstance("Carnac");
+                Application.Current.Shutdown();
+            }
 
             var item = new MenuItem
             {
@@ -21,9 +30,9 @@ namespace Carnac.Views
 
             var ni = new NotifyIcon
                          {
-                              Icon = new Icon(@"..\..\icon.ico"),
-                              ContextMenu =  new ContextMenu(new[] { item })
-                          };
+                             Icon = new Icon(@"..\..\icon.ico"),
+                             ContextMenu = new ContextMenu(new[] { item })
+                         };
 
             ni.Click += NotifyIconClick;
             ni.Visible = true;
@@ -45,7 +54,7 @@ namespace Carnac.Views
         {
             base.OnStateChanged(e);
 
-            if(WindowState == WindowState.Minimized)
+            if (WindowState == WindowState.Minimized)
                 Hide();
         }
 
