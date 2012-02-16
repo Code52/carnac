@@ -79,6 +79,8 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Analects\Loader\Loader.cs" />
+    <Compile Include="KeyMonitor\HotKey.cs" />
+    <Compile Include="KeyMonitor\HotKeyWinApi.cs" />
     <Compile Include="KeyMonitor\InterceptKeyEventArgs.cs" />
     <Compile Include="KeyMonitor\InterceptKeys.cs" />
     <Compile Include="KeyMonitor\KeyDirection.cs" />
