@@ -1,6 +1,6 @@
 using System;
 using Caliburn.Micro;
-using NotifyPropertyWeaver;
+using Carnac.Logic;
 
 namespace Carnac.Models
 {

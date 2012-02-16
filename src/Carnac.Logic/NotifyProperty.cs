@@ -1,6 +1,6 @@
 ﻿﻿using System;
 
-namespace NotifyPropertyWeaver
+namespace Carnac.Logic
 {
 
     /// <summary>

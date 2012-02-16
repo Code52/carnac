@@ -79,9 +79,6 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Analects\Loader\Loader.cs" />
-    <Compile Include="KeyMonitor\InterceptKeyEventArgs.cs" />
-    <Compile Include="KeyMonitor\InterceptKeys.cs" />
-    <Compile Include="KeyMonitor\KeyDirection.cs" />
     <Compile Include="ViewModels\KeyShowViewModel.cs" />
     <Compile Include="Models\Message.cs" />
     <Compile Include="ViewModels\ShellViewModel.cs" />

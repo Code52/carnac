@@ -1,0 +1,26 @@
+﻿<Window x:Class="KeyStreamCapture.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MainWindow"
+        Height="350"
+        Width="525">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal">
+            <Button Content="Start Capture"
+                    Click="StartCapture"
+                    Margin="3" />
+            <Button Content="Stop Capture"
+                    Click="StopCapture"
+                    Margin="3" />
+        </StackPanel>
+
+        <TextBox x:Name="textBox"
+                 Grid.Row="1"
+                 AcceptsReturn="True"
+                 VerticalScrollBarVisibility="Visible" />
+    </Grid>
+</Window>

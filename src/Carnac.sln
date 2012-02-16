@@ -13,6 +13,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{8A9058
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KeyStreamCapture", "KeyStreamCapture\KeyStreamCapture.csproj", "{DD585B10-CB02-49B6-9E37-42E5C605C192}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,6 +55,16 @@ Global
 		{614470A0-432C-46EB-B0EB-DE0A9062FC22}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{614470A0-432C-46EB-B0EB-DE0A9062FC22}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{614470A0-432C-46EB-B0EB-DE0A9062FC22}.Release|x86.ActiveCfg = Release|Any CPU
+		{DD585B10-CB02-49B6-9E37-42E5C605C192}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{DD585B10-CB02-49B6-9E37-42E5C605C192}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{DD585B10-CB02-49B6-9E37-42E5C605C192}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{DD585B10-CB02-49B6-9E37-42E5C605C192}.Debug|x86.ActiveCfg = Debug|x86
+		{DD585B10-CB02-49B6-9E37-42E5C605C192}.Debug|x86.Build.0 = Debug|x86
+		{DD585B10-CB02-49B6-9E37-42E5C605C192}.Release|Any CPU.ActiveCfg = Release|x86
+		{DD585B10-CB02-49B6-9E37-42E5C605C192}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{DD585B10-CB02-49B6-9E37-42E5C605C192}.Release|Mixed Platforms.Build.0 = Release|x86
+		{DD585B10-CB02-49B6-9E37-42E5C605C192}.Release|x86.ActiveCfg = Release|x86
+		{DD585B10-CB02-49B6-9E37-42E5C605C192}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
