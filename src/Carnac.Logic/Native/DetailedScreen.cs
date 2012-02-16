@@ -1,4 +1,4 @@
-namespace Carnac.ViewModels
+namespace Carnac.Logic.Native
 {
     public class DetailedScreen
     {

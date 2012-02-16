@@ -4,9 +4,8 @@ using System.Reactive.Subjects;
 using System.Runtime.InteropServices;
 using System.Security.Permissions;
 using System.Windows.Forms;
-using Carnac.Logic;
 
-namespace Carnac.KeyMonitor
+namespace Carnac.Logic.KeyMonitor
 {
     [PermissionSet(SecurityAction.LinkDemand, Name = "FullTrust")]
     [PermissionSet(SecurityAction.InheritanceDemand, Name="FullTrust")]
@@ -72,18 +71,19 @@ namespace Carnac.KeyMonitor
             {
                 bool alt = (Control.ModifierKeys & Keys.Alt) != 0;
                 bool control = (Control.ModifierKeys & Keys.Control) != 0;
+                bool shift = (Control.ModifierKeys & Keys.Shift) != 0;
                 bool keyDown = wParam == (IntPtr)Win32Methods.WM_KEYDOWN;
                 bool keyUp = wParam == (IntPtr)Win32Methods.WM_KEYUP;
                 int vkCode = Marshal.ReadInt32(lParam);
                 var key = (Keys)vkCode;
 
-                var interceptKeyEventArgs = new InterceptKeyEventArgs(key,
-                                                                      keyDown
-                                                                          ? KeyDirection.Down
-                                                                          : keyUp
-                                                                                ? KeyDirection.Up
-                                                                                : KeyDirection.Unknown,
-                                                                      alt, control);
+                var interceptKeyEventArgs = new InterceptKeyEventArgs(
+                    key,
+                    keyDown ?
+                    KeyDirection.Down: keyUp 
+                    ? KeyDirection.Up: KeyDirection.Unknown,
+                    alt, control, shift);
+
                 subject.OnNext(interceptKeyEventArgs);
                 Debug.Write(key);
                 if (interceptKeyEventArgs.Handled)

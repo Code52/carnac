@@ -1,45 +1,36 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows;
 using System.Windows.Threading;
 using Caliburn.Micro;
-using Carnac.KeyMonitor;
 using System.ComponentModel.Composition;
+using Carnac.Logic;
+using Carnac.Logic.KeyMonitor;
+using Carnac.Logic.Native;
 using Message = Carnac.Models.Message;
 using Timer = System.Timers.Timer;
 
 namespace Carnac.ViewModels
 {
     [Export(typeof(IShell))]
-    public class ShellViewModel :Screen, IShell, IObserver<InterceptKeyEventArgs>
+    public class ShellViewModel :Screen, IShell, IObserver<KeyPress>
     {
         [DllImport("user32.dll")]
         static extern bool EnumDisplayDevices(string lpDevice, uint iDevNum, ref DISPLAY_DEVICE lpDisplayDevice, uint dwFlags);
 
         [DllImport("User32.dll")]
         static extern bool EnumDisplaySettings(string lpszDeviceName, int iModeNum, ref DEVMODE lpDevMode);
-        
-        [DllImport("User32.dll")]
-        static extern int GetForegroundWindow();
-
-        [DllImport("user32.dll")]
-        static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
 
         public ObservableCollection<DetailedScreen> Screens { get; set; }
 
         private IDisposable keySubscription;
 
-        private readonly Dictionary<int, Process> processes;
-
         public ShellViewModel()
         {
             DisplayName = "Carnac";
-            processes = new Dictionary<int, Process>();
 
             Keys = new ObservableCollection<Message>();
             Screens = new ObservableCollection<DetailedScreen>();
@@ -116,7 +107,7 @@ namespace Carnac.ViewModels
 
         protected override void OnActivate()
         {
-            keySubscription = InterceptKeys.Current.Subscribe(this);
+            keySubscription = new KeyProvider(InterceptKeys.Current).Subscribe(this);
         }
 
         protected override void OnDeactivate(bool close)
@@ -124,46 +115,31 @@ namespace Carnac.ViewModels
             keySubscription.Dispose();
         }
 
-        public void OnNext(InterceptKeyEventArgs value)
+        public void OnNext(KeyPress value)
         {
-            Process process;
-
-            int handle = GetForegroundWindow();
-
-            if (!processes.ContainsKey(handle))
-            {
-                uint processID;
-                GetWindowThreadProcessId(new IntPtr(handle), out processID);
-                var p = Process.GetProcessById(Convert.ToInt32(processID));
-                processes.Add(handle, p);
-                process = p;
-            }
-            else process = processes[handle];
-
-
-            if (value.KeyDirection != KeyDirection.Up) return;
+            if (value.InterceptKeyEventArgs.KeyDirection != KeyDirection.Up) return;
             if (Keys.Count > 10)
                 Keys.RemoveAt(0);
 
             string message;
 
-            if (value.AltPressed && value.ControlPressed)
-                message = string.Format("Ctrl + Alt + {0}", value.Key);
-            else if (value.AltPressed)
-                message = string.Format("Alt + {0}", value.Key);
-            else if (value.ControlPressed)
-                message = string.Format("Ctrl + {0}", value.Key);
+            if (value.InterceptKeyEventArgs.AltPressed && value.InterceptKeyEventArgs.ControlPressed)
+                message = string.Format("Ctrl + Alt + {0}", value.InterceptKeyEventArgs.Key);
+            else if (value.InterceptKeyEventArgs.AltPressed)
+                message = string.Format("Alt + {0}", value.InterceptKeyEventArgs.Key);
+            else if (value.InterceptKeyEventArgs.ControlPressed)
+                message = string.Format("Ctrl + {0}", value.InterceptKeyEventArgs.Key);
             else
-                message = string.Format(value.Key.ToString());
+                message = string.Format(value.InterceptKeyEventArgs.Key.ToString());
 
             Message m;
 
-            if (CurrentMessage == null || CurrentMessage.ProcessName != process.ProcessName || CurrentMessage.LastMessage < DateTime.Now.AddSeconds(-1))
+            if (CurrentMessage == null || CurrentMessage.ProcessName != value.Process.ProcessName || CurrentMessage.LastMessage < DateTime.Now.AddSeconds(-1))
             {
                 m = new Message
                         {
-                            StartingTime = DateTime.Now, 
-                            ProcessName = process.ProcessName
+                            StartingTime = DateTime.Now,
+                            ProcessName = value.Process.ProcessName
                         };
                 
                 CurrentMessage = m;

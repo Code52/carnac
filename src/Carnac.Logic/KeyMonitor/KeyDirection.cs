@@ -1,4 +1,4 @@
-namespace Carnac.KeyMonitor
+namespace Carnac.Logic.KeyMonitor
 {
     public enum KeyDirection
     {
