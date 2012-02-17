@@ -21,29 +21,31 @@
             </CollectionViewSource.SortDescriptions>
         </CollectionViewSource>
     </Window.Resources>
+
+
     <ListView ItemsSource="{Binding Source={StaticResource cvs}}" 
-              HorizontalAlignment="Stretch" 
-              VerticalAlignment="Stretch"
-              Background="Transparent" 
-              Focusable="False" 
-              IsHitTestVisible="False"
-              BorderBrush="Transparent"
-              BorderThickness="0">
+			HorizontalAlignment="Stretch" 
+			VerticalAlignment="Stretch"
+			Background="Transparent" 
+			Focusable="False" 
+			IsHitTestVisible="False"
+			BorderBrush="Transparent"
+			BorderThickness="0">
         <ListView.LayoutTransform>
             <ScaleTransform ScaleY="-1" />
         </ListView.LayoutTransform>
         <ListView.ItemTemplate>
             <DataTemplate>
                 <Border Opacity="0.5" 
-                        x:Name="Border"
-                        BorderBrush="Black" 
-                        IsHitTestVisible="False" 
-                        Focusable="False"
-                        HorizontalAlignment="Stretch" 
-                        BorderThickness="4"
-                        CornerRadius="2" Margin="0, 0, 0, 3"
-                        Padding="2" 
-                        Background="Black">
+						x:Name="Border"
+						BorderBrush="Black" 
+						IsHitTestVisible="False" 
+						Focusable="False"
+						HorizontalAlignment="Stretch" 
+						BorderThickness="4"
+						CornerRadius="2" Margin="0, 0, 0, 3"
+						Padding="2" 
+						Background="Black">
                     <Border.Style>
                         <Style>
                             <Style.Triggers>
@@ -62,21 +64,64 @@
                     <Border.LayoutTransform>
                         <ScaleTransform ScaleY="-1" />
                     </Border.LayoutTransform>
-                    <TextBlock
-                        x:Name="Text"
-                        MaxWidth="250"
-                        HorizontalAlignment="Stretch" 
-                        Foreground="White"
-                        FontWeight="Bold" 
-                        Text="{Binding Text}"
-                        Focusable="False" 
-                        IsHitTestVisible="False" 
-                        TextWrapping="Wrap" >
-                        <TextBlock.Background>
-                            <SolidColorBrush Color="Black" Opacity="0.5" />
-                        </TextBlock.Background>
-                    </TextBlock>
+                    <ListBox 
+							ItemsSource="{Binding Text}"
+							MaxWidth="250"
+							HorizontalAlignment="Stretch"
+							Foreground="White"
+                            Background="Black"
+							FontWeight="Bold" 
+							Focusable="False" 
+                            BorderBrush="{x:Null}"
+                            ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+							IsHitTestVisible="False">
+                        <ListBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel />
+                            </ItemsPanelTemplate>
+                        </ListBox.ItemsPanel>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <WrapPanel>
+                                    <TextBlock x:Name="KeyCap" FontFamily="/Carnac;component/Fonts/#DavysBigKeyCaps" Visibility="Collapsed" />
+                                    <TextBlock x:Name="extra" Text="+" Visibility="Collapsed"/>
+                                    <TextBlock x:Name="regular" Text="{Binding}" />
+                                </WrapPanel>
+                                <DataTemplate.Triggers>
+                                    <DataTrigger Binding="{Binding .}" Value="Return">
+                                        <Setter TargetName="KeyCap" Property="TextBlock.Text" Value="b" />
+                                        <Setter TargetName="KeyCap" Property="Control.Visibility" Value="Visible" />
+                                        <Setter TargetName="regular" Property="Control.Visibility" Value="Collapsed" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding .}" Value="Alt">
+                                        <Setter TargetName="KeyCap" Property="TextBlock.Text" Value="a" />
+                                        <Setter TargetName="KeyCap" Property="Control.Visibility" Value="Visible" />
+                                        <Setter TargetName="regular" Property="Control.Visibility" Value="Collapsed" />
+                                    </DataTrigger>
 
+                                    <DataTrigger Binding="{Binding .}" Value="Back">
+                                        <Setter TargetName="KeyCap" Property="TextBlock.Text" Value="n" />
+                                        <Setter TargetName="KeyCap" Property="Control.Visibility" Value="Visible" />
+                                        <Setter TargetName="regular" Property="Control.Visibility" Value="Collapsed" />
+                                    </DataTrigger>
+
+                                    <DataTrigger Binding="{Binding .}" Value="Escape">
+                                        <Setter TargetName="KeyCap" Property="TextBlock.Text" Value="s" />
+                                        <Setter TargetName="KeyCap" Property="Control.Visibility" Value="Visible" />
+                                        <Setter TargetName="regular" Property="Control.Visibility" Value="Collapsed" />
+                                    </DataTrigger>
+
+                                    <DataTrigger Binding="{Binding .}" Value="Ctrl">
+                                        <Setter TargetName="KeyCap" Property="TextBlock.Text" Value="v" />
+                                        <Setter TargetName="KeyCap" Property="Control.Visibility" Value="Visible" />
+                                        <Setter TargetName="extra" Property="Control.Visibility" Value="Visible" />
+                                        <Setter TargetName="regular" Property="Control.Visibility" Value="Collapsed" />
+                                    </DataTrigger>
+
+                                </DataTemplate.Triggers>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
                 </Border>
             </DataTemplate>
         </ListView.ItemTemplate>
