@@ -7,7 +7,7 @@ using Carnac.Logic.KeyMonitor;
 
 namespace Carnac.Logic
 {
-    public class KeyProvider : IKeyProvider
+    public class KeyProvider : IObservable<KeyPress>
     {
         private readonly IObservable<InterceptKeyEventArgs> interceptKeysSource;
         private readonly Dictionary<int, Process> processes;
@@ -49,22 +49,6 @@ namespace Carnac.Logic
                 process = processes[handle];
 
             return new KeyPress(process, interceptKeyEventArgs);
-        }
-    }
-
-    public interface IKeyProvider :IObservable<KeyPress>
-    {
-    }
-
-    public class KeyPress
-    {
-        public Process Process { get; private set; }
-        public InterceptKeyEventArgs InterceptKeyEventArgs { get; private set; }
-
-        public KeyPress(Process process, InterceptKeyEventArgs interceptKeyEventArgs)
-        {
-            Process = process;
-            InterceptKeyEventArgs = interceptKeyEventArgs;
         }
     }
 }

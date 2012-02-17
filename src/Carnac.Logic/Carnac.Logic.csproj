@@ -49,7 +49,8 @@
     <Compile Include="KeyMonitor\InterceptKeyEventArgs.cs" />
     <Compile Include="KeyMonitor\InterceptKeys.cs" />
     <Compile Include="KeyMonitor\KeyDirection.cs" />
-    <Compile Include="KeySource.cs" />
+    <Compile Include="KeyPress.cs" />
+    <Compile Include="KeyProvider.cs" />
     <Compile Include="Win32Methods.cs" />
     <Compile Include="Native\DetailedScreen.cs" />
     <Compile Include="Native\DEVMODE.cs" />
