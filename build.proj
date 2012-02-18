@@ -2,8 +2,21 @@
   
   <UsingTask AssemblyFile=".\tools\xunit\xunit.runner.msbuild.dll" TaskName="Xunit.Runner.MSBuild.xunit" />
 
-  <Target Name="Compile">
-    <Message Text=" ===========Building Website===========" Importance="High" />
+  <PropertyGroup>
+  	<OutputPath>.\src\Carnac\bin\$(Configuration)</OutputPath>
+  </PropertyGroup>
+
+  <Target Name="Clean">
+
+  	<ItemGroup>
+        <TempFiles Include=".\src\Carnac\bin\**\*" />
+    </ItemGroup>
+
+  	<delete files="@(TempFiles)" />
+  </Target>
+
+  <Target Name="Compile" DependsOnTargets="Clean">
+    <Message Text=" ===========Compiling code===========" Importance="High" />
     <MSBuild Projects="./src/Carnac.sln" Properties="Configuration=$(Configuration)" />
   </Target>
 
@@ -20,29 +33,7 @@
 
   <Target Name="Package" DependsOnTargets="Test">
 
-  	<!-- workaround from http://stackoverflow.com/a/5650767-->
-	<PropertyGroup>
-	    <!--MSBuild 4.0 property-->
-	    <ProgramFiles32>$(MSBuildProgramFiles32)</ProgramFiles32> 
-	    <!--Use OS env vars as a fallback-->
-	    <ProgramFiles32 Condition=" '' == '$(ProgramFiles32)'">$(ProgramFiles%28x86%29)</ProgramFiles32>
-	    <ProgramFiles32 Condition=" '' == '$(ProgramFiles32)' ">$(ProgramFiles)</ProgramFiles32>
-</PropertyGroup>
-
-    <PropertyGroup>
-    	<MainAssembly>.\src\Carnac\bin\$(Configuration)\Carnac.Merged.exe</MainAssembly>
-    </PropertyGroup>
-
-    <ItemGroup>
-        <IntermediateAssembly Include=".\src\Carnac\bin\$(Configuration)\Carnac.exe" />
-        <AssembliesToMerge Include=".\src\Carnac\bin\$(Configuration)\*.dll" />
-        <Internalize Include=".\src\Carnac\bin\$(Configuration)\*.dll" />
-    </ItemGroup>
-
-      	<Message Text="===========ILMerge===========" Importance="High" />
-    
-    <exec command=".\tools\Ilmerge\ILMerge.exe /allowDup /out:$(MainAssembly) /targetplatform:v4,&quot;$(ProgramFiles32)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0&quot; &quot;@(IntermediateAssembly)&quot; @(AssembliesToMerge->'&quot;%(FullPath)&quot;', ' ')" />
-
+  	
   </Target>
 
 
