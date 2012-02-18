@@ -6,6 +6,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                       xmlns:extToolkit="http://schemas.microsoft.com/winfx/2006/xaml/presentation/toolkit/extended"
                       MouseDown="OnMouseDown"
+                      Icon="../icon.ico"
         ShowTitleBar="False"
         mc:Ignorable="d"
         Width="606"
@@ -102,6 +103,10 @@
                 </StackPanel>
             </StackPanel>
         </TabItem>
-        <TabItem Header="About"/>
+        <TabItem Header="About">
+        	<Grid>
+        		<Image Source="/Carnac;component/carnac_2.png" HorizontalAlignment="Center" VerticalAlignment="Top" Width="200" Height="200" Stretch="UniformToFill"/>
+        	</Grid>
+        </TabItem>
     </TabControl>
 </Controls:MetroWindow>
