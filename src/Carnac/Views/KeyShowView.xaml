@@ -92,6 +92,7 @@
 							Focusable="False" 
                             BorderBrush="{x:Null}"
                             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                            VerticalContentAlignment="Center"
 							IsHitTestVisible="False">
                         <ListBox.Background>
                             <SolidColorBrush Color="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListView}}, Path=DataContext.Settings.ItemBackgroundColor}" />
@@ -106,21 +107,15 @@
                         </ListBox.ItemsPanel>
                         <ListBox.ItemTemplate>
                             <DataTemplate>
-                                <WrapPanel>
-                                    <TextBlock x:Name="KeyCap" FontFamily="/Carnac;component/Fonts/#DavysBigKeyCaps" Visibility="Collapsed" />
-                                    <Rectangle x:Name="foo">
-                                    </Rectangle>
-                                    <TextBlock x:Name="extra" Text="+" Visibility="Collapsed"/>
-                                    <TextBlock x:Name="regular" Text="{Binding}" />
-                                </WrapPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock x:Name="KeyCap" FontFamily="/Carnac;component/Fonts/#DavysBigKeyCaps" Visibility="Collapsed" VerticalAlignment="Center" />
+                                    <Rectangle x:Name="foo" VerticalAlignment="Center" />
+                                    <TextBlock x:Name="extra" Text="+" Visibility="Collapsed" VerticalAlignment="Center"/>
+                                    <TextBlock x:Name="regular" Text="{Binding}" VerticalAlignment="Center" />
+                                </StackPanel>
                                 <DataTemplate.Triggers>
                                     <DataTrigger Binding="{Binding .}" Value="Return">
                                         <Setter TargetName="KeyCap" Property="TextBlock.Text" Value="b" />
-                                        <Setter TargetName="KeyCap" Property="Control.Visibility" Value="Visible" />
-                                        <Setter TargetName="regular" Property="Control.Visibility" Value="Collapsed" />
-                                    </DataTrigger>
-                                    <DataTrigger Binding="{Binding .}" Value="Alt">
-                                        <Setter TargetName="KeyCap" Property="TextBlock.Text" Value="a" />
                                         <Setter TargetName="KeyCap" Property="Control.Visibility" Value="Visible" />
                                         <Setter TargetName="regular" Property="Control.Visibility" Value="Collapsed" />
                                     </DataTrigger>
@@ -137,8 +132,21 @@
                                         <Setter TargetName="regular" Property="Control.Visibility" Value="Collapsed" />
                                     </DataTrigger>
 
+                                    <DataTrigger Binding="{Binding .}" Value="Alt">
+                                        <Setter TargetName="KeyCap" Property="TextBlock.Text" Value="a" />
+                                        <Setter TargetName="KeyCap" Property="Control.Visibility" Value="Visible" />
+                                        <Setter TargetName="extra" Property="Control.Visibility" Value="Visible" />
+                                        <Setter TargetName="regular" Property="Control.Visibility" Value="Collapsed" />
+                                    </DataTrigger>
                                     <DataTrigger Binding="{Binding .}" Value="Ctrl">
                                         <Setter TargetName="KeyCap" Property="TextBlock.Text" Value="v" />
+                                        <Setter TargetName="KeyCap" Property="Control.Visibility" Value="Visible" />
+                                        <Setter TargetName="extra" Property="Control.Visibility" Value="Visible" />
+                                        <Setter TargetName="regular" Property="Control.Visibility" Value="Collapsed" />
+                                    </DataTrigger>
+
+                                    <DataTrigger Binding="{Binding .}" Value="Shift">
+                                        <Setter TargetName="KeyCap" Property="TextBlock.Text" Value="q" />
                                         <Setter TargetName="KeyCap" Property="Control.Visibility" Value="Visible" />
                                         <Setter TargetName="extra" Property="Control.Visibility" Value="Visible" />
                                         <Setter TargetName="regular" Property="Control.Visibility" Value="Collapsed" />

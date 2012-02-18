@@ -152,7 +152,9 @@
   <ItemGroup>
     <Resource Include="icon.ico" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="carnac_2.png" />
+  </ItemGroup>
   <ItemGroup>
     <Resource Include="Fonts\10823_DavysBigKeyCapsMedium.ttf" />
   </ItemGroup>

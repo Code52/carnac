@@ -99,7 +99,6 @@ namespace Carnac.ViewModels
 
         public void OnNext(KeyPress value)
         {
-            if (value.InterceptKeyEventArgs.KeyDirection != KeyDirection.Up) return;
             if (Keys.Count > 10)
                 Keys.RemoveAt(0);
 
@@ -120,21 +119,17 @@ namespace Carnac.ViewModels
             else
                 m = CurrentMessage;
 
-            if (value.InterceptKeyEventArgs.AltPressed && value.InterceptKeyEventArgs.ControlPressed)
-            {
+            var controlPressed = value.InterceptKeyEventArgs.ControlPressed;
+            var altPressed = value.InterceptKeyEventArgs.AltPressed;
+            var shiftPressed = value.InterceptKeyEventArgs.ShiftPressed;
+            if (controlPressed)
                 m.Text.Add("Ctrl");
+            if (altPressed)
                 m.Text.Add("Alt");
-            }
-            else if (value.InterceptKeyEventArgs.AltPressed)
-            {
-                m.Text.Add("Alt");
-            }
-            else if (value.InterceptKeyEventArgs.ControlPressed)
-            {
-                m.Text.Add("Ctrl");
-            }
-            else
-                m.Text.Add(value.InterceptKeyEventArgs.Key.Sanitise());
+            if (shiftPressed)
+                m.Text.Add("Shift");
+            
+            m.Text.Add(value.InterceptKeyEventArgs.Key.Sanitise());
 
             m.LastMessage = DateTime.Now;
             m.Count++;
@@ -174,7 +169,7 @@ namespace Carnac.ViewModels
             Settings.FontColor = "White";
             Settings.ItemBackgroundColor = "Black";
             Settings.ItemOpacity = 0.5;
-            Settings.ItemMaxWidth = 250;
+            Settings.ItemMaxWidth = 350;
 
             SaveSettings();
         }
