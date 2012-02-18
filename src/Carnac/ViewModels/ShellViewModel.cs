@@ -121,17 +121,6 @@ namespace Carnac.ViewModels
             if (Keys.Count > 10)
                 Keys.RemoveAt(0);
 
-            string message;
-
-            if (value.InterceptKeyEventArgs.AltPressed && value.InterceptKeyEventArgs.ControlPressed)
-                message = string.Format("Ctrl + Alt + {0}", value.InterceptKeyEventArgs.Key);
-            else if (value.InterceptKeyEventArgs.AltPressed)
-                message = string.Format("Alt + {0}", value.InterceptKeyEventArgs.Key);
-            else if (value.InterceptKeyEventArgs.ControlPressed)
-                message = string.Format("Ctrl + {0}", value.InterceptKeyEventArgs.Key);
-            else
-                message = string.Format(value.InterceptKeyEventArgs.Key.ToString());
-
             Message m;
 
             if (CurrentMessage == null || CurrentMessage.ProcessName != value.Process.ProcessName || CurrentMessage.LastMessage < DateTime.Now.AddSeconds(-1))
@@ -148,8 +137,23 @@ namespace Carnac.ViewModels
             else 
                 m = CurrentMessage;
 
+            if (value.InterceptKeyEventArgs.AltPressed && value.InterceptKeyEventArgs.ControlPressed)
+            {
+                m.Text.Add("Ctrl");
+                m.Text.Add("Alt");
+            }
+            else if (value.InterceptKeyEventArgs.AltPressed)
+            {
+                m.Text.Add("Alt");
+            }
+            else if (value.InterceptKeyEventArgs.ControlPressed)
+            {
+                m.Text.Add("Ctrl");
+            }
+            else
+                m.Text.Add(value.InterceptKeyEventArgs.Key.Sanitise());
+
             m.LastMessage = DateTime.Now;
-            m.Text += message;
             m.Count++;
             Console.WriteLine("\n" + m.Count + " - " + m.Text);
         }
