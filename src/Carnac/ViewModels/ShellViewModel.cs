@@ -150,14 +150,8 @@ namespace Carnac.ViewModels
             {
                 m.Text.Add("Ctrl");
             }
-            else if (
-                value.InterceptKeyEventArgs.Key.HasFlag(System.Windows.Forms.Keys.LWin) ||
-                value.InterceptKeyEventArgs.Key.HasFlag(System.Windows.Forms.Keys.RWin))
-            {
-                m.Text.Add("Win");
-            }
             else
-                m.Text.Add(string.Format(value.InterceptKeyEventArgs.Key.ToString()));
+                m.Text.Add(value.InterceptKeyEventArgs.Key.Sanitise());
 
             m.LastMessage = DateTime.Now;
             m.Count++;
