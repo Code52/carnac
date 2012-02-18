@@ -19,7 +19,12 @@ namespace Carnac.Models
         public int FontSize { get; set; }
 
         public int Screen { get; set; }
+
+        [NotifyProperty(AlsoNotifyFor = new[] { "ScaleTransform", "Alignment" })]
         public int Placement { get; set; }
+
+        //Used to determine which from it's leftmost co-ord
+        public double X { get; set; }
 
         [NotifyProperty(AlsoNotifyFor = new [] { "Margins" } )]
         public int TopOffset { get; set; }
@@ -30,14 +35,16 @@ namespace Carnac.Models
         [NotifyProperty(AlsoNotifyFor = new[] { "Margins" })]
         public int RightOffset { get; set; }
 
-        [NotifyProperty(AlsoNotifyFor = new[] { "ScaleTransform" })]
-
-        public bool TopDown { get; set; }
-        
         public double ScaleTransform
         {
-            get { return TopDown ? 1 : -1; }
+            get { return Placement == 1 || Placement == 3 ? 1 : -1; }
         }
+
+        public string Alignment
+        {
+            get { return Placement == 1 || Placement == 2 ? "Left" : "Right"; }
+        }
+
 
         public Thickness Margins
         {

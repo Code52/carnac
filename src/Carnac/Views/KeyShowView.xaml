@@ -40,7 +40,7 @@
 
 
     <ListView ItemsSource="{Binding Source={StaticResource cvs}}" 
-			HorizontalAlignment="Stretch" 
+			HorizontalAlignment="{Binding Settings.Alignment}" 
 			VerticalAlignment="Stretch"
 			Background="Transparent" 
 			Focusable="False" 
