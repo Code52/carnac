@@ -12,9 +12,10 @@ namespace Carnac.Logic
         //
 
         public const int WH_KEYBOARD_LL = 13;
-        public const int WM_KEYDOWN = 0x0100;
-        public const int WM_KEYUP = 0x0101;
-        public const int WM_WTF = 0x0260;
+        public const int WM_KEYDOWN = 256;
+        public const int WM_KEYUP = 257;
+        public const int WM_SYSKEYUP = 261;
+        public const int WM_SYSKEYDOWN = 260;
         public const int WS_EX_TRANSPARENT = 0x00000020;
         public  const int GWL_EXSTYLE = (-20);
 
@@ -33,8 +34,6 @@ namespace Carnac.Logic
 
         [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         public static extern IntPtr GetModuleHandle(string lpModuleName);
-
-
 
         [DllImport("user32.dll")]
         static extern int GetWindowLong(IntPtr hwnd, int index);
