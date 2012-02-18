@@ -3,7 +3,9 @@ using System.Drawing;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
+using Carnac.Logic.Native;
 using Carnac.Utilities;
+using Carnac.ViewModels;
 using Application = System.Windows.Application;
 
 namespace Carnac.Views
@@ -62,6 +64,20 @@ namespace Carnac.Views
         {
             base.OnClosing(e);
             System.Windows.Application.Current.Shutdown();
+        }
+
+        private void CheckBoxChecked(object sender, RoutedEventArgs e)
+        {
+            var dc = DataContext as ShellViewModel;
+            if (dc == null) return;
+
+            var rb = sender as System.Windows.Controls.RadioButton;
+            if (rb == null) return;
+
+            var tag = rb.Tag as DetailedScreen;
+            if (tag == null) return;
+
+            dc.SelectedScreen = tag;
         }
     }
 }

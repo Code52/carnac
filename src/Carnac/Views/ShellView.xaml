@@ -47,10 +47,10 @@
                                 <Grid HorizontalAlignment="Left" Height="{Binding RelativeHeight}" Margin="0" Width="{Binding RelativeWidth}">
                                     <Rectangle Fill="{DynamicResource AccentColorBrush}"/>
                                     <TextBlock FontWeight="SemiBold" TextWrapping="Wrap" Foreground="White" FontSize="96" VerticalAlignment="Center" HorizontalAlignment="Center" Text="{Binding Index}" />
-                                    <RadioButton x:Name="rbTL" Content="1" IsChecked="{Binding Placement1}" HorizontalAlignment="Left" VerticalAlignment="Top" />
-                                    <RadioButton x:Name="rbBL" Content="2" IsChecked="{Binding Placement2}" HorizontalAlignment="Left" VerticalAlignment="Bottom" />
-                                    <RadioButton x:Name="rbTR" Content="3" IsChecked="{Binding Placement3}" HorizontalAlignment="Right" VerticalAlignment="Top" />
-                                    <RadioButton x:Name="rbBR" Content="4" IsChecked="{Binding Placement4}" HorizontalAlignment="Right" VerticalAlignment="Bottom" />
+                                    <RadioButton x:Name="rbTL" Content="" IsChecked="{Binding Placement1}" Checked="CheckBoxChecked" Tag="{Binding}" GroupName="Placement" HorizontalAlignment="Left" VerticalAlignment="Top" />
+                                    <RadioButton x:Name="rbBL" Content="" IsChecked="{Binding Placement2}" Checked="CheckBoxChecked" Tag="{Binding}" GroupName="Placement" HorizontalAlignment="Left" VerticalAlignment="Bottom" />
+                                    <RadioButton x:Name="rbTR" Content="" IsChecked="{Binding Placement3}" Checked="CheckBoxChecked" Tag="{Binding}" GroupName="Placement" HorizontalAlignment="Right" VerticalAlignment="Top" />
+                                    <RadioButton x:Name="rbBR" Content="" IsChecked="{Binding Placement4}" Checked="CheckBoxChecked" Tag="{Binding}" GroupName="Placement" HorizontalAlignment="Right" VerticalAlignment="Bottom" />
                                 </Grid>
                                 <TextBlock FontWeight="SemiBold" HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding FriendlyName}" FontSize="18.667"/>
                                 <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" FontSize="14">

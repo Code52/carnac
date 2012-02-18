@@ -10,7 +10,6 @@
         Top="0"
         Left="{Binding Settings.Left}"
         WindowState="Maximized"
-        VerticalContentAlignment="Bottom"
         WindowStyle="None"
         SnapsToDevicePixels="True"
         FontSize="{Binding Settings.FontSize}"

@@ -1,6 +1,11 @@
 ﻿using System;
+using System.Runtime.InteropServices;
+using System.Threading;
+using System.Windows;
 using System.Windows.Interop;
+using System.Windows.Threading;
 using Carnac.Logic;
+using Timer = System.Timers.Timer;
 
 namespace Carnac.Views
 {
