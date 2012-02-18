@@ -87,7 +87,7 @@
                     <TextBox Text="{Binding Settings.FontSize}" Width="50" Foreground="White" HorizontalAlignment="Center"  Margin="0 0 5 5" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Foreground="White" FontWeight="Bold" Text="Font Size" Margin="10 0 0 0" Width="200" VerticalAlignment="Center" />
+                    <TextBlock Foreground="White" FontWeight="Bold" Text="Font Colour" Margin="10 0 0 0" Width="200" VerticalAlignment="Center" />
                     <extToolkit:ColorPicker SelectedColor="{Binding Settings.FontColor}" Width="200"  Margin="5 5 20 5" />
                     <TextBox Text="{Binding Settings.FontColor}" Width="100" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"  Margin="0 0 5 0" />
                 </StackPanel>

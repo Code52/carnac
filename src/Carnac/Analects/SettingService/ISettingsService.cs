@@ -1,5 +1,8 @@
+using System.ComponentModel.Composition;
+
 namespace Analects.SettingsService
 {
+    [InheritedExport]
     public interface ISettingsService
     {
         bool ContainsKey(string key);

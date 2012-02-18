@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel.Composition;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
@@ -7,7 +8,6 @@ using System.Windows;
 using System.Windows.Threading;
 using Analects.SettingsService;
 using Caliburn.Micro;
-using System.ComponentModel.Composition;
 using Carnac.Logic;
 using Carnac.Logic.KeyMonitor;
 using Carnac.Logic.Native;
@@ -21,22 +21,26 @@ namespace Carnac.ViewModels
     public class ShellViewModel : Screen, IShell, IObserver<KeyPress>
     {
         [DllImport("user32.dll")]
-        private static extern bool EnumDisplayDevices(string lpDevice, uint iDevNum, ref DISPLAY_DEVICE lpDisplayDevice,
-                                                      uint dwFlags);
+        private static extern bool EnumDisplayDevices(string lpDevice, uint iDevNum, ref DISPLAY_DEVICE lpDisplayDevice, uint dwFlags);
 
         [DllImport("User32.dll")]
         private static extern bool EnumDisplaySettings(string lpszDeviceName, int iModeNum, ref DEVMODE lpDevMode);
 
-        public ObservableCollection<DetailedScreen> Screens { get; set; }
+        IDisposable keySubscription;
 
-        private IDisposable keySubscription;
+        readonly ISettingsService settingsService;
 
-        private readonly ISettingsService SettingsService;
-        public Settings Settings { get; set; }
+        readonly TimeSpan fiveseconds = TimeSpan.FromSeconds(5);
+        readonly TimeSpan sixseconds = TimeSpan.FromSeconds(6);
 
-        public ShellViewModel()
+        [ImportingConstructor]
+        public ShellViewModel(ISettingsService settingsService)
         {
             DisplayName = "Carnac";
+
+            this.settingsService = settingsService;
+
+            Settings = settingsService.Get<Settings>("PopupSettings");
 
             Keys = new ObservableCollection<Message>();
             Screens = new ObservableCollection<DetailedScreen>();
@@ -59,7 +63,6 @@ namespace Carnac.ViewModels
                     if (string.IsNullOrEmpty(x.DeviceName) || string.IsNullOrEmpty(x.DeviceString))
                         continue;
 
-
                     var screen = new DetailedScreen {FriendlyName = x.DeviceString, Index = index++};
 
                     var mode = new DEVMODE();
@@ -68,28 +71,28 @@ namespace Carnac.ViewModels
                     {
                         screen.Width = (int) mode.dmPelsWidth;
                         screen.Height = (int) mode.dmPelsHeight;
-                        screen.Top = (int) mode.dmPosition.y;
+                        screen.Top = mode.dmPosition.y;
                     }
 
                     Screens.Add(screen);
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //log this
             }
 
-            var maxWidth = Screens.OrderByDescending(s => s.Width).FirstOrDefault().Width;
-            foreach (var s in Screens)
+            var biggestScreen = Screens.OrderByDescending(s => s.Width).FirstOrDefault();
+            if (biggestScreen != null)
             {
-                s.RelativeWidth = 200*(s.Width/maxWidth);
-                s.RelativeHeight = s.RelativeWidth*(s.Height/s.Width);
-                s.Top *= (s.RelativeHeight/s.Height);
+                var maxWidth = biggestScreen.Width;
+                foreach (var s in Screens)
+                {
+                    s.RelativeWidth = 200*(s.Width/maxWidth);
+                    s.RelativeHeight = s.RelativeWidth*(s.Height/s.Width);
+                    s.Top *= (s.RelativeHeight/s.Height);
+                }
             }
-
-            SettingsService = new SettingsService();
-
-            Settings = SettingsService.Get<Settings>("PopupSettings");
 
             if (Settings == null)
             {
@@ -97,7 +100,7 @@ namespace Carnac.ViewModels
                 SetDefaultSettings();
             }
 
-            WindowManager manager = new WindowManager();
+            var manager = new WindowManager();
             manager.ShowWindow(new KeyShowViewModel(Keys, Settings));
 
             var timer = new Timer(1000);
@@ -113,8 +116,13 @@ namespace Carnac.ViewModels
             timer.Start();
         }
 
-        private readonly TimeSpan fiveseconds = TimeSpan.FromSeconds(5);
-        private readonly TimeSpan sixseconds = TimeSpan.FromSeconds(6);
+        public ObservableCollection<Message> Keys { get; private set; }
+
+        public Message CurrentMessage { get; private set; }
+
+        public ObservableCollection<DetailedScreen> Screens { get; set; }
+
+        public Settings Settings { get; set; }
 
         public void Cleanup()
         {
@@ -124,13 +132,10 @@ namespace Carnac.ViewModels
                 y.IsDeleting = true;
 
             var deleted =
-                Keys.Where(k => DateTime.Now.Subtract(k.LastMessage) > sixseconds && k.IsDeleting == true).ToList();
+                Keys.Where(k => DateTime.Now.Subtract(k.LastMessage) > sixseconds && k.IsDeleting).ToList();
             foreach (var y in deleted)
                 Keys.Remove(y);
         }
-
-        public ObservableCollection<Message> Keys { get; private set; }
-        public Message CurrentMessage { get; private set; }
 
         protected override void OnActivate()
         {
@@ -183,7 +188,6 @@ namespace Carnac.ViewModels
 
             m.LastMessage = DateTime.Now;
             m.Count++;
-            Console.WriteLine("\n" + m.Count + " - " + m.Text);
         }
 
         public void OnError(Exception error)
@@ -194,7 +198,6 @@ namespace Carnac.ViewModels
         {
         }
 
-
         public void SaveSettingsGeneral()
         {
             SaveSettings();
@@ -202,6 +205,7 @@ namespace Carnac.ViewModels
 
         public void SaveSettings()
         {
+            // TODO: @tobin - this looks important
             //Settings.Screen = SelectedScreen.Index;
             //if (SelectedScreen.Placement1) Settings.Placement = 1;
             //else if (SelectedScreen.Placement2) Settings.Placement = 2;
@@ -211,9 +215,8 @@ namespace Carnac.ViewModels
 
             //PlaceScreen();
 
-            SettingsService.Set("PopupSettings", Settings);
-            SettingsService.Save();
-
+            settingsService.Set("PopupSettings", Settings);
+            settingsService.Save();
         }
 
         public void SetDefaultSettings()
