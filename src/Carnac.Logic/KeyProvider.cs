@@ -42,7 +42,7 @@ namespace Carnac.Logic
         public IDisposable Subscribe(IObserver<KeyPress> observer)
         {
             return interceptKeysSource
-                .Where(k => !IsModifierKeyPress(k) && k.KeyDirection == KeyDirection.Up)
+                .Where(k => !IsModifierKeyPress(k) && k.KeyDirection == KeyDirection.Down)
                 .Select(ToCarnacKeyPress)
                 .Subscribe(observer);
         }
