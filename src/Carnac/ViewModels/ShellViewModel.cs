@@ -167,7 +167,7 @@ namespace Carnac.ViewModels
             Settings.FontColor = "White";
             Settings.ItemBackgroundColor = "Black";
             Settings.ItemOpacity = 0.5;
-            Settings.ItemMaxWidth = 250;
+            Settings.ItemMaxWidth = 350;
 
             SaveSettings();
         }

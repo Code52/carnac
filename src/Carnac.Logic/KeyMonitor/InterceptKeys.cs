@@ -72,11 +72,21 @@ namespace Carnac.Logic.KeyMonitor
                 bool alt = (Control.ModifierKeys & Keys.Alt) != 0;
                 bool control = (Control.ModifierKeys & Keys.Control) != 0;
                 bool shift = (Control.ModifierKeys & Keys.Shift) != 0;
-                //WM_WTF is passed as an argument for alt+enter. There is no documented value for 0x0260, so treating as keydown
-                bool keyDown = wParam == (IntPtr)Win32Methods.WM_KEYDOWN;// || wParam == (IntPtr)Win32Methods.WM_WTF;
+                bool keyDown = wParam == (IntPtr)Win32Methods.WM_KEYDOWN;
                 bool keyUp = wParam == (IntPtr)Win32Methods.WM_KEYUP;
                 int vkCode = Marshal.ReadInt32(lParam);
                 var key = (Keys)vkCode;
+                //http://msdn.microsoft.com/en-us/library/windows/desktop/ms646286(v=vs.85).aspx
+                if (key != Keys.RMenu && key != Keys.LMenu && wParam == (IntPtr)Win32Methods.WM_SYSKEYDOWN)
+                {
+                    alt = true;
+                    keyDown = true;
+                }
+                if (key != Keys.RMenu && key != Keys.LMenu && wParam == (IntPtr)Win32Methods.WM_SYSKEYUP)
+                {
+                    alt = true;
+                    keyUp = true;
+                }
 
                 var interceptKeyEventArgs = new InterceptKeyEventArgs(
                     key,
