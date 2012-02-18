@@ -38,12 +38,27 @@ namespace Carnac.Views
 
             ni.Click += NotifyIconClick;
             ni.Visible = true;
+
+            SetPopupsBehind();
         }
 
         private void NotifyIconClick(object sender, EventArgs e)
         {
             Show();
             WindowState = WindowState.Normal;
+            this.Topmost = true;  // When it comes back, make sure it's on top...
+            this.Topmost = false; // and then it doesn't need to be anymore.
+
+            SetPopupsBehind();
+        }
+
+        public void SetPopupsBehind()
+        {
+            var dc = DataContext as ShellViewModel;
+            if (dc == null) return;
+            if (dc.Settings == null) return;
+
+            dc.Settings.SetWindowInFront = false;
         }
 
         private void OnMouseDown(object sender, MouseButtonEventArgs e)
@@ -57,7 +72,15 @@ namespace Carnac.Views
             base.OnStateChanged(e);
 
             if (WindowState == WindowState.Minimized)
+            {
                 Hide();
+
+                var dc = DataContext as ShellViewModel;
+                if (dc == null) return;
+                if (dc.Settings == null) return;
+
+                dc.Settings.SetWindowInFront = true;
+            }
         }
 
         protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
@@ -66,7 +89,7 @@ namespace Carnac.Views
             System.Windows.Application.Current.Shutdown();
         }
 
-        private void CheckBoxChecked(object sender, RoutedEventArgs e)
+        private void RadioChecked(object sender, RoutedEventArgs e)
         {
             var dc = DataContext as ShellViewModel;
             if (dc == null) return;

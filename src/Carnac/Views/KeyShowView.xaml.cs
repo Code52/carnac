@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Threading;
 using Carnac.Logic;
+using Carnac.ViewModels;
 using Timer = System.Timers.Timer;
 
 namespace Carnac.Views
@@ -30,11 +31,33 @@ namespace Carnac.Views
 
                     Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() =>
                     {
-                        RECT rect;
+                        var dc = DataContext as KeyShowViewModel;
 
-                        if (GetWindowRect(hwnd, out rect))
+                        if (dc == null) return;
+
+                        if (dc.Settings.SetWindowInFront)
                         {
-                            SetWindowPos(hwnd, HWND.TOPMOST, rect.Left, rect.Top, rect.Right - rect.Left, rect.Bottom - rect.Top, 0);
+                            RECT rect;
+
+                            if (GetWindowRect(hwnd, out rect))
+                            {
+                                SetWindowPos(hwnd,
+                                             HWND.TOPMOST,
+                                             0, 0, 0, 0,
+                                             (uint)(SWP.NOMOVE | SWP.NOSIZE | SWP.SHOWWINDOW));
+                            }
+                            else
+                            {
+                                SetWindowPos(hwnd,
+                                            HWND.NOTOPMOST,
+                                            0, 0, 0, 0,
+                                            (uint)(SWP.NOMOVE | SWP.NOSIZE | SWP.SHOWWINDOW));
+
+                                SetWindowPos(hwnd,
+                                           HWND.BOTTOM,
+                                           0, 0, 0, 0,
+                                           (uint)(SWP.NOMOVE | SWP.NOSIZE | SWP.SHOWWINDOW));
+                            }
                         }
                     }));
                 };
