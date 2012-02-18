@@ -72,12 +72,12 @@
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Foreground="White" FontWeight="Bold" Text="Left Offset" Margin="10 0 0 0" Width="200" VerticalAlignment="Center" />
-                    <Slider x:Name="Settings_LeftOffset" Width="200" Minimum="0" Maximum="2000" SmallChange="1" LargeChange="10" TickFrequency="20" IsSnapToTickEnabled="True" Margin="5 0 20 0" />
+                    <Slider x:Name="Settings_LeftOffset" Width="200" Minimum="0" Maximum="2000" SmallChange="1" LargeChange="10" TickFrequency="10" IsSnapToTickEnabled="True" Margin="5 0 20 0" />
                     <TextBox Text="{Binding Settings.LeftOffset}" Width="50" Foreground="White" HorizontalAlignment="Center"  Margin="0 0 5 5" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Foreground="White" FontWeight="Bold" Text="Right Offset" Margin="10 0 0 0" Width="200" VerticalAlignment="Center" />
-                    <Slider x:Name="Settings_RightOffset" Width="200" Minimum="0" Maximum="2000" SmallChange="1" LargeChange="10" TickFrequency="20" IsSnapToTickEnabled="True" Margin="5 0 20 0" />
+                    <Slider x:Name="Settings_RightOffset" Width="200" Minimum="0" Maximum="2000" SmallChange="1" LargeChange="10" TickFrequency="10" IsSnapToTickEnabled="True" Margin="5 0 20 0" />
                     <TextBox Text="{Binding Settings.RightOffset}" Width="50" Foreground="White" HorizontalAlignment="Center"  Margin="0 0 5 5" />
                 </StackPanel>
                 <Button x:Name="SaveSettingsGeneral" Content="Save" Width="50" Margin="0 5 50 5" HorizontalAlignment="Right" />

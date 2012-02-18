@@ -24,7 +24,7 @@ namespace Carnac.Models
         public int Placement { get; set; }
 
         //Used to determine which from it's leftmost co-ord
-        public double X { get; set; }
+        public double Left { get; set; }
 
         [NotifyProperty(AlsoNotifyFor = new [] { "Margins" } )]
         public int TopOffset { get; set; }

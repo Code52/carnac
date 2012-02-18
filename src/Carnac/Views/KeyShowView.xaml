@@ -8,7 +8,7 @@
         BorderBrush="Transparent"
         WindowStartupLocation="Manual"
         Top="0"
-        Left="0"
+        Left="{Binding Settings.Left}"
         WindowState="Maximized"
         VerticalContentAlignment="Bottom"
         WindowStyle="None"

@@ -186,6 +186,8 @@ namespace Carnac.ViewModels
             else if (Settings.Placement == 2) SelectedScreen.Placement2 = true;
             else if (Settings.Placement == 3) SelectedScreen.Placement3 = true;
             else if (Settings.Placement == 4) SelectedScreen.Placement4 = true;
+
+            Settings.Left = SelectedScreen.Left;
         }
 
     }
