@@ -73,6 +73,9 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="WPFToolkit.Extended">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.1.5.0\lib\net40\WPFToolkit.Extended.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -80,8 +83,11 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Analects\Loader\Loader.cs" />
+    <Compile Include="Analects\SettingService\ISettingsService.cs" />
+    <Compile Include="Analects\SettingService\SettingsService.cs" />
     <Compile Include="KeyMonitor\HotKey.cs" />
     <Compile Include="KeyMonitor\HotKeyWinApi.cs" />
+    <Compile Include="Models\Settings.cs" />
     <Compile Include="ReplaceKey.cs" />
     <Compile Include="Utilities\ProcessUtilities.cs" />
     <Compile Include="ViewModels\KeyShowViewModel.cs" />

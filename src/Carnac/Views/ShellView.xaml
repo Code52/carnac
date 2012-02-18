@@ -3,8 +3,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-        MouseDown="OnMouseDown"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                      xmlns:extToolkit="http://schemas.microsoft.com/winfx/2006/xaml/presentation/toolkit/extended"
+                      MouseDown="OnMouseDown"
         ShowTitleBar="False"
         mc:Ignorable="d"
         Width="606"
@@ -68,7 +69,39 @@
         <TabItem Header="Recording">
             <TextBlock x:Name="CurrentMessage_Text" Foreground="White" Background="DarkBlue" HorizontalAlignment="Stretch" Width="200"/>
         </TabItem>
-        <TabItem Header="Appearance"/>
+        <TabItem Header="Appearance">
+            <StackPanel Orientation="Vertical">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Foreground="White" FontWeight="Bold" Text="Popup Text Width" Margin="10 0 0 0" Width="200" VerticalAlignment="Center" />
+                    <Slider x:Name="Settings_ItemMaxWidth" Width="200" Minimum="0" Maximum="1000" SmallChange="10" LargeChange="50" TickFrequency="10" IsSnapToTickEnabled="True" Margin="5 0 20 0" />
+                    <TextBox Text="{Binding Settings.ItemMaxWidth}" Width="50" Foreground="White" HorizontalAlignment="Center"  Margin="0 0 5 5" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Foreground="White" FontWeight="Bold" Text="Popup Opacity" Margin="10 0 0 0" Width="200" VerticalAlignment="Center" />
+                    <Slider x:Name="Settings_ItemOpacity" Width="200" Minimum="0" Maximum="1" SmallChange="0.05" LargeChange="0.1" TickFrequency="0.05" IsSnapToTickEnabled="True" Margin="5 0 20 0" />
+                    <TextBox Text="{Binding Settings.ItemOpacity}" Width="50" Foreground="White" HorizontalAlignment="Center"  Margin="0 0 5 5" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Foreground="White" FontWeight="Bold" Text="Font Size" Margin="10 0 0 0" Width="200" VerticalAlignment="Center" />
+                    <Slider x:Name="Settings_FontSize" Width="200" Minimum="8" Maximum="48" SmallChange="1" LargeChange="2" TickFrequency="1" IsSnapToTickEnabled="True" Margin="5 0 20 0" />
+                    <TextBox Text="{Binding Settings.FontSize}" Width="50" Foreground="White" HorizontalAlignment="Center"  Margin="0 0 5 5" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Foreground="White" FontWeight="Bold" Text="Font Size" Margin="10 0 0 0" Width="200" VerticalAlignment="Center" />
+                    <extToolkit:ColorPicker SelectedColor="{Binding Settings.FontColor}" Width="200"  Margin="5 5 20 5" />
+                    <TextBox Text="{Binding Settings.FontColor}" Width="100" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"  Margin="0 0 5 0" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Foreground="White" FontWeight="Bold" Text="Background Color" Margin="10 0 0 0" Width="200" VerticalAlignment="Center" />
+                    <extToolkit:ColorPicker SelectedColor="{Binding Settings.ItemBackgroundColor}" Width="200"  Margin="5 5 20 5" />
+                    <TextBox Text="{Binding Settings.ItemBackgroundColor}" Width="100" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"  Margin="0 0 5 0" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal"  Margin="0 5 50 5" HorizontalAlignment="Right">
+                    <Button x:Name="SetDefaultSettings" Content="Reset to Defaults" Width="150" Margin="0 0 5 0" />
+                    <Button x:Name="SaveSettings" Content="Save" Width="50" />
+                </StackPanel>
+            </StackPanel>
+        </TabItem>
         <TabItem Header="About"/>
     </TabControl>
 </Controls:MetroWindow>

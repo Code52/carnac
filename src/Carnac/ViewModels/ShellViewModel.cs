@@ -5,28 +5,34 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows;
 using System.Windows.Threading;
+using Analects.SettingsService;
 using Caliburn.Micro;
 using System.ComponentModel.Composition;
 using Carnac.Logic;
 using Carnac.Logic.KeyMonitor;
 using Carnac.Logic.Native;
+using Carnac.Models;
 using Message = Carnac.Models.Message;
 using Timer = System.Timers.Timer;
 
 namespace Carnac.ViewModels
 {
-    [Export(typeof(IShell))]
-    public class ShellViewModel :Screen, IShell, IObserver<KeyPress>
+    [Export(typeof (IShell))]
+    public class ShellViewModel : Screen, IShell, IObserver<KeyPress>
     {
         [DllImport("user32.dll")]
-        static extern bool EnumDisplayDevices(string lpDevice, uint iDevNum, ref DISPLAY_DEVICE lpDisplayDevice, uint dwFlags);
+        private static extern bool EnumDisplayDevices(string lpDevice, uint iDevNum, ref DISPLAY_DEVICE lpDisplayDevice,
+                                                      uint dwFlags);
 
         [DllImport("User32.dll")]
-        static extern bool EnumDisplaySettings(string lpszDeviceName, int iModeNum, ref DEVMODE lpDevMode);
+        private static extern bool EnumDisplaySettings(string lpszDeviceName, int iModeNum, ref DEVMODE lpDevMode);
 
         public ObservableCollection<DetailedScreen> Screens { get; set; }
 
         private IDisposable keySubscription;
+
+        private readonly ISettingsService SettingsService;
+        public Settings Settings { get; set; }
 
         public ShellViewModel()
         {
@@ -54,15 +60,15 @@ namespace Carnac.ViewModels
                         continue;
 
 
-                    var screen = new DetailedScreen { FriendlyName = x.DeviceString, Index = index++ };
+                    var screen = new DetailedScreen {FriendlyName = x.DeviceString, Index = index++};
 
                     var mode = new DEVMODE();
-                    mode.dmSize = (ushort)Marshal.SizeOf(mode);
+                    mode.dmSize = (ushort) Marshal.SizeOf(mode);
                     if (EnumDisplaySettings(d.DeviceName, -1, ref mode))
                     {
-                        screen.Width = (int)mode.dmPelsWidth;
-                        screen.Height = (int)mode.dmPelsHeight;
-                        screen.Top = (int)mode.dmPosition.y;
+                        screen.Width = (int) mode.dmPelsWidth;
+                        screen.Height = (int) mode.dmPelsHeight;
+                        screen.Top = (int) mode.dmPosition.y;
                     }
 
                     Screens.Add(screen);
@@ -76,28 +82,49 @@ namespace Carnac.ViewModels
             var maxWidth = Screens.OrderByDescending(s => s.Width).FirstOrDefault().Width;
             foreach (var s in Screens)
             {
-                s.RelativeWidth = 200 * (s.Width / maxWidth);
-                s.RelativeHeight = s.RelativeWidth * (s.Height / s.Width);
-                s.Top *= (s.RelativeHeight / s.Height);
+                s.RelativeWidth = 200*(s.Width/maxWidth);
+                s.RelativeHeight = s.RelativeWidth*(s.Height/s.Width);
+                s.Top *= (s.RelativeHeight/s.Height);
+            }
+
+            SettingsService = new SettingsService();
+
+            Settings = SettingsService.Get<Settings>("PopupSettings");
+
+            if (Settings == null)
+            {
+                Settings = new Settings();
+                SetDefaultSettings();
             }
 
             WindowManager manager = new WindowManager();
-            manager.ShowWindow(new KeyShowViewModel(Keys));
+            manager.ShowWindow(new KeyShowViewModel(Keys, Settings));
 
             var timer = new Timer(1000);
-            timer.Elapsed += (s, e) => Application.Current.Dispatcher.BeginInvoke((ThreadStart)(Cleanup), DispatcherPriority.Background, null);
+            timer.Elapsed +=
+                (s, e) =>
+                    {
+                        if (Application.Current == null || Application.Current.Dispatcher == null) return;
+
+                        Application.Current.Dispatcher.BeginInvoke((ThreadStart) (Cleanup),
+                                                                   DispatcherPriority.Background, null);
+                    };
+
             timer.Start();
         }
 
         private readonly TimeSpan fiveseconds = TimeSpan.FromSeconds(5);
         private readonly TimeSpan sixseconds = TimeSpan.FromSeconds(6);
+
         public void Cleanup()
         {
-            var deleting = Keys.Where(k => DateTime.Now.Subtract(k.LastMessage) > fiveseconds && k.IsDeleting == false).ToList();
+            var deleting =
+                Keys.Where(k => DateTime.Now.Subtract(k.LastMessage) > fiveseconds && k.IsDeleting == false).ToList();
             foreach (var y in deleting)
                 y.IsDeleting = true;
 
-            var deleted = Keys.Where(k => DateTime.Now.Subtract(k.LastMessage) > sixseconds && k.IsDeleting == true).ToList();
+            var deleted =
+                Keys.Where(k => DateTime.Now.Subtract(k.LastMessage) > sixseconds && k.IsDeleting == true).ToList();
             foreach (var y in deleted)
                 Keys.Remove(y);
         }
@@ -123,18 +150,19 @@ namespace Carnac.ViewModels
 
             Message m;
 
-            if (CurrentMessage == null || CurrentMessage.ProcessName != value.Process.ProcessName || CurrentMessage.LastMessage < DateTime.Now.AddSeconds(-1))
+            if (CurrentMessage == null || CurrentMessage.ProcessName != value.Process.ProcessName ||
+                CurrentMessage.LastMessage < DateTime.Now.AddSeconds(-1))
             {
                 m = new Message
                         {
                             StartingTime = DateTime.Now,
                             ProcessName = value.Process.ProcessName
                         };
-                
+
                 CurrentMessage = m;
                 Keys.Add(m);
             }
-            else 
+            else
                 m = CurrentMessage;
 
             if (value.InterceptKeyEventArgs.AltPressed && value.InterceptKeyEventArgs.ControlPressed)
@@ -158,8 +186,45 @@ namespace Carnac.ViewModels
             Console.WriteLine("\n" + m.Count + " - " + m.Text);
         }
 
-        public void OnError(Exception error){}
-        public void OnCompleted(){}
-    }
+        public void OnError(Exception error)
+        {
+        }
 
+        public void OnCompleted()
+        {
+        }
+
+
+        public void SaveSettingsGeneral()
+        {
+            SaveSettings();
+        }
+
+        public void SaveSettings()
+        {
+            //Settings.Screen = SelectedScreen.Index;
+            //if (SelectedScreen.Placement1) Settings.Placement = 1;
+            //else if (SelectedScreen.Placement2) Settings.Placement = 2;
+            //else if (SelectedScreen.Placement3) Settings.Placement = 3;
+            //else if (SelectedScreen.Placement4) Settings.Placement = 4;
+            //else Settings.Placement = 0;
+
+            //PlaceScreen();
+
+            SettingsService.Set("PopupSettings", Settings);
+            SettingsService.Save();
+
+        }
+
+        public void SetDefaultSettings()
+        {
+            Settings.FontSize = 40;
+            Settings.FontColor = "White";
+            Settings.ItemBackgroundColor = "Black";
+            Settings.ItemOpacity = 0.5;
+            Settings.ItemMaxWidth = 250;
+
+            SaveSettings();
+        }
+    }
 }
