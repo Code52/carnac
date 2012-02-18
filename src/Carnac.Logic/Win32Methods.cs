@@ -5,6 +5,7 @@ namespace Carnac.Logic
 {
     public static class Win32Methods
     {
+
         public delegate IntPtr LowLevelKeyboardProc(int nCode, IntPtr wParam, IntPtr lParam);
 
         // ReSharper disable InconsistentNaming
@@ -13,6 +14,7 @@ namespace Carnac.Logic
         public const int WH_KEYBOARD_LL = 13;
         public const int WM_KEYDOWN = 0x0100;
         public const int WM_KEYUP = 0x0101;
+        public const int WM_WTF = 0x0260;
         public const int WS_EX_TRANSPARENT = 0x00000020;
         public  const int GWL_EXSTYLE = (-20);
 
