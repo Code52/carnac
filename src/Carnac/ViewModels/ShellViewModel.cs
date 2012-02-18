@@ -143,12 +143,21 @@ namespace Carnac.ViewModels
                 m.Text.Add("Alt");
             }
             else if (value.InterceptKeyEventArgs.AltPressed)
+            {
                 m.Text.Add("Alt");
-
+            }
             else if (value.InterceptKeyEventArgs.ControlPressed)
+            {
                 m.Text.Add("Ctrl");
-            
-            m.Text.Add(string.Format(value.InterceptKeyEventArgs.Key.ToString()));
+            }
+            else if (
+                value.InterceptKeyEventArgs.Key.HasFlag(System.Windows.Forms.Keys.LWin) ||
+                value.InterceptKeyEventArgs.Key.HasFlag(System.Windows.Forms.Keys.RWin))
+            {
+                m.Text.Add("Win");
+            }
+            else
+                m.Text.Add(string.Format(value.InterceptKeyEventArgs.Key.ToString()));
 
             m.LastMessage = DateTime.Now;
             m.Count++;
