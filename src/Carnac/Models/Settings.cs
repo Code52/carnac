@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Caliburn.Micro;
+using System.Windows;
+using Carnac.Logic;
 
 namespace Carnac.Models
 {
@@ -19,10 +21,28 @@ namespace Carnac.Models
         public int Screen { get; set; }
         public int Placement { get; set; }
 
-        public double X { get; set; }
-        public double Y { get; set; }
+        [NotifyProperty(AlsoNotifyFor = new [] { "Margins" } )]
+        public int TopOffset { get; set; }
+        [NotifyProperty(AlsoNotifyFor = new[] { "Margins" })]
+        public int BottomOffset { get; set; }
+        [NotifyProperty(AlsoNotifyFor = new[] { "Margins" })]
+        public int LeftOffset { get; set; }
+        [NotifyProperty(AlsoNotifyFor = new[] { "Margins" })]
+        public int RightOffset { get; set; }
 
-        public double Height { get; set; }
+        [NotifyProperty(AlsoNotifyFor = new[] { "ScaleTransform" })]
+
+        public bool TopDown { get; set; }
+        
+        public double ScaleTransform
+        {
+            get { return TopDown ? 1 : -1; }
+        }
+
+        public Thickness Margins
+        {
+            get { return new Thickness(LeftOffset, TopOffset, RightOffset, BottomOffset); }
+        }
 
         public string SortDescription
         {

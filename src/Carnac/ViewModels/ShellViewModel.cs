@@ -41,6 +41,8 @@ namespace Carnac.ViewModels
                 SetDefaultSettings();
             }
 
+            PlaceScreen();
+
             var manager = new WindowManager();
             manager.ShowWindow(new KeyShowViewModel(Keys, Settings));
 
@@ -62,6 +64,7 @@ namespace Carnac.ViewModels
         public Message CurrentMessage { get; private set; }
 
         public ObservableCollection<DetailedScreen> Screens { get; set; }
+        public DetailedScreen SelectedScreen { get; set; }
 
         public Settings Settings { get; set; }
 
@@ -152,15 +155,14 @@ namespace Carnac.ViewModels
 
         public void SaveSettings()
         {
-            // TODO: @tobin - this looks important
-            //Settings.Screen = SelectedScreen.Index;
-            //if (SelectedScreen.Placement1) Settings.Placement = 1;
-            //else if (SelectedScreen.Placement2) Settings.Placement = 2;
-            //else if (SelectedScreen.Placement3) Settings.Placement = 3;
-            //else if (SelectedScreen.Placement4) Settings.Placement = 4;
-            //else Settings.Placement = 0;
+            Settings.Screen = SelectedScreen.Index;
+            if (SelectedScreen.Placement1) Settings.Placement = 1;
+            else if (SelectedScreen.Placement2) Settings.Placement = 2;
+            else if (SelectedScreen.Placement3) Settings.Placement = 3;
+            else if (SelectedScreen.Placement4) Settings.Placement = 4;
+            else Settings.Placement = 0;
 
-            //PlaceScreen();
+            PlaceScreen();
 
             settingsService.Set("PopupSettings", Settings);
             settingsService.Save();
@@ -176,5 +178,20 @@ namespace Carnac.ViewModels
 
             SaveSettings();
         }
+
+        private void PlaceScreen()
+        {
+            if (Screens == null) return;
+
+            SelectedScreen = Screens.FirstOrDefault(s => s.Index == Settings.Screen);
+
+            if (SelectedScreen == null) return;
+
+            if (Settings.Placement == 1) SelectedScreen.Placement1 = true;
+            else if (Settings.Placement == 2) SelectedScreen.Placement2 = true;
+            else if (Settings.Placement == 3) SelectedScreen.Placement3 = true;
+            else if (Settings.Placement == 4) SelectedScreen.Placement4 = true;
+        }
+
     }
 }
