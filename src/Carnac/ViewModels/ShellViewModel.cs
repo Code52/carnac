@@ -2,7 +2,6 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows;
 using System.Windows.Threading;
@@ -20,12 +19,6 @@ namespace Carnac.ViewModels
     [Export(typeof (IShell))]
     public class ShellViewModel : Screen, IShell, IObserver<KeyPress>
     {
-        [DllImport("user32.dll")]
-        private static extern bool EnumDisplayDevices(string lpDevice, uint iDevNum, ref DISPLAY_DEVICE lpDisplayDevice, uint dwFlags);
-
-        [DllImport("User32.dll")]
-        private static extern bool EnumDisplaySettings(string lpszDeviceName, int iModeNum, ref DEVMODE lpDevMode);
-
         IDisposable keySubscription;
 
         readonly ISettingsService settingsService;
@@ -34,66 +27,14 @@ namespace Carnac.ViewModels
         readonly TimeSpan sixseconds = TimeSpan.FromSeconds(6);
 
         [ImportingConstructor]
-        public ShellViewModel(ISettingsService settingsService)
+        public ShellViewModel(ISettingsService settingsService, IScreenManager screenManager)
         {
-            DisplayName = "Carnac";
-
             this.settingsService = settingsService;
 
-            Settings = settingsService.Get<Settings>("PopupSettings");
-
             Keys = new ObservableCollection<Message>();
-            Screens = new ObservableCollection<DetailedScreen>();
+            Screens = new ObservableCollection<DetailedScreen>(screenManager.GetScreens());
 
-            int index = 1;
-            var d = new DISPLAY_DEVICE();
-            d.cb = Marshal.SizeOf(d);
-            try
-            {
-                for (uint id = 0; EnumDisplayDevices(null, id, ref d, 0); id++)
-                {
-                    d.cb = Marshal.SizeOf(d);
-
-                    var x = new DISPLAY_DEVICE();
-                    x.cb = Marshal.SizeOf(x);
-
-                    //Get the actual monitor
-                    EnumDisplayDevices(d.DeviceName, 0, ref x, 0);
-
-                    if (string.IsNullOrEmpty(x.DeviceName) || string.IsNullOrEmpty(x.DeviceString))
-                        continue;
-
-                    var screen = new DetailedScreen {FriendlyName = x.DeviceString, Index = index++};
-
-                    var mode = new DEVMODE();
-                    mode.dmSize = (ushort) Marshal.SizeOf(mode);
-                    if (EnumDisplaySettings(d.DeviceName, -1, ref mode))
-                    {
-                        screen.Width = (int) mode.dmPelsWidth;
-                        screen.Height = (int) mode.dmPelsHeight;
-                        screen.Top = mode.dmPosition.y;
-                    }
-
-                    Screens.Add(screen);
-                }
-            }
-            catch (Exception)
-            {
-                //log this
-            }
-
-            var biggestScreen = Screens.OrderByDescending(s => s.Width).FirstOrDefault();
-            if (biggestScreen != null)
-            {
-                var maxWidth = biggestScreen.Width;
-                foreach (var s in Screens)
-                {
-                    s.RelativeWidth = 200*(s.Width/maxWidth);
-                    s.RelativeHeight = s.RelativeWidth*(s.Height/s.Width);
-                    s.Top *= (s.RelativeHeight/s.Height);
-                }
-            }
-
+            Settings = settingsService.Get<Settings>("PopupSettings");
             if (Settings == null)
             {
                 Settings = new Settings();
@@ -123,6 +64,12 @@ namespace Carnac.ViewModels
         public ObservableCollection<DetailedScreen> Screens { get; set; }
 
         public Settings Settings { get; set; }
+
+        public override string DisplayName
+        {
+            get { return "Carnac"; }
+            set { }
+        }
 
         public void Cleanup()
         {
