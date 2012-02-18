@@ -2,17 +2,14 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
 using System.Linq;
-using System.Threading;
-using System.Windows;
-using System.Windows.Threading;
 using Analects.SettingsService;
 using Caliburn.Micro;
 using Carnac.Logic;
 using Carnac.Logic.KeyMonitor;
 using Carnac.Logic.Native;
 using Carnac.Models;
+using Carnac.Utilities;
 using Message = Carnac.Models.Message;
-using Timer = System.Timers.Timer;
 
 namespace Carnac.ViewModels
 {
@@ -20,14 +17,18 @@ namespace Carnac.ViewModels
     public class ShellViewModel : Screen, IShell, IObserver<KeyPress>
     {
         IDisposable keySubscription;
+        readonly IDisposable timerToken;
 
         readonly ISettingsService settingsService;
 
         readonly TimeSpan fiveseconds = TimeSpan.FromSeconds(5);
         readonly TimeSpan sixseconds = TimeSpan.FromSeconds(6);
-
+        
         [ImportingConstructor]
-        public ShellViewModel(ISettingsService settingsService, IScreenManager screenManager)
+        public ShellViewModel(
+            ISettingsService settingsService, 
+            IScreenManager screenManager,
+            ITimerFactory timerFactory)
         {
             this.settingsService = settingsService;
 
@@ -44,17 +45,7 @@ namespace Carnac.ViewModels
             var manager = new WindowManager();
             manager.ShowWindow(new KeyShowViewModel(Keys, Settings));
 
-            var timer = new Timer(1000);
-            timer.Elapsed +=
-                (s, e) =>
-                    {
-                        if (Application.Current == null || Application.Current.Dispatcher == null) return;
-
-                        Application.Current.Dispatcher.BeginInvoke((ThreadStart) (Cleanup),
-                                                                   DispatcherPriority.Background, null);
-                    };
-
-            timer.Start();
+            timerToken = timerFactory.Start(1000, Cleanup);
         }
 
         public ObservableCollection<Message> Keys { get; private set; }
@@ -92,6 +83,7 @@ namespace Carnac.ViewModels
         protected override void OnDeactivate(bool close)
         {
             keySubscription.Dispose();
+            timerToken.Dispose();
         }
 
         public void OnNext(KeyPress value)

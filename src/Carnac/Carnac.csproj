@@ -89,7 +89,10 @@
     <Compile Include="KeyMonitor\HotKeyWinApi.cs" />
     <Compile Include="Models\Settings.cs" />
     <Compile Include="ReplaceKey.cs" />
+    <Compile Include="Utilities\ITimerFactory.cs" />
     <Compile Include="Utilities\ProcessUtilities.cs" />
+    <Compile Include="Utilities\TimerFactory.cs" />
+    <Compile Include="Utilities\TimerState.cs" />
     <Compile Include="ViewModels\KeyShowViewModel.cs" />
     <Compile Include="Models\Message.cs" />
     <Compile Include="ViewModels\ShellViewModel.cs" />
@@ -132,7 +135,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="Analects\Loader\EmbedAssemblies.targets" />
+    <None Include="Analects\Loader\EmbedAssemblies.targets">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -160,14 +165,6 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
-  <Import Project="Analects\Loader\EmbedAssemblies.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
   <Target Name="AfterCompile">
     <NotifyPropertyWeaverMsBuildTask.WeavingTask />
   </Target>
