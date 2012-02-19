@@ -8,12 +8,19 @@ namespace Carnac.Tests
 {
     public class KeyProviderTests
     {
+        private readonly IPasswordModeService passwordModeService;
+
+        public KeyProviderTests()
+        {
+            passwordModeService = new PasswordModeService();
+        }
+
         [Fact]
         public void ctrlshiftl_is_processed_correctly()
         {
             // arrange
             var player = KeyStreams.CtrlShiftL();
-            var provider = new KeyProvider(player);
+            var provider = new KeyProvider(player, passwordModeService);
 
             // act
             var processedKeys = ToEnumerable(provider, player);
@@ -27,7 +34,7 @@ namespace Carnac.Tests
         {
             // arrange
             var player = KeyStreams.ShiftL();
-            var provider = new KeyProvider(player);
+            var provider = new KeyProvider(player, passwordModeService);
 
             // act
             var processedKeys = ToEnumerable(provider, player);
@@ -41,7 +48,7 @@ namespace Carnac.Tests
         {
             // arrange
             var player = KeyStreams.LetterL();
-            var provider = new KeyProvider(player);
+            var provider = new KeyProvider(player, passwordModeService);
 
             // act
             var processedKeys = ToEnumerable(provider, player);
@@ -55,7 +62,7 @@ namespace Carnac.Tests
         {
             // arrange
             var player = KeyStreams.Number1();
-            var provider = new KeyProvider(player);
+            var provider = new KeyProvider(player, passwordModeService);
 
             // act
             var processedKeys = ToEnumerable(provider, player);
@@ -69,7 +76,7 @@ namespace Carnac.Tests
         {
             // arrange
             var player = KeyStreams.ExclaimationMark();
-            var provider = new KeyProvider(player);
+            var provider = new KeyProvider(player, passwordModeService);
 
             // act
             var processedKeys = ToEnumerable(provider, player);
@@ -83,7 +90,7 @@ namespace Carnac.Tests
         {
             // arrange
             var player = KeyStreams.WinkeyE();
-            var provider = new KeyProvider(player);
+            var provider = new KeyProvider(player, passwordModeService);
 
             // act
             var processedKeys = ToEnumerable(provider, player);
