@@ -6,9 +6,10 @@
         AllowsTransparency="True"
         Background="Transparent"
         BorderBrush="Transparent"
-        BorderThickness="0"
         WindowStartupLocation="Manual"
-        Left="0"
+        Top="0"
+        Left="{Binding Settings.Left}"
+        WindowState="Maximized"
         WindowStyle="None"
         SnapsToDevicePixels="True"
         FontSize="{Binding Settings.FontSize}"
@@ -25,11 +26,31 @@
             <DrawingBrush.Drawing>
                 <DrawingGroup>
                     <DrawingGroup.Children>
-                        <GeometryDrawing Brush="White" Geometry="F1 M 47.5543,45.9331C 55.3596,51.2598 64.0063,55.5305 82.0276,47.9798L 73.1409,79.0625C 55.1236,86.6091 46.4849,82.3212 38.6889,76.9638L 47.5543,45.9331 Z "/>
-                        <GeometryDrawing Brush="White" Geometry="F1 M 44.4637,37.2977C 36.6704,31.9844 28.0211,27.7483 10.0384,35.2817L 18.9517,4.06303C 36.9371,-3.47164 45.5784,0.796367 53.3651,6.13768L 44.4637,37.2977 Z "/>
-                        <GeometryDrawing Brush="White" Geometry="F1 M 0.92133,71.12C 0.842667,71.1506 0.753331,71.1746 0.663996,71.1746C 0.294662,71.172 -0.00267029,70.8653 0,70.492C 0.00133228,70.4267 0.00933266,70.3653 0.0266666,70.308L 8.49333,40.688C 26.4773,33.1546 35.1267,37.3907 42.9187,42.7013L 34.0587,73.7133C 26.4587,68.5 18.0453,64.3106 0.92133,71.12 Z "/>
-                        <GeometryDrawing Brush="White" Geometry="F1 M 92.0659,12.8218L 83.5712,42.5752C 65.5512,50.1245 56.9045,45.8551 49.1005,40.5245L 57.9939,9.38719C 65.6059,14.6192 74.0219,18.8312 91.1819,12.0032C 91.2592,11.9739 91.3432,11.9578 91.4325,11.9578C 91.8032,11.9605 92.0992,12.2671 92.0952,12.6405C 92.0939,12.7032 92.0819,12.7645 92.0659,12.8218 Z "/>
-                        <GeometryDrawing Brush="White" Geometry="F1 M 86.1499,73.521C 86.1499,73.165 86.0499,72.9077 85.8499,72.7477C 85.6245,72.565 85.2419,72.4743 84.7045,72.4743L 83.9365,72.4743L 83.9365,74.589L 84.8672,74.589C 85.7232,74.589 86.1499,74.2331 86.1499,73.521 Z M 87.3472,77.9357L 86.2925,77.9357L 85.6165,76.445C 85.2739,75.6984 84.9032,75.3263 84.5099,75.3263L 83.9365,75.3263L 83.9365,77.9357L 83.0645,77.9357L 83.0645,71.7237L 84.8152,71.7237C 85.5872,71.7237 86.1739,71.8984 86.5725,72.245C 86.9112,72.545 87.0805,72.9357 87.0805,73.417C 87.0805,73.8423 86.9432,74.2063 86.6685,74.505C 86.3925,74.805 86.0045,75.005 85.5059,75.109L 85.5059,75.1357C 85.8525,75.2144 86.1952,75.597 86.5339,76.281M 89.2819,74.8957C 89.2819,73.6664 88.8645,72.6437 88.0312,71.8237C 87.1979,71.0024 86.1819,70.5917 84.9845,70.5917C 83.7432,70.5917 82.7139,71.005 81.8952,71.8317C 81.0765,72.6597 80.6685,73.6797 80.6685,74.8957C 80.6685,76.133 81.0912,77.165 81.9379,77.9944C 82.7672,78.8103 83.7832,79.2184 84.9845,79.2184C 86.1739,79.2184 87.1872,78.805 88.0245,77.9784C 88.8619,77.1517 89.2819,76.1237 89.2819,74.8957 Z M 89.8672,74.8703C 89.8672,76.237 89.3952,77.385 88.4525,78.3171C 87.5072,79.2477 86.3432,79.7144 84.9579,79.7144C 83.5619,79.7144 82.4005,79.2597 81.4779,78.3517C 80.5565,77.445 80.0952,76.297 80.0952,74.909C 80.0952,73.5464 80.5645,72.3957 81.5019,71.461C 82.4392,70.5263 83.6045,70.057 84.9979,70.057C 86.3645,70.057 87.5125,70.505 88.4419,71.3984C 89.3925,72.3157 89.8672,73.4717 89.8672,74.8703 Z "/>
+                        <GeometryDrawing Geometry="F1 M 47.5543,45.9331C 55.3596,51.2598 64.0063,55.5305 82.0276,47.9798L 73.1409,79.0625C 55.1236,86.6091 46.4849,82.3212 38.6889,76.9638L 47.5543,45.9331 Z ">
+                            <GeometryDrawing.Brush>
+                                <SolidColorBrush Color="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListView}}, Path=DataContext.Settings.ItemBackgroundColor}" />
+                            </GeometryDrawing.Brush>
+                        </GeometryDrawing>
+                        <GeometryDrawing Geometry="F1 M 44.4637,37.2977C 36.6704,31.9844 28.0211,27.7483 10.0384,35.2817L 18.9517,4.06303C 36.9371,-3.47164 45.5784,0.796367 53.3651,6.13768L 44.4637,37.2977 Z ">
+                            <GeometryDrawing.Brush>
+                                <SolidColorBrush Color="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListView}}, Path=DataContext.Settings.ItemBackgroundColor}" />
+                            </GeometryDrawing.Brush>
+                        </GeometryDrawing>
+                        <GeometryDrawing Geometry="F1 M 0.92133,71.12C 0.842667,71.1506 0.753331,71.1746 0.663996,71.1746C 0.294662,71.172 -0.00267029,70.8653 0,70.492C 0.00133228,70.4267 0.00933266,70.3653 0.0266666,70.308L 8.49333,40.688C 26.4773,33.1546 35.1267,37.3907 42.9187,42.7013L 34.0587,73.7133C 26.4587,68.5 18.0453,64.3106 0.92133,71.12 Z ">
+                            <GeometryDrawing.Brush>
+                                <SolidColorBrush Color="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListView}}, Path=DataContext.Settings.ItemBackgroundColor}" />
+                            </GeometryDrawing.Brush>
+                        </GeometryDrawing>
+                        <GeometryDrawing Geometry="F1 M 92.0659,12.8218L 83.5712,42.5752C 65.5512,50.1245 56.9045,45.8551 49.1005,40.5245L 57.9939,9.38719C 65.6059,14.6192 74.0219,18.8312 91.1819,12.0032C 91.2592,11.9739 91.3432,11.9578 91.4325,11.9578C 91.8032,11.9605 92.0992,12.2671 92.0952,12.6405C 92.0939,12.7032 92.0819,12.7645 92.0659,12.8218 Z ">
+                            <GeometryDrawing.Brush>
+                                <SolidColorBrush Color="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListView}}, Path=DataContext.Settings.ItemBackgroundColor}" />
+                            </GeometryDrawing.Brush>
+                        </GeometryDrawing>
+                        <GeometryDrawing Geometry="F1 M 86.1499,73.521C 86.1499,73.165 86.0499,72.9077 85.8499,72.7477C 85.6245,72.565 85.2419,72.4743 84.7045,72.4743L 83.9365,72.4743L 83.9365,74.589L 84.8672,74.589C 85.7232,74.589 86.1499,74.2331 86.1499,73.521 Z M 87.3472,77.9357L 86.2925,77.9357L 85.6165,76.445C 85.2739,75.6984 84.9032,75.3263 84.5099,75.3263L 83.9365,75.3263L 83.9365,77.9357L 83.0645,77.9357L 83.0645,71.7237L 84.8152,71.7237C 85.5872,71.7237 86.1739,71.8984 86.5725,72.245C 86.9112,72.545 87.0805,72.9357 87.0805,73.417C 87.0805,73.8423 86.9432,74.2063 86.6685,74.505C 86.3925,74.805 86.0045,75.005 85.5059,75.109L 85.5059,75.1357C 85.8525,75.2144 86.1952,75.597 86.5339,76.281M 89.2819,74.8957C 89.2819,73.6664 88.8645,72.6437 88.0312,71.8237C 87.1979,71.0024 86.1819,70.5917 84.9845,70.5917C 83.7432,70.5917 82.7139,71.005 81.8952,71.8317C 81.0765,72.6597 80.6685,73.6797 80.6685,74.8957C 80.6685,76.133 81.0912,77.165 81.9379,77.9944C 82.7672,78.8103 83.7832,79.2184 84.9845,79.2184C 86.1739,79.2184 87.1872,78.805 88.0245,77.9784C 88.8619,77.1517 89.2819,76.1237 89.2819,74.8957 Z M 89.8672,74.8703C 89.8672,76.237 89.3952,77.385 88.4525,78.3171C 87.5072,79.2477 86.3432,79.7144 84.9579,79.7144C 83.5619,79.7144 82.4005,79.2597 81.4779,78.3517C 80.5565,77.445 80.0952,76.297 80.0952,74.909C 80.0952,73.5464 80.5645,72.3957 81.5019,71.461C 82.4392,70.5263 83.6045,70.057 84.9979,70.057C 86.3645,70.057 87.5125,70.505 88.4419,71.3984C 89.3925,72.3157 89.8672,73.4717 89.8672,74.8703 Z ">
+                            <GeometryDrawing.Brush>
+                                <SolidColorBrush Color="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListView}}, Path=DataContext.Settings.ItemBackgroundColor}" />
+                            </GeometryDrawing.Brush>
+                        </GeometryDrawing>
                     </DrawingGroup.Children>
                 </DrawingGroup>
             </DrawingBrush.Drawing>
@@ -38,17 +59,18 @@
 
 
     <ListView ItemsSource="{Binding Source={StaticResource cvs}}" 
-			HorizontalAlignment="Stretch" 
+			HorizontalAlignment="{Binding Settings.Alignment}" 
 			VerticalAlignment="Stretch"
 			Background="Transparent" 
 			Focusable="False" 
 			IsHitTestVisible="False"
 			BorderBrush="Transparent"
 			BorderThickness="0"
+            Margin="{Binding Settings.Margins}"
             ScrollViewer.VerticalScrollBarVisibility="Hidden"
             ScrollViewer.HorizontalScrollBarVisibility="Hidden">
         <ListView.LayoutTransform>
-            <ScaleTransform ScaleY="-1" />
+            <ScaleTransform ScaleY="{Binding Settings.ScaleTransform}" />
         </ListView.LayoutTransform>
         <ListView.ItemTemplate>
             <DataTemplate>
@@ -79,7 +101,7 @@
                         </Style>
                     </Border.Style>
                     <Border.LayoutTransform>
-                        <ScaleTransform ScaleY="-1" />
+                        <ScaleTransform ScaleY="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListView}},Path=DataContext.Settings.ScaleTransform}" />
                     </Border.LayoutTransform>
                     <ListBox 
 							ItemsSource="{Binding Text}"
@@ -105,55 +127,67 @@
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock x:Name="KeyCap" FontFamily="/Carnac;component/Fonts/#DavysBigKeyCaps" Visibility="Collapsed" VerticalAlignment="Center" />
-                                    <Rectangle x:Name="foo" VerticalAlignment="Center" />
+                                    <Border x:Name="KeyCapBorder" 
+                                            Visibility="Collapsed" 
+                                            CornerRadius="5"
+                                            Margin="2"
+                                            Padding="5">
+                                        <Border.Background>
+                                            <SolidColorBrush Color="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListView}}, Path=DataContext.Settings.FontColor}" />
+                                        </Border.Background>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Rectangle x:Name="icon" VerticalAlignment="Center" />
+                                            <TextBlock x:Name="KeyCap" Text="{Binding}">
+                                            <TextBlock.Foreground>
+                                                <SolidColorBrush Color="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListView}}, Path=DataContext.Settings.ItemBackgroundColor}" />
+                                            </TextBlock.Foreground>
+                                            </TextBlock>
+                                        </StackPanel>
+                                    </Border>
+                                    
                                     <TextBlock x:Name="extra" Text="+" Visibility="Collapsed" VerticalAlignment="Center"/>
                                     <TextBlock x:Name="regular" Text="{Binding}" VerticalAlignment="Center" />
                                 </StackPanel>
                                 <DataTemplate.Triggers>
                                     <DataTrigger Binding="{Binding .}" Value="Return">
-                                        <Setter TargetName="KeyCap" Property="TextBlock.Text" Value="b" />
-                                        <Setter TargetName="KeyCap" Property="Control.Visibility" Value="Visible" />
+                                        <Setter TargetName="KeyCapBorder" Property="Control.Visibility" Value="Visible" />
                                         <Setter TargetName="regular" Property="Control.Visibility" Value="Collapsed" />
                                     </DataTrigger>
 
                                     <DataTrigger Binding="{Binding .}" Value="Back">
-                                        <Setter TargetName="KeyCap" Property="TextBlock.Text" Value="n" />
-                                        <Setter TargetName="KeyCap" Property="Control.Visibility" Value="Visible" />
+                                        <Setter TargetName="KeyCapBorder" Property="Control.Visibility" Value="Visible" />
                                         <Setter TargetName="regular" Property="Control.Visibility" Value="Collapsed" />
                                     </DataTrigger>
 
                                     <DataTrigger Binding="{Binding .}" Value="Escape">
-                                        <Setter TargetName="KeyCap" Property="TextBlock.Text" Value="s" />
-                                        <Setter TargetName="KeyCap" Property="Control.Visibility" Value="Visible" />
+                                        <Setter TargetName="KeyCapBorder" Property="Control.Visibility" Value="Visible" />
                                         <Setter TargetName="regular" Property="Control.Visibility" Value="Collapsed" />
                                     </DataTrigger>
 
                                     <DataTrigger Binding="{Binding .}" Value="Alt">
-                                        <Setter TargetName="KeyCap" Property="TextBlock.Text" Value="a" />
-                                        <Setter TargetName="KeyCap" Property="Control.Visibility" Value="Visible" />
+                                        <Setter TargetName="KeyCapBorder" Property="Control.Visibility" Value="Visible" />
                                         <Setter TargetName="extra" Property="Control.Visibility" Value="Visible" />
                                         <Setter TargetName="regular" Property="Control.Visibility" Value="Collapsed" />
                                     </DataTrigger>
                                     <DataTrigger Binding="{Binding .}" Value="Ctrl">
-                                        <Setter TargetName="KeyCap" Property="TextBlock.Text" Value="v" />
-                                        <Setter TargetName="KeyCap" Property="Control.Visibility" Value="Visible" />
+                                        <Setter TargetName="KeyCapBorder" Property="Control.Visibility" Value="Visible" />
                                         <Setter TargetName="extra" Property="Control.Visibility" Value="Visible" />
                                         <Setter TargetName="regular" Property="Control.Visibility" Value="Collapsed" />
                                     </DataTrigger>
 
                                     <DataTrigger Binding="{Binding .}" Value="Shift">
-                                        <Setter TargetName="KeyCap" Property="TextBlock.Text" Value="q" />
-                                        <Setter TargetName="KeyCap" Property="Control.Visibility" Value="Visible" />
+                                        <Setter TargetName="KeyCapBorder" Property="Control.Visibility" Value="Visible" />
                                         <Setter TargetName="extra" Property="Control.Visibility" Value="Visible" />
                                         <Setter TargetName="regular" Property="Control.Visibility" Value="Collapsed" />
                                     </DataTrigger>
 
                                     <DataTrigger Binding="{Binding .}" Value="Win">
                                         <Setter TargetName="regular" Property="Control.Visibility" Value="Collapsed" />
-                                        <Setter TargetName="foo" Property="Rectangle.Fill" Value="{StaticResource Layer_1}" />
-                                        <Setter TargetName="foo" Property="Rectangle.Width" Value="50" />
-                                        <Setter TargetName="foo" Property="Rectangle.Height" Value="50" />
+                                        <Setter TargetName="KeyCapBorder" Property="Control.Visibility" Value="Visible" />
+                                        <Setter TargetName="KeyCap" Property="Control.Visibility" Value="Collapsed" />
+                                        <Setter TargetName="icon" Property="Rectangle.Fill" Value="{StaticResource Layer_1}" />
+                                        <Setter TargetName="icon" Property="Rectangle.Width" Value="50" />
+                                        <Setter TargetName="icon" Property="Rectangle.Height" Value="50" />
                                     </DataTrigger>
 
                                 </DataTemplate.Triggers>

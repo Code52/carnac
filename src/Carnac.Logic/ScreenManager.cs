@@ -45,6 +45,7 @@ namespace Carnac.Logic
                         screen.Width = (int)mode.dmPelsWidth;
                         screen.Height = (int)mode.dmPelsHeight;
                         screen.Top = mode.dmPosition.y;
+                        screen.Left = mode.dmPosition.x;
                     }
 
                     screens.Add(screen);

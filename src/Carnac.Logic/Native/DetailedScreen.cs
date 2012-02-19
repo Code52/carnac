@@ -11,5 +11,11 @@ namespace Carnac.Logic.Native
         public double RelativeWidth { get; set; }
 
         public double Top { get; set; }
+        public double Left { get; set; }
+
+        public bool Placement1 { get; set; }
+        public bool Placement2 { get; set; }
+        public bool Placement3 { get; set; }
+        public bool Placement4 { get; set; }
     }
 }

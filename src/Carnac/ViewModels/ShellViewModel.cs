@@ -2,17 +2,14 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
 using System.Linq;
-using System.Threading;
-using System.Windows;
-using System.Windows.Threading;
 using Analects.SettingsService;
 using Caliburn.Micro;
 using Carnac.Logic;
 using Carnac.Logic.KeyMonitor;
 using Carnac.Logic.Native;
 using Carnac.Models;
+using Carnac.Utilities;
 using Message = Carnac.Models.Message;
-using Timer = System.Timers.Timer;
 
 namespace Carnac.ViewModels
 {
@@ -20,14 +17,19 @@ namespace Carnac.ViewModels
     public class ShellViewModel : Screen, IShell, IObserver<KeyPress>
     {
         IDisposable keySubscription;
+        readonly IDisposable timerToken;
 
         readonly ISettingsService settingsService;
 
         readonly TimeSpan fiveseconds = TimeSpan.FromSeconds(5);
         readonly TimeSpan sixseconds = TimeSpan.FromSeconds(6);
-
+        
         [ImportingConstructor]
-        public ShellViewModel(ISettingsService settingsService, IScreenManager screenManager)
+        public ShellViewModel(
+            ISettingsService settingsService, 
+            IScreenManager screenManager,
+            ITimerFactory timerFactory,
+            IWindowManager windowManager)
         {
             this.settingsService = settingsService;
 
@@ -41,20 +43,11 @@ namespace Carnac.ViewModels
                 SetDefaultSettings();
             }
 
-            var manager = new WindowManager();
-            manager.ShowWindow(new KeyShowViewModel(Keys, Settings));
+            PlaceScreen();
 
-            var timer = new Timer(1000);
-            timer.Elapsed +=
-                (s, e) =>
-                    {
-                        if (Application.Current == null || Application.Current.Dispatcher == null) return;
+            windowManager.ShowWindow(new KeyShowViewModel(Keys, Settings));
 
-                        Application.Current.Dispatcher.BeginInvoke((ThreadStart) (Cleanup),
-                                                                   DispatcherPriority.Background, null);
-                    };
-
-            timer.Start();
+            timerToken = timerFactory.Start(1000, Cleanup);
         }
 
         public ObservableCollection<Message> Keys { get; private set; }
@@ -62,6 +55,7 @@ namespace Carnac.ViewModels
         public Message CurrentMessage { get; private set; }
 
         public ObservableCollection<DetailedScreen> Screens { get; set; }
+		public DetailedScreen SelectedScreen { get; set; }
 
         public Settings Settings { get; set; }
 
@@ -92,6 +86,7 @@ namespace Carnac.ViewModels
         protected override void OnDeactivate(bool close)
         {
             keySubscription.Dispose();
+            timerToken.Dispose();
         }
 
         public void OnNext(KeyPress value)
@@ -140,15 +135,24 @@ namespace Carnac.ViewModels
 
         public void SaveSettings()
         {
-            // TODO: @tobin - this looks important
-            //Settings.Screen = SelectedScreen.Index;
-            //if (SelectedScreen.Placement1) Settings.Placement = 1;
-            //else if (SelectedScreen.Placement2) Settings.Placement = 2;
-            //else if (SelectedScreen.Placement3) Settings.Placement = 3;
-            //else if (SelectedScreen.Placement4) Settings.Placement = 4;
-            //else Settings.Placement = 0;
+            if (Screens.Count < 1) return;
+            
+            if (SelectedScreen == null) 
+                SelectedScreen = Screens.First();
+ 
+            Settings.Screen = SelectedScreen.Index;
 
-            //PlaceScreen();
+            if (SelectedScreen.Placement1) 
+                Settings.Placement = 1;
+            else if (SelectedScreen.Placement2) 
+                Settings.Placement = 2;
+            else if (SelectedScreen.Placement3) 
+                Settings.Placement = 3;
+            else if (SelectedScreen.Placement4) 
+                Settings.Placement = 4;
+            else Settings.Placement = 2;
+
+            PlaceScreen();
 
             settingsService.Set("PopupSettings", Settings);
             settingsService.Save();
@@ -164,5 +168,25 @@ namespace Carnac.ViewModels
 
             SaveSettings();
         }
-    }
+        private void PlaceScreen()
+        {
+            if (Screens == null) return;
+
+            SelectedScreen = Screens.FirstOrDefault(s => s.Index == Settings.Screen);
+
+            if (SelectedScreen == null) return;
+
+            if (Settings.Placement == 1) 
+                SelectedScreen.Placement1 = true;
+            else if (Settings.Placement == 2) 
+                SelectedScreen.Placement2 = true;
+            else if (Settings.Placement == 3) 
+                SelectedScreen.Placement3 = true;
+            else if (Settings.Placement == 4) 
+                SelectedScreen.Placement4 = true;
+            else SelectedScreen.Placement2 = true;
+
+            Settings.Left = SelectedScreen.Left;
+        }
+   }
 }
