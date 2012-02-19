@@ -95,7 +95,6 @@ namespace Carnac.ViewModels
                                                          "Caliburn Micro",
                                                          "NSubstitute",
                                                          "Reactive Extensions",
-                                                         "MarkdownDeep",
                                                          "Notify Property Weaver"
                                                      };
         public string Components
