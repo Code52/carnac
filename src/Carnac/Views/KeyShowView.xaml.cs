@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
-using System.Threading;
-using System.Windows;
 using System.Windows.Interop;
-using System.Windows.Threading;
 using Carnac.Logic;
-using Carnac.ViewModels;
 using Timer = System.Timers.Timer;
 
 namespace Carnac.Views
@@ -27,49 +23,31 @@ namespace Carnac.Views
             timer.Elapsed +=
                 (s, x) =>
                 {
-                    if (Application.Current == null || Application.Current.Dispatcher == null) return;
+                    RECT rect;
 
-                    Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() =>
+                    if (GetWindowRect(hwnd, out rect))
                     {
-                        var dc = DataContext as KeyShowViewModel;
+                        SetWindowPos(hwnd,
+                                     HWND.TOPMOST,
+                                     0, 0, 0, 0,
+                                     (uint)(SWP.NOMOVE | SWP.NOSIZE | SWP.SHOWWINDOW));
+                    }
+                    else
+                    {
+                        SetWindowPos(hwnd,
+                                    HWND.NOTOPMOST,
+                                    0, 0, 0, 0,
+                                    (uint)(SWP.NOMOVE | SWP.NOSIZE | SWP.SHOWWINDOW));
 
-                        if (dc == null) return;
-
-                        if (dc.Settings.SetWindowInFront)
-                        {
-                            RECT rect;
-
-                            if (GetWindowRect(hwnd, out rect))
-                            {
-                                SetWindowPos(hwnd,
-                                             HWND.TOPMOST,
-                                             0, 0, 0, 0,
-                                             (uint)(SWP.NOMOVE | SWP.NOSIZE | SWP.SHOWWINDOW));
-                            }
-                            else
-                            {
-                                SetWindowPos(hwnd,
-                                            HWND.NOTOPMOST,
-                                            0, 0, 0, 0,
-                                            (uint)(SWP.NOMOVE | SWP.NOSIZE | SWP.SHOWWINDOW));
-
-                                SetWindowPos(hwnd,
-                                           HWND.BOTTOM,
-                                           0, 0, 0, 0,
-                                           (uint)(SWP.NOMOVE | SWP.NOSIZE | SWP.SHOWWINDOW));
-                            }
-                        }
-                    }));
+                        SetWindowPos(hwnd,
+                                   HWND.BOTTOM,
+                                   0, 0, 0, 0,
+                                   (uint)(SWP.NOMOVE | SWP.NOSIZE | SWP.SHOWWINDOW));
+                    }
                 };
 
             timer.Start();
         }
-
-        //[DllImport("user32.dll", SetLastError = true)]
-        //static extern bool BringWindowToTop(IntPtr hWnd);
-
-        //[DllImport("user32.dll")]
-        //private static extern bool SetForegroundWindow(IntPtr hWnd);
 
         [DllImport("user32.dll", SetLastError = true)]
         public static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int W, int H, uint uFlags);
