@@ -1,11 +1,12 @@
-﻿using System;
-using Analects.SettingsService;
+﻿using Analects.SettingsService;
+using Caliburn.Micro;
 using Carnac.Logic;
 using Carnac.Models;
 using Carnac.Utilities;
 using Carnac.ViewModels;
 using NSubstitute;
 using Xunit;
+using Action = System.Action;
 
 namespace Carnac.Tests.ViewModels
 {
@@ -14,11 +15,12 @@ namespace Carnac.Tests.ViewModels
         readonly ISettingsService settingsService = Substitute.For<ISettingsService>();
         readonly IScreenManager screenManager = Substitute.For<IScreenManager>();
         readonly ITimerFactory timerFactory = Substitute.For<ITimerFactory>();
+        readonly IWindowManager windowManager = Substitute.For<IWindowManager>();
         private ShellViewModel viewModel;
 
         public ShellViewModelTests()
         {
-            viewModel = new ShellViewModel(settingsService, screenManager, timerFactory);
+            viewModel = new ShellViewModel(settingsService, screenManager, timerFactory, windowManager);
         }
 
         [Fact]

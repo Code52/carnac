@@ -28,7 +28,8 @@ namespace Carnac.ViewModels
         public ShellViewModel(
             ISettingsService settingsService, 
             IScreenManager screenManager,
-            ITimerFactory timerFactory)
+            ITimerFactory timerFactory,
+            IWindowManager windowManager)
         {
             this.settingsService = settingsService;
 
@@ -42,8 +43,7 @@ namespace Carnac.ViewModels
                 SetDefaultSettings();
             }
 
-            var manager = new WindowManager();
-            manager.ShowWindow(new KeyShowViewModel(Keys, Settings));
+            windowManager.ShowWindow(new KeyShowViewModel(Keys, Settings));
 
             timerToken = timerFactory.Start(1000, Cleanup);
         }
