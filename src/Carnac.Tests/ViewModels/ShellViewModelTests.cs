@@ -41,5 +41,26 @@ namespace Carnac.Tests.ViewModels
             settingsService.Received().Get<Settings>("PopupSettings");
         }
 
+
+        [Fact]
+        public void Constructor_WhenSettingsExists_PopulatesValue()
+        {
+            var settings = new Settings();
+            settingsService.Get<Settings>("PopupSettings").Returns(settings);
+            viewModel = new ShellViewModel(settingsService, screenManager, timerFactory, windowManager);
+
+            Assert.Equal(settings, viewModel.Settings);
+        }
+
+        [Fact]
+        public void Constructor_WhenSettingsDoNotExists_PopulatesNewValue()
+        {
+            Settings settings = null;
+            settingsService.Get<Settings>("PopupSettings").Returns(settings);
+            viewModel = new ShellViewModel(settingsService, screenManager, timerFactory, windowManager);
+
+            Assert.NotNull(viewModel.Settings);
+        }
+
     }
 }
