@@ -53,6 +53,7 @@
     <Compile Include="KeyMonitor\KeyDirection.cs" />
     <Compile Include="KeyPress.cs" />
     <Compile Include="KeyProvider.cs" />
+    <Compile Include="ReplaceKey.cs" />
     <Compile Include="ScreenManager.cs" />
     <Compile Include="Win32Methods.cs" />
     <Compile Include="Native\DetailedScreen.cs" />

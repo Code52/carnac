@@ -88,7 +88,6 @@
     <Compile Include="KeyMonitor\HotKey.cs" />
     <Compile Include="KeyMonitor\HotKeyWinApi.cs" />
     <Compile Include="Models\Settings.cs" />
-    <Compile Include="ReplaceKey.cs" />
     <Compile Include="Utilities\ProcessUtilities.cs" />
     <Compile Include="ViewModels\KeyShowViewModel.cs" />
     <Compile Include="Models\Message.cs" />

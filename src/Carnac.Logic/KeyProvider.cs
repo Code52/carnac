@@ -54,6 +54,53 @@ namespace Carnac.Logic
 
         private KeyPress ToCarnacKeyPress(InterceptKeyEventArgs interceptKeyEventArgs)
         {
+            var process = GetAssociatedProcess();
+
+            var isLetter = interceptKeyEventArgs.Key >= Keys.A &&
+                           interceptKeyEventArgs.Key <= Keys.Z;
+
+            var inputs = ToInputs(isLetter, interceptKeyEventArgs);
+
+            return new KeyPress(process, interceptKeyEventArgs, isLetter, inputs);
+        }
+
+        private IEnumerable<string> ToInputs(bool isLetter, InterceptKeyEventArgs interceptKeyEventArgs)
+        {
+            var controlPressed = interceptKeyEventArgs.ControlPressed;
+            var altPressed = interceptKeyEventArgs.AltPressed;
+            var shiftPressed = interceptKeyEventArgs.ShiftPressed;
+            if (controlPressed)
+                yield return "Ctrl";
+            if (altPressed)
+                yield return "Alt";
+
+            if (controlPressed || altPressed)
+            {
+                //Treat as a shortcut, don't be too smart
+                if (shiftPressed)
+                    yield return "Shift";
+
+                yield return interceptKeyEventArgs.Key.Sanitise();
+            }
+            else
+            {
+                string input;
+                var shiftModifiesInput = interceptKeyEventArgs.Key.SanitiseShift(out input);
+
+                if (!isLetter && !shiftModifiesInput && shiftPressed)
+                    yield return "Shift";
+
+                if (interceptKeyEventArgs.ShiftPressed && shiftModifiesInput)
+                    yield return input;
+                else if (isLetter && !interceptKeyEventArgs.ShiftPressed)
+                    yield return interceptKeyEventArgs.Key.ToString().ToLower();
+                else
+                    yield return interceptKeyEventArgs.Key.Sanitise();
+            }
+        }
+
+        private Process GetAssociatedProcess()
+        {
             Process process;
 
             int handle = GetForegroundWindow();
@@ -66,10 +113,9 @@ namespace Carnac.Logic
                 processes.Add(handle, p);
                 process = p;
             }
-            else 
+            else
                 process = processes[handle];
-
-            return new KeyPress(process, interceptKeyEventArgs);
+            return process;
         }
     }
 }
