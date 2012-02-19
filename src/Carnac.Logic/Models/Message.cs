@@ -29,7 +29,17 @@ namespace Carnac.Logic.Models
         public int Count { get; set; }
         public bool IsDeleting { get; set; }
 
-        public string ShortcutName { get; set; }
+        private string shortcutName;
+        public string ShortcutName
+        {
+            get { return shortcutName; }
+            set
+            {
+                shortcutName = value;
+                if (!string.IsNullOrEmpty(shortcutName))
+                    AddText(string.Format(" [{0}]", value));
+            }
+        }
 
         public void AddKey(KeyPress keyPress)
         {

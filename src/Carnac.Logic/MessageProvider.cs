@@ -33,7 +33,8 @@ namespace Carnac.Logic
         {
             Message message;
 
-            var keyPresses = CurrentMessage == null ? new[] {value} : CurrentMessage.Keys.Concat(new[] {value}).ToArray();
+            var currentKeyPress = new[] {value};
+            var keyPresses = CurrentMessage == null ? currentKeyPress : CurrentMessage.Keys.Concat(currentKeyPress).ToArray();
             var possibleShortcuts = GetPossibleShortcuts(keyPresses).ToList();
             if (possibleShortcuts.Any())
             {
@@ -41,10 +42,32 @@ namespace Carnac.Logic
                 if (shortcut != null)
                 {
                     message = CurrentMessage ?? CreateNewMessage(value);
+                    message.AddKey(value);
                     message.ShortcutName = shortcut.Name;
+                    message.LastMessage = DateTime.Now;
+                    message.Count++;
+                    //Have duplicated as it was easier for now, this should be cleaned up
+                    return;
                 }
-                else
+            }
+
+            // Haven't matched a Chord, try just the last keypress
+            var keyShortcuts = GetPossibleShortcuts(currentKeyPress).ToList();
+            if (keyShortcuts.Any())
+            {
+                var shortcut = keyShortcuts.FirstOrDefault(s => s.IsMatch(currentKeyPress));
+                if (shortcut != null)
+                {
+                    //For matching last keypress, we want a new message
                     message = CreateNewMessage(value);
+                    message.AddKey(value);
+                    message.ShortcutName = shortcut.Name;
+                    message.LastMessage = DateTime.Now;
+                    message.Count++;
+                    //Have duplicated as it was easier for now, this should be cleaned up
+                    return;
+                }
+                message = CreateNewMessage(value);
             }
             else if (ShouldCreateNewMessage(value))
             {
@@ -54,7 +77,6 @@ namespace Carnac.Logic
                 message = CurrentMessage ?? CreateNewMessage(value);
 
             message.AddKey(value);
-
             message.LastMessage = DateTime.Now;
             message.Count++;
         }
