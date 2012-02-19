@@ -9,20 +9,20 @@ using Carnac.Logic.KeyMonitor;
 using Carnac.Logic.Native;
 using Carnac.Models;
 using Carnac.Utilities;
-using Message = Carnac.Models.Message;
+using Message = Carnac.Logic.Models.Message;
 using System.Reflection;
 using System.Collections.Generic;
 
 namespace Carnac.ViewModels
 {
     [Export(typeof(IShell))]
-    public class ShellViewModel : Screen, IShell, IObserver<KeyPress>
+    public class ShellViewModel : Screen, IShell, IObserver<Message>
     {
         IDisposable keySubscription;
         readonly IDisposable timerToken;
 
         readonly ISettingsService settingsService;
-        private readonly IKeyProvider keyProvider;
+        private readonly IMessageProvider messageProvider;
 
         readonly TimeSpan fiveseconds = TimeSpan.FromSeconds(5);
         readonly TimeSpan sixseconds = TimeSpan.FromSeconds(6);
@@ -33,10 +33,10 @@ namespace Carnac.ViewModels
             IScreenManager screenManager,
             ITimerFactory timerFactory,
             IWindowManager windowManager,
-            IKeyProvider keyProvider)
+            IMessageProvider messageProvider)
         {
             this.settingsService = settingsService;
-            this.keyProvider = keyProvider;
+            this.messageProvider = messageProvider;
 
             Keys = new ObservableCollection<Message>();
             Screens = new ObservableCollection<DetailedScreen>(screenManager.GetScreens());
@@ -56,8 +56,6 @@ namespace Carnac.ViewModels
         }
 
         public ObservableCollection<Message> Keys { get; private set; }
-
-        public Message CurrentMessage { get; private set; }
 
         public ObservableCollection<DetailedScreen> Screens { get; set; }
         public DetailedScreen SelectedScreen { get; set; }
@@ -132,7 +130,7 @@ namespace Carnac.ViewModels
 
         protected override void OnActivate()
         {
-            keySubscription = keyProvider.Subscribe(this);
+            keySubscription = messageProvider.Subscribe(this);
         }
 
         protected override void OnDeactivate(bool close)
@@ -141,39 +139,12 @@ namespace Carnac.ViewModels
             timerToken.Dispose();
         }
 
-        public void OnNext(KeyPress value)
+        public void OnNext(Message value)
         {
             if (Keys.Count > 10)
                 Keys.RemoveAt(0);
 
-            Message m;
-
-            if (CurrentMessage == null || CurrentMessage.ProcessName != value.Process.ProcessName ||
-                CurrentMessage.LastMessage < DateTime.Now.AddSeconds(-1) ||
-                value.IsShortcut)
-            {
-                m = new Message
-                        {
-                            StartingTime = DateTime.Now,
-                            ProcessName = value.Process.ProcessName
-                        };
-
-                CurrentMessage = m;
-                Keys.Add(m);
-            }
-            else
-                m = CurrentMessage;
-
-            foreach (var input in value.Input)
-            {
-                m.AddText(input);
-            }
-
-            m.LastMessage = DateTime.Now;
-            m.Count++;
-
-            if (value.IsShortcut)
-                CurrentMessage = null;
+            Keys.Add(value);
         }
 
         public void OnError(Exception error)

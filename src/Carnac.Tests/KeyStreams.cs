@@ -68,5 +68,16 @@ namespace Carnac.Tests
                            new InterceptKeyEventArgs(Keys.LControlKey, KeyDirection.Up, false, true, false)
                        };
         }
+
+        public static KeyPlayer CtrlU()
+        {
+            return new KeyPlayer
+                       {
+                           new InterceptKeyEventArgs(Keys.LControlKey, KeyDirection.Down, false, false, false),
+                           new InterceptKeyEventArgs(Keys.U, KeyDirection.Down, false, true, false),
+                           new InterceptKeyEventArgs(Keys.U, KeyDirection.Up, false, true, false),
+                           new InterceptKeyEventArgs(Keys.LControlKey, KeyDirection.Up, false, true, false)
+                       };
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace Carnac.Logic
@@ -76,6 +77,19 @@ namespace Carnac.Logic
                                                                                 {Keys.LWin, "Win"},
                                                                                 {Keys.RWin, "Win"},
                                                                             };
+
+        public static Keys? ToKey(string keyText)
+        {
+            foreach (var shiftReplacement in ShiftReplacements)
+            {
+                if (shiftReplacement.Value == keyText)
+                    return shiftReplacement.Key;
+            }
+            Keys parsedKey;
+            if (Enum.TryParse(keyText ,out parsedKey))
+                return parsedKey;
+            return null;
+        }
 
         public static string Sanitise(this Keys key)
         {

@@ -145,7 +145,6 @@
                                         </StackPanel>
                                     </Border>
                                     
-                                    <TextBlock x:Name="extra" Text="+" Visibility="Collapsed" VerticalAlignment="Center"/>
                                     <TextBlock x:Name="regular" Text="{Binding}" VerticalAlignment="Center" />
                                 </StackPanel>
                                 <DataTemplate.Triggers>
@@ -166,23 +165,19 @@
 
                                     <DataTrigger Binding="{Binding .}" Value="Alt">
                                         <Setter TargetName="KeyCapBorder" Property="Control.Visibility" Value="Visible" />
-                                        <Setter TargetName="extra" Property="Control.Visibility" Value="Visible" />
                                         <Setter TargetName="regular" Property="Control.Visibility" Value="Collapsed" />
                                     </DataTrigger>
                                     <DataTrigger Binding="{Binding .}" Value="Ctrl">
                                         <Setter TargetName="KeyCapBorder" Property="Control.Visibility" Value="Visible" />
-                                        <Setter TargetName="extra" Property="Control.Visibility" Value="Visible" />
                                         <Setter TargetName="regular" Property="Control.Visibility" Value="Collapsed" />
                                     </DataTrigger>
 
                                     <DataTrigger Binding="{Binding .}" Value="Shift">
                                         <Setter TargetName="KeyCapBorder" Property="Control.Visibility" Value="Visible" />
-                                        <Setter TargetName="extra" Property="Control.Visibility" Value="Visible" />
                                         <Setter TargetName="regular" Property="Control.Visibility" Value="Collapsed" />
                                     </DataTrigger>
 
                                     <DataTrigger Binding="{Binding .}" Value="Win">
-                                        <Setter TargetName="extra" Property="Control.Visibility" Value="Visible" />
                                         <Setter TargetName="regular" Property="Control.Visibility" Value="Collapsed" />
                                         <Setter TargetName="KeyCapBorder" Property="Control.Visibility" Value="Visible" />
                                         <Setter TargetName="KeyCap" Property="Control.Visibility" Value="Collapsed" />

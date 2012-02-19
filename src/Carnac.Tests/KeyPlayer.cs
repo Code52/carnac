@@ -22,5 +22,13 @@ namespace Carnac.Tests
             }
             subject.OnCompleted();
         }
+
+        public void Play(Subject<InterceptKeyEventArgs> interceptKeysSource)
+        {
+            foreach (var key in this)
+            {
+                interceptKeysSource.OnNext(key);
+            }
+        }
     }
 }
