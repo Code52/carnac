@@ -189,9 +189,6 @@
   <ItemGroup>
     <Resource Include="carnac_2.png" />
   </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Fonts\10823_DavysBigKeyCapsMedium.ttf" />
-  </ItemGroup>
   <UsingTask TaskName="NotifyPropertyWeaverMsBuildTask.WeavingTask" AssemblyFile="$(SolutionDir)Tools\NotifyPropertyWeaverMsBuildTask.dll" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
