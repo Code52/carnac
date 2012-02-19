@@ -6,9 +6,10 @@
         AllowsTransparency="True"
         Background="Transparent"
         BorderBrush="Transparent"
-        BorderThickness="0"
         WindowStartupLocation="Manual"
-        Left="0"
+        Top="0"
+        Left="{Binding Settings.Left}"
+        WindowState="Maximized"
         WindowStyle="None"
         SnapsToDevicePixels="True"
         FontSize="{Binding Settings.FontSize}"
@@ -38,17 +39,18 @@
 
 
     <ListView ItemsSource="{Binding Source={StaticResource cvs}}" 
-			HorizontalAlignment="Stretch" 
+			HorizontalAlignment="{Binding Settings.Alignment}" 
 			VerticalAlignment="Stretch"
 			Background="Transparent" 
 			Focusable="False" 
 			IsHitTestVisible="False"
 			BorderBrush="Transparent"
 			BorderThickness="0"
+            Margin="{Binding Settings.Margins}"
             ScrollViewer.VerticalScrollBarVisibility="Hidden"
             ScrollViewer.HorizontalScrollBarVisibility="Hidden">
         <ListView.LayoutTransform>
-            <ScaleTransform ScaleY="-1" />
+            <ScaleTransform ScaleY="{Binding Settings.ScaleTransform}" />
         </ListView.LayoutTransform>
         <ListView.ItemTemplate>
             <DataTemplate>
@@ -79,7 +81,7 @@
                         </Style>
                     </Border.Style>
                     <Border.LayoutTransform>
-                        <ScaleTransform ScaleY="-1" />
+                        <ScaleTransform ScaleY="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListView}},Path=DataContext.Settings.ScaleTransform}" />
                     </Border.LayoutTransform>
                     <ListBox 
 							ItemsSource="{Binding Text}"
