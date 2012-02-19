@@ -10,6 +10,8 @@ using Carnac.Logic.Native;
 using Carnac.Models;
 using Carnac.Utilities;
 using Message = Carnac.Models.Message;
+using System.Reflection;
+using System.Collections.Generic;
 
 namespace Carnac.ViewModels
 {
@@ -63,6 +65,53 @@ namespace Carnac.ViewModels
         {
             get { return "Carnac"; }
             set { }
+        }
+
+        public string Version
+        {
+            get { return Assembly.GetExecutingAssembly().GetName().Version.ToString(); }
+        }
+
+        private readonly List<string> authors = new List<string>
+                                                    {
+                                                         "Brendan Forster",
+                                                         "Alex Friedman",
+                                                         "Jon Galloway",
+                                                         "Jake Ginnivan",
+                                                         "Paul Jenkins",
+                                                         "Dmitry Pursanov",
+                                                         "Chris Sainty",
+                                                         "Andrew Tobin"
+                                                     };
+        public string Authors
+        {
+            get { return string.Join(", ", authors); }
+        }
+
+        private readonly List<string> components = new List<string>
+                                                       {
+                                                         "MahApps.Metro",
+                                                         "Analects",
+                                                         "Caliburn Micro",
+                                                         "NSubstitute",
+                                                         "Reactive Extensions",
+                                                         "Notify Property Weaver"
+                                                     };
+        public string Components
+        {
+            get { return string.Join(", ", components); }
+        }
+
+        public void Visit()
+        {
+            try
+            {
+                System.Diagnostics.Process.Start("http://code52.org/carnac.html");
+            }
+            catch //I forget what exceptions can be raised if the browser is crashed?
+            {
+
+            }
         }
 
         public void Cleanup()
