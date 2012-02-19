@@ -25,7 +25,11 @@ namespace Carnac.Logic
                     Keys.ShiftKey,
                     Keys.Shift,
                     Keys.Alt,
+                    Keys.LWin,
+                    Keys.RWin
                 };
+
+        private bool winKeyPressed;
 
         [DllImport("User32.dll")]
         private static extern int GetForegroundWindow();
@@ -42,9 +46,23 @@ namespace Carnac.Logic
         public IDisposable Subscribe(IObserver<KeyPress> observer)
         {
             return interceptKeysSource
+                .Select(DetectWindowsKey)
                 .Where(k => !IsModifierKeyPress(k) && k.KeyDirection == KeyDirection.Down)
                 .Select(ToCarnacKeyPress)
                 .Subscribe(observer);
+        }
+
+        private InterceptKeyEventArgs DetectWindowsKey(InterceptKeyEventArgs interceptKeyEventArgs)
+        {
+            if (interceptKeyEventArgs.Key == Keys.LWin || interceptKeyEventArgs.Key == Keys.RWin)
+            {
+                if (interceptKeyEventArgs.KeyDirection == KeyDirection.Up)
+                    winKeyPressed = false;
+                else if (interceptKeyEventArgs.KeyDirection == KeyDirection.Down)
+                    winKeyPressed = true;
+            }
+
+            return interceptKeyEventArgs;
         }
 
         private bool IsModifierKeyPress(InterceptKeyEventArgs interceptKeyEventArgs)
@@ -61,7 +79,7 @@ namespace Carnac.Logic
 
             var inputs = ToInputs(isLetter, interceptKeyEventArgs);
 
-            return new KeyPress(process, interceptKeyEventArgs, isLetter, inputs);
+            return new KeyPress(process, interceptKeyEventArgs, winKeyPressed, inputs);
         }
 
         private IEnumerable<string> ToInputs(bool isLetter, InterceptKeyEventArgs interceptKeyEventArgs)
@@ -73,6 +91,8 @@ namespace Carnac.Logic
                 yield return "Ctrl";
             if (altPressed)
                 yield return "Alt";
+            if (winKeyPressed)
+                yield return "Win";
 
             if (controlPressed || altPressed)
             {
