@@ -122,7 +122,6 @@
     <Compile Include="Utilities\TimerFactory.cs" />
     <Compile Include="Utilities\TimerState.cs" />
     <Compile Include="ViewModels\KeyShowViewModel.cs" />
-    <Compile Include="Models\Message.cs" />
     <Compile Include="ViewModels\ShellViewModel.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>

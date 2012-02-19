@@ -1,4 +1,5 @@
-﻿using Carnac.Models;
+﻿using Carnac.Logic.Models;
+using Carnac.Models;
 using Xunit;
 
 namespace Carnac.Tests

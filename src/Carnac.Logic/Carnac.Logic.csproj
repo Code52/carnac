@@ -54,8 +54,11 @@
     <Compile Include="KeyMonitor\InterceptKeyEventArgs.cs" />
     <Compile Include="KeyMonitor\InterceptKeys.cs" />
     <Compile Include="KeyMonitor\KeyDirection.cs" />
-    <Compile Include="KeyPress.cs" />
+    <Compile Include="Models\KeyPress.cs" />
     <Compile Include="KeyProvider.cs" />
+    <Compile Include="MessageProvider.cs" />
+    <Compile Include="Models\Message.cs" />
+    <Compile Include="NotifyPropertyChanged.cs" />
     <Compile Include="PasswordModeService.cs" />
     <Compile Include="ReplaceKey.cs" />
     <Compile Include="ScreenManager.cs" />
