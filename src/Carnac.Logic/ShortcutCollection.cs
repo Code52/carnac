@@ -7,9 +7,9 @@ namespace Carnac.Logic
 {
     public class ShortcutCollection : Collection<KeyShortcut>
     {
-        public bool ContainsShortcut(IEnumerable<KeyPress> keys, KeyPress newKeyPress)
+        public IEnumerable<KeyShortcut> GetShortcutsMatching(IEnumerable<KeyPress> keys)
         {
-            return this.Any(s => s.StartsWith(keys.Concat(new[] { newKeyPress })));
+            return this.Where(s => s.StartsWith(keys));
         }
     }
 }

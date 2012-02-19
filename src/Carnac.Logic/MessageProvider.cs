@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
 using System.Reactive.Subjects;
@@ -32,19 +33,25 @@ namespace Carnac.Logic
         {
             Message message;
 
-            if (ShouldCreateNewMessage(value) && !IsChord(value))
+            var keyPresses = CurrentMessage == null ? new[] {value} : CurrentMessage.Keys.Concat(new[] {value}).ToArray();
+            var possibleShortcuts = GetPossibleShortcuts(keyPresses).ToList();
+            if (possibleShortcuts.Any())
             {
-                message = new Message
+                var shortcut = possibleShortcuts.FirstOrDefault(s => s.IsMatch(keyPresses));
+                if (shortcut != null)
                 {
-                    StartingTime = DateTime.Now,
-                    ProcessName = value.Process.ProcessName
-                };
-
-                CurrentMessage = message;
-                subject.OnNext(message);
+                    message = CurrentMessage ?? CreateNewMessage(value);
+                    message.ShortcutName = shortcut.Name;
+                }
+                else
+                    message = CreateNewMessage(value);
+            }
+            else if (ShouldCreateNewMessage(value))
+            {
+                message = CreateNewMessage(value);
             }
             else
-                message = CurrentMessage;
+                message = CurrentMessage ?? CreateNewMessage(value);
 
             message.AddKey(value);
 
@@ -52,13 +59,27 @@ namespace Carnac.Logic
             message.Count++;
         }
 
+        private Message CreateNewMessage(KeyPress value)
+        {
+            var message = new Message
+                                  {
+                                      StartingTime = DateTime.Now,
+                                      ProcessName = value.Process.ProcessName
+                                  };
+
+            CurrentMessage = message;
+            subject.OnNext(message);
+            return message;
+        }
+
         private bool ShouldCreateNewMessage(KeyPress value)
         {
             return
                 CurrentMessage == null ||
                 IsDifferentProcess(value) ||
-                IsOlderThanASecond()  ||
-                LastKeyPressWasShortcut();
+                IsOlderThanASecond() ||
+                LastKeyPressWasShortcut() ||
+                value.IsShortcut;
         }
 
         private bool LastKeyPressWasShortcut()
@@ -66,12 +87,9 @@ namespace Carnac.Logic
             return CurrentMessage.Keys.Last().IsShortcut;
         }
 
-        private bool IsChord(KeyPress value)
+        private IEnumerable<KeyShortcut> GetPossibleShortcuts(IEnumerable<KeyPress> keyPresses)
         {
-            if (CurrentMessage == null)
-                return false;
-            var isChord = shortcutProvider.IsChord(CurrentMessage.Keys, value);
-            return isChord;
+            return shortcutProvider.GetShortcutsMatching(keyPresses);
         }
 
         private bool IsOlderThanASecond()

@@ -29,6 +29,8 @@ namespace Carnac.Logic.Models
         public int Count { get; set; }
         public bool IsDeleting { get; set; }
 
+        public string ShortcutName { get; set; }
+
         public void AddKey(KeyPress keyPress)
         {
             keyCollection.Add(keyPress);

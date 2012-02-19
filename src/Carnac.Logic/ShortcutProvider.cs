@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using System.Linq;
 using System.Windows.Forms;
 using Carnac.Logic.Models;
 
@@ -14,22 +15,24 @@ namespace Carnac.Logic
         {
             shortcuts.Add("devenv", new ShortcutCollection
                                          {
-                                             new KeyShortcut(new KeyPressDefinition(Keys.R, controlPressed: true),
-                                                             new KeyPressDefinition(Keys.T, controlPressed: true))
+                                             new KeyShortcut("Run Tests", 
+                                                 new KeyPressDefinition(Keys.R, controlPressed: true),
+                                                 new KeyPressDefinition(Keys.T, controlPressed: true))
                                          });
         }
 
-        public bool IsChord(IEnumerable<KeyPress> keys, KeyPress newKeyPress)
+        public IEnumerable<KeyShortcut> GetShortcutsMatching(IEnumerable<KeyPress> keys)
         {
-            var processName = newKeyPress.Process.ProcessName;
+            var keyPresses = keys.ToArray();
+            var processName = keyPresses.Last().Process.ProcessName;
             if (shortcuts.ContainsKey(processName))
             {
                 var collection = shortcuts[processName];
 
-                return collection.ContainsShortcut(keys, newKeyPress);
+                return collection.GetShortcutsMatching(keyPresses);
             }
 
-            return false;
+            return Enumerable.Empty<KeyShortcut>();
         }
     }
 }

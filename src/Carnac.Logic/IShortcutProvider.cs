@@ -5,6 +5,6 @@ namespace Carnac.Logic
 {
     public interface IShortcutProvider
     {
-        bool IsChord(IEnumerable<KeyPress> keys, KeyPress newKeyPress);
+        IEnumerable<KeyShortcut> GetShortcutsMatching(IEnumerable<KeyPress> keys);
     }
 }
