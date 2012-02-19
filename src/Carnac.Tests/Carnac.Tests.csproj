@@ -61,6 +61,7 @@
   <ItemGroup>
     <Compile Include="KeyPlayer.cs" />
     <Compile Include="KeyStreams.cs" />
+    <Compile Include="MessageFacts.cs" />
     <Compile Include="SpecificationFor.cs" />
     <Compile Include="KeyProviderTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
