@@ -84,10 +84,30 @@
             </StackPanel>
         </TabItem>
         <TabItem Header="Keys">
-            <ItemsControl Margin="12" ItemsSource="{Binding Keys}" DisplayMemberPath="Text" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <ItemsControl Margin="12" ItemsSource="{Binding Keys}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                 <ItemsControl.Foreground>
                     <SolidColorBrush Color="White" />
                 </ItemsControl.Foreground>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding ProcessName}" Foreground="White"/>
+                            <ListBox ItemsSource="{Binding Text}" Foreground="White"
+                                     BorderBrush="Transparent" BorderThickness="0">
+                                <ListBox.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel />
+                                    </ItemsPanelTemplate>
+                                </ListBox.ItemsPanel>
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding}" Foreground="White" />
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </StackPanel>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
             </ItemsControl>
         </TabItem>
         <TabItem Header="Recording">
