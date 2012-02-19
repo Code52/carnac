@@ -15,25 +15,28 @@ using System.Collections.Generic;
 
 namespace Carnac.ViewModels
 {
-    [Export(typeof (IShell))]
+    [Export(typeof(IShell))]
     public class ShellViewModel : Screen, IShell, IObserver<KeyPress>
     {
         IDisposable keySubscription;
         readonly IDisposable timerToken;
 
         readonly ISettingsService settingsService;
+        private readonly IKeyProvider keyProvider;
 
         readonly TimeSpan fiveseconds = TimeSpan.FromSeconds(5);
         readonly TimeSpan sixseconds = TimeSpan.FromSeconds(6);
-        
+
         [ImportingConstructor]
         public ShellViewModel(
-            ISettingsService settingsService, 
+            ISettingsService settingsService,
             IScreenManager screenManager,
             ITimerFactory timerFactory,
-            IWindowManager windowManager)
+            IWindowManager windowManager,
+            IKeyProvider keyProvider)
         {
             this.settingsService = settingsService;
+            this.keyProvider = keyProvider;
 
             Keys = new ObservableCollection<Message>();
             Screens = new ObservableCollection<DetailedScreen>(screenManager.GetScreens());
@@ -57,7 +60,7 @@ namespace Carnac.ViewModels
         public Message CurrentMessage { get; private set; }
 
         public ObservableCollection<DetailedScreen> Screens { get; set; }
-		public DetailedScreen SelectedScreen { get; set; }
+        public DetailedScreen SelectedScreen { get; set; }
 
         public Settings Settings { get; set; }
 
@@ -129,7 +132,7 @@ namespace Carnac.ViewModels
 
         protected override void OnActivate()
         {
-            keySubscription = new KeyProvider(InterceptKeys.Current).Subscribe(this);
+            keySubscription = keyProvider.Subscribe(this);
         }
 
         protected override void OnDeactivate(bool close)
@@ -185,19 +188,19 @@ namespace Carnac.ViewModels
         public void SaveSettings()
         {
             if (Screens.Count < 1) return;
-            
-            if (SelectedScreen == null) 
+
+            if (SelectedScreen == null)
                 SelectedScreen = Screens.First();
- 
+
             Settings.Screen = SelectedScreen.Index;
 
-            if (SelectedScreen.Placement1) 
+            if (SelectedScreen.Placement1)
                 Settings.Placement = 1;
-            else if (SelectedScreen.Placement2) 
+            else if (SelectedScreen.Placement2)
                 Settings.Placement = 2;
-            else if (SelectedScreen.Placement3) 
+            else if (SelectedScreen.Placement3)
                 Settings.Placement = 3;
-            else if (SelectedScreen.Placement4) 
+            else if (SelectedScreen.Placement4)
                 Settings.Placement = 4;
             else Settings.Placement = 2;
 
@@ -225,17 +228,17 @@ namespace Carnac.ViewModels
 
             if (SelectedScreen == null) return;
 
-            if (Settings.Placement == 1) 
+            if (Settings.Placement == 1)
                 SelectedScreen.Placement1 = true;
-            else if (Settings.Placement == 2) 
+            else if (Settings.Placement == 2)
                 SelectedScreen.Placement2 = true;
-            else if (Settings.Placement == 3) 
+            else if (Settings.Placement == 3)
                 SelectedScreen.Placement3 = true;
-            else if (Settings.Placement == 4) 
+            else if (Settings.Placement == 4)
                 SelectedScreen.Placement4 = true;
             else SelectedScreen.Placement2 = true;
 
             Settings.Left = SelectedScreen.Left;
         }
-   }
+    }
 }

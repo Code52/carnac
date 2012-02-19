@@ -4,24 +4,28 @@ using System.Linq;
 using System.Windows.Forms;
 using Carnac.Logic;
 using Carnac.Logic.KeyMonitor;
+using NSubstitute;
+using NSubstitute.Core;
 using Xunit;
 
 namespace Carnac.Tests
 {
     public class ExampleTest
     {
+        private IPasswordModeService passwordModeService = Substitute.For<IPasswordModeService>();
+
         [Fact]
         public void ctrlshiftl_is_processed_correctly()
         {
             // arrange
             var player = CtrlShiftL();
-            var provider = new KeyProvider(player);
+            var provider = new KeyProvider(player, passwordModeService);
 
             // act
             var processedKeys = ToEnumerable(provider, player);
 
             // assert
-            Assert.Equal(new[]{"Ctrl", "Shift", "L"}, processedKeys.Single().Input);
+            Assert.Equal(new[] { "Ctrl", "Shift", "L" }, processedKeys.Single().Input);
         }
 
         [Fact]
@@ -29,7 +33,7 @@ namespace Carnac.Tests
         {
             // arrange
             var player = ShiftL();
-            var provider = new KeyProvider(player);
+            var provider = new KeyProvider(player, passwordModeService);
 
             // act
             var processedKeys = ToEnumerable(provider, player);
@@ -43,7 +47,7 @@ namespace Carnac.Tests
         {
             // arrange
             var player = LetterL();
-            var provider = new KeyProvider(player);
+            var provider = new KeyProvider(player, passwordModeService);
 
             // act
             var processedKeys = ToEnumerable(provider, player);
@@ -57,7 +61,7 @@ namespace Carnac.Tests
         {
             // arrange
             var player = Number1();
-            var provider = new KeyProvider(player);
+            var provider = new KeyProvider(player, passwordModeService);
 
             // act
             var processedKeys = ToEnumerable(provider, player);
@@ -71,13 +75,35 @@ namespace Carnac.Tests
         {
             // arrange
             var player = ExclaimationMark();
-            var provider = new KeyProvider(player);
+            var provider = new KeyProvider(player, passwordModeService);
 
             // act
             var processedKeys = ToEnumerable(provider, player);
 
             // assert
             Assert.Equal(new[] { "!" }, processedKeys.Single().Input);
+        }
+
+        [Fact]
+        public void verify_password_mode_works()
+        {
+            //arrange
+            var passwordInterceptKeyEventArgs = new InterceptKeyEventArgs(Keys.A, KeyDirection.Down, false, false, false);
+            var passwordInterceptKeyEventArgs2 = new InterceptKeyEventArgs(Keys.B, KeyDirection.Down, false, false, false);
+            var player = new KeyPlayer { passwordInterceptKeyEventArgs, passwordInterceptKeyEventArgs2 };
+            
+            var passwordService = Substitute.For<IPasswordModeService>();
+            passwordService.CheckPasswordMode(Arg.Is(passwordInterceptKeyEventArgs)).Returns(true);
+            
+            var provider = new KeyProvider(player, passwordService);
+
+            //act
+            var processedKeys = ToEnumerable(provider, player);
+
+            //assert
+            Assert.Equal(1, processedKeys.Count());
+
+
         }
 
         private IEnumerable<KeyPress> ToEnumerable(KeyProvider provider, KeyPlayer player)

@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
+using System.ComponentModel.Composition.Primitives;
 using System.Linq;
 using Caliburn.Micro;
 using Carnac.Logic;
+using Carnac.Logic.KeyMonitor;
 
 namespace Carnac
 {
@@ -24,7 +26,8 @@ namespace Carnac
             container = new CompositionContainer(catalog);
 
             var batch = new CompositionBatch();
-
+            
+            batch.AddExportedValue<IKeyProvider>(new KeyProvider(InterceptKeys.Current, new PasswordModeService()));
             batch.AddExportedValue<IWindowManager>(new WindowManager());
             batch.AddExportedValue<IEventAggregator>(new EventAggregator());
             batch.AddExportedValue(container);

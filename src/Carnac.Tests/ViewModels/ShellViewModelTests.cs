@@ -19,10 +19,11 @@ namespace Carnac.Tests.ViewModels
             private readonly IScreenManager screenManager = Substitute.For<IScreenManager>();
             private readonly ITimerFactory timerFactory = Substitute.For<ITimerFactory>();
             private readonly IWindowManager windowManager = Substitute.For<IWindowManager>();
+            private readonly IKeyProvider keyProvider = Substitute.For<IKeyProvider>();
 
             public override ShellViewModel Given()
             {
-                return new ShellViewModel(settingsService, screenManager, timerFactory, windowManager);
+                return new ShellViewModel(settingsService, screenManager, timerFactory, windowManager, keyProvider);
             }
 
             public override void When()
@@ -61,12 +62,13 @@ namespace Carnac.Tests.ViewModels
             private readonly IScreenManager screenManager = Substitute.For<IScreenManager>();
             private readonly ITimerFactory timerFactory = Substitute.For<ITimerFactory>();
             private readonly IWindowManager windowManager = Substitute.For<IWindowManager>();
+            private readonly IKeyProvider keyProvider = Substitute.For<IKeyProvider>();
             private readonly Settings settings = new Settings();
 
             public override ShellViewModel Given()
             {
                 settingsService.Get<Settings>("PopupSettings").Returns(settings);
-                return new ShellViewModel(settingsService, screenManager, timerFactory, windowManager);
+                return new ShellViewModel(settingsService, screenManager, timerFactory, windowManager, keyProvider);
             }
 
             public override void When()
@@ -87,12 +89,13 @@ namespace Carnac.Tests.ViewModels
             private readonly IScreenManager screenManager = Substitute.For<IScreenManager>();
             private readonly ITimerFactory timerFactory = Substitute.For<ITimerFactory>();
             private readonly IWindowManager windowManager = Substitute.For<IWindowManager>();
+            private readonly IKeyProvider keyProvider = Substitute.For<IKeyProvider>();
             private readonly Settings settings;
 
             public override ShellViewModel Given()
             {
                 settingsService.Get<Settings>("PopupSettings").Returns(settings);
-                return new ShellViewModel(settingsService, screenManager, timerFactory, windowManager);
+                return new ShellViewModel(settingsService, screenManager, timerFactory, windowManager, keyProvider);
             }
 
             public override void When()

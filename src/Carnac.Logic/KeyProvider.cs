@@ -8,11 +8,11 @@ using Carnac.Logic.KeyMonitor;
 
 namespace Carnac.Logic
 {
-    public class KeyProvider : IObservable<KeyPress>
+    public class KeyProvider : IKeyProvider
     {
         private readonly IObservable<InterceptKeyEventArgs> interceptKeysSource;
         private readonly Dictionary<int, Process> processes;
-
+        private readonly IPasswordModeService passwordModeService;
         private readonly List<Keys> modifierKeys =
             new List<Keys>
                 {
@@ -33,10 +33,11 @@ namespace Carnac.Logic
         [DllImport("user32.dll")]
         private static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
 
-        public KeyProvider(IObservable<InterceptKeyEventArgs> interceptKeysSource)
+        public KeyProvider(IObservable<InterceptKeyEventArgs> interceptKeysSource, IPasswordModeService passwordModeService)
         {
             processes = new Dictionary<int, Process>();
             this.interceptKeysSource = interceptKeysSource;
+            this.passwordModeService = passwordModeService;
         }
 
         public IDisposable Subscribe(IObserver<KeyPress> observer)
@@ -44,6 +45,7 @@ namespace Carnac.Logic
             return interceptKeysSource
                 .Where(k => !IsModifierKeyPress(k) && k.KeyDirection == KeyDirection.Down)
                 .Select(ToCarnacKeyPress)
+                .Where(k => !passwordModeService.CheckPasswordMode(k.InterceptKeyEventArgs))
                 .Subscribe(observer);
         }
 
