@@ -97,7 +97,8 @@ namespace Carnac.ViewModels
             Message m;
 
             if (CurrentMessage == null || CurrentMessage.ProcessName != value.Process.ProcessName ||
-                CurrentMessage.LastMessage < DateTime.Now.AddSeconds(-1))
+                CurrentMessage.LastMessage < DateTime.Now.AddSeconds(-1) ||
+                value.IsShortcut)
             {
                 m = new Message
                         {
@@ -113,11 +114,14 @@ namespace Carnac.ViewModels
 
             foreach (var input in value.Input)
             {
-                m.Text.Add(input);
+                m.AddText(input);
             }
 
             m.LastMessage = DateTime.Now;
             m.Count++;
+
+            if (value.IsShortcut)
+                CurrentMessage = null;
         }
 
         public void OnError(Exception error)
