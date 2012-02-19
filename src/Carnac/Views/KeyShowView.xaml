@@ -182,6 +182,7 @@
                                     </DataTrigger>
 
                                     <DataTrigger Binding="{Binding .}" Value="Win">
+                                        <Setter TargetName="extra" Property="Control.Visibility" Value="Visible" />
                                         <Setter TargetName="regular" Property="Control.Visibility" Value="Collapsed" />
                                         <Setter TargetName="KeyCapBorder" Property="Control.Visibility" Value="Visible" />
                                         <Setter TargetName="KeyCap" Property="Control.Visibility" Value="Collapsed" />
