@@ -127,9 +127,21 @@
             </StackPanel>
         </TabItem>
         <TabItem Header="About">
-        	<Grid>
-        		<Image Source="/Carnac;component/carnac_2.png" HorizontalAlignment="Center" VerticalAlignment="Top" Width="200" Height="200" Stretch="UniformToFill"/>
-        	</Grid>
+            <StackPanel Orientation="Horizontal" Margin="20,40,0,0">
+                <StackPanel Width="340">
+                    <TextBlock TextWrapping="Wrap" Foreground="#FF41B1E1" Margin="0,-7,-0.001,0" VerticalAlignment="Bottom" HorizontalAlignment="Left" FontFamily="Segoe UI Light" FontSize="18.667"><Run Text="a code52 project"/></TextBlock>
+                    <TextBlock Foreground="White" HorizontalAlignment="Left" TextWrapping="Wrap" Margin="0,8,0,0" FontFamily="Segoe UI Light" FontSize="20" Text="a project by" />
+                    <TextBlock Foreground="White" Text="{Binding Authors}" TextWrapping="Wrap" Margin="0,4,0,0" />
+                    <TextBlock Foreground="White" HorizontalAlignment="Left" TextWrapping="Wrap" Margin="0,10,0,0" FontFamily="Segoe UI Light" FontSize="20" ><Run Text="Carnac uses"/></TextBlock>
+                    <TextBlock Foreground="White" Text="{Binding Components}" TextWrapping="Wrap" Margin="0,4,0,0" />
+                    <Button x:Name="Visit" Content="Visit Carnac Website" HorizontalAlignment="Center" Margin="0,60,0,0" Style="{DynamicResource SquareButtonStyle}" Width="145"/>
+                </StackPanel>
+                <StackPanel>
+                    <Image Source="/Carnac;component/carnac_2.png" HorizontalAlignment="Center" VerticalAlignment="Top" Width="200" Height="200" Stretch="UniformToFill"/>
+                    <TextBlock TextWrapping="Wrap" FontWeight="Bold" FontSize="69.333" HorizontalAlignment="Left" Margin="-4,0,0,0" Foreground="White"><Run Text="Carnac"/></TextBlock>
+                    <TextBlock Margin="0,-18,0,0" TextWrapping="Wrap" FontWeight="Bold" HorizontalAlignment="Left" Height="20.83" Foreground="White"><Run Text="version "/><Run Text=" "/><Run Text="{Binding Version, Mode=OneTime}" /><Run Text=" "/><Run Text="{Binding Configuration, Mode=OneTime}" /></TextBlock>
+                </StackPanel>
+            </StackPanel>
         </TabItem>
     </TabControl>
 </Controls:MetroWindow>
