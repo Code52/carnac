@@ -45,6 +45,8 @@ namespace Carnac.ViewModels
                 SetDefaultSettings();
             }
 
+            PlaceScreen();
+
             windowManager.ShowWindow(new KeyShowViewModel(Keys, Settings));
 
             timerToken = timerFactory.Start(1000, Cleanup);
@@ -159,17 +161,10 @@ namespace Carnac.ViewModels
             else
                 m = CurrentMessage;
 
-            var controlPressed = value.InterceptKeyEventArgs.ControlPressed;
-            var altPressed = value.InterceptKeyEventArgs.AltPressed;
-            var shiftPressed = value.InterceptKeyEventArgs.ShiftPressed;
-            if (controlPressed)
-                m.Text.Add("Ctrl");
-            if (altPressed)
-                m.Text.Add("Alt");
-            if (shiftPressed)
-                m.Text.Add("Shift");
-            
-            m.Text.Add(value.InterceptKeyEventArgs.Key.Sanitise());
+            foreach (var input in value.Input)
+            {
+                m.Text.Add(input);
+            }
 
             m.LastMessage = DateTime.Now;
             m.Count++;

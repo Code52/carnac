@@ -135,6 +135,10 @@
       <Project>{614470A0-432C-46EB-B0EB-DE0A9062FC22}</Project>
       <Name>Carnac.Logic</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Carnac.Tests\Carnac.Tests.csproj">
+      <Project>{820B7770-FCD1-4987-A88C-E5DAE74F4AD6}</Project>
+      <Name>Carnac.Tests</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />

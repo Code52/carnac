@@ -1,0 +1,15 @@
+<ProjectConfiguration>
+  <CopyReferencedAssembliesToWorkspace>false</CopyReferencedAssembliesToWorkspace>
+  <IgnoreThisComponentCompletely>false</IgnoreThisComponentCompletely>
+  <RunPreBuildEvents>false</RunPreBuildEvents>
+  <RunPostBuildEvents>false</RunPostBuildEvents>
+  <PreviouslyBuiltSuccessfully>true</PreviouslyBuiltSuccessfully>
+  <InstrumentAssembly>true</InstrumentAssembly>
+  <AnalyseExecutionTimes>true</AnalyseExecutionTimes>
+  <IncludeStaticReferencesInWorkspace>true</IncludeStaticReferencesInWorkspace>
+  <DefaultTestTimeout>60000</DefaultTestTimeout>
+  <UseBuildConfiguration></UseBuildConfiguration>
+  <ProxyProcessPath></ProxyProcessPath>
+  <UseCPUArchitecture>AutoDetect</UseCPUArchitecture>
+  <AdditionalFilesToInclude>..\Tools\NotifyPropertyWeaverMsBuildTask.dll</AdditionalFilesToInclude>
+</ProjectConfiguration>
