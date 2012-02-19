@@ -1,7 +1,9 @@
 ﻿using System;
 using System.ComponentModel.Composition;
+using System.Linq;
 using System.Reactive.Subjects;
 using Carnac.Logic.Models;
+using Message = Carnac.Logic.Models.Message;
 
 namespace Carnac.Logic
 {
@@ -9,14 +11,12 @@ namespace Carnac.Logic
     public class MessageProvider : IMessageProvider, IObserver<KeyPress>
     {
         readonly Subject<Message> subject = new Subject<Message>();
-        private readonly IKeyProvider keyProvider;
         private readonly IShortcutProvider shortcutProvider;
         private IDisposable keyStream;
 
         [ImportingConstructor]
         public MessageProvider(IKeyProvider keyProvider, IShortcutProvider shortcutProvider)
         {
-            this.keyProvider = keyProvider;
             this.shortcutProvider = shortcutProvider;
             keyStream = keyProvider.Subscribe(this);
         }
@@ -30,31 +30,58 @@ namespace Carnac.Logic
 
         public void OnNext(KeyPress value)
         {
-            Message m;
+            Message message;
 
-            if (CurrentMessage == null || CurrentMessage.ProcessName != value.Process.ProcessName ||
-                CurrentMessage.LastMessage < DateTime.Now.AddSeconds(-1) ||
-                value.IsShortcut)
+            if (ShouldCreateNewMessage(value) && !IsChord(value))
             {
-                m = new Message
+                message = new Message
                 {
                     StartingTime = DateTime.Now,
                     ProcessName = value.Process.ProcessName
                 };
 
-                CurrentMessage = m;
-                subject.OnNext(m);
+                CurrentMessage = message;
+                subject.OnNext(message);
             }
             else
-                m = CurrentMessage;
+                message = CurrentMessage;
 
-            m.AddKey(value);
+            message.AddKey(value);
 
-            m.LastMessage = DateTime.Now;
-            m.Count++;
+            message.LastMessage = DateTime.Now;
+            message.Count++;
+        }
 
-            if (value.IsShortcut)
-                CurrentMessage = null;
+        private bool ShouldCreateNewMessage(KeyPress value)
+        {
+            return
+                CurrentMessage == null ||
+                IsDifferentProcess(value) ||
+                IsOlderThanASecond()  ||
+                LastKeyPressWasShortcut();
+        }
+
+        private bool LastKeyPressWasShortcut()
+        {
+            return CurrentMessage.Keys.Last().IsShortcut;
+        }
+
+        private bool IsChord(KeyPress value)
+        {
+            if (CurrentMessage == null)
+                return false;
+            var isChord = shortcutProvider.IsChord(CurrentMessage.Keys, value);
+            return isChord;
+        }
+
+        private bool IsOlderThanASecond()
+        {
+            return CurrentMessage.LastMessage < DateTime.Now.AddSeconds(-1);
+        }
+
+        private bool IsDifferentProcess(KeyPress value)
+        {
+            return CurrentMessage.ProcessName != value.Process.ProcessName;
         }
 
         public void OnError(Exception error)
@@ -66,18 +93,5 @@ namespace Carnac.Logic
         {
 
         }
-    }
-
-    public interface IMessageProvider : IObservable<Message>
-    {
-    }
-
-    public interface IShortcutProvider
-    {
-    }
-
-    [Export(typeof(IShortcutProvider))]
-    public class ShortcutProvider : IShortcutProvider
-    {
     }
 }

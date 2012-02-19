@@ -7,6 +7,7 @@ namespace Carnac.Logic.Models
     public class Message : NotifyPropertyChanged
     {
         private readonly ObservableCollection<string> textCollection;
+        private readonly ObservableCollection<KeyPress> keyCollection;
         private int lastTextRepeatCount = 1;
         private string lastText;
         private KeyPress lastKeyPress;
@@ -14,7 +15,9 @@ namespace Carnac.Logic.Models
         public Message()
         {
             textCollection = new ObservableCollection<string>();
+            keyCollection = new ObservableCollection<KeyPress>();
             Text = new ReadOnlyObservableCollection<string>(textCollection);
+            Keys = new ReadOnlyObservableCollection<KeyPress>(keyCollection);
         }
 
         public string ProcessName { get; set; }
@@ -22,11 +25,13 @@ namespace Carnac.Logic.Models
         public DateTime StartingTime { get; set; }
         public DateTime LastMessage { get; set; }
         public ReadOnlyObservableCollection<string> Text { get; private set; }
+        public ReadOnlyObservableCollection<KeyPress> Keys { get; private set; }
         public int Count { get; set; }
         public bool IsDeleting { get; set; }
 
         public void AddKey(KeyPress keyPress)
         {
+            keyCollection.Add(keyPress);
             if (lastKeyPress != null && lastKeyPress.IsShortcut)
                 textCollection.Add(", ");
             lastKeyPress = keyPress;

@@ -5,19 +5,18 @@ using Carnac.Logic.KeyMonitor;
 
 namespace Carnac.Logic.Models
 {
-    public class KeyPress
+    public class KeyPress : KeyPressDefinition
     {
-        public KeyPress(Process process, InterceptKeyEventArgs interceptKeyEventArgs, bool winkeyPressed, IEnumerable<string> input)
+        public KeyPress(Process process, InterceptKeyEventArgs interceptKeyEventArgs, bool winkeyPressed, IEnumerable<string> input):
+            base(interceptKeyEventArgs.Key, winkeyPressed, interceptKeyEventArgs.ShiftPressed, interceptKeyEventArgs.AltPressed, interceptKeyEventArgs.ControlPressed)
         {
             Process = process;
             InterceptKeyEventArgs = interceptKeyEventArgs;
-            WinkeyPressed = winkeyPressed;
             Input = input;
         }
 
         public Process Process { get; private set; }
         public InterceptKeyEventArgs InterceptKeyEventArgs { get; private set; }
-        protected bool WinkeyPressed { get; private set; }
         public IEnumerable<string> Input { get; private set; }
 
         public bool IsShortcut
