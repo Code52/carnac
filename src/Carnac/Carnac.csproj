@@ -117,7 +117,6 @@
     <Compile Include="KeyMonitor\HotKey.cs" />
     <Compile Include="KeyMonitor\HotKeyWinApi.cs" />
     <Compile Include="Models\Settings.cs" />
-    <Compile Include="ReplaceKey.cs" />
     <Compile Include="Utilities\ITimerFactory.cs" />
     <Compile Include="Utilities\ProcessUtilities.cs" />
     <Compile Include="Utilities\TimerFactory.cs" />

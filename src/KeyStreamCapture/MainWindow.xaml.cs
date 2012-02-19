@@ -10,6 +10,7 @@ using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
 using Carnac.Logic.KeyMonitor;
+using Carnac.Tests;
 using Microsoft.CSharp;
 
 namespace KeyStreamCapture
@@ -53,10 +54,10 @@ namespace KeyStreamCapture
                     ReturnType = new CodeTypeReference(typeof(IObservable<InterceptKeyEventArgs>))
                 };
 
-                var list =
-                    new CodeVariableDeclarationStatement(new CodeTypeReference(typeof(List<InterceptKeyEventArgs>)), "keys",
-                    new CodeObjectCreateExpression(typeof(List<InterceptKeyEventArgs>)));
-                method.Statements.Add(list);
+                var player =
+                    new CodeVariableDeclarationStatement(new CodeTypeReference(typeof(KeyPlayer)), "keys",
+                    new CodeObjectCreateExpression(typeof(KeyPlayer)));
+                method.Statements.Add(player);
                 foreach (var interceptKeyEventArgse in keys)
                 {
                     var key = new CodeObjectCreateExpression(new CodeTypeReference(typeof(InterceptKeyEventArgs)),
@@ -69,8 +70,7 @@ namespace KeyStreamCapture
                     var keyPress = new CodeMethodInvokeExpression(new CodeVariableReferenceExpression("keys"), "Add", key);
                     method.Statements.Add(keyPress);
                 }
-                method.Statements.Add(new CodeMethodReturnStatement(
-                new CodeMethodInvokeExpression(new CodeTypeReferenceExpression(typeof(Observable)), "ToObservable", new CodeVariableReferenceExpression("keys"))));
+                method.Statements.Add(new CodeMethodReturnStatement(new CodeVariableReferenceExpression("keys")));
 
                 var sb = new StringBuilder();
                 using(var stringWriter = new StringWriter(sb))
