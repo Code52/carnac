@@ -23,27 +23,10 @@ namespace Carnac.Views
             timer.Elapsed +=
                 (s, x) =>
                 {
-                    RECT rect;
-
-                    if (GetWindowRect(hwnd, out rect))
-                    {
-                        SetWindowPos(hwnd,
-                                     HWND.TOPMOST,
-                                     0, 0, 0, 0,
-                                     (uint)(SWP.NOMOVE | SWP.NOSIZE | SWP.SHOWWINDOW));
-                    }
-                    else
-                    {
-                        SetWindowPos(hwnd,
-                                    HWND.NOTOPMOST,
-                                    0, 0, 0, 0,
-                                    (uint)(SWP.NOMOVE | SWP.NOSIZE | SWP.SHOWWINDOW));
-
-                        SetWindowPos(hwnd,
-                                   HWND.BOTTOM,
-                                   0, 0, 0, 0,
-                                   (uint)(SWP.NOMOVE | SWP.NOSIZE | SWP.SHOWWINDOW));
-                    }
+                    SetWindowPos(hwnd,
+                                 HWND.TOPMOST,
+                                 0, 0, 0, 0,
+                                 (uint)(SWP.NOMOVE | SWP.NOSIZE | SWP.SHOWWINDOW));
                 };
 
             timer.Start();
@@ -52,18 +35,6 @@ namespace Carnac.Views
         [DllImport("user32.dll", SetLastError = true)]
         public static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int W, int H, uint uFlags);
 
-        [DllImport("user32.dll")]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        private static extern bool GetWindowRect(IntPtr hWnd, out RECT lpRect);
-
-        [StructLayout(LayoutKind.Sequential)]
-        public struct RECT
-        {
-            public int Left;
-            public int Top;
-            public int Right;
-            public int Bottom;
-        }
 
         /// <summary>
         /// HWND values for hWndInsertAfter

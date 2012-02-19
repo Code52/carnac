@@ -43,6 +43,8 @@ namespace Carnac.ViewModels
                 SetDefaultSettings();
             }
 
+            PlaceScreen();
+
             windowManager.ShowWindow(new KeyShowViewModel(Keys, Settings));
 
             timerToken = timerFactory.Start(1000, Cleanup);
