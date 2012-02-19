@@ -12,55 +12,99 @@ namespace Carnac.Tests.ViewModels
 {
     public class ShellViewModelTests
     {
-        readonly ISettingsService settingsService = Substitute.For<ISettingsService>();
-        readonly IScreenManager screenManager = Substitute.For<IScreenManager>();
-        readonly ITimerFactory timerFactory = Substitute.For<ITimerFactory>();
-        readonly IWindowManager windowManager = Substitute.For<IWindowManager>();
-        private ShellViewModel viewModel;
 
-        public ShellViewModelTests()
+        public class when_creating_the_new_viewmodel : SpecificationFor<ShellViewModel>
         {
-            viewModel = new ShellViewModel(settingsService, screenManager, timerFactory, windowManager);
+            private readonly ISettingsService settingsService = Substitute.For<ISettingsService>();
+            private readonly IScreenManager screenManager = Substitute.For<IScreenManager>();
+            private readonly ITimerFactory timerFactory = Substitute.For<ITimerFactory>();
+            private readonly IWindowManager windowManager = Substitute.For<IWindowManager>();
+
+            public override ShellViewModel Given()
+            {
+                return new ShellViewModel(settingsService, screenManager, timerFactory, windowManager);
+            }
+
+            public override void When()
+            {
+                // do nothing
+            }
+
+            [Fact]
+            public void TimerFactory_Always_StartsATimer()
+            {
+                timerFactory.Received().Start(1000, Arg.Any<Action>());
+            }
+
+            [Fact]
+            public void ScreenManager_Always_Fetches_CurrentScreens()
+            {
+                screenManager.Received().GetScreens();
+            }
+
+            [Fact]
+            public void SettingsService_Always_Fetches_ExistingSettings()
+            {
+                settingsService.Received().Get<Settings>("PopupSettings");
+            }
+
+            [Fact]
+            public void Constructor_Always_ShowsKeyShowViewModel()
+            {
+                windowManager.ReceivedWithAnyArgs().ShowWindow(null);
+            }
         }
 
-        [Fact]
-        public void Constructor_Always_StartsTimer()
+        public class when_the_settings_file_is_defined : SpecificationFor<ShellViewModel>
         {
-            timerFactory.Received().Start(1000, Arg.Any<Action>());
+            private readonly ISettingsService settingsService = Substitute.For<ISettingsService>();
+            private readonly IScreenManager screenManager = Substitute.For<IScreenManager>();
+            private readonly ITimerFactory timerFactory = Substitute.For<ITimerFactory>();
+            private readonly IWindowManager windowManager = Substitute.For<IWindowManager>();
+            private readonly Settings settings = new Settings();
+
+            public override ShellViewModel Given()
+            {
+                settingsService.Get<Settings>("PopupSettings").Returns(settings);
+                return new ShellViewModel(settingsService, screenManager, timerFactory, windowManager);
+            }
+
+            public override void When()
+            {
+                // do nothing
+            }
+
+            [Fact]
+            public void the_settings_file_is_the_existing_instance()
+            {
+                Assert.Equal(settings, Subject.Settings);
+            }
         }
 
-        [Fact]
-        public void Constructor_Always_FetchesScreens()
+        public class when_the_settings_file_is_not_defined : SpecificationFor<ShellViewModel>
         {
-            screenManager.Received().GetScreens();
+            private readonly ISettingsService settingsService = Substitute.For<ISettingsService>();
+            private readonly IScreenManager screenManager = Substitute.For<IScreenManager>();
+            private readonly ITimerFactory timerFactory = Substitute.For<ITimerFactory>();
+            private readonly IWindowManager windowManager = Substitute.For<IWindowManager>();
+            private readonly Settings settings;
+
+            public override ShellViewModel Given()
+            {
+                settingsService.Get<Settings>("PopupSettings").Returns(settings);
+                return new ShellViewModel(settingsService, screenManager, timerFactory, windowManager);
+            }
+
+            public override void When()
+            {
+                // do nothing
+            }
+
+            [Fact]
+            public void the_settings_file_is_the_existing_instance()
+            {
+                Assert.NotNull(Subject.Settings);
+            }
         }
-
-        [Fact]
-        public void Constructor_Always_ChecksForSettings()
-        {
-            settingsService.Received().Get<Settings>("PopupSettings");
-        }
-
-
-        [Fact]
-        public void Constructor_WhenSettingsExists_PopulatesValue()
-        {
-            var settings = new Settings();
-            settingsService.Get<Settings>("PopupSettings").Returns(settings);
-            viewModel = new ShellViewModel(settingsService, screenManager, timerFactory, windowManager);
-
-            Assert.Equal(settings, viewModel.Settings);
-        }
-
-        [Fact]
-        public void Constructor_WhenSettingsDoNotExists_PopulatesNewValue()
-        {
-            Settings settings = null;
-            settingsService.Get<Settings>("PopupSettings").Returns(settings);
-            viewModel = new ShellViewModel(settingsService, screenManager, timerFactory, windowManager);
-
-            Assert.NotNull(viewModel.Settings);
-        }
-
     }
 }
