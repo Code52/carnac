@@ -6,16 +6,7 @@
   	<OutputPath>.\src\Carnac\bin\$(Configuration)</OutputPath>
   </PropertyGroup>
 
-  <Target Name="Clean">
-
-  	<ItemGroup>
-        <TempFiles Include=".\src\Carnac\bin\**\*" />
-    </ItemGroup>
-
-  	<delete files="@(TempFiles)" />
-  </Target>
-
-  <Target Name="Compile" DependsOnTargets="Clean">
+  <Target Name="Compile">
     <Message Text=" ===========Compiling code===========" Importance="High" />
     <MSBuild Projects="./src/Carnac.sln" Properties="Configuration=$(Configuration)" />
   </Target>
