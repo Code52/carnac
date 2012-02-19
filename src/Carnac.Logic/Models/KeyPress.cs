@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Windows.Forms;
 using Carnac.Logic.KeyMonitor;
 
-namespace Carnac.Logic
+namespace Carnac.Logic.Models
 {
     public class KeyPress
     {

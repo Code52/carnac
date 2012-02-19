@@ -48,10 +48,7 @@ namespace Carnac.Logic
             else
                 m = CurrentMessage;
 
-            foreach (var input in value.Input)
-            {
-                m.AddText(input);
-            }
+            m.AddKey(value);
 
             m.LastMessage = DateTime.Now;
             m.Count++;

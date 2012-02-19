@@ -9,6 +9,7 @@ namespace Carnac.Logic.Models
         private readonly ObservableCollection<string> textCollection;
         private int lastTextRepeatCount = 1;
         private string lastText;
+        private KeyPress lastKeyPress;
 
         public Message()
         {
@@ -24,9 +25,24 @@ namespace Carnac.Logic.Models
         public int Count { get; set; }
         public bool IsDeleting { get; set; }
 
-        public void AddText(string input)
+        public void AddKey(KeyPress keyPress)
         {
-            if (input == "Back" && lastText == input)
+            if (lastKeyPress != null && lastKeyPress.IsShortcut)
+                textCollection.Add(", ");
+            lastKeyPress = keyPress;
+            var first = true;
+            foreach (var text in keyPress.Input)
+            {
+                if (!first)
+                    AddText(" + ");
+                AddText(text);
+                first = false;
+            }
+        }
+
+        private void AddText(string text)
+        {
+            if (text == "Back" && lastText == text)
             {
                 var repeatText = string.Format(" x {0} ", ++lastTextRepeatCount);
                 if (Text.Last() == lastText)
@@ -36,8 +52,8 @@ namespace Carnac.Logic.Models
             }
             else
             {
-                textCollection.Add(input);
-                lastText = input;
+                textCollection.Add(text);
+                lastText = text;
                 lastTextRepeatCount = 1;
             }
         }

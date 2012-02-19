@@ -5,6 +5,7 @@ using System.Reactive.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using Carnac.Logic.KeyMonitor;
+using Carnac.Logic.Models;
 
 namespace Carnac.Logic
 {
