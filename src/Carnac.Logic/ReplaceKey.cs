@@ -24,7 +24,10 @@ namespace Carnac.Logic
                                                                                      {Keys.OemBackslash, "|"},
                                                                                      {Keys.Oem5, "|"},
                                                                                      {Keys.OemQuestion, "?"},
+                                                                                     {Keys.OemPeriod, ">"},
+                                                                                     {Keys.Oemcomma, "<"},
                                                                                      {Keys.Oem1, ":"},
+                                                                                     {Keys.Oem7, "\""},
                                                                                      {Keys.Oemtilde, "~"},
                                                                                  };
 
