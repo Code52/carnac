@@ -1,35 +1,26 @@
 using System;
 using System.Collections.Generic;
+using System.Reactive.Subjects;
 using Carnac.Logic.KeyMonitor;
 
 namespace Carnac.Tests
 {
     public class KeyPlayer : List<InterceptKeyEventArgs>, IObservable<InterceptKeyEventArgs>
     {
-        private IObserver<InterceptKeyEventArgs> subscriber;
+        readonly Subject<InterceptKeyEventArgs> subject = new Subject<InterceptKeyEventArgs>();
 
         public IDisposable Subscribe(IObserver<InterceptKeyEventArgs> observer)
         {
-            subscriber = observer;
-
-            return new DoNothing();
-        }
-
-        internal class DoNothing : IDisposable
-        {
-            public void Dispose()
-            {
-                
-            }
+            return subject.Subscribe(observer);
         }
 
         public void Play()
         {
             foreach (var key in this)
             {
-                subscriber.OnNext(key);
+                subject.OnNext(key);
             }
-            subscriber.OnCompleted();
+            subject.OnCompleted();
         }
     }
 }
