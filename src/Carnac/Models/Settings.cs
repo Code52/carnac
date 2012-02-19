@@ -55,7 +55,5 @@ namespace Carnac.Models
         {
             get { return Placement == 1 || Placement == 3 ? "Ascending" : "Descending"; }
         }
-
-        public bool SetWindowInFront { get; set; }
     }
 }
