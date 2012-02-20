@@ -73,13 +73,16 @@ namespace Carnac.Views
         private void RadioChecked(object sender, RoutedEventArgs e)
         {
             var dc = DataContext as ShellViewModel;
-            if (dc == null) return;
+            if (dc == null)
+                return;
 
             var rb = sender as System.Windows.Controls.RadioButton;
-            if (rb == null) return;
+            if (rb == null) 
+                return;
 
             var tag = rb.Tag as DetailedScreen;
-            if (tag == null) return;
+            if (tag == null) 
+                return;
 
             dc.SelectedScreen = tag;
         }

@@ -161,7 +161,8 @@ namespace Carnac.ViewModels
 
         public void SaveSettings()
         {
-            if (Screens.Count < 1) return;
+            if (Screens.Count < 1) 
+                return;
 
             if (SelectedScreen == null)
                 SelectedScreen = Screens.First();
@@ -176,7 +177,8 @@ namespace Carnac.ViewModels
                 Settings.Placement = 3;
             else if (SelectedScreen.Placement4)
                 Settings.Placement = 4;
-            else Settings.Placement = 2;
+            else 
+                Settings.Placement = 2;
 
             PlaceScreen();
 
@@ -196,21 +198,32 @@ namespace Carnac.ViewModels
         }
         private void PlaceScreen()
         {
-            if (Screens == null) return;
+            if (Screens == null) 
+                return;
 
             SelectedScreen = Screens.FirstOrDefault(s => s.Index == Settings.Screen);
 
-            if (SelectedScreen == null) return;
+            if (SelectedScreen == null) 
+                return;
 
-            if (Settings.Placement == 1)
-                SelectedScreen.Placement1 = true;
-            else if (Settings.Placement == 2)
-                SelectedScreen.Placement2 = true;
-            else if (Settings.Placement == 3)
-                SelectedScreen.Placement3 = true;
-            else if (Settings.Placement == 4)
-                SelectedScreen.Placement4 = true;
-            else SelectedScreen.Placement2 = true;
+            switch (Settings.Placement)
+            {
+                case 1:
+                    SelectedScreen.Placement1 = true;
+                    break;
+                case 2:
+                    SelectedScreen.Placement2 = true;
+                    break;
+                case 3:
+                    SelectedScreen.Placement3 = true;
+                    break;
+                case 4:
+                    SelectedScreen.Placement4 = true;
+                    break;
+                default:
+                    SelectedScreen.Placement2 = true;
+                    break;
+            }
 
             Settings.Left = SelectedScreen.Left;
         }
