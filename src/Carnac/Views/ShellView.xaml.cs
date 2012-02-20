@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
@@ -28,11 +29,13 @@ namespace Carnac.Views
                 Text = "Exit"
             };
 
-            item.Click += (sender, args) => this.Close();
+            item.Click += (sender, args) => Close();
+
+            var iconStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Carnac.icon.embedded.ico");
 
             var ni = new NotifyIcon
                          {
-                             Icon = new Icon(@"..\..\icon.ico"),
+                             Icon = new Icon(iconStream),
                              ContextMenu = new ContextMenu(new[] { item })
                          };
 
