@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Carnac.Logic;
+using Carnac.Logic.Models;
 using Xunit;
 
 namespace Carnac.Tests

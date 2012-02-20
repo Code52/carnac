@@ -62,10 +62,11 @@
     <Compile Include="KeyPlayer.cs" />
     <Compile Include="KeyStreams.cs" />
     <Compile Include="MessageFacts.cs" />
+    <Compile Include="MessageProviderFacts.cs" />
     <Compile Include="SpecificationFor.cs" />
     <Compile Include="KeyProviderTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ViewModels\ShellViewModelTests.cs" />
+    <Compile Include="ViewModels\ShellViewModelFacts.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

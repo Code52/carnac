@@ -1,7 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using Caliburn.Micro;
 using Carnac.Models;
-using Message = Carnac.Models.Message;
+using Message = Carnac.Logic.Models.Message;
 
 namespace Carnac.ViewModels
 {

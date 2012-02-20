@@ -47,18 +47,27 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IMessageProvider.cs" />
     <Compile Include="Internal\FixedQueue.cs" />
     <Compile Include="IKeyProvider.cs" />
     <Compile Include="IPasswordModeService.cs" />
     <Compile Include="IScreenManager.cs" />
+    <Compile Include="IShortcutProvider.cs" />
     <Compile Include="KeyMonitor\InterceptKeyEventArgs.cs" />
     <Compile Include="KeyMonitor\InterceptKeys.cs" />
     <Compile Include="KeyMonitor\KeyDirection.cs" />
-    <Compile Include="KeyPress.cs" />
+    <Compile Include="KeyPressDefinition.cs" />
+    <Compile Include="KeyShortcut.cs" />
+    <Compile Include="Models\KeyPress.cs" />
     <Compile Include="KeyProvider.cs" />
+    <Compile Include="MessageProvider.cs" />
+    <Compile Include="Models\Message.cs" />
+    <Compile Include="NotifyPropertyChanged.cs" />
     <Compile Include="PasswordModeService.cs" />
     <Compile Include="ReplaceKey.cs" />
     <Compile Include="ScreenManager.cs" />
+    <Compile Include="ShortcutCollection.cs" />
+    <Compile Include="ShortcutProvider.cs" />
     <Compile Include="Win32Methods.cs" />
     <Compile Include="Native\DetailedScreen.cs" />
     <Compile Include="Native\DEVMODE.cs" />
