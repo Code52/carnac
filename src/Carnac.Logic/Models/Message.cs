@@ -59,7 +59,9 @@ namespace Carnac.Logic.Models
 
         private void AddText(string text)
         {
-            if (text == "Back" && lastText == text)
+            var formattedText = Format(text);
+
+            if (formattedText == "Back" && lastText == formattedText)
             {
                 var repeatText = string.Format(" x {0} ", ++lastTextRepeatCount);
                 if (Text.Last() == lastText)
@@ -69,10 +71,28 @@ namespace Carnac.Logic.Models
             }
             else
             {
-                textCollection.Add(text);
-                lastText = text;
+                textCollection.Add(formattedText);
+                lastText = formattedText;
                 lastTextRepeatCount = 1;
             }
+        }
+
+        private static string Format(string text)
+        {
+            if (text == "Left")
+                return GetString(8592);
+            if (text == "Up")
+                return GetString(8593);
+            if (text == "Right")
+                return GetString(8594);
+            if (text == "Down")
+                return GetString(8595);
+            return text;
+        }
+
+        private static string GetString(int decimalValue)
+        {
+            return new string(new[] { (char)decimalValue });
         }
     }
 }
