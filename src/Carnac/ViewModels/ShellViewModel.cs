@@ -5,7 +5,6 @@ using System.Linq;
 using Analects.SettingsService;
 using Caliburn.Micro;
 using Carnac.Logic;
-using Carnac.Logic.KeyMonitor;
 using Carnac.Logic.Native;
 using Carnac.Models;
 using Carnac.Utilities;
@@ -107,7 +106,7 @@ namespace Carnac.ViewModels
         {
             try
             {
-                System.Diagnostics.Process.Start("http://code52.org/carnac.html");
+                System.Diagnostics.Process.Start("http://code52.org/carnac/");
             }
             catch //I forget what exceptions can be raised if the browser is crashed?
             {
