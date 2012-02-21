@@ -47,10 +47,10 @@
                                 <Grid HorizontalAlignment="Left" Height="{Binding RelativeHeight}" Margin="0" Width="{Binding RelativeWidth}">
                                     <Rectangle Fill="{DynamicResource AccentColorBrush}"/>
                                     <TextBlock FontWeight="SemiBold" TextWrapping="Wrap" Foreground="White" FontSize="96" VerticalAlignment="Center" HorizontalAlignment="Center" Text="{Binding Index}" />
-                                    <RadioButton x:Name="rbTL" Content="" IsChecked="{Binding Placement1}" Checked="RadioChecked" Tag="{Binding}" GroupName="Placement" HorizontalAlignment="Left" VerticalAlignment="Top" />
-                                    <RadioButton x:Name="rbBL" Content="" IsChecked="{Binding Placement2}" Checked="RadioChecked" Tag="{Binding}" GroupName="Placement" HorizontalAlignment="Left" VerticalAlignment="Bottom" />
-                                    <RadioButton x:Name="rbTR" Content="" IsChecked="{Binding Placement3}" Checked="RadioChecked" Tag="{Binding}" GroupName="Placement" HorizontalAlignment="Right" VerticalAlignment="Top" />
-                                    <RadioButton x:Name="rbBR" Content="" IsChecked="{Binding Placement4}" Checked="RadioChecked" Tag="{Binding}" GroupName="Placement" HorizontalAlignment="Right" VerticalAlignment="Bottom" />
+                                    <RadioButton x:Name="rbTL" Content="" IsChecked="{Binding NotificationPlacementTopLeft}" Checked="RadioChecked" Tag="{Binding}" GroupName="Placement" HorizontalAlignment="Left" VerticalAlignment="Top" />
+                                    <RadioButton x:Name="rbBL" Content="" IsChecked="{Binding NotificationPlacementBottomLeft}" Checked="RadioChecked" Tag="{Binding}" GroupName="Placement" HorizontalAlignment="Left" VerticalAlignment="Bottom" />
+                                    <RadioButton x:Name="rbTR" Content="" IsChecked="{Binding NotificationPlacementTopRight}" Checked="RadioChecked" Tag="{Binding}" GroupName="Placement" HorizontalAlignment="Right" VerticalAlignment="Top" />
+                                    <RadioButton x:Name="rbBR" Content="" IsChecked="{Binding NotificationPlacementBottomRight}" Checked="RadioChecked" Tag="{Binding}" GroupName="Placement" HorizontalAlignment="Right" VerticalAlignment="Bottom" />
                                 </Grid>
                                 <TextBlock FontWeight="SemiBold" HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding FriendlyName}" FontSize="18.667"/>
                                 <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" FontSize="14">
