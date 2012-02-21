@@ -16,7 +16,7 @@
   	<Message Text="===========Tests===========" Importance="High" />
 
   	<ItemGroup>
-  		<TestFiles Include=".\**\bin\$(Configuration)\*Tests.dll" />
+  		<TestFiles Include="src\Carnac.Tests\bin\$(Configuration)\*Tests.dll" />
 	</ItemGroup>
 
     <xunit Assembly="@(TestFiles)" />
