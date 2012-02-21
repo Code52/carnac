@@ -13,9 +13,9 @@ namespace Carnac.Logic.Native
         public double Top { get; set; }
         public double Left { get; set; }
 
-        public bool Placement1 { get; set; }
-        public bool Placement2 { get; set; }
-        public bool Placement3 { get; set; }
-        public bool Placement4 { get; set; }
+        public bool NotificationPlacementTopLeft { get; set; }
+        public bool NotificationPlacementBottomLeft { get; set; }
+        public bool NotificationPlacementTopRight { get; set; }
+        public bool NotificationPlacementBottomRight { get; set; }
     }
 }
