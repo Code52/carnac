@@ -2,9 +2,30 @@
   
   <UsingTask AssemblyFile=".\tools\xunit\xunit.runner.msbuild.dll" TaskName="Xunit.Runner.MSBuild.xunit" />
 
+  <PropertyGroup>
+  	<OutputPath>.\src\Carnac\bin\$(Configuration)</OutputPath>
+  </PropertyGroup>
+
   <Target Name="Compile">
-    <Message Text=" ===========Building Website===========" Importance="High" />
+    <Message Text=" ===========Compiling code===========" Importance="High" />
     <MSBuild Projects="./src/Carnac.sln" Properties="Configuration=$(Configuration)" />
   </Target>
+
+  <Target Name="Test" DependsOnTargets="Compile">
+
+  	<Message Text="===========Tests===========" Importance="High" />
+
+  	<ItemGroup>
+  		<TestFiles Include="src\Carnac.Tests\bin\$(Configuration)\*Tests.dll" />
+	</ItemGroup>
+
+    <xunit Assembly="@(TestFiles)" />
+  </Target>
+
+  <Target Name="Package" DependsOnTargets="Test">
+
+  	
+  </Target>
+
 
 </Project>

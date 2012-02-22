@@ -1,4 +1,4 @@
-namespace Carnac.ViewModels
+namespace Carnac.Logic.Native
 {
     public class DetailedScreen
     {
@@ -11,5 +11,11 @@ namespace Carnac.ViewModels
         public double RelativeWidth { get; set; }
 
         public double Top { get; set; }
+        public double Left { get; set; }
+
+        public bool NotificationPlacementTopLeft { get; set; }
+        public bool NotificationPlacementBottomLeft { get; set; }
+        public bool NotificationPlacementTopRight { get; set; }
+        public bool NotificationPlacementBottomRight { get; set; }
     }
 }

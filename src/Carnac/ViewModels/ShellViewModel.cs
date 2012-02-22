@@ -1,147 +1,219 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Linq;
-using System.Runtime.InteropServices;
-using Caliburn.Micro;
-using Carnac.KeyMonitor;
 using System.ComponentModel.Composition;
+using System.Linq;
+using Analects.SettingsService;
+using Caliburn.Micro;
+using Carnac.Enum;
+using Carnac.Logic;
+using Carnac.Logic.Native;
+using Carnac.Models;
+using Carnac.Utilities;
+using Message = Carnac.Logic.Models.Message;
+using System.Reflection;
+using System.Collections.Generic;
 
 namespace Carnac.ViewModels
 {
     [Export(typeof(IShell))]
-    public class ShellViewModel :Screen, IShell, IObserver<InterceptKeyEventArgs>
+    public class ShellViewModel : Screen, IShell, IObserver<Message>
     {
-        [DllImport("user32.dll")]
-        static extern bool EnumDisplayDevices(string lpDevice, uint iDevNum, ref DISPLAY_DEVICE lpDisplayDevice, uint dwFlags);
+        IDisposable keySubscription;
+        readonly IDisposable timerToken;
 
-        [DllImport("User32.dll")]
-        static extern bool EnumDisplaySettings(string lpszDeviceName, int iModeNum, ref DEVMODE lpDevMode);
-        
-        [DllImport("User32.dll")]
-        static extern int GetForegroundWindow();
+        readonly ISettingsService settingsService;
+        private readonly IMessageProvider messageProvider;
 
-        [DllImport("user32.dll")]
-        static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
+        readonly TimeSpan fiveseconds = TimeSpan.FromSeconds(5);
+        readonly TimeSpan sixseconds = TimeSpan.FromSeconds(6);
 
-        private ObservableCollection<DetailedScreen> _screens;
-
-        public ObservableCollection<DetailedScreen> Screens
+        [ImportingConstructor]
+        public ShellViewModel(
+            ISettingsService settingsService,
+            IScreenManager screenManager,
+            ITimerFactory timerFactory,
+            IWindowManager windowManager,
+            IMessageProvider messageProvider)
         {
-            get
+            this.settingsService = settingsService;
+            this.messageProvider = messageProvider;
+
+            Keys = new ObservableCollection<Message>();
+            Screens = new ObservableCollection<DetailedScreen>(screenManager.GetScreens());
+
+            Settings = settingsService.Get<Settings>("PopupSettings");
+            if (Settings == null)
             {
-                return _screens;
+                Settings = new Settings();
+                SetDefaultSettings();
             }
-            set { _screens = value; }
+
+            PlaceScreen();
+
+            windowManager.ShowWindow(new KeyShowViewModel(Keys, Settings));
+
+            timerToken = timerFactory.Start(1000, Cleanup);
         }
 
-        private IDisposable keySubscription;
+        public ObservableCollection<Message> Keys { get; private set; }
 
-        private Dictionary<int, Process> _processes;
+        public ObservableCollection<DetailedScreen> Screens { get; set; }
+        public DetailedScreen SelectedScreen { get; set; }
 
-        public ShellViewModel()
+        public Settings Settings { get; set; }
+
+        public override string DisplayName
         {
-            _processes = new Dictionary<int, Process>();
+            get { return "Carnac"; }
+            set { }
+        }
 
-            Keys = new ObservableCollection<string>();
-            Screens = new ObservableCollection<DetailedScreen>();
+        public string Version
+        {
+            get { return Assembly.GetExecutingAssembly().GetName().Version.ToString(); }
+        }
 
-            int index = 1;
-            var d = new DISPLAY_DEVICE();
-            d.cb = Marshal.SizeOf(d);
+        private readonly List<string> authors = new List<string>
+                                                    {
+                                                         "Brendan Forster",
+                                                         "Alex Friedman",
+                                                         "Jon Galloway",
+                                                         "Jake Ginnivan",
+                                                         "Paul Jenkins",
+                                                         "Dmitry Pursanov",
+                                                         "Chris Sainty",
+                                                         "Andrew Tobin"
+                                                     };
+        public string Authors
+        {
+            get { return string.Join(", ", authors); }
+        }
+
+        private readonly List<string> components = new List<string>
+                                                       {
+                                                         "MahApps.Metro",
+                                                         "Analects",
+                                                         "Caliburn Micro",
+                                                         "NSubstitute",
+                                                         "Reactive Extensions",
+                                                         "Notify Property Weaver"
+                                                     };
+        public string Components
+        {
+            get { return string.Join(", ", components); }
+        }
+
+        public void Visit()
+        {
             try
             {
-                for (uint id = 0; EnumDisplayDevices(null, id, ref d, 0); id++)
-                {
-                    d.cb = Marshal.SizeOf(d);
-
-                    var x = new DISPLAY_DEVICE();
-                    x.cb = Marshal.SizeOf(x);
-
-                    //Get the actual monitor
-                    EnumDisplayDevices(d.DeviceName, 0, ref x, 0);
-
-                    if (string.IsNullOrEmpty(x.DeviceName) || string.IsNullOrEmpty(x.DeviceString))
-                        continue;
-
-
-                    var screen = new DetailedScreen { FriendlyName = x.DeviceString, Index = index++ };
-
-                    var mode = new DEVMODE();
-                    mode.dmSize = (ushort)Marshal.SizeOf(mode);
-                    if (EnumDisplaySettings(d.DeviceName, -1, ref mode))
-                    {
-                        screen.Width = (int)mode.dmPelsWidth;
-                        screen.Height = (int)mode.dmPelsHeight;
-                        screen.Top = (int)mode.dmPosition.y;
-
-                    }
-
-                    Screens.Add(screen);
-                }
+                System.Diagnostics.Process.Start("http://code52.org/carnac.html");
             }
-            catch (Exception ex)
+            catch //I forget what exceptions can be raised if the browser is crashed?
             {
-                //log this
-            }
 
-            var maxWidth = Screens.OrderByDescending(s => s.Width).FirstOrDefault().Width;
-            foreach (var s in Screens)
-            {
-                s.RelativeWidth = 200 * (s.Width / maxWidth);
-                s.RelativeHeight = s.RelativeWidth * (s.Height / s.Width);
-                s.Top *= (s.RelativeHeight / s.Height);
             }
-
-            WindowManager manager = new WindowManager();
-            manager.ShowWindow(new KeyShowViewModel(Keys));
         }
 
-        public ObservableCollection<string> Keys { get; private set; }
+        public void Cleanup()
+        {
+            var deleting =
+                Keys.Where(k => DateTime.Now.Subtract(k.LastMessage) > fiveseconds && k.IsDeleting == false).ToList();
+            foreach (var y in deleting)
+                y.IsDeleting = true;
+
+            var deleted =
+                Keys.Where(k => DateTime.Now.Subtract(k.LastMessage) > sixseconds && k.IsDeleting).ToList();
+            foreach (var y in deleted)
+                Keys.Remove(y);
+        }
 
         protected override void OnActivate()
         {
-            keySubscription = InterceptKeys.Current.Subscribe(this);
+            keySubscription = messageProvider.Subscribe(this);
         }
 
         protected override void OnDeactivate(bool close)
         {
             keySubscription.Dispose();
+            timerToken.Dispose();
         }
 
-        public void OnNext(InterceptKeyEventArgs value)
+        public void OnNext(Message value)
         {
-            Process process;
-
-            int handle = 0;
-            handle = GetForegroundWindow();
-
-            if (!_processes.ContainsKey(handle))
-            {
-                uint processID = 0;
-                uint threadID = GetWindowThreadProcessId(new IntPtr(handle), out processID);
-                var p = Process.GetProcessById(Convert.ToInt32(processID));
-                _processes.Add(handle, p);
-                process = p;
-            }
-            else process = _processes[handle];
-
-
-            if (value.KeyDirection != KeyDirection.Up) return;
             if (Keys.Count > 10)
                 Keys.RemoveAt(0);
 
-            if (value.AltPressed && value.ControlPressed)
-                Keys.Add(string.Format("Ctrl + Alt + {0}", value.Key));
-            else if (value.AltPressed)
-                Keys.Add(string.Format("Alt + {0}", value.Key));
-            else if (value.ControlPressed)
-                Keys.Add(string.Format("Ctrl + {0}", value.Key));
-            else
-                Keys.Add(string.Format("{0} - {1}", process.ProcessName, value.Key.ToString()));
+            Keys.Add(value);
         }
-        public void OnError(Exception error){}
-        public void OnCompleted(){}
+
+        public void OnError(Exception error)
+        {
+        }
+
+        public void OnCompleted()
+        {
+        }
+
+        public void SaveSettingsGeneral()
+        {
+            SaveSettings();
+        }
+
+        public void SaveSettings()
+        {
+            if (Screens.Count < 1) return;
+
+            if (SelectedScreen == null)
+                SelectedScreen = Screens.First();
+
+            Settings.Screen = SelectedScreen.Index;
+
+               if (SelectedScreen.NotificationPlacementTopLeft)
+                Settings.Placement = NotificationPlacement.TopLeft;
+            else if (SelectedScreen.NotificationPlacementBottomLeft)
+                Settings.Placement = NotificationPlacement.BottomLeft;
+            else if (SelectedScreen.NotificationPlacementTopRight)
+                Settings.Placement = NotificationPlacement.TopRight;
+            else if (SelectedScreen.NotificationPlacementBottomRight)
+                Settings.Placement = NotificationPlacement.BottomRight;
+            else Settings.Placement = NotificationPlacement.BottomLeft;
+
+            PlaceScreen();
+
+            settingsService.Set("PopupSettings", Settings);
+            settingsService.Save();
+        }
+
+        public void SetDefaultSettings()
+        {
+            Settings.FontSize = 40;
+            Settings.FontColor = "White";
+            Settings.ItemBackgroundColor = "Black";
+            Settings.ItemOpacity = 0.5;
+            Settings.ItemMaxWidth = 350;
+
+            SaveSettings();
+        }
+        private void PlaceScreen()
+        {
+            if (Screens == null) return;
+
+            SelectedScreen = Screens.FirstOrDefault(s => s.Index == Settings.Screen);
+
+            if (SelectedScreen == null) return;
+
+            if (Settings.Placement == NotificationPlacement.TopLeft)
+                SelectedScreen.NotificationPlacementTopLeft = true;
+            else if (Settings.Placement == NotificationPlacement.BottomLeft)
+                SelectedScreen.NotificationPlacementBottomLeft = true;
+            else if (Settings.Placement == NotificationPlacement.TopRight)
+                SelectedScreen.NotificationPlacementTopRight = true;
+            else if (Settings.Placement == NotificationPlacement.BottomRight)
+                SelectedScreen.NotificationPlacementBottomRight = true;
+            else SelectedScreen.NotificationPlacementBottomLeft = true;
+
+            Settings.Left = SelectedScreen.Left;
+        }
     }
 }

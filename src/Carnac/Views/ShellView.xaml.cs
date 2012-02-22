@@ -1,8 +1,13 @@
 ﻿using System;
 using System.Drawing;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
+using Carnac.Logic.Native;
+using Carnac.Utilities;
+using Carnac.ViewModels;
+using Application = System.Windows.Application;
 
 namespace Carnac.Views
 {
@@ -12,31 +17,39 @@ namespace Carnac.Views
         {
             InitializeComponent();
 
+            // Check if there was instance before this. If there was-close the current one.  
+            if (ProcessUtilities.ThisProcessIsAlreadyRunning())
+            {
+                ProcessUtilities.SetFocusToPreviousInstance("Carnac");
+                Application.Current.Shutdown();
+            }
+
             var item = new MenuItem
             {
                 Text = "Exit"
             };
 
-            item.Click += (sender, args) => this.Close();
+            item.Click += (sender, args) => Close();
 
-            var _ni = new NotifyIcon()
-                          {
-                              Icon = new Icon(@"..\..\icon.ico"),
+            var iconStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Carnac.icon.embedded.ico");
 
-                              ContextMenu =  new ContextMenu(new[] { item })
-                          };
+            var ni = new NotifyIcon
+                         {
+                             Icon = new Icon(iconStream),
+                             ContextMenu = new ContextMenu(new[] { item })
+                         };
 
-            _ni.Click += NotifyIcon_Click;
-            _ni.Visible = true;
+            ni.Click += NotifyIconClick;
+            ni.Visible = true;
         }
 
-        private void NotifyIcon_Click(object sender, EventArgs e)
+        private void NotifyIconClick(object sender, EventArgs e)
         {
-            this.Show();
-            this.WindowState = WindowState.Normal;
+            Show();
+            WindowState = WindowState.Normal;
+            this.Topmost = true;  // When it comes back, make sure it's on top...
+            this.Topmost = false; // and then it doesn't need to be anymore.
         }
-
-        private NotifyIcon _ni;
 
         private void OnMouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -44,19 +57,34 @@ namespace Carnac.Views
                 DragMove();
         }
 
-        protected override void OnStateChanged(System.EventArgs e)
+        protected override void OnStateChanged(EventArgs e)
         {
             base.OnStateChanged(e);
 
-            if(this.WindowState == WindowState.Minimized)
+            if (WindowState == WindowState.Minimized)
+            {
                 Hide();
+            }
         }
 
         protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
         {
             base.OnClosing(e);
-
             System.Windows.Application.Current.Shutdown();
+        }
+
+        private void RadioChecked(object sender, RoutedEventArgs e)
+        {
+            var dc = DataContext as ShellViewModel;
+            if (dc == null) return;
+
+            var rb = sender as System.Windows.Controls.RadioButton;
+            if (rb == null) return;
+
+            var tag = rb.Tag as DetailedScreen;
+            if (tag == null) return;
+
+            dc.SelectedScreen = tag;
         }
     }
 }

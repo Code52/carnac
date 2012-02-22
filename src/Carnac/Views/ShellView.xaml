@@ -3,12 +3,14 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" MouseDown="OnMouseDown"
-        Topmost="True"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                      xmlns:extToolkit="http://schemas.microsoft.com/winfx/2006/xaml/presentation/toolkit/extended"
+                      MouseDown="OnMouseDown"
+                      Icon="../icon.ico"
         ShowTitleBar="False"
         mc:Ignorable="d"
-        Width="606"
-        Height="369">
+        Width="610"
+        Height="420">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -27,46 +29,139 @@
     </Window.Foreground>
     <TabControl Margin="0,12">
         <TabItem Header="General">
-            <ListBox ItemsSource="{Binding Screens}" BorderBrush="{x:Null}" Background="{x:Null}" VerticalAlignment="Top">
-                <ListBox.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <StackPanel Orientation="Horizontal" IsItemsHost="True"/>
-                    </ItemsPanelTemplate>
-                </ListBox.ItemsPanel>
-                <ListBox.ItemContainerStyle>
-                    <Style TargetType="ListBoxItem">
-                        <Setter Property="VerticalAlignment" Value="Bottom" />
-                    </Style>
-                </ListBox.ItemContainerStyle>
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Margin="5,5,5,5">
-                            <Grid HorizontalAlignment="Left" Height="{Binding RelativeHeight}" Margin="0" Width="{Binding RelativeWidth}">
-                                <Rectangle Fill="{DynamicResource AccentColorBrush}"/>
-                                <TextBlock FontWeight="SemiBold" TextWrapping="Wrap" Foreground="White" FontSize="96" VerticalAlignment="Center" HorizontalAlignment="Center" Text="{Binding Index}" />
-                                <RadioButton x:Name="rbTL" Content="" HorizontalAlignment="Left" VerticalAlignment="Top" />
-                                <RadioButton x:Name="rbBL" Content="" HorizontalAlignment="Left" VerticalAlignment="Bottom" />
-                                <RadioButton x:Name="rbTR" Content="" HorizontalAlignment="Right" VerticalAlignment="Top" />
-                                <RadioButton x:Name="rbBR" Content="" HorizontalAlignment="Right" VerticalAlignment="Bottom" />
-                            </Grid>
-                            <TextBlock FontWeight="SemiBold" HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding FriendlyName}" FontSize="18.667"/>
-                            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" FontSize="14">
-                            <Run Text="{Binding Width}"/> x <Run Text="{Binding Height}"/>
-                            </TextBlock>
-                        </StackPanel>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
+            <StackPanel Orientation="Vertical">
+                <ListBox ItemsSource="{Binding Screens}" SelectedItem="{Binding SelectedScreen}" BorderBrush="{x:Null}" Background="{x:Null}" VerticalAlignment="Top">
+                    <ListBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Horizontal" IsItemsHost="True"/>
+                        </ItemsPanelTemplate>
+                    </ListBox.ItemsPanel>
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="ListBoxItem">
+                            <Setter Property="VerticalAlignment" Value="Bottom" />
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Margin="5,5,5,5">
+                                <Grid HorizontalAlignment="Left" Height="{Binding RelativeHeight}" Margin="0" Width="{Binding RelativeWidth}">
+                                    <Rectangle Fill="{DynamicResource AccentColorBrush}"/>
+                                    <TextBlock FontWeight="SemiBold" TextWrapping="Wrap" Foreground="White" FontSize="96" VerticalAlignment="Center" HorizontalAlignment="Center" Text="{Binding Index}" />
+                                    <RadioButton x:Name="rbTL" Content="" IsChecked="{Binding NotificationPlacementTopLeft}" Checked="RadioChecked" Tag="{Binding}" GroupName="Placement" HorizontalAlignment="Left" VerticalAlignment="Top" />
+                                    <RadioButton x:Name="rbBL" Content="" IsChecked="{Binding NotificationPlacementBottomLeft}" Checked="RadioChecked" Tag="{Binding}" GroupName="Placement" HorizontalAlignment="Left" VerticalAlignment="Bottom" />
+                                    <RadioButton x:Name="rbTR" Content="" IsChecked="{Binding NotificationPlacementTopRight}" Checked="RadioChecked" Tag="{Binding}" GroupName="Placement" HorizontalAlignment="Right" VerticalAlignment="Top" />
+                                    <RadioButton x:Name="rbBR" Content="" IsChecked="{Binding NotificationPlacementBottomRight}" Checked="RadioChecked" Tag="{Binding}" GroupName="Placement" HorizontalAlignment="Right" VerticalAlignment="Bottom" />
+                                </Grid>
+                                <TextBlock FontWeight="SemiBold" HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding FriendlyName}" FontSize="18.667"/>
+                                <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" FontSize="14">
+                                    <Run Text="{Binding Width}"/> x <Run Text="{Binding Height}"/>
+                                </TextBlock>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Foreground="White" FontWeight="Bold" Text="Top Offset" Margin="10 0 0 0" Width="200" VerticalAlignment="Center" />
+                    <Slider x:Name="Settings_TopOffset" Width="200" Minimum="0" Maximum="800" SmallChange="1" LargeChange="10" TickFrequency="20" IsSnapToTickEnabled="True" Margin="5 0 20 0" />
+                    <TextBox Text="{Binding Settings.TopOffset}" Width="50" Foreground="White" HorizontalAlignment="Center"  Margin="0 0 5 5" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Foreground="White" FontWeight="Bold" Text="Bottom Offset" Margin="10 0 0 0" Width="200" VerticalAlignment="Center" />
+                    <Slider x:Name="Settings_BottomOffset" Width="200" Minimum="0" Maximum="800" SmallChange="1" LargeChange="10" TickFrequency="20" IsSnapToTickEnabled="True" Margin="5 0 20 0" />
+                    <TextBox Text="{Binding Settings.BottomOffset}" Width="50" Foreground="White" HorizontalAlignment="Center"  Margin="0 0 5 5" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Foreground="White" FontWeight="Bold" Text="Left Offset" Margin="10 0 0 0" Width="200" VerticalAlignment="Center" />
+                    <Slider x:Name="Settings_LeftOffset" Width="200" Minimum="0" Maximum="2000" SmallChange="1" LargeChange="10" TickFrequency="10" IsSnapToTickEnabled="True" Margin="5 0 20 0" />
+                    <TextBox Text="{Binding Settings.LeftOffset}" Width="50" Foreground="White" HorizontalAlignment="Center"  Margin="0 0 5 5" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Foreground="White" FontWeight="Bold" Text="Right Offset" Margin="10 0 0 0" Width="200" VerticalAlignment="Center" />
+                    <Slider x:Name="Settings_RightOffset" Width="200" Minimum="0" Maximum="2000" SmallChange="1" LargeChange="10" TickFrequency="10" IsSnapToTickEnabled="True" Margin="5 0 20 0" />
+                    <TextBox Text="{Binding Settings.RightOffset}" Width="50" Foreground="White" HorizontalAlignment="Center"  Margin="0 0 5 5" />
+                </StackPanel>
+                <Button x:Name="SaveSettingsGeneral" Content="Save" Width="50" Margin="0 5 50 5" HorizontalAlignment="Right" />
+            </StackPanel>
         </TabItem>
         <TabItem Header="Keys">
             <ItemsControl Margin="12" ItemsSource="{Binding Keys}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                 <ItemsControl.Foreground>
                     <SolidColorBrush Color="White" />
                 </ItemsControl.Foreground>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding ProcessName}" Foreground="White"/>
+                            <ListBox ItemsSource="{Binding Text}" Foreground="White"
+                                     BorderBrush="Transparent" BorderThickness="0">
+                                <ListBox.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel />
+                                    </ItemsPanelTemplate>
+                                </ListBox.ItemsPanel>
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding}" Foreground="White" />
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </StackPanel>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
             </ItemsControl>
         </TabItem>
-        <TabItem Header="Recording"/>
-        <TabItem Header="Appearance"/>
-        <TabItem Header="About"/>
+        <TabItem Header="Recording">
+            <TextBlock x:Name="CurrentMessage_Text" Foreground="White" Background="DarkBlue" HorizontalAlignment="Stretch" Width="200"/>
+        </TabItem>
+        <TabItem Header="Appearance">
+            <StackPanel Orientation="Vertical">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Foreground="White" FontWeight="Bold" Text="Popup Text Width" Margin="10 0 0 0" Width="200" VerticalAlignment="Center" />
+                    <Slider x:Name="Settings_ItemMaxWidth" Width="200" Minimum="0" Maximum="1000" SmallChange="10" LargeChange="50" TickFrequency="10" IsSnapToTickEnabled="True" Margin="5 0 20 0" />
+                    <TextBox Text="{Binding Settings.ItemMaxWidth}" Width="50" Foreground="White" HorizontalAlignment="Center"  Margin="0 0 5 5" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Foreground="White" FontWeight="Bold" Text="Popup Opacity" Margin="10 0 0 0" Width="200" VerticalAlignment="Center" />
+                    <Slider x:Name="Settings_ItemOpacity" Width="200" Minimum="0" Maximum="1" SmallChange="0.05" LargeChange="0.1" TickFrequency="0.05" IsSnapToTickEnabled="True" Margin="5 0 20 0" />
+                    <TextBox Text="{Binding Settings.ItemOpacity}" Width="50" Foreground="White" HorizontalAlignment="Center"  Margin="0 0 5 5" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Foreground="White" FontWeight="Bold" Text="Font Size" Margin="10 0 0 0" Width="200" VerticalAlignment="Center" />
+                    <Slider x:Name="Settings_FontSize" Width="200" Minimum="8" Maximum="48" SmallChange="1" LargeChange="2" TickFrequency="1" IsSnapToTickEnabled="True" Margin="5 0 20 0" />
+                    <TextBox Text="{Binding Settings.FontSize}" Width="50" Foreground="White" HorizontalAlignment="Center"  Margin="0 0 5 5" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Foreground="White" FontWeight="Bold" Text="Font Colour" Margin="10 0 0 0" Width="200" VerticalAlignment="Center" />
+                    <extToolkit:ColorPicker SelectedColor="{Binding Settings.FontColor}" Width="200"  Margin="5 5 20 5" />
+                    <TextBox Text="{Binding Settings.FontColor}" Width="100" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"  Margin="0 0 5 0" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Foreground="White" FontWeight="Bold" Text="Background Color" Margin="10 0 0 0" Width="200" VerticalAlignment="Center" />
+                    <extToolkit:ColorPicker SelectedColor="{Binding Settings.ItemBackgroundColor}" Width="200"  Margin="5 5 20 5" />
+                    <TextBox Text="{Binding Settings.ItemBackgroundColor}" Width="100" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"  Margin="0 0 5 0" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal"  Margin="0 5 50 5" HorizontalAlignment="Right">
+                    <Button x:Name="SetDefaultSettings" Content="Reset to Defaults" Width="150" Margin="0 0 5 0" />
+                    <Button x:Name="SaveSettings" Content="Save" Width="50" />
+                </StackPanel>
+            </StackPanel>
+        </TabItem>
+        <TabItem Header="About">
+            <StackPanel Orientation="Horizontal" Margin="20,40,0,0">
+                <StackPanel Width="340">
+                    <TextBlock TextWrapping="Wrap" Foreground="#FF41B1E1" Margin="0,-7,-0.001,0" VerticalAlignment="Bottom" HorizontalAlignment="Left" FontFamily="Segoe UI Light" FontSize="18.667"><Run Text="a code52 project"/></TextBlock>
+                    <TextBlock Foreground="White" HorizontalAlignment="Left" TextWrapping="Wrap" Margin="0,8,0,0" FontFamily="Segoe UI Light" FontSize="20" Text="a project by" />
+                    <TextBlock Foreground="White" Text="{Binding Authors}" TextWrapping="Wrap" Margin="0,4,0,0" />
+                    <TextBlock Foreground="White" HorizontalAlignment="Left" TextWrapping="Wrap" Margin="0,10,0,0" FontFamily="Segoe UI Light" FontSize="20" ><Run Text="Carnac uses"/></TextBlock>
+                    <TextBlock Foreground="White" Text="{Binding Components}" TextWrapping="Wrap" Margin="0,4,0,0" />
+                    <Button x:Name="Visit" Content="Visit Carnac Website" HorizontalAlignment="Center" Margin="0,60,0,0" Style="{DynamicResource SquareButtonStyle}" Width="145"/>
+                </StackPanel>
+                <StackPanel>
+                    <Image Source="/Carnac;component/carnac_2.png" HorizontalAlignment="Center" VerticalAlignment="Top" Width="200" Height="200" Stretch="UniformToFill"/>
+                    <TextBlock TextWrapping="Wrap" FontWeight="Bold" FontSize="69.333" HorizontalAlignment="Left" Margin="-4,0,0,0" Foreground="White"><Run Text="Carnac"/></TextBlock>
+                    <TextBlock Margin="0,-18,0,0" TextWrapping="Wrap" FontWeight="Bold" HorizontalAlignment="Left" Height="20.83" Foreground="White"><Run Text="version "/><Run Text=" "/><Run Text="{Binding Version, Mode=OneTime}" /><Run Text=" "/><Run Text="{Binding Configuration, Mode=OneTime}" /></TextBlock>
+                </StackPanel>
+            </StackPanel>
+        </TabItem>
     </TabControl>
 </Controls:MetroWindow>

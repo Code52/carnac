@@ -1,6 +1,6 @@
 using System;
 
-namespace Carnac.ViewModels
+namespace Carnac.Logic.Native
 {
     [Flags()]
     public enum DisplayDeviceStateFlags : int
