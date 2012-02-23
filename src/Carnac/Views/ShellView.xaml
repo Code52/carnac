@@ -4,8 +4,7 @@
         xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-                      xmlns:extToolkit="http://schemas.microsoft.com/winfx/2006/xaml/presentation/toolkit/extended"
-                      MouseDown="OnMouseDown"
+                      xmlns:extToolkit="http://schemas.microsoft.com/winfx/2006/xaml/presentation/toolkit/extended" xmlns:Views="clr-namespace:Carnac.Views" MouseDown="OnMouseDown"
                       Icon="../icon.ico"
         ShowTitleBar="False"
         mc:Ignorable="d"
@@ -21,6 +20,37 @@
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Blue.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseDark.xaml" />
             </ResourceDictionary.MergedDictionaries>
+
+            <Views:PlacementMarginConverter x:Key="PlacementMarginConverter"/>
+            <Style x:Key="PlacementButton" TargetType="{x:Type RadioButton}">
+                <Setter Property="SnapsToDevicePixels" Value="true" />
+                <Setter Property="OverridesDefaultStyle" Value="true" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type RadioButton}">
+                            <Grid x:Name="Grid" Height="30" Width="30">
+                                <ContentPresenter Margin="4,0,0,0"
+                                              HorizontalAlignment="Left"
+                                              VerticalAlignment="Center"
+                                              RecognizesAccessKey="True" />
+                            </Grid>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsChecked" Value="true">
+                                    <Setter TargetName="Grid" Property="Background" Value="White" />
+                                </Trigger>
+                                <Trigger Property="IsChecked" Value="false">
+                                    <Setter TargetName="Grid" Property="Background" Value="Silver" />
+                                </Trigger>
+                                <Trigger Property="IsMouseOver" Value="true">
+                                    <Setter TargetName="Grid" Property="Opacity" Value="0.5" />
+                                    <Setter TargetName="Grid" Property="Background" Value="White" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            
         </ResourceDictionary>
     </Window.Resources>
 
@@ -31,6 +61,14 @@
         <TabItem Header="General">
             <StackPanel Orientation="Vertical">
                 <ListBox ItemsSource="{Binding Screens}" SelectedItem="{Binding SelectedScreen}" BorderBrush="{x:Null}" Background="{x:Null}" VerticalAlignment="Top">
+                    <ListBox.Style>
+                        <Style>
+                            <Style.Resources>
+                                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Transparent" />
+                                <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="Transparent" />
+                            </Style.Resources>
+                        </Style>
+                    </ListBox.Style>
                     <ListBox.ItemsPanel>
                         <ItemsPanelTemplate>
                             <StackPanel Orientation="Horizontal" IsItemsHost="True"/>
@@ -47,10 +85,42 @@
                                 <Grid HorizontalAlignment="Left" Height="{Binding RelativeHeight}" Margin="0" Width="{Binding RelativeWidth}">
                                     <Rectangle Fill="{DynamicResource AccentColorBrush}"/>
                                     <TextBlock FontWeight="SemiBold" TextWrapping="Wrap" Foreground="White" FontSize="96" VerticalAlignment="Center" HorizontalAlignment="Center" Text="{Binding Index}" />
-                                    <RadioButton x:Name="rbTL" Content="" IsChecked="{Binding NotificationPlacementTopLeft}" Checked="RadioChecked" Tag="{Binding}" GroupName="Placement" HorizontalAlignment="Left" VerticalAlignment="Top" />
-                                    <RadioButton x:Name="rbBL" Content="" IsChecked="{Binding NotificationPlacementBottomLeft}" Checked="RadioChecked" Tag="{Binding}" GroupName="Placement" HorizontalAlignment="Left" VerticalAlignment="Bottom" />
-                                    <RadioButton x:Name="rbTR" Content="" IsChecked="{Binding NotificationPlacementTopRight}" Checked="RadioChecked" Tag="{Binding}" GroupName="Placement" HorizontalAlignment="Right" VerticalAlignment="Top" />
-                                    <RadioButton x:Name="rbBR" Content="" IsChecked="{Binding NotificationPlacementBottomRight}" Checked="RadioChecked" Tag="{Binding}" GroupName="Placement" HorizontalAlignment="Right" VerticalAlignment="Bottom" />
+                                    <RadioButton x:Name="rbTL" Content="" IsChecked="{Binding NotificationPlacementTopLeft}" Style="{StaticResource PlacementButton}" Checked="RadioChecked" Tag="{Binding}" GroupName="Placement" HorizontalAlignment="Left" VerticalAlignment="Top" >
+                                        <RadioButton.Margin>
+                                            <MultiBinding Converter="{StaticResource PlacementMarginConverter}">
+                                                <Binding Path="DataContext.Settings.Margins" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Controls:MetroWindow}}" />
+                                                <Binding Path="DataContext.SelectedScreen" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Controls:MetroWindow}}" />
+                                                <Binding Path="IsChecked" RelativeSource="{RelativeSource Self}" />
+                                            </MultiBinding>
+                                        </RadioButton.Margin>
+                                    </RadioButton>
+                                    <RadioButton x:Name="rbBL" Content="" IsChecked="{Binding NotificationPlacementBottomLeft}" Style="{StaticResource PlacementButton}" Checked="RadioChecked" Tag="{Binding}" GroupName="Placement" HorizontalAlignment="Left" VerticalAlignment="Bottom">
+                                        <RadioButton.Margin>
+                                            <MultiBinding Converter="{StaticResource PlacementMarginConverter}">
+                                                <Binding Path="DataContext.Settings.Margins" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Controls:MetroWindow}}" />
+                                                <Binding Path="DataContext.SelectedScreen" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Controls:MetroWindow}}" />
+                                                <Binding Path="IsChecked" RelativeSource="{RelativeSource Self}" />
+                                            </MultiBinding>
+                                        </RadioButton.Margin>
+                                    </RadioButton>
+                                    <RadioButton x:Name="rbTR" Content="" IsChecked="{Binding NotificationPlacementTopRight}" Style="{StaticResource PlacementButton}" Checked="RadioChecked" Tag="{Binding}" GroupName="Placement" HorizontalAlignment="Right" VerticalAlignment="Top">
+                                        <RadioButton.Margin>
+                                            <MultiBinding Converter="{StaticResource PlacementMarginConverter}">
+                                                <Binding Path="DataContext.Settings.Margins" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Controls:MetroWindow}}" />
+                                                <Binding Path="DataContext.SelectedScreen" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Controls:MetroWindow}}" />
+                                                <Binding Path="IsChecked" RelativeSource="{RelativeSource Self}" />
+                                            </MultiBinding>
+                                        </RadioButton.Margin>
+                                    </RadioButton>
+                                    <RadioButton x:Name="rbBR" Content="" IsChecked="{Binding NotificationPlacementBottomRight}" Style="{StaticResource PlacementButton}" Checked="RadioChecked" Tag="{Binding}" GroupName="Placement" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+                                        <RadioButton.Margin>
+                                            <MultiBinding Converter="{StaticResource PlacementMarginConverter}">
+                                                <Binding Path="DataContext.Settings.Margins" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Controls:MetroWindow}}" />
+                                                <Binding Path="DataContext.SelectedScreen" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Controls:MetroWindow}}" />
+                                                <Binding Path="IsChecked" RelativeSource="{RelativeSource Self}" />
+                                            </MultiBinding>
+                                        </RadioButton.Margin>
+                                    </RadioButton>
                                 </Grid>
                                 <TextBlock FontWeight="SemiBold" HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding FriendlyName}" FontSize="18.667"/>
                                 <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" FontSize="14">
@@ -62,23 +132,23 @@
                 </ListBox>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Foreground="White" FontWeight="Bold" Text="Top Offset" Margin="10 0 0 0" Width="200" VerticalAlignment="Center" />
-                    <Slider x:Name="Settings_TopOffset" Width="200" Minimum="0" Maximum="800" SmallChange="1" LargeChange="10" TickFrequency="20" IsSnapToTickEnabled="True" Margin="5 0 20 0" />
-                    <TextBox Text="{Binding Settings.TopOffset}" Width="50" Foreground="White" HorizontalAlignment="Center"  Margin="0 0 5 5" />
+                    <Slider x:Name="Settings_TopOffset" Value="{Binding Settings.TopOffset}" Width="200" Minimum="0" Maximum="{Binding SelectedScreen.Height}" SmallChange="1" LargeChange="10" TickFrequency="20" IsSnapToTickEnabled="True" Margin="5 0 20 0" />
+                    <TextBox Text="{Binding ElementName=Settings_TopOffset,Path=Value}" Width="50" Foreground="White" HorizontalAlignment="Center"  Margin="0 0 5 5" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Foreground="White" FontWeight="Bold" Text="Bottom Offset" Margin="10 0 0 0" Width="200" VerticalAlignment="Center" />
-                    <Slider x:Name="Settings_BottomOffset" Width="200" Minimum="0" Maximum="800" SmallChange="1" LargeChange="10" TickFrequency="20" IsSnapToTickEnabled="True" Margin="5 0 20 0" />
-                    <TextBox Text="{Binding Settings.BottomOffset}" Width="50" Foreground="White" HorizontalAlignment="Center"  Margin="0 0 5 5" />
+                    <Slider x:Name="Settings_BottomOffset" Value="{Binding Settings.BottomOffset}" Width="200" Minimum="0" Maximum="{Binding SelectedScreen.Height}" SmallChange="1" LargeChange="10" TickFrequency="20" IsSnapToTickEnabled="True" Margin="5 0 20 0" />
+                    <TextBox Text="{Binding ElementName=Settings_BottomOffset,Path=Value}" Width="50" Foreground="White" HorizontalAlignment="Center"  Margin="0 0 5 5" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Foreground="White" FontWeight="Bold" Text="Left Offset" Margin="10 0 0 0" Width="200" VerticalAlignment="Center" />
-                    <Slider x:Name="Settings_LeftOffset" Width="200" Minimum="0" Maximum="2000" SmallChange="1" LargeChange="10" TickFrequency="10" IsSnapToTickEnabled="True" Margin="5 0 20 0" />
-                    <TextBox Text="{Binding Settings.LeftOffset}" Width="50" Foreground="White" HorizontalAlignment="Center"  Margin="0 0 5 5" />
+                    <Slider x:Name="Settings_LeftOffset" Value="{Binding Settings.LeftOffset}" Width="200" Minimum="0" Maximum="{Binding SelectedScreen.Width}" SmallChange="1" LargeChange="10" TickFrequency="10" IsSnapToTickEnabled="True" Margin="5 0 20 0" />
+                    <TextBox Text="{Binding ElementName=Settings_LeftOffset,Path=Value}" Width="50" Foreground="White" HorizontalAlignment="Center"  Margin="0 0 5 5" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Foreground="White" FontWeight="Bold" Text="Right Offset" Margin="10 0 0 0" Width="200" VerticalAlignment="Center" />
-                    <Slider x:Name="Settings_RightOffset" Width="200" Minimum="0" Maximum="2000" SmallChange="1" LargeChange="10" TickFrequency="10" IsSnapToTickEnabled="True" Margin="5 0 20 0" />
-                    <TextBox Text="{Binding Settings.RightOffset}" Width="50" Foreground="White" HorizontalAlignment="Center"  Margin="0 0 5 5" />
+                    <Slider x:Name="Settings_RightOffset" Value="{Binding Settings.RightOffset}"  Width="200" Minimum="0" Maximum="{Binding SelectedScreen.Width}" SmallChange="1" LargeChange="10" TickFrequency="10" IsSnapToTickEnabled="True" Margin="5 0 20 0" />
+                    <TextBox Text="{Binding ElementName=Settings_RightOffset,Path=Value}" Width="50" Foreground="White" HorizontalAlignment="Center"  Margin="0 0 5 5" />
                 </StackPanel>
                 <Button x:Name="SaveSettingsGeneral" Content="Save" Width="50" Margin="0 5 50 5" HorizontalAlignment="Right" />
             </StackPanel>
