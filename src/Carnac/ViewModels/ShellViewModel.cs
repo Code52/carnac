@@ -22,7 +22,7 @@ namespace Carnac.ViewModels
         readonly IDisposable timerToken;
 
         readonly ISettingsService settingsService;
-        private readonly IMessageProvider messageProvider;
+        readonly IMessageProvider messageProvider;
 
         readonly TimeSpan fiveseconds = TimeSpan.FromSeconds(5);
         readonly TimeSpan sixseconds = TimeSpan.FromSeconds(6);
@@ -41,12 +41,14 @@ namespace Carnac.ViewModels
             Keys = new ObservableCollection<Message>();
             Screens = new ObservableCollection<DetailedScreen>(screenManager.GetScreens());
 
+            DetectShortcuts = settingsService.Get<bool>("DetectShortcuts");
             Settings = settingsService.Get<Settings>("PopupSettings");
             if (Settings == null)
             {
                 Settings = new Settings();
                 SetDefaultSettings();
             }
+
 
             PlaceScreen();
 
@@ -61,6 +63,8 @@ namespace Carnac.ViewModels
         public DetailedScreen SelectedScreen { get; set; }
 
         public Settings Settings { get; set; }
+
+        public bool DetectShortcuts { get; set; }
 
         public override string DisplayName
         {
@@ -182,6 +186,7 @@ namespace Carnac.ViewModels
             PlaceScreen();
 
             settingsService.Set("PopupSettings", Settings);
+            settingsService.Set("DetectShortcuts", DetectShortcuts);
             settingsService.Save();
         }
 
@@ -192,6 +197,7 @@ namespace Carnac.ViewModels
             Settings.ItemBackgroundColor = "Black";
             Settings.ItemOpacity = 0.5;
             Settings.ItemMaxWidth = 350;
+            DetectShortcuts = true;
 
             SaveSettings();
         }

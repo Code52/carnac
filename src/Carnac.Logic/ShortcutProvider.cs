@@ -11,6 +11,7 @@ namespace Carnac.Logic
     public class ShortcutProvider : IShortcutProvider
     {
         readonly Dictionary<string, ShortcutCollection> shortcuts = new Dictionary<string, ShortcutCollection>();
+        readonly ISettingsService settings;
 
         private string resharperShortcuts =
             @"R# context actions|Alt+Enter
@@ -98,8 +99,11 @@ Unit Test Sessions|Ctrl+Alt+T
 Close recent tool|Ctrl+Shift+F4
 Activate recent tool|Ctrl+Alt+Backspace";
 
-        public ShortcutProvider()
+        [ImportingConstructor]
+        public ShortcutProvider(ISettingsService settingsService)
         {
+            settings = settingsService;
+
             var shortcutCollection = new ShortcutCollection();
             var parsedShortcuts = resharperShortcuts.Split(new[] {"\r\n"}, StringSplitOptions.RemoveEmptyEntries)
                 .Where(s => !s.StartsWith("#"))
@@ -145,6 +149,9 @@ Activate recent tool|Ctrl+Alt+Backspace";
 
         public IEnumerable<KeyShortcut> GetShortcutsMatching(IEnumerable<KeyPress> keys)
         {
+            if (settings.ContainsKey("DetectShortcuts") && !settings.Get<bool>("DetectShortcuts"))
+                return Enumerable.Empty<KeyShortcut>();
+
             var keyPresses = keys.ToArray();
             var processName = keyPresses.Last().Process.ProcessName;
             if (shortcuts.ContainsKey(processName))

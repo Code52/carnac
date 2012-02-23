@@ -52,6 +52,7 @@
     <Compile Include="IKeyProvider.cs" />
     <Compile Include="IPasswordModeService.cs" />
     <Compile Include="IScreenManager.cs" />
+    <Compile Include="ISettingsService.cs" />
     <Compile Include="IShortcutProvider.cs" />
     <Compile Include="KeyMonitor\InterceptKeyEventArgs.cs" />
     <Compile Include="KeyMonitor\InterceptKeys.cs" />
