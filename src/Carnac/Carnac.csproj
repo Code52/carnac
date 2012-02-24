@@ -114,6 +114,7 @@
     <Compile Include="Analects\Loader\Loader.cs" />
     <Compile Include="Analects\SettingService\ISettingsService.cs" />
     <Compile Include="Analects\SettingService\SettingsService.cs" />
+    <Compile Include="Enum\NotificationPlacement.cs" />
     <Compile Include="KeyMonitor\HotKey.cs" />
     <Compile Include="KeyMonitor\HotKeyWinApi.cs" />
     <Compile Include="Models\Settings.cs" />
@@ -187,6 +188,10 @@
   <ItemGroup>
     <Resource Include="carnac_2.png" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="icon.embedded.ico" />
+  </ItemGroup>
+  <ItemGroup />
   <UsingTask TaskName="NotifyPropertyWeaverMsBuildTask.WeavingTask" AssemblyFile="$(SolutionDir)Tools\NotifyPropertyWeaverMsBuildTask.dll" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />

@@ -14,6 +14,9 @@ namespace Analects.Loader
         private static readonly Dictionary<string, Assembly> libraries = new Dictionary<string, Assembly>();
         private static readonly Dictionary<string, Assembly> reflectionOnlyLibraries = new Dictionary<string, Assembly>();
 
+        private const string X86Environment = "x86";
+        private const string X64Environment = "x64";
+
         public static void Initialize()
         {
             AppDomain.CurrentDomain.AssemblyResolve += FindAssembly;
@@ -27,9 +30,9 @@ namespace Analects.Loader
         private static void PreloadUnmanagedLibraries()
         {
             // Preload correct library
-            var bittyness = "x86";
+            var bittyness = X86Environment;
             if (IntPtr.Size == 8)
-                bittyness = "x64";
+                bittyness = X64Environment;
 
             var assemblyName = Assembly.GetExecutingAssembly().GetName();
 
@@ -93,9 +96,9 @@ namespace Analects.Loader
             if (string.IsNullOrEmpty(actualName))
             {
                 // The library might be a mixed mode assembly. Try loading from the bitty folders.
-                var bittyness = "x86";
+                var bittyness = X86Environment;
                 if (IntPtr.Size == 8)
-                    bittyness = "x64";
+                    bittyness = X64Environment;
 
                 resourceName = String.Format("{0}.{3}.{1}.{2}.dll", assemblyName.Name, bittyness, shortName, LibsFolder);
                 actualName = executingAssembly.GetManifestResourceNames().FirstOrDefault(n => string.Equals(n, resourceName, StringComparison.OrdinalIgnoreCase));
