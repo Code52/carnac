@@ -3,6 +3,7 @@ using Caliburn.Micro;
 using System.Windows;
 using Carnac.Enum;
 using Carnac.Logic;
+using System.ComponentModel.Composition;
 
 namespace Carnac.Models
 {
@@ -24,7 +25,7 @@ namespace Carnac.Models
         //Used to determine which from it's leftmost co-ord
         public double Left { get; set; }
 
-        [NotifyProperty(AlsoNotifyFor = new [] { "Margins" } )]
+        [NotifyProperty(AlsoNotifyFor = new[] { "Margins" })]
         public int TopOffset { get; set; }
         [NotifyProperty(AlsoNotifyFor = new[] { "Margins" })]
         public int BottomOffset { get; set; }

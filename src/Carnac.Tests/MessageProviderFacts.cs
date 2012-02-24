@@ -47,7 +47,7 @@ namespace Carnac.Tests
             // arrange
             messageProvider.Subscribe(this);
             shortcutProvider.GetShortcutsMatching(Arg.Any<IEnumerable<KeyPress>>())
-                .Returns(new []{new KeyShortcut("MyShortcut", new KeyPressDefinition(Keys.L, shiftPressed:true, controlPressed:true))});
+                .Returns(new[] { new KeyShortcut("MyShortcut", new KeyPressDefinition(Keys.L, shiftPressed: true, controlPressed: true)) });
 
             // act
             KeyStreams.CtrlShiftL().Play(interceptKeysSource);
