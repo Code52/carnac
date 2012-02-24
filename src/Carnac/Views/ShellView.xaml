@@ -31,7 +31,7 @@
                             <Border  BorderThickness="0">
                                 <Grid Height="30" Width="30">
                                     <Rectangle x:Name="Border" Stroke="Black" StrokeThickness="2"/>
-                                    <Rectangle x:Name="Check" Margin="4"/>
+                                    <Path x:Name="Check" Data="M0,1 22,1 22,5 0,5Z M0,7 20,7 20,11 0,11Z M0,13 18,13 18,16 0,16Z M0,18 16,18 16,21 0,21Z" Margin="4"/>
                                     <Rectangle x:Name="MouseOver" Fill="White" Margin="2"/>
                                     <ContentPresenter Margin="4,0,0,0"
                                                   HorizontalAlignment="Left"
@@ -73,7 +73,7 @@
     </Window.Foreground>
     <TabControl Margin="0,12">
         <TabItem Header="General">
-            <StackPanel Orientation="Vertical">
+            <StackPanel Margin="10,0,0,0" Orientation="Vertical">
                 <ItemsControl ItemsSource="{Binding Screens}" BorderBrush="{x:Null}" Background="{x:Null}" VerticalAlignment="Top" Foreground="White">
                     <ItemsControl.Style>
                         <Style>
@@ -88,7 +88,7 @@
                             <StackPanel Orientation="Horizontal" IsItemsHost="True"/>
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
-                        <ItemsControl.ItemTemplate>
+                    <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Margin="5,5,5,5" VerticalAlignment="Bottom">
                                 <Grid HorizontalAlignment="Left" Height="{Binding RelativeHeight}" Margin="0" Width="{Binding RelativeWidth}">
@@ -193,7 +193,7 @@
             <TextBlock x:Name="CurrentMessage_Text" Foreground="White" Background="DarkBlue" HorizontalAlignment="Stretch" Width="200"/>
         </TabItem>
         <TabItem Header="Appearance">
-            <StackPanel Orientation="Vertical">
+            <StackPanel Margin="10,0,0,0" Orientation="Vertical">
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Foreground="White" FontWeight="Bold" Text="Popup Text Width" Margin="10 0 0 0" Width="200" VerticalAlignment="Center" />
                     <Slider x:Name="Settings_ItemMaxWidth" Width="200" Minimum="0" Maximum="1000" SmallChange="10" LargeChange="50" TickFrequency="10" IsSnapToTickEnabled="True" Margin="5 0 20 0" />
