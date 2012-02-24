@@ -135,6 +135,10 @@
                     <extToolkit:ColorPicker SelectedColor="{Binding Settings.ItemBackgroundColor}" Width="200"  Margin="5 5 20 5" />
                     <TextBox Text="{Binding Settings.ItemBackgroundColor}" Width="100" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"  Margin="0 0 5 0" />
                 </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Foreground="White" FontWeight="Bold" Text="Detect Shortcuts" Margin="10 0 0 0" Width="200" VerticalAlignment="Center" />
+                    <CheckBox IsChecked="{Binding DetectShortcuts}" Margin="5 5 20 5" />
+                </StackPanel>
                 <StackPanel Orientation="Horizontal"  Margin="0 5 50 5" HorizontalAlignment="Right">
                     <Button x:Name="SetDefaultSettings" Content="Reset to Defaults" Width="150" Margin="0 0 5 0" />
                     <Button x:Name="SaveSettings" Content="Save" Width="50" />

@@ -43,6 +43,8 @@ namespace Carnac.ViewModels
             Screens = new ObservableCollection<DetailedScreen>(screenManager.GetScreens());
 
             Settings = settingsService.Get<Settings>("PopupSettings");
+            if (settingsService.ContainsKey("DetectShortcuts"))
+                DetectShortcuts = settingsService.Get<bool>("DetectShortcuts");
             if (Settings == null)
             {
                 Settings = new Settings();
@@ -62,6 +64,8 @@ namespace Carnac.ViewModels
         public DetailedScreen SelectedScreen { get; set; }
 
         public Settings Settings { get; set; }
+
+        public bool DetectShortcuts { get; set; }
 
         public override string DisplayName
         {
@@ -185,6 +189,7 @@ namespace Carnac.ViewModels
             PlaceScreen();
 
             settingsService.Set("PopupSettings", Settings);
+            settingsService.Set("DetectShortcuts", DetectShortcuts);
             settingsService.Save();
         }
 
@@ -195,6 +200,7 @@ namespace Carnac.ViewModels
             Settings.ItemBackgroundColor = "Black";
             Settings.ItemOpacity = 0.5;
             Settings.ItemMaxWidth = 350;
+            DetectShortcuts = true;
 
             SaveSettings();
         }
