@@ -87,6 +87,9 @@
     <Content Include="Keymaps\visual-studio.yml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Keymaps\konami.yml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Keymaps\resharper.yml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

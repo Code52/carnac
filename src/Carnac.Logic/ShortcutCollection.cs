@@ -12,7 +12,7 @@ namespace Carnac.Logic
 
         public IEnumerable<KeyShortcut> GetShortcutsMatching(IEnumerable<KeyPress> keys)
         {
-            var matches = this.Where(s => s.EndsWith(keys));
+            var matches = this.Where(s => s.StartsWith(keys));
             return matches;
         }
     }
