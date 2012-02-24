@@ -3,6 +3,7 @@ using Caliburn.Micro;
 using System.Windows;
 using Carnac.Enum;
 using Carnac.Logic;
+using Carnac.Views;
 
 namespace Carnac.Models
 {
@@ -22,9 +23,18 @@ namespace Carnac.Models
         public NotificationPlacement Placement { get; set; }
 
         //Used to determine which from it's leftmost co-ord
-        public double Left { get; set; }
+        private double left;
+        public double Left
+        {
+            get { return left; }
+            set
+            {
+                left = value;
+                AppBootstrapper.Aggregator.Publish(new LeftChanged(value));
+            }
+        }
 
-        [NotifyProperty(AlsoNotifyFor = new [] { "Margins" } )]
+        [NotifyProperty(AlsoNotifyFor = new[] { "Margins" })]
         public int TopOffset { get; set; }
         [NotifyProperty(AlsoNotifyFor = new[] { "Margins" })]
         public int BottomOffset { get; set; }
