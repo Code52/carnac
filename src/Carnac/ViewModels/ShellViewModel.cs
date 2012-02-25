@@ -6,6 +6,7 @@ using Analects.SettingsService;
 using Caliburn.Micro;
 using Carnac.Enum;
 using Carnac.Logic;
+using Carnac.Logic.KeyMonitor;
 using Carnac.Logic.Native;
 using Carnac.Models;
 using Carnac.Utilities;
@@ -107,7 +108,7 @@ namespace Carnac.ViewModels
         {
             try
             {
-                System.Diagnostics.Process.Start("http://code52.org/carnac.html");
+                System.Diagnostics.Process.Start("http://code52.org/carnac/");
             }
             catch //I forget what exceptions can be raised if the browser is crashed?
             {
@@ -162,14 +163,15 @@ namespace Carnac.ViewModels
 
         public void SaveSettings()
         {
-            if (Screens.Count < 1) return;
+            if (Screens.Count < 1)
+                return;
 
             if (SelectedScreen == null)
                 SelectedScreen = Screens.First();
 
             Settings.Screen = SelectedScreen.Index;
 
-               if (SelectedScreen.NotificationPlacementTopLeft)
+            if (SelectedScreen.NotificationPlacementTopLeft)
                 Settings.Placement = NotificationPlacement.TopLeft;
             else if (SelectedScreen.NotificationPlacementBottomLeft)
                 Settings.Placement = NotificationPlacement.BottomLeft;
@@ -177,7 +179,8 @@ namespace Carnac.ViewModels
                 Settings.Placement = NotificationPlacement.TopRight;
             else if (SelectedScreen.NotificationPlacementBottomRight)
                 Settings.Placement = NotificationPlacement.BottomRight;
-            else Settings.Placement = NotificationPlacement.BottomLeft;
+            else
+                Settings.Placement = NotificationPlacement.BottomLeft;
 
             PlaceScreen();
 
@@ -197,21 +200,32 @@ namespace Carnac.ViewModels
         }
         private void PlaceScreen()
         {
-            if (Screens == null) return;
+            if (Screens == null) 
+                return;
 
             SelectedScreen = Screens.FirstOrDefault(s => s.Index == Settings.Screen);
 
-            if (SelectedScreen == null) return;
+            if (SelectedScreen == null) 
+                return;
 
-            if (Settings.Placement == NotificationPlacement.TopLeft)
-                SelectedScreen.NotificationPlacementTopLeft = true;
-            else if (Settings.Placement == NotificationPlacement.BottomLeft)
-                SelectedScreen.NotificationPlacementBottomLeft = true;
-            else if (Settings.Placement == NotificationPlacement.TopRight)
-                SelectedScreen.NotificationPlacementTopRight = true;
-            else if (Settings.Placement == NotificationPlacement.BottomRight)
-                SelectedScreen.NotificationPlacementBottomRight = true;
-            else SelectedScreen.NotificationPlacementBottomLeft = true;
+            switch (Settings.Placement)
+            {
+                case NotificationPlacement.TopLeft:
+                    SelectedScreen.NotificationPlacementTopLeft = true;
+                    break;
+                case NotificationPlacement.BottomLeft:
+                    SelectedScreen.NotificationPlacementBottomLeft = true;
+                    break;
+                case NotificationPlacement.TopRight:
+                    SelectedScreen.NotificationPlacementTopRight = true;
+                    break;
+                case NotificationPlacement.BottomRight:
+                    SelectedScreen.NotificationPlacementBottomRight = true;
+                    break;
+                default:
+                    SelectedScreen.NotificationPlacementBottomLeft = true;
+                    break;
+            }
 
             Settings.Left = SelectedScreen.Left;
         }

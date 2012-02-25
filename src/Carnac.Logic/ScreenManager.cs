@@ -68,6 +68,8 @@ namespace Carnac.Logic
                 }
             }
 
+            screens = screens.OrderBy(s => s.Left).ToList();
+
             return screens;
         }
     }

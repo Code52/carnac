@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Drawing;
+using System.Globalization;
 using System.Reflection;
 using System.Windows;
+using System.Windows.Data;
 using System.Windows.Forms;
 using System.Windows.Input;
 using Carnac.Logic.Native;
@@ -76,15 +78,49 @@ namespace Carnac.Views
         private void RadioChecked(object sender, RoutedEventArgs e)
         {
             var dc = DataContext as ShellViewModel;
-            if (dc == null) return;
+            if (dc == null)
+                return;
 
             var rb = sender as System.Windows.Controls.RadioButton;
-            if (rb == null) return;
+            if (rb == null) 
+                return;
 
             var tag = rb.Tag as DetailedScreen;
-            if (tag == null) return;
+            if (tag == null) 
+                return;
 
             dc.SelectedScreen = tag;
         }
     }
+
+    public class PlacementMarginConverter : IMultiValueConverter
+    {
+        public object Convert(object[] values, Type targetType, object parameter,
+            System.Globalization.CultureInfo culture)
+        {
+            if ((bool)values[2] == false || values[0] == DependencyProperty.UnsetValue || values[1] == DependencyProperty.UnsetValue)
+                return new Thickness(0);
+
+            var or = (Thickness)values[0];
+            var sc = (DetailedScreen)values[1];
+
+            Thickness th = new Thickness();
+
+            th.Top = or.Top * (sc.RelativeHeight / sc.Height);
+            th.Bottom = or.Bottom * (sc.RelativeHeight / sc.Height);
+            th.Left = or.Left * (sc.RelativeWidth / sc.Width);
+            th.Right = or.Right * (sc.RelativeWidth / sc.Width);
+
+            return th;
+
+        }
+
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter,
+            System.Globalization.CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    
 }
