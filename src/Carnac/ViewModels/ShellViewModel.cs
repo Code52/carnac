@@ -223,7 +223,7 @@ namespace Carnac.ViewModels
                     SelectedScreen.NotificationPlacementBottomRight = true;
                     break;
                 default:
-            else SelectedScreen.NotificationPlacementBottomLeft = true;
+                    SelectedScreen.NotificationPlacementBottomLeft = true;
                     break;
             }
 

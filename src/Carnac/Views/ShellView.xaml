@@ -94,7 +94,7 @@
                                 <Grid HorizontalAlignment="Left" Height="{Binding RelativeHeight}" Margin="0" Width="{Binding RelativeWidth}">
                                     <Rectangle Fill="{DynamicResource AccentColorBrush}"/>
                                     <TextBlock FontWeight="SemiBold" TextWrapping="Wrap" FontSize="96" VerticalAlignment="Center" HorizontalAlignment="Center" Text="{Binding Index}" />
-                                    <RadioButton x:Name="rbTL" Content="" IsChecked="{Binding NotificationPlacementTopLeft}" Checked="RadioChecked" Tag="{Binding}" GroupName="Placement" HorizontalAlignment="Left" VerticalAlignment="Top" />
+                                    <RadioButton x:Name="rbTL" Content="" Style="{StaticResource PlacementButton}"  IsChecked="{Binding NotificationPlacementTopLeft}" Checked="RadioChecked" Tag="{Binding}" GroupName="Placement" HorizontalAlignment="Left" VerticalAlignment="Top">
                                         <RadioButton.Margin>
                                             <MultiBinding Converter="{StaticResource PlacementMarginConverter}">
                                                 <Binding Path="DataContext.Settings.Margins" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Controls:MetroWindow}}" />
@@ -103,7 +103,7 @@
                                             </MultiBinding>
                                         </RadioButton.Margin>
                                     </RadioButton>
-                                    <RadioButton x:Name="rbBL" Content="" IsChecked="{Binding NotificationPlacementBottomLeft}" Checked="RadioChecked" Tag="{Binding}" GroupName="Placement" HorizontalAlignment="Left" VerticalAlignment="Bottom" />
+                                    <RadioButton x:Name="rbBL" Content="" Style="{StaticResource PlacementButton}"  IsChecked="{Binding NotificationPlacementBottomLeft}" Checked="RadioChecked" Tag="{Binding}" GroupName="Placement" HorizontalAlignment="Left" VerticalAlignment="Bottom">
                                         <RadioButton.Margin>
                                             <MultiBinding Converter="{StaticResource PlacementMarginConverter}">
                                                 <Binding Path="DataContext.Settings.Margins" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Controls:MetroWindow}}" />
@@ -112,7 +112,7 @@
                                             </MultiBinding>
                                         </RadioButton.Margin>
                                     </RadioButton>
-                                    <RadioButton x:Name="rbTR" Content="" IsChecked="{Binding NotificationPlacementTopRight}" Checked="RadioChecked" Tag="{Binding}" GroupName="Placement" HorizontalAlignment="Right" VerticalAlignment="Top" />
+                                    <RadioButton x:Name="rbTR" Content="" Style="{StaticResource PlacementButton}"  IsChecked="{Binding NotificationPlacementTopRight}" Checked="RadioChecked" Tag="{Binding}" GroupName="Placement" HorizontalAlignment="Right" VerticalAlignment="Top">
                                         <RadioButton.Margin>
                                             <MultiBinding Converter="{StaticResource PlacementMarginConverter}">
                                                 <Binding Path="DataContext.Settings.Margins" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Controls:MetroWindow}}" />
@@ -121,7 +121,7 @@
                                             </MultiBinding>
                                         </RadioButton.Margin>
                                     </RadioButton>
-                                    <RadioButton x:Name="rbBR" Content="" IsChecked="{Binding NotificationPlacementBottomRight}" Checked="RadioChecked" Tag="{Binding}" GroupName="Placement" HorizontalAlignment="Right" VerticalAlignment="Bottom" />
+                                    <RadioButton x:Name="rbBR" Content="" Style="{StaticResource PlacementButton}"  IsChecked="{Binding NotificationPlacementBottomRight}" Checked="RadioChecked" Tag="{Binding}" GroupName="Placement" HorizontalAlignment="Right" VerticalAlignment="Bottom">
                                         <RadioButton.Margin>
                                             <MultiBinding Converter="{StaticResource PlacementMarginConverter}">
                                                 <Binding Path="DataContext.Settings.Margins" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Controls:MetroWindow}}" />
