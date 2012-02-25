@@ -107,7 +107,7 @@ namespace Carnac.ViewModels
         {
             try
             {
-                System.Diagnostics.Process.Start("http://code52.org/carnac.html");
+                System.Diagnostics.Process.Start("http://code52.org/carnac/");
             }
             catch //I forget what exceptions can be raised if the browser is crashed?
             {
