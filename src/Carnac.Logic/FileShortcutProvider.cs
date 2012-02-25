@@ -1,19 +1,23 @@
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
+using System.Windows.Forms;
 using Carnac.Logic.Models;
+using Carnac.Logic.Internal;
+using System.IO;
+using System.Diagnostics;
+using YamlDotNet.Core;
 using YamlDotNet.RepresentationModel;
 
 namespace Carnac.Logic
 {
     [Export(typeof(IShortcutProvider))]
-    public class ShortcutProvider : IShortcutProvider
+    public class FileShortcutProvider : IShortcutProvider
     {
-                List<ShortcutCollection> shortcuts = new List<ShortcutCollection>();
+        List<ShortcutCollection> shortcuts = new List<ShortcutCollection>();
 
-        public ShortcutProvider()
+        public FileShortcutProvider()
         {
             string folder = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName) + @"\Keymaps\";
             string filter = "*.yml";
@@ -93,6 +97,5 @@ namespace Carnac.Logic
 
             return Enumerable.Empty<KeyShortcut>();
         }
-
     }
 }
