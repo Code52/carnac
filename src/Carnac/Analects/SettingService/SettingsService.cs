@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.IsolatedStorage;
 using System.Runtime.Serialization.Formatters.Binary;
+using Carnac.Logic;
 
 namespace Analects.SettingsService
 {
