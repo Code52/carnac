@@ -30,6 +30,8 @@ namespace Carnac.Logic
                                                                                      {Keys.Oem1, ":"},
                                                                                      {Keys.Oem7, "\""},
                                                                                      {Keys.Oemtilde, "~"},
+                                                                                     {Keys.Insert, "ins"},
+                                                                                     {Keys.Delete, "del"}
                                                                                  };
 
         private static readonly Dictionary<Keys, string> Replacements = new Dictionary<Keys, string>
@@ -82,11 +84,11 @@ namespace Carnac.Logic
         {
             foreach (var shiftReplacement in ShiftReplacements)
             {
-                if (shiftReplacement.Value == keyText)
+                if (shiftReplacement.Value.Equals(keyText, StringComparison.CurrentCultureIgnoreCase))
                     return shiftReplacement.Key;
             }
             Keys parsedKey;
-            if (Enum.TryParse(keyText ,out parsedKey))
+            if (Enum.TryParse(keyText, true, out parsedKey))
                 return parsedKey;
             return null;
         }

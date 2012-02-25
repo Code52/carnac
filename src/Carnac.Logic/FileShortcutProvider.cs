@@ -1,19 +1,23 @@
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
+using System.Windows.Forms;
 using Carnac.Logic.Models;
+using Carnac.Logic.Internal;
+using System.IO;
+using System.Diagnostics;
+using YamlDotNet.Core;
 using YamlDotNet.RepresentationModel;
 
 namespace Carnac.Logic
 {
     [Export(typeof(IShortcutProvider))]
-    public class ShortcutProvider : IShortcutProvider
+    public class FileShortcutProvider : IShortcutProvider
     {
-                List<ShortcutCollection> shortcuts = new List<ShortcutCollection>();
+        List<ShortcutCollection> shortcuts = new List<ShortcutCollection>();
 
-        public ShortcutProvider()
+        public FileShortcutProvider()
         {
             string folder = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName) + @"\Keymaps\";
             string filter = "*.yml";
@@ -39,6 +43,7 @@ namespace Carnac.Logic
                     foreach (YamlMappingNode entry in groupShortcuts.Children)
                     {
                         string name = GetValueByKey(entry, "name");
+                        List<KeyPressDefinition> definitions = new List<KeyPressDefinition>();
 
                         if (entry.Children.First(n => n.Key.ToString() == "keys").Value as YamlSequenceNode == null)
                             continue;
@@ -47,17 +52,12 @@ namespace Carnac.Logic
 
                         foreach (var keyCombo in keys.Children)
                         {
-                            List<KeyPressDefinition> definitions = new List<KeyPressDefinition>();
-                            string[] combos = keyCombo.ToString().Split(',');
-                            foreach (string combo in combos)
-                            {
-                                var definition = GetKeyPressDefintion(combo);
-                                if (definition != null)
-                                    definitions.Add(definition);
-                            }
-                            if(definitions.Count > 0)
-                                shortcutCollection.Add(new KeyShortcut(name, definitions.ToArray()));
+                            string combo = keyCombo.ToString();
+                            var definition = GetKeyPressDefintion(combo);
+                            definitions.Add(definition);
                         }
+
+                        shortcutCollection.Add(new KeyShortcut(name, definitions.ToArray()));
                     }
 
                     shortcuts.Add(shortcutCollection);
@@ -72,17 +72,15 @@ namespace Carnac.Logic
 
         private KeyPressDefinition GetKeyPressDefintion(string combo)
         {
-            combo = combo.ToLower();
             var key = combo.Split('+').Last();
             var keys = ReplaceKey.ToKey(key);
             if (keys != null)
                 return
                     new KeyPressDefinition
                         (keys.Value,
-                         shiftPressed: combo.Contains("shift"),
-                         controlPressed: combo.Contains("ctrl"),
-                         altPressed: combo.Contains("alt"),
-                         winkeyPressed: combo.Contains("win"));
+                         shiftPressed: combo.Contains("Shift"),
+                         controlPressed: combo.Contains("Ctrl"),
+                         altPressed: combo.Contains("Alt"));
             return null;
         }
 
@@ -90,15 +88,14 @@ namespace Carnac.Logic
         {
             var keyPresses = keys.ToArray();
             var processName = keyPresses.Last().Process.ProcessName;
-            foreach(var shortcut in shortcuts.Where(s => (s.Process == processName) || string.IsNullOrWhiteSpace(s.Process)))
+            var shortcut = shortcuts.FirstOrDefault(s => s.Process == processName);
+
+            if (shortcut != null)
             {
-                var match = shortcut.GetShortcutsMatching(keyPresses);
-                if (match.Count() > 0) 
-                    return match;
+                return shortcut.GetShortcutsMatching(keyPresses);
             }
 
             return Enumerable.Empty<KeyShortcut>();
         }
-
     }
 }

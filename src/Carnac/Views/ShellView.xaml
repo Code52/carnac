@@ -30,23 +30,18 @@
     <TabControl Margin="0,12">
         <TabItem Header="General">
             <StackPanel Orientation="Vertical">
-                <ListBox ItemsSource="{Binding Screens}" SelectedItem="{Binding SelectedScreen}" BorderBrush="{x:Null}" Background="{x:Null}" VerticalAlignment="Top">
-                    <ListBox.ItemsPanel>
+                <ItemsControl ItemsSource="{Binding Screens}" BorderBrush="{x:Null}" Background="{x:Null}" VerticalAlignment="Top" Foreground="White">
+                    <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <StackPanel Orientation="Horizontal" IsItemsHost="True"/>
                         </ItemsPanelTemplate>
-                    </ListBox.ItemsPanel>
-                    <ListBox.ItemContainerStyle>
-                        <Style TargetType="ListBoxItem">
-                            <Setter Property="VerticalAlignment" Value="Bottom" />
-                        </Style>
-                    </ListBox.ItemContainerStyle>
-                    <ListBox.ItemTemplate>
+                    </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <StackPanel Margin="5,5,5,5">
+                            <StackPanel Margin="5,5,5,5" VerticalAlignment="Bottom">
                                 <Grid HorizontalAlignment="Left" Height="{Binding RelativeHeight}" Margin="0" Width="{Binding RelativeWidth}">
                                     <Rectangle Fill="{DynamicResource AccentColorBrush}"/>
-                                    <TextBlock FontWeight="SemiBold" TextWrapping="Wrap" Foreground="White" FontSize="96" VerticalAlignment="Center" HorizontalAlignment="Center" Text="{Binding Index}" />
+                                    <TextBlock FontWeight="SemiBold" TextWrapping="Wrap" FontSize="96" VerticalAlignment="Center" HorizontalAlignment="Center" Text="{Binding Index}" />
                                     <RadioButton x:Name="rbTL" Content="" IsChecked="{Binding NotificationPlacementTopLeft}" Checked="RadioChecked" Tag="{Binding}" GroupName="Placement" HorizontalAlignment="Left" VerticalAlignment="Top" />
                                     <RadioButton x:Name="rbBL" Content="" IsChecked="{Binding NotificationPlacementBottomLeft}" Checked="RadioChecked" Tag="{Binding}" GroupName="Placement" HorizontalAlignment="Left" VerticalAlignment="Bottom" />
                                     <RadioButton x:Name="rbTR" Content="" IsChecked="{Binding NotificationPlacementTopRight}" Checked="RadioChecked" Tag="{Binding}" GroupName="Placement" HorizontalAlignment="Right" VerticalAlignment="Top" />
@@ -58,8 +53,8 @@
                                 </TextBlock>
                             </StackPanel>
                         </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Foreground="White" FontWeight="Bold" Text="Top Offset" Margin="10 0 0 0" Width="200" VerticalAlignment="Center" />
                     <Slider x:Name="Settings_TopOffset" Width="200" Minimum="0" Maximum="800" SmallChange="1" LargeChange="10" TickFrequency="20" IsSnapToTickEnabled="True" Margin="5 0 20 0" />
@@ -110,7 +105,7 @@
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
         </TabItem>
-        <TabItem Header="Recording">
+        <TabItem Header="Recording" Visibility="Collapsed">
             <TextBlock x:Name="CurrentMessage_Text" Foreground="White" Background="DarkBlue" HorizontalAlignment="Stretch" Width="200"/>
         </TabItem>
         <TabItem Header="Appearance">
@@ -159,7 +154,7 @@
                 <StackPanel>
                     <Image Source="/Carnac;component/carnac_2.png" HorizontalAlignment="Center" VerticalAlignment="Top" Width="200" Height="200" Stretch="UniformToFill"/>
                     <TextBlock TextWrapping="Wrap" FontWeight="Bold" FontSize="69.333" HorizontalAlignment="Left" Margin="-4,0,0,0" Foreground="White"><Run Text="Carnac"/></TextBlock>
-                    <TextBlock Margin="0,-18,0,0" TextWrapping="Wrap" FontWeight="Bold" HorizontalAlignment="Left" Height="20.83" Foreground="White"><Run Text="version "/><Run Text=" "/><Run Text="{Binding Version, Mode=OneTime}" /><Run Text=" "/><Run Text="{Binding Configuration, Mode=OneTime}" /></TextBlock>
+                    <TextBlock Margin="0,-10,0,0" TextWrapping="Wrap" FontWeight="Bold" HorizontalAlignment="Left" Height="20.83" Foreground="White"><Run Text="version "/><Run Text=" "/><Run Text="{Binding Version, Mode=OneTime}" /><Run Text=" "/><Run Text="{Binding Configuration, Mode=OneTime}" /></TextBlock>
                 </StackPanel>
             </StackPanel>
         </TabItem>

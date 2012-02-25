@@ -1,0 +1,91 @@
+group:          Visual Studio
+process:        devenv
+
+# Reference: http://msdn.microsoft.com/en-us/library/da5kh0wa.aspx
+
+# Group: Edit
+shortcuts:
+    - name:      Edit.Copy
+      keys: 
+      - ctrl+c
+      - ctrl+ins
+      
+    - name:      Edit.Cut
+      keys: 
+      - ctrl+x
+      - ctrl+del
+
+    - name:      Edit.CycleClipboardRing
+      keys: 
+      - ctrl+shift+ins
+      
+    - name:      Edit.Delete
+      keys: 
+      - CTRL+DELETE
+
+    - name:      Edit.Find
+      keys: 
+      - CTRL+F
+    - name:      Edit.FindAllReferences
+      keys: 
+      - SHIFT+F12
+    - name:      Edit.FindinFiles
+      keys: 
+      - CTRL+SHIFT+F
+    - name:      Edit.FindNext
+      keys: 
+      - F3
+    - name:      Edit.FindNextSelected
+      keys: 
+      - CTRL+F3
+    - name:      Edit.FindPrevious
+      keys: 
+      - SHIFT+F3
+    - name:      Edit.FindPreviousSelected
+      keys: 
+      - CTRL+SHIFT+F3
+    - name:      Edit.FindSymbol
+      keys: 
+      - ALT+F12
+    - name:      Edit.GoToFindCombo
+      keys: 
+      - CTRL+/
+    - name:      Edit.IncrementalSearch
+      keys: 
+      - ALT+I
+    - name:      Edit.Paste
+      keys: 
+      - CTRL+V
+      - SHIFT+INSERT
+    - name:      Edit.QuickFindSymbol
+      keys: 
+      - SHIFT+ALT+F12
+    - name:      Edit.NavigateTo
+      keys: 
+      - CTRL+,
+    - name:      Edit.Redo
+      keys: 
+      - SHIFT+ALT+BACKSPACE
+      - CTRL+SHIFT+Z
+    - name:      Edit.Replace
+      keys: 
+      - CTRL+H
+    - name:      Edit.ReplaceinFiles
+      keys: 
+      - CTRL+SHIFT+H
+    - name:      Edit.SelectAll
+      keys: 
+      - CTRL+A
+    - name:      Edit.StopSearch
+      keys: 
+      - ALT+F3,S
+    - name:      Edit.Undo
+      keys: 
+      - CTRL+Z
+      - ALT+BACKSPACE
+    - name:      View.ViewCode
+      keys: 
+      - F7
+    - name:      View.ViewDesigner
+      keys: 
+      - SHIFT+F7
