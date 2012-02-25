@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using System.Windows;
 using System.Windows.Interop;
+using Caliburn.Micro;
 using Carnac.Logic;
+using Carnac.ViewModels;
 using Timer = System.Timers.Timer;
 
 namespace Carnac.Views
 {
-    public partial class KeyShowView
+    public partial class KeyShowView : IHandle<LeftChanged>
     {
         public KeyShowView()
         {
@@ -71,6 +74,31 @@ namespace Carnac.Views
             NOSENDCHANGING = 0x0400,
             DEFERERASE = 0x2000,
             ASYNCWINDOWPOS = 0x4000;
+        }
+
+        private void WindowLoaded(object sender, RoutedEventArgs e)
+        {
+            var vm = ((KeyShowViewModel) DataContext);
+            Left = vm.Settings.Left;
+            AppBootstrapper.Aggregator.Subscribe(this);
+            WindowState = WindowState.Maximized;
+        }
+
+        public void Handle(LeftChanged message)
+        {
+            WindowState = WindowState.Normal;
+            Left = message.Left;
+            WindowState = WindowState.Maximized;
+        }
+    }
+
+    public class LeftChanged
+    {
+        public double Left { get; set; }
+
+        public LeftChanged(double left)
+        {
+            Left = left;
         }
     }
 }

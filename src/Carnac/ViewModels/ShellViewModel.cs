@@ -162,22 +162,24 @@ namespace Carnac.ViewModels
 
         public void SaveSettings()
         {
-            if (Screens.Count < 1) return;
+            if (Screens.Count < 1) 
+                return;
 
             if (SelectedScreen == null)
                 SelectedScreen = Screens.First();
 
             Settings.Screen = SelectedScreen.Index;
 
-               if (SelectedScreen.NotificationPlacementTopLeft)
-                Settings.Placement = NotificationPlacement.TopLeft;
-            else if (SelectedScreen.NotificationPlacementBottomLeft)
-                Settings.Placement = NotificationPlacement.BottomLeft;
-            else if (SelectedScreen.NotificationPlacementTopRight)
-                Settings.Placement = NotificationPlacement.TopRight;
-            else if (SelectedScreen.NotificationPlacementBottomRight)
-                Settings.Placement = NotificationPlacement.BottomRight;
-            else Settings.Placement = NotificationPlacement.BottomLeft;
+            if (SelectedScreen.Placement1)
+                Settings.Placement = 1;
+            else if (SelectedScreen.Placement2)
+                Settings.Placement = 2;
+            else if (SelectedScreen.Placement3)
+                Settings.Placement = 3;
+            else if (SelectedScreen.Placement4)
+                Settings.Placement = 4;
+            else 
+                Settings.Placement = 2;
 
             PlaceScreen();
 
@@ -197,21 +199,32 @@ namespace Carnac.ViewModels
         }
         private void PlaceScreen()
         {
-            if (Screens == null) return;
+            if (Screens == null) 
+                return;
 
             SelectedScreen = Screens.FirstOrDefault(s => s.Index == Settings.Screen);
 
-            if (SelectedScreen == null) return;
+            if (SelectedScreen == null) 
+                return;
 
-            if (Settings.Placement == NotificationPlacement.TopLeft)
-                SelectedScreen.NotificationPlacementTopLeft = true;
-            else if (Settings.Placement == NotificationPlacement.BottomLeft)
-                SelectedScreen.NotificationPlacementBottomLeft = true;
-            else if (Settings.Placement == NotificationPlacement.TopRight)
-                SelectedScreen.NotificationPlacementTopRight = true;
-            else if (Settings.Placement == NotificationPlacement.BottomRight)
-                SelectedScreen.NotificationPlacementBottomRight = true;
-            else SelectedScreen.NotificationPlacementBottomLeft = true;
+            switch (Settings.Placement)
+            {
+                case 1:
+                    SelectedScreen.Placement1 = true;
+                    break;
+                case 2:
+                    SelectedScreen.Placement2 = true;
+                    break;
+                case 3:
+                    SelectedScreen.Placement3 = true;
+                    break;
+                case 4:
+                    SelectedScreen.Placement4 = true;
+                    break;
+                default:
+                    SelectedScreen.Placement2 = true;
+                    break;
+            }
 
             Settings.Left = SelectedScreen.Left;
         }
