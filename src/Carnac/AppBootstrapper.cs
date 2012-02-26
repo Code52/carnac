@@ -11,6 +11,7 @@ namespace Carnac
 {
     public class AppBootstrapper : Bootstrapper<IShell>
     {
+        public static EventAggregator Aggregator { get; set; }
         CompositionContainer container;
 
         /// <summary>
@@ -18,6 +19,9 @@ namespace Carnac
         /// </summary>
         protected override void Configure()
         {
+
+            Aggregator = new EventAggregator();
+
             var catalog = new AggregateCatalog(
                 new AssemblyCatalog(typeof(AppBootstrapper).Assembly),
                 new AssemblyCatalog(typeof(IScreenManager).Assembly));
