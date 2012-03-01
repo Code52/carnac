@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset='utf-8'>
+		<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+		<title>{{ site.appname }}</title>
+		<link rel="shortcut icon" href="favicon.ico" />
+		<style>
+			body 
+			{ 
+				font-family: Segoe UI, Segoe WP, Helvetica, Arial, FreeSans, san-serif;
+				margin:0; 
+				padding:0; 
+				background: url('background_image.png') repeat-x top;
+				font-size:1.1em;
+			}
+			h1 { font-family: Segoe UI Light, Segoe WP Light, Segoe UI, Helvetica, sans-serif; font-weight: lighter; font-size:2.75em; margin-top:0px;}
+			a, a:visited { color: #{{site.accent}}; text-decoration:none;}
+			a:hover { color: #{{site.darkaccent}}; text-decoration:underline;}
+			img { border: none;}
+			iframe { margin-left:auto; margin-right:auto; display: block;box-shadow: 0 0 15px #888888;}
+
+			#code52 { color: #41b1e1; font-family: Segoe UI Light, Segoe WP Light, Segoe UI, Helvetica, sans-serif; }
+			#code52 a, #code52 a:visited { color: #41b1e1; text-decoration:none; }
+			#code52 a:hover { text-decoration:underline; }
+			#apptitle { font-family: Segoe UI; font-weight:bold;}
+			#container {  width: 900px; margin-left:auto; margin-right:auto;  margin-top:25px; }
+			#features { margin-top:25px; margin-bottom:25px;}
+			#screenshot { text-align:center; }
+			.screenshotborder
+			{
+				width:790px;
+				display:block;
+				margin-left:auto;
+				margin-right:auto;
+			}
+			#screenshotbordertop {margin-top:-22px;}
+			#screenshotborderbottom {margin-bottom:20px;}
+			#downloads { margin-left:auto; margin-right:auto; width:435px;font-size:2em; }
+			#downloads a { text-align:left;}
+			#downloads div {text-align:center;}
+			#downloads a img {margin-right:15px; margin-bottom:-5px;}
+			
+			.accent { color: #{{site.accent}};}
+			.feature { float:left; width: 245px; margin-right:50px;}
+			.feature h2 { font-size: 1.15em; margin-top:0px; margin-bottom:0px;}
+			.twitter-share-button {margin-top:50px;}
+			@media screen and (max-width:900px)
+			{
+				body { width:auto; padding:10px;}
+				#container { width : 100%;  }
+				img { max-width:100%; }
+				.screenshotborder { display:none; }
+			}
+		</style>
+	</head>
+	<body>
+		<div id="container">
+			<div id="code52"><a href="http://www.code52.org">a code 52 project</a></div>
+			<h1><span id="apptitle" class="accent">{{ site.appname }}</span> {{site.appslogan}}</h1>
+			<div id="screenshot">
+				<img src="screenshot.png" />
+				<img src="dropshadow_border_top.png" id="screenshotbordertop"  class="screenshotborder"/>
+			</div>
+			<div id="features">
+				<div class="feature">
+					<h2>{{ site.feature1title}}</h2>
+					{{ site.feature1desc }}
+				</div>
+
+				<div class="feature">
+					<h2>{{ site.feature2title}}</h2>
+					{{ site.feature2desc }}
+				</div>
+
+				<div class="feature">
+					<h2>{{ site.feature3title}}</h2>
+					{{ site.feature3desc }}
+				</div>
+				<div style="clear:both">&nbsp;</div>
+			</div>
+			{{content}}
+			
+			<div id="downloads">
+				<a href="{{ site.downloadurl}}"><img src="windows.png" /> Download for Windows</a><br /><br />
+				<a href="http://github.com/{{ site.username }}/{{ site.reponame }}"><img src="github.png" />Get the source</a>
+			</div>
+			<a href="https://twitter.com/share" class="twitter-share-button" data-via="Code_52">Tweet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+		</div>
+		<div style="clear:both">&nbsp;</div>
+	</body>
+</html>
