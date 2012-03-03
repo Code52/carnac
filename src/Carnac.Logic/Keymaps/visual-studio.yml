@@ -1,0 +1,955 @@
+group:          Visual Studio
+process:        devenv
+
+# Reference: http://msdn.microsoft.com/en-us/library/da5kh0wa.aspx
+
+# Group: Edit
+shortcuts:
+    - name: Analyze.NavigateBackward
+      keys:
+      - Shift+Alt+3
+
+    - name: Analyze.NavigateForward
+      keys:
+      - Shift+Alt+4
+
+    - name: Architecture.NewDiagram
+      keys:
+      - Ctrl+\, Ctrl+N
+
+    - name: Build.BuildSolution
+      keys:
+      - Ctrl+Shift+B
+
+    - name: Build.Cancel
+      keys:
+      - Ctrl+Break
+
+    - name: ClassViewContextMenus.ClassViewMultiselectProjectreferencesItems.Properties
+      keys:
+      - Alt+Enter
+
+    - name: Data.Execute
+      keys:
+      - Ctrl+Alt+F5
+
+    - name: Data.ShowDataSources
+      keys:
+      - Shift+Alt+D
+
+    - name: Data.StepInto
+      keys:
+      - Alt+F5
+
+    - name: Debug.ApplyCodeChanges
+      keys:
+      - Alt+F10
+
+    - name: Debug.Autos
+      keys:
+      - Ctrl+Alt+V, A
+
+    - name: Debug.BreakAll
+      keys:
+      - Ctrl+Alt+Break
+
+    - name: Debug.BreakatFunction
+      keys:
+      - Ctrl+B
+
+    - name: Debug.Breakpoints
+      keys:
+      - Ctrl+Alt+B
+
+    - name: Debug.CallStack
+      keys:
+      - Ctrl+Alt+C
+
+    - name: Debug.DeleteAllBreakpoints
+      keys:
+      - Ctrl+Shift+F9
+
+    - name: Debug.Disassembly
+      keys:
+      - Ctrl+Alt+D
+
+    - name: Debug.EnableBreakpoint
+      keys:
+      - Ctrl+F9
+
+    - name: Debug.Exceptions
+      keys:
+      - Ctrl+Alt+E
+
+    - name: Debug.GoToPreviousCallorIntelliTraceEvent
+      keys:
+      - Ctrl+Shift+F11
+
+    - name: Debug.Immediate
+      keys:
+      - Ctrl+Alt+I
+
+    - name: Debug.IntelliTraceCalls
+      keys:
+      - Ctrl+Alt+Y, T
+
+    - name: Debug.IntelliTraceEvents
+      keys:
+      - Ctrl+Alt+Y, F
+
+    - name: Debug.Locals
+      keys:
+      - Ctrl+Alt+V, L
+
+    - name: Debug.LocationToolbar.ProcessCombo
+      keys:
+      - Ctrl+5
+
+    - name: Debug.LocationToolbar.StackFrameCombo
+      keys:
+      - Ctrl+7
+
+    - name: Debug.LocationToolbar.ThreadCombo
+      keys:
+      - Ctrl+6
+
+    - name: Debug.LocationToolbar.ToggleCurrentThreadFlaggedState
+      keys:
+      - Ctrl+8
+
+    - name: Debug.LocationToolbar.ToggleFlaggedThreads
+      keys:
+      - Ctrl+9
+
+    - name: Debug.Memory1
+      keys:
+      - Ctrl+Alt+M, 1
+
+    - name: Debug.Memory2
+      keys:
+      - Ctrl+Alt+M, 2
+
+    - name: Debug.Memory3
+      keys:
+      - Ctrl+Alt+M, 3
+
+    - name: Debug.Memory4
+      keys:
+      - Ctrl+Alt+M, 4
+
+    - name: Debug.Modules
+      keys:
+      - Ctrl+Alt+U
+
+    - name: Debug.ParallelStacks
+      keys:
+      - Ctrl+Shift+D, S
+
+    - name: Debug.ParallelTasks
+      keys:
+      - Ctrl+Shift+D, K
+
+    - name: Debug.Processes
+      keys:
+      - Ctrl+Alt+Z
+
+    - name: Debug.QuickWatch
+      keys:
+      - Shift+F9
+      - Ctrl+Alt+Q
+
+    - name: Debug.Registers
+      keys:
+      - Ctrl+Alt+G
+
+    - name: Debug.Restart
+      keys:
+      - Ctrl+Shift+F5
+
+    - name: Debug.RunToCursor
+      keys:
+      - Ctrl+F10
+
+    - name: Debug.SetNextStatement
+      keys:
+      - Ctrl+Shift+F10
+
+    - name: Debug.ShowNextStatement
+      keys:
+      - Alt+Num *
+
+    - name: Debug.Start
+      keys:
+      - F5
+
+    - name: Debug.StartPerformanceAnalysis
+      keys:
+      - Alt+F2
+
+    - name: Debug.StartWindowsPhonePerformanceAnalysis
+      keys:
+      - Alt+F1
+
+    - name: Debug.StartWithoutDebugging
+      keys:
+      - Ctrl+F5
+
+    - name: Debug.StepInto
+      keys:
+      - F11
+
+    - name: Debug.StepIntoCurrentProcess
+      keys:
+      - Ctrl+Alt+F11
+
+    - name: Debug.StepIntoSpecific
+      keys:
+      - Shift+Alt+F11
+
+    - name: Debug.StepOut
+      keys:
+      - Shift+F11
+
+    - name: Debug.StepOutCurrentProcess
+      keys:
+      - Ctrl+Shift+Alt+F11
+
+    - name: Debug.StepOver
+      keys:
+      - F10
+
+    - name: Debug.StepOverCurrentProcess
+      keys:
+      - Ctrl+Alt+F10
+
+    - name: Debug.StopDebugging
+      keys:
+      - Shift+F5
+
+    - name: Debug.Threads
+      keys:
+      - Ctrl+Alt+H
+
+    - name: Debug.ToggleBreakpoint
+      keys:
+      - F9
+
+    - name: Debug.ToggleDisassembly
+      keys:
+      - Ctrl+F11
+
+    - name: Debug.Watch1
+      keys:
+      - Ctrl+Alt+W, 1
+
+    - name: Debug.Watch2
+      keys:
+      - Ctrl+Alt+W, 2
+
+    - name: Debug.Watch3
+      keys:
+      - Ctrl+Alt+W, 3
+
+    - name: Debug.Watch4
+      keys:
+      - Ctrl+Alt+W, 4
+
+    - name: DebuggerContextMenus.BreakpointsWindow.Delete
+      keys:
+      - Alt+F9, D
+
+    - name: DebuggerContextMenus.BreakpointsWindow.GoToDisassembly
+      keys:
+      - Alt+F9, A
+
+    - name: DebuggerContextMenus.BreakpointsWindow.GoToSourceCode
+      keys:
+      - Alt+F9, S
+
+    - name: Edit.Copy
+      keys:
+      - Ctrl+C
+      - Ctrl+Ins
+
+    - name: Edit.Cut
+      keys:
+      - Ctrl+X
+      - Shift+Del
+
+    - name: Edit.CycleClipboardRing
+      keys:
+      - Ctrl+Shift+V
+      - Ctrl+Shift+Ins
+
+    - name: Edit.Delete
+      keys:
+      - Del
+
+    - name: Edit.Find
+      keys:
+      - Ctrl+F
+
+    - name: Edit.FindAllReferences
+      keys:
+      - Shift+F12
+
+    - name: Edit.FindinFiles
+      keys:
+      - Ctrl+Shift+F
+
+    - name: Edit.FindNext
+      keys:
+      - F3
+
+    - name: Edit.FindNextSelected
+      keys:
+      - Ctrl+F3
+
+    - name: Edit.FindPrevious
+      keys:
+      - Shift+F3
+
+    - name: Edit.FindPreviousSelected
+      keys:
+      - Ctrl+Shift+F3
+
+    - name: Edit.FindSymbol
+      keys:
+      - Alt+F12
+
+    - name: Edit.GenerateMethod
+      keys:
+      - Ctrl+K, Ctrl+M
+
+    - name: Edit.GoTo
+      keys:
+      - Ctrl+G
+
+    - name: Edit.GoToDeclaration
+      keys:
+      - Ctrl+F12
+
+    - name: Edit.GoToDefinition
+      keys:
+      - F12
+
+    - name: Edit.GoToFindCombo
+      keys:
+      - Ctrl+D
+
+    - name: Edit.GoToNextLocation
+      keys:
+      - F8
+
+    - name: Edit.GoToPrevLocation
+      keys:
+      - Shift+F8
+
+    - name: Edit.InsertSnippet
+      keys:
+      - Ctrl+K, Ctrl+X
+
+    - name: Edit.MoveControlDown
+      keys:
+      - Ctrl+Down Arrow
+
+    - name: Edit.MoveControlDownGrid
+      keys:
+      - Down Arrow
+
+    - name: Edit.MoveControlLeft
+      keys:
+      - Ctrl+Left Arrow
+
+    - name: Edit.MoveControlLeftGrid
+      keys:
+      - Left Arrow
+
+    - name: Edit.MoveControlRight
+      keys:
+      - Ctrl+Right Arrow
+
+    - name: Edit.MoveControlRightGrid
+      keys:
+      - Right Arrow
+
+    - name: Edit.MoveControlUp
+      keys:
+      - Ctrl+Up Arrow
+
+    - name: Edit.MoveControlUpGrid
+      keys:
+      - Up Arrow
+
+    - name: Edit.NavigateTo
+      keys:
+      - Ctrl+,
+
+    - name: Edit.NextBookmark
+      keys:
+      - Ctrl+K, Ctrl+N
+
+    - name: Edit.NextBookmarkInFolder
+      keys:
+      - Ctrl+Shift+K, Ctrl+Shift+N
+
+    - name: Edit.OpenFile
+      keys:
+      - Ctrl+Shift+G
+
+    - name: Edit.Paste
+      keys:
+      - Ctrl+V
+      - Shift+Ins
+
+    - name: Edit.PreviousBookmark
+      keys:
+      - Ctrl+K, Ctrl+P
+
+    - name: Edit.PreviousBookmarkInFolder
+      keys:
+      - Ctrl+Shift+K, Ctrl+Shift+P
+
+    - name: Edit.QuickFindSymbol
+      keys:
+      - Shift+Alt+F12
+
+    - name: Edit.Redo
+      keys:
+      - Ctrl+Y
+      - Ctrl+Shift+Z
+      - Shift+Alt+Bkspce
+
+    - name: Edit.Replace
+      keys:
+      - Ctrl+H
+
+    - name: Edit.ReplaceinFiles
+      keys:
+      - Ctrl+Shift+H
+
+    - name: Edit.SelectAll
+      keys:
+      - Ctrl+A
+
+    - name: Edit.SelectNextControl
+      keys:
+      - Tab
+
+    - name: Edit.SelectPreviousControl
+      keys:
+      - Shift+Tab
+
+    - name: Edit.ShowTileGrid
+      keys:
+      - Enter
+
+    - name: Edit.SizeControlDown
+      keys:
+      - Ctrl+Shift+Down Arrow
+
+    - name: Edit.SizeControlDownGrid
+      keys:
+      - Shift+Down Arrow
+
+    - name: Edit.SizeControlLeft
+      keys:
+      - Ctrl+Shift+Left Arrow
+
+    - name: Edit.SizeControlLeftGrid
+      keys:
+      - Shift+Left Arrow
+
+    - name: Edit.SizeControlRight
+      keys:
+      - Ctrl+Shift+Right Arrow
+
+    - name: Edit.SizeControlRightGrid
+      keys:
+      - Shift+Right Arrow
+
+    - name: Edit.SizeControlUp
+      keys:
+      - Ctrl+Shift+Up Arrow
+
+    - name: Edit.SizeControlUpGrid
+      keys:
+      - Shift+Up Arrow
+
+    - name: Edit.StopSearch
+      keys:
+      - Alt+F3, S
+
+    - name: Edit.SurroundWith
+      keys:
+      - Ctrl+K, Ctrl+S
+
+    - name: Edit.Undo
+      keys:
+      - Ctrl+Z
+      - Alt+Bkspce
+
+    - name: EditorContextMenus.CodeWindow.AddView
+      keys:
+      - Ctrl+M, Ctrl+V
+
+    - name: EditorContextMenus.CodeWindow.Breakpoint.BreakpointEditlabels
+      keys:
+      - Alt+F9, L
+
+    - name: EditorContextMenus.CodeWindow.GoToView
+      keys:
+      - Ctrl+M, Ctrl+G
+
+    - name: EditorContextMenus.CodeWindow.RunSelection
+      keys:
+      - Ctrl+Q
+
+    - name: EditorContextMenus.CodeWindow.ViewCallHierarchy
+      keys:
+      - Ctrl+K, Ctrl+T
+      - Ctrl+K, T
+
+    - name: File.Exit
+      keys:
+      - Alt+F4
+
+    - name: File.NewFile
+      keys:
+      - Ctrl+N
+
+    - name: File.NewProject
+      keys:
+      - Ctrl+Shift+N
+
+    - name: File.NewWebSite
+      keys:
+      - Shift+Alt+N
+
+    - name: File.OpenFile
+      keys:
+      - Ctrl+O
+
+    - name: File.OpenProject
+      keys:
+      - Ctrl+Shift+O
+
+    - name: File.OpenWebSite
+      keys:
+      - Shift+Alt+O
+
+    - name: File.Print
+      keys:
+      - Ctrl+P
+
+    - name: File.SaveAll
+      keys:
+      - Ctrl+Shift+S
+
+    - name: File.SaveSelectedItems
+      keys:
+      - Ctrl+S
+
+    - name: File.ViewinBrowser
+      keys:
+      - Ctrl+Shift+W
+
+    - name: Help.F1Help
+      keys:
+      - F1
+
+    - name: Help.ManageHelpSettings
+      keys:
+      - Ctrl+Alt+F1
+
+    - name: Help.ViewHelp
+      keys:
+      - Ctrl+F1
+
+    - name: Help.WindowHelp
+      keys:
+      - Shift+F1
+
+    - name: LoadTest.JumpToCounterPane
+      keys:
+      - Ctrl+R, Q
+
+    - name: Project.AddExistingItem
+      keys:
+      - Shift+Alt+A
+
+    - name: Project.AddNewItem
+      keys:
+      - Ctrl+Shift+A
+
+    - name: Project.ClassWizard
+      keys:
+      - Ctrl+Shift+X
+
+    - name: Project.Override
+      keys:
+      - Ctrl+Alt+Ins
+
+    - name: ProjectandSolutionContextMenus.Item.MoveDown
+      keys:
+      - Alt+Down Arrow
+
+    - name: ProjectandSolutionContextMenus.Item.MoveUp
+      keys:
+      - Alt+Up Arrow
+
+    - name: ProjectandSolutionContextMenus.Project.Add.Controller
+      keys:
+      - Ctrl+M, Ctrl+C
+
+    - name: Refactor.EncapsulateField
+      keys:
+      - Ctrl+R, Ctrl+E
+
+    - name: Refactor.ExtractInterface
+      keys:
+      - Ctrl+R, Ctrl+I
+
+    - name: Refactor.ExtractMethod
+      keys:
+      - Ctrl+R, Ctrl+M
+
+    - name: Refactor.RemoveParameters
+      keys:
+      - Ctrl+R, Ctrl+V
+
+    - name: Refactor.Rename
+      keys:
+      - Ctrl+R, Ctrl+R
+
+    - name: Refactor.ReorderParameters
+      keys:
+      - Ctrl+R, Ctrl+O
+
+    - name: Test.DebugAllImpactedTests
+      keys:
+      - Ctrl+R, Ctrl+Y
+
+    - name: Test.DebugAllTestsInSolution
+      keys:
+      - Ctrl+R, Ctrl+A
+
+    - name: Test.DebugTestsInClass
+      keys:
+      - Ctrl+R, Ctrl+C
+
+    - name: Test.DebugTestsInCurrentContext
+      keys:
+      - Ctrl+R, Ctrl+T
+
+    - name: Test.DebugTestsInNamespace
+      keys:
+      - Ctrl+R, Ctrl+N
+
+    - name: Test.RunAllImpactedTests
+      keys:
+      - Ctrl+R, Y
+
+    - name: Test.RunAllTestsInSolution
+      keys:
+      - Ctrl+R, A
+
+    - name: Test.RunTestsInClass
+      keys:
+      - Ctrl+R, C
+
+    - name: Test.RunTestsInCurrentContext
+      keys:
+      - Ctrl+R, T
+
+    - name: Test.RunTestsInNamespace
+      keys:
+      - Ctrl+R, N
+
+    - name: Test.TestResults.RunCheckedTests
+      keys:
+      - Ctrl+R, F
+
+    - name: Test.UseCodedUITestBuilder
+      keys:
+      - Ctrl+\, Ctrl+C
+
+    - name: Test.UseExistingActionRecording
+      keys:
+      - Ctrl+\, Ctrl+A
+
+    - name: TestResults.DebugAllTestsInTestResults
+      keys:
+      - Ctrl+R, Ctrl+D
+
+    - name: TestResults.DebugCheckedTests
+      keys:
+      - Ctrl+R, Ctrl+F
+
+    - name: TestResults.RunAllTestsInTestResults
+      keys:
+      - Ctrl+R, D
+
+    - name: Tools.AttachtoProcess
+      keys:
+      - Ctrl+Alt+P
+
+    - name: Tools.CodeSnippetsManager
+      keys:
+      - Ctrl+K, Ctrl+B
+
+    - name: Tools.ForceGC
+      keys:
+      - Ctrl+Shift+Alt+F12, Ctrl+Shift+Alt+F12
+
+    - name: Tools.GoToCommandLine
+      keys:
+      - Ctrl+/
+
+    - name: Tools.MacrosIDE
+      keys:
+      - Alt+F11
+
+    - name: Tools.RecordTemporaryMacro
+      keys:
+      - Ctrl+Shift+R
+
+    - name: Tools.RunTemporaryMacro
+      keys:
+      - Ctrl+Shift+P
+
+    - name: View.ArchitectureExplorer
+      keys:
+      - Ctrl+\, Ctrl+R
+
+    - name: View.Backward
+      keys:
+      - Alt+Left Arrow
+
+    - name: View.BookmarkWindow
+      keys:
+      - Ctrl+K, Ctrl+W
+
+    - name: View.BrowseNext
+      keys:
+      - Ctrl+Shift+1
+
+    - name: View.BrowsePrevious
+      keys:
+      - Ctrl+Shift+2
+
+    - name: View.CallHierarchy
+      keys:
+      - Ctrl+Alt+K
+
+    - name: View.ClassView
+      keys:
+      - Ctrl+Shift+C
+
+    - name: View.ClassViewGoToSearchCombo
+      keys:
+      - Ctrl+K, Ctrl+V
+
+    - name: View.CodeDefinitionWindow
+      keys:
+      - Ctrl+\, D
+      - Ctrl+\, Ctrl+D
+
+    - name: View.CommandWindow
+      keys:
+      - Ctrl+Alt+A
+
+    - name: View.DocumentOutline
+      keys:
+      - Ctrl+Alt+T
+
+    - name: View.EditLabel
+      keys:
+      - F2
+
+    - name: View.ErrorList
+      keys:
+      - Ctrl+\, E
+      - Ctrl+\, Ctrl+E
+
+    - name: View.F#Interactive
+      keys:
+      - Ctrl+Alt+F
+
+    - name: View.FindSymbolResults
+      keys:
+      - Ctrl+Alt+F12
+
+    - name: View.Forward
+      keys:
+      - Alt+Right Arrow
+
+    - name: View.ForwardBrowseContext
+      keys:
+      - Ctrl+Shift+7
+
+    - name: View.FullScreen
+      keys:
+      - Shift+Alt+Enter
+
+    - name: View.MacroExplorer
+      keys:
+      - Alt+F8
+
+    - name: View.NavigateBackward
+      keys:
+      - Ctrl+-
+
+    - name: View.NavigateForward
+      keys:
+      - Ctrl+Shift+-
+
+    - name: View.NextError
+      keys:
+      - Ctrl+Shift+F12
+
+    - name: View.ObjectBrowser
+      keys:
+      - Ctrl+Alt+J
+
+    - name: View.ObjectBrowserGoToSearchCombo
+      keys:
+      - Ctrl+K, Ctrl+R
+
+    - name: View.Output
+      keys:
+      - Ctrl+Alt+O
+
+    - name: View.PopBrowseContext
+      keys:
+      - Ctrl+Shift+8
+
+    - name: View.PropertiesWindow
+      keys:
+      - F4
+
+    - name: View.PropertyPages
+      keys:
+      - Shift+F4
+
+    - name: View.ResourceView
+      keys:
+      - Ctrl+Shift+E
+
+    - name: View.ServerExplorer
+      keys:
+      - Ctrl+Alt+S
+
+    - name: View.ShowSmartTag
+      keys:
+      - Shift+Alt+F10
+      - Ctrl+.
+
+    - name: View.SolutionExplorer
+      keys:
+      - Ctrl+Alt+L
+
+    - name: View.TaskList
+      keys:
+      - Ctrl+\, T
+      - Ctrl+\, Ctrl+T
+
+    - name: View.TeamExplorer
+      keys:
+      - Ctrl+\, Ctrl+M
+
+    - name: View.ToggleDesigner
+      keys:
+      - F7
+
+    - name: View.Toolbox
+      keys:
+      - Ctrl+Alt+X
+
+    - name: View.UMLModelExplorer
+      keys:
+      - Ctrl+\, Ctrl+U
+
+    - name: View.WebBrowser
+      keys:
+      - Ctrl+Alt+R
+
+    - name: View.ZoomIn
+      keys:
+      - Ctrl+Shift+.
+
+    - name: View.ZoomOut
+      keys:
+      - Ctrl+Shift+,
+
+    - name: Window.ActivateDocumentWindow
+      keys:
+      - Esc
+
+    - name: Window.CloseDocumentWindow
+      keys:
+      - Ctrl+F4
+
+    - name: Window.CloseToolWindow
+      keys:
+      - Shift+Esc
+
+    - name: Window.MovetoNavigationBar
+      keys:
+      - Ctrl+F2
+
+    - name: Window.NextDocumentWindow
+      keys:
+      - Ctrl+F6
+
+    - name: Window.NextDocumentWindowNav
+      keys:
+      - Ctrl+Tab
+
+    - name: Window.NextPane
+      keys:
+      - Alt+F6
+
+    - name: Window.NextSplitPane
+      keys:
+      - F6
+
+    - name: Window.NextTab
+      keys:
+      - Ctrl+PgDn
+
+    - name: Window.NextToolWindowNav
+      keys:
+      - Alt+F7
+
+    - name: Window.PreviousDocumentWindow
+      keys:
+      - Ctrl+Shift+F6
+
+    - name: Window.PreviousDocumentWindowNav
+      keys:
+      - Ctrl+Shift+Tab
+
+    - name: Window.PreviousPane
+      keys:
+      - Shift+Alt+F6
+
+    - name: Window.PreviousSplitPane
+      keys:
+      - Shift+F6
+
+    - name: Window.PreviousTab
+      keys:
+      - Ctrl+PgUp
+
+    - name: Window.PreviousToolWindowNav
+      keys:
+      - Shift+Alt+F7
+
+    - name: Window.ShowDockMenu
+      keys:
+      - Alt+-
+
+    - name: Window.ShowEzMDIFileList
+      keys:
+      - Ctrl+Alt+Down Arrow
