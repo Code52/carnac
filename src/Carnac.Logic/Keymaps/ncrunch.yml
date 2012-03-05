@@ -1,0 +1,71 @@
+group:          NCrunch
+process:        devenv
+
+shortcuts:
+    - name: NCrunch.BreakIntoFirstCoveringTest
+      keys:
+      - Ctrl+M, B
+
+    - name: NCrunch.ClearProcessingQueueofPendingTests
+      keys:
+      - Ctrl+R, Ctrl+S
+
+    - name: NCrunch.DebugCoveringTests
+      keys:
+      - Ctrl+M, T
+
+    - name: NCrunch.DebugCoveringTestsInNewProcess
+      keys:
+      - Ctrl+M, N
+
+    - name: NCrunch.DisableNCrunch
+      keys:
+      - Ctrl+M, D
+
+    - name: NCrunch.EnableNCrunch
+      keys:
+      - Ctrl+M, E
+
+    - name: NCrunch.IgnoreCoverIngTest
+      keys:
+      - Ctrl+M, I
+
+    - name: NCrunch.PinCoveringTestsToTestsWindow
+      keys:
+      - Ctrl+M, P
+
+    - name: NCrunch.ProcessingQueue
+      keys:
+      - Ctrl+Shift+Q
+
+    - name: NCrunch.RunAllTestsRightNow
+      keys:
+      - Ctrl+R, Ctrl+J
+
+    - name: NCrunch.RunCoveringTestsInNewProcess
+      keys:
+      - Ctrl+M, U
+
+    - name: NCrunch.RunprioritiseCoveringTests
+      keys:
+      - Ctrl+M, R
+
+    - name: NCrunch.RunPrioritiseTestsPinnedToTestsWindow
+      keys:
+      - Ctrl+R, Ctrl+P
+
+    - name: NCrunch.RunPrioritiseTestsVisibleinTestsWindow
+      keys:
+      - Ctrl+R, Ctrl+K
+
+    - name: NCrunch.ShowCoveringTests
+      keys:
+      - Ctrl+M, S
+
+    - name: NCrunch.ShowExceptionDetails
+      keys:
+      - Ctrl+M, X
+
+    - name: NCrunch.Tests
+      keys:
+      - Ctrl+Shift+M

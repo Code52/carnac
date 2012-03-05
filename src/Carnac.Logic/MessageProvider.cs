@@ -67,9 +67,9 @@ namespace Carnac.Logic
                     //Have duplicated as it was easier for now, this should be cleaned up
                     return;
                 }
-                message = CreateNewMessage(value);
             }
-            else if (ShouldCreateNewMessage(value))
+
+            if (ShouldCreateNewMessage(value))
             {
                 message = CreateNewMessage(value);
             }
@@ -99,7 +99,7 @@ namespace Carnac.Logic
             return
                 CurrentMessage == null ||
                 IsDifferentProcess(value) ||
-                IsOlderThanASecond() ||
+                IsOlderThanOneSecond() ||
                 LastKeyPressWasShortcut() ||
                 value.IsShortcut;
         }
@@ -114,7 +114,7 @@ namespace Carnac.Logic
             return shortcutProvider.GetShortcutsMatching(keyPresses);
         }
 
-        private bool IsOlderThanASecond()
+        private bool IsOlderThanOneSecond()
         {
             return CurrentMessage.LastMessage < DateTime.Now.AddSeconds(-1);
         }
