@@ -1,0 +1,323 @@
+group:          Resharper
+process:        devenv
+
+shortcuts:
+    - name:      Reshaper context actions
+      keys:
+      - Alt+Enter
+
+    - name:      Code cleanup
+      keys:
+      - Ctrl+E,C
+
+    - name:      Silent code cleanup
+      keys:
+      - Ctrl+E,F
+
+    - name:      Symbol code completion
+      keys:
+      - Ctrl+Space
+
+    - name:      Smart code completion
+      keys:
+      - Ctrl+Alt+Space
+
+    - name:      Import symbol completion
+      keys:
+      - Shift+Alt+Space
+
+    - name:      Complete statement
+      keys:
+      - Ctrl+Shift+Enter
+
+    - name:      Parameter information
+      keys:
+      - Ctrl+Shift+Space
+
+    - name:      Quick documentation
+      keys:
+      - Ctrl+Shift+F1
+
+    - name:      Insert live template
+      keys:
+      - Ctrl+E,L
+
+    - name:      Surround with template
+      keys:
+      - Ctrl+E,U
+
+    - name:      Generate code
+      keys:
+      - Alt+Insert
+
+    - name:      Create file from template
+      keys:
+      - Ctrl+Alt+Insert
+
+    - name:      Move code up
+      keys:
+      - Ctrl+Shift+Alt+Up
+
+    - name:      Move code down
+      keys:
+      - Ctrl+Shift+Alt+Down
+
+    - name:      Move code left
+      keys:
+      - Ctrl+Shift+Alt+Left
+
+    - name:      Move code right
+      keys:
+      - Ctrl+Shift+Alt+Right
+
+    - name:      Extend selection
+      keys:
+      - Ctrl+Alt+Right
+
+    - name:      Shrink selection
+      keys:
+      - Ctrl+Alt+Left
+
+    - name:      Duplicate a line or selection
+      keys:
+      - Ctrl+D
+
+    - name:      Comment with line comment
+      keys:
+      - Ctrl+Alt+/
+
+    - name:      Comment with block comment
+      keys:
+      - Ctrl+Shift+/
+
+    - name:      Inspect this
+      keys:
+      - Ctrl+Shift+Alt+A
+
+    - name:      Inspection Results window
+      keys:
+      - Ctrl+Alt+V
+
+    - name:      Turn code analysis on/off
+      keys:
+      - Ctrl+Shift+Alt+8
+
+    - name:      Find Results window
+      keys:
+      - Ctrl+Alt+F12
+
+    - name:      Hierarchies window
+      keys:
+      - Ctrl+Alt+H
+
+    - name:      View type hierarchy
+      keys:
+      - Ctrl+E,H
+
+    - name:      File structure
+      keys:
+      - Ctrl+Alt+F
+
+    - name:      To-do items
+      keys:
+      - Ctrl+Alt+D
+
+    - name:      Browse stack trace
+      keys:
+      - Ctrl+E,T
+
+    - name:      Locate in Solution Explorer
+      keys:
+      - Shift+Alt+L
+
+    - name:      View recent files
+      keys:
+      - Ctrl+,
+
+    - name:      View recent edits
+      keys:
+      - Ctrl+Shift+,
+
+    - name:      Go to previous edit
+      keys:
+      - Ctrl+Shift+Backspace
+
+    - name:      Go to related files
+      keys:
+      - Ctrl+Alt+F7
+
+    - name:      View bookmarks
+      keys:
+      - Ctrl+`
+
+    - name:      Go to bookmark
+      keys:
+      - Ctrl+[numeric+key]
+
+    - name:      Set/remove bookmark
+      keys:
+      - Ctrl+Shift+[numeric+key]
+
+    - name:      Go to type
+      keys:
+      - Ctrl+T
+
+    - name:      Go to file
+      keys:
+      - Ctrl+Shift+T
+
+    - name:      Go to file member
+      keys:
+      - Alt+\
+
+    - name:      Go to symbol
+      keys:
+      - Shift+Alt+T
+
+    - name:      Navigate to
+      keys:
+      - Alt+`
+
+    - name:      Go to type of symbol
+      keys:
+      - Ctrl+Shift+F11
+
+    - name:      Go to declaration
+      keys:
+      - F12
+
+    - name:      Go to implementation
+      keys:
+      - Ctrl+F12
+
+    - name:      Go to base symbols
+      keys:
+      - Alt+Home
+
+    - name:      Go to derived symbols
+      keys:
+      - Alt+End
+
+    - name:      Go to usage
+      keys:
+      - Shift+Alt+F12
+
+    - name:      Go to next member/tag
+      keys:
+      - Alt+Down
+
+    - name:      Go to previous member/tag
+      keys:
+      - Alt+Up
+
+    - name:      Go to next highlight (error, warning or suggestion)
+      keys:
+      - Alt+PageDown
+
+    - name:      Go to previous highlight (error, warning or suggestion)
+      keys:
+      - Alt+PageUp
+
+    - name:      Go to next error
+      keys:
+      - Shift+Alt+PageDown
+
+    - name:      Go to next error in solution
+      keys:
+      - Shift+Alt+PageDown
+
+    - name:      Go to previous error
+      keys:
+      - Shift+Alt+PageUp
+
+    - name:      Go to previous error in solution
+      keys:
+      - Shift+Alt+PageUp
+
+    - name:      Go to containing declaration
+      keys:
+      - Ctrl+[
+
+    - name:      Find usages
+      keys:
+      - Shift+F12
+
+    - name:      Find usages (advanced)
+      keys:
+      - Ctrl+Shift+Alt+F12
+
+    - name:      Highlight usages in file
+      keys:
+      - Shift+Alt+F11
+
+    - name:      Go to previous usage
+      keys:
+      - Ctrl+Alt+PageUp
+
+    - name:      Go to next usage
+      keys:
+      - Ctrl+Alt+PageDown
+
+    - name:      Refactor this
+      keys:
+      - Ctrl+Shift+R
+
+    - name:      Rename
+      keys:
+      - Ctrl+R,R
+
+    - name:      Move
+      keys:
+      - Ctrl+R,O
+
+    - name:      Safe delete
+      keys:
+      - Ctrl+R,D
+
+    - name:      Safe delete
+      keys:
+      - Alt+Del
+
+    - name:      Extract method
+      keys:
+      - Ctrl+R,M
+
+    - name:      Introduce variable
+      keys:
+      - Ctrl+R,V
+
+    - name:      Introduce field
+      keys:
+      - Ctrl+R,F
+
+    - name:      Introduce parameter
+      keys:
+      - Ctrl+R,P
+
+    - name:      Inline variable/method/field
+      keys:
+      - Ctrl+R,I
+
+    - name:      Encapsulate field
+      keys:
+      - Ctrl+R,E
+
+    - name:      Change signature
+      keys:
+      - Ctrl+R,S
+
+    - name:      Unit Test Explorer
+      keys:
+      - Ctrl+Alt+U
+
+    - name:      Unit Test Sessions
+      keys:
+      - Ctrl+Alt+T
+
+    - name:      Close recent tool
+      keys:
+      - Ctrl+Shift+F4
+
+    - name:      Activate recent tool
+      keys:
+      - Ctrl+Alt+Backspace
