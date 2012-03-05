@@ -15,7 +15,7 @@ shortcuts:
 
     - name: Architecture.NewDiagram
       keys:
-      - Ctrl+\, Ctrl+N
+      - Ctrl+\,Ctrl+N
 
     - name: Build.BuildSolution
       keys:
@@ -47,7 +47,7 @@ shortcuts:
 
     - name: Debug.Autos
       keys:
-      - Ctrl+Alt+V, A
+      - Ctrl+Alt+V,A
 
     - name: Debug.BreakAll
       keys:
@@ -91,15 +91,15 @@ shortcuts:
 
     - name: Debug.IntelliTraceCalls
       keys:
-      - Ctrl+Alt+Y, T
+      - Ctrl+Alt+Y,T
 
     - name: Debug.IntelliTraceEvents
       keys:
-      - Ctrl+Alt+Y, F
+      - Ctrl+Alt+Y,F
 
     - name: Debug.Locals
       keys:
-      - Ctrl+Alt+V, L
+      - Ctrl+Alt+V,L
 
     - name: Debug.LocationToolbar.ProcessCombo
       keys:
@@ -123,19 +123,19 @@ shortcuts:
 
     - name: Debug.Memory1
       keys:
-      - Ctrl+Alt+M, 1
+      - Ctrl+Alt+M,1
 
     - name: Debug.Memory2
       keys:
-      - Ctrl+Alt+M, 2
+      - Ctrl+Alt+M,2
 
     - name: Debug.Memory3
       keys:
-      - Ctrl+Alt+M, 3
+      - Ctrl+Alt+M,3
 
     - name: Debug.Memory4
       keys:
-      - Ctrl+Alt+M, 4
+      - Ctrl+Alt+M,4
 
     - name: Debug.Modules
       keys:
@@ -143,11 +143,11 @@ shortcuts:
 
     - name: Debug.ParallelStacks
       keys:
-      - Ctrl+Shift+D, S
+      - Ctrl+Shift+D,S
 
     - name: Debug.ParallelTasks
       keys:
-      - Ctrl+Shift+D, K
+      - Ctrl+Shift+D,K
 
     - name: Debug.Processes
       keys:
@@ -240,31 +240,31 @@ shortcuts:
 
     - name: Debug.Watch1
       keys:
-      - Ctrl+Alt+W, 1
+      - Ctrl+Alt+W,1
 
     - name: Debug.Watch2
       keys:
-      - Ctrl+Alt+W, 2
+      - Ctrl+Alt+W,2
 
     - name: Debug.Watch3
       keys:
-      - Ctrl+Alt+W, 3
+      - Ctrl+Alt+W,3
 
     - name: Debug.Watch4
       keys:
-      - Ctrl+Alt+W, 4
+      - Ctrl+Alt+W,4
 
     - name: DebuggerContextMenus.BreakpointsWindow.Delete
       keys:
-      - Alt+F9, D
+      - Alt+F9,D
 
     - name: DebuggerContextMenus.BreakpointsWindow.GoToDisassembly
       keys:
-      - Alt+F9, A
+      - Alt+F9,A
 
     - name: DebuggerContextMenus.BreakpointsWindow.GoToSourceCode
       keys:
-      - Alt+F9, S
+      - Alt+F9,S
 
     - name: Edit.Copy
       keys:
@@ -319,7 +319,7 @@ shortcuts:
 
     - name: Edit.GenerateMethod
       keys:
-      - Ctrl+K, Ctrl+M
+      - Ctrl+K,Ctrl+M
 
     - name: Edit.GoTo
       keys:
@@ -347,7 +347,7 @@ shortcuts:
 
     - name: Edit.InsertSnippet
       keys:
-      - Ctrl+K, Ctrl+X
+      - Ctrl+K,Ctrl+X
 
     - name: Edit.MoveControlDown
       keys:
@@ -387,11 +387,11 @@ shortcuts:
 
     - name: Edit.NextBookmark
       keys:
-      - Ctrl+K, Ctrl+N
+      - Ctrl+K,Ctrl+N
 
     - name: Edit.NextBookmarkInFolder
       keys:
-      - Ctrl+Shift+K, Ctrl+Shift+N
+      - Ctrl+Shift+K,Ctrl+Shift+N
 
     - name: Edit.OpenFile
       keys:
@@ -404,11 +404,11 @@ shortcuts:
 
     - name: Edit.PreviousBookmark
       keys:
-      - Ctrl+K, Ctrl+P
+      - Ctrl+K,Ctrl+P
 
     - name: Edit.PreviousBookmarkInFolder
       keys:
-      - Ctrl+Shift+K, Ctrl+Shift+P
+      - Ctrl+Shift+K,Ctrl+Shift+P
 
     - name: Edit.QuickFindSymbol
       keys:
@@ -478,11 +478,11 @@ shortcuts:
 
     - name: Edit.StopSearch
       keys:
-      - Alt+F3, S
+      - Alt+F3,S
 
     - name: Edit.SurroundWith
       keys:
-      - Ctrl+K, Ctrl+S
+      - Ctrl+K,Ctrl+S
 
     - name: Edit.Undo
       keys:
@@ -491,15 +491,15 @@ shortcuts:
 
     - name: EditorContextMenus.CodeWindow.AddView
       keys:
-      - Ctrl+M, Ctrl+V
+      - Ctrl+M,Ctrl+V
 
     - name: EditorContextMenus.CodeWindow.Breakpoint.BreakpointEditlabels
       keys:
-      - Alt+F9, L
+      - Alt+F9,L
 
     - name: EditorContextMenus.CodeWindow.GoToView
       keys:
-      - Ctrl+M, Ctrl+G
+      - Ctrl+M,Ctrl+G
 
     - name: EditorContextMenus.CodeWindow.RunSelection
       keys:
@@ -507,8 +507,8 @@ shortcuts:
 
     - name: EditorContextMenus.CodeWindow.ViewCallHierarchy
       keys:
-      - Ctrl+K, Ctrl+T
-      - Ctrl+K, T
+      - Ctrl+K,Ctrl+T
+      - Ctrl+K,T
 
     - name: File.Exit
       keys:
@@ -572,7 +572,7 @@ shortcuts:
 
     - name: LoadTest.JumpToCounterPane
       keys:
-      - Ctrl+R, Q
+      - Ctrl+R,Q
 
     - name: Project.AddExistingItem
       keys:
@@ -600,95 +600,95 @@ shortcuts:
 
     - name: ProjectandSolutionContextMenus.Project.Add.Controller
       keys:
-      - Ctrl+M, Ctrl+C
+      - Ctrl+M,Ctrl+C
 
     - name: Refactor.EncapsulateField
       keys:
-      - Ctrl+R, Ctrl+E
+      - Ctrl+R,Ctrl+E
 
     - name: Refactor.ExtractInterface
       keys:
-      - Ctrl+R, Ctrl+I
+      - Ctrl+R,Ctrl+I
 
     - name: Refactor.ExtractMethod
       keys:
-      - Ctrl+R, Ctrl+M
+      - Ctrl+R,Ctrl+M
 
     - name: Refactor.RemoveParameters
       keys:
-      - Ctrl+R, Ctrl+V
+      - Ctrl+R,Ctrl+V
 
     - name: Refactor.Rename
       keys:
-      - Ctrl+R, Ctrl+R
+      - Ctrl+R,Ctrl+R
 
     - name: Refactor.ReorderParameters
       keys:
-      - Ctrl+R, Ctrl+O
+      - Ctrl+R,Ctrl+O
 
     - name: Test.DebugAllImpactedTests
       keys:
-      - Ctrl+R, Ctrl+Y
+      - Ctrl+R,Ctrl+Y
 
     - name: Test.DebugAllTestsInSolution
       keys:
-      - Ctrl+R, Ctrl+A
+      - Ctrl+R,Ctrl+A
 
     - name: Test.DebugTestsInClass
       keys:
-      - Ctrl+R, Ctrl+C
+      - Ctrl+R,Ctrl+C
 
     - name: Test.DebugTestsInCurrentContext
       keys:
-      - Ctrl+R, Ctrl+T
+      - Ctrl+R,Ctrl+T
 
     - name: Test.DebugTestsInNamespace
       keys:
-      - Ctrl+R, Ctrl+N
+      - Ctrl+R,Ctrl+N
 
     - name: Test.RunAllImpactedTests
       keys:
-      - Ctrl+R, Y
+      - Ctrl+R,Y
 
     - name: Test.RunAllTestsInSolution
       keys:
-      - Ctrl+R, A
+      - Ctrl+R,A
 
     - name: Test.RunTestsInClass
       keys:
-      - Ctrl+R, C
+      - Ctrl+R,C
 
     - name: Test.RunTestsInCurrentContext
       keys:
-      - Ctrl+R, T
+      - Ctrl+R,T
 
     - name: Test.RunTestsInNamespace
       keys:
-      - Ctrl+R, N
+      - Ctrl+R,N
 
     - name: Test.TestResults.RunCheckedTests
       keys:
-      - Ctrl+R, F
+      - Ctrl+R,F
 
     - name: Test.UseCodedUITestBuilder
       keys:
-      - Ctrl+\, Ctrl+C
+      - Ctrl+\,Ctrl+C
 
     - name: Test.UseExistingActionRecording
       keys:
-      - Ctrl+\, Ctrl+A
+      - Ctrl+\,Ctrl+A
 
     - name: TestResults.DebugAllTestsInTestResults
       keys:
-      - Ctrl+R, Ctrl+D
+      - Ctrl+R,Ctrl+D
 
     - name: TestResults.DebugCheckedTests
       keys:
-      - Ctrl+R, Ctrl+F
+      - Ctrl+R,Ctrl+F
 
     - name: TestResults.RunAllTestsInTestResults
       keys:
-      - Ctrl+R, D
+      - Ctrl+R,D
 
     - name: Tools.AttachtoProcess
       keys:
@@ -696,11 +696,11 @@ shortcuts:
 
     - name: Tools.CodeSnippetsManager
       keys:
-      - Ctrl+K, Ctrl+B
+      - Ctrl+K,Ctrl+B
 
     - name: Tools.ForceGC
       keys:
-      - Ctrl+Shift+Alt+F12, Ctrl+Shift+Alt+F12
+      - Ctrl+Shift+Alt+F12,Ctrl+Shift+Alt+F12
 
     - name: Tools.GoToCommandLine
       keys:
@@ -720,7 +720,7 @@ shortcuts:
 
     - name: View.ArchitectureExplorer
       keys:
-      - Ctrl+\, Ctrl+R
+      - Ctrl+\,Ctrl+R
 
     - name: View.Backward
       keys:
@@ -728,7 +728,7 @@ shortcuts:
 
     - name: View.BookmarkWindow
       keys:
-      - Ctrl+K, Ctrl+W
+      - Ctrl+K,Ctrl+W
 
     - name: View.BrowseNext
       keys:
@@ -748,12 +748,12 @@ shortcuts:
 
     - name: View.ClassViewGoToSearchCombo
       keys:
-      - Ctrl+K, Ctrl+V
+      - Ctrl+K,Ctrl+V
 
     - name: View.CodeDefinitionWindow
       keys:
-      - Ctrl+\, D
-      - Ctrl+\, Ctrl+D
+      - Ctrl+\,D
+      - Ctrl+\,Ctrl+D
 
     - name: View.CommandWindow
       keys:
@@ -769,8 +769,8 @@ shortcuts:
 
     - name: View.ErrorList
       keys:
-      - Ctrl+\, E
-      - Ctrl+\, Ctrl+E
+      - Ctrl+\,E
+      - Ctrl+\,Ctrl+E
 
     - name: View.F#Interactive
       keys:
@@ -814,7 +814,7 @@ shortcuts:
 
     - name: View.ObjectBrowserGoToSearchCombo
       keys:
-      - Ctrl+K, Ctrl+R
+      - Ctrl+K,Ctrl+R
 
     - name: View.Output
       keys:
@@ -851,12 +851,12 @@ shortcuts:
 
     - name: View.TaskList
       keys:
-      - Ctrl+\, T
-      - Ctrl+\, Ctrl+T
+      - Ctrl+\,T
+      - Ctrl+\,Ctrl+T
 
     - name: View.TeamExplorer
       keys:
-      - Ctrl+\, Ctrl+M
+      - Ctrl+\,Ctrl+M
 
     - name: View.ToggleDesigner
       keys:
@@ -868,7 +868,7 @@ shortcuts:
 
     - name: View.UMLModelExplorer
       keys:
-      - Ctrl+\, Ctrl+U
+      - Ctrl+\,Ctrl+U
 
     - name: View.WebBrowser
       keys:

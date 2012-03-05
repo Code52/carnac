@@ -61,8 +61,8 @@ namespace Carnac.Logic
                                                                                 {Keys.Oem6, "]"},
                                                                                 {Keys.OemMinus, "-"},
                                                                                 {Keys.Oemplus, "="},
-                                                                                {Keys.OemBackslash, "\\"},
                                                                                 {Keys.Oem5, "\\"},
+                                                                                {Keys.OemBackslash, "\\"},
                                                                                 {Keys.OemQuestion, "/"},
                                                                                 {Keys.OemPeriod, "."},
                                                                                 {Keys.Oemcomma, ","},
@@ -79,7 +79,6 @@ namespace Carnac.Logic
                                                                                 {Keys.LWin, "Win"},
                                                                                 {Keys.RWin, "Win"},
                                                                             };
-
         public static Keys? ToKey(string keyText)
         {
             foreach (var shiftReplacement in ShiftReplacements)
@@ -90,6 +89,12 @@ namespace Carnac.Logic
             Keys parsedKey;
             if (Enum.TryParse(keyText, true, out parsedKey))
                 return parsedKey;
+
+            foreach (var replacement in Replacements)
+            {
+                if (replacement.Value.Equals(keyText, StringComparison.CurrentCultureIgnoreCase))
+                    return replacement.Key;
+            }
             return null;
         }
 
