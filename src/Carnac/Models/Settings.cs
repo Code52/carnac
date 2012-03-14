@@ -63,5 +63,7 @@ namespace Carnac.Models
         {
             get { return Placement == NotificationPlacement.TopLeft || Placement == NotificationPlacement.TopRight ? "Ascending" : "Descending"; }
         }
+
+        public bool DetectShortcutsOnly { get; set; }
     }
 }

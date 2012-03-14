@@ -68,7 +68,7 @@ namespace Carnac.Logic
                     return;
                 }
             }
-
+            
             if (ShouldCreateNewMessage(value))
             {
                 message = CreateNewMessage(value);
