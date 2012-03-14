@@ -2,13 +2,12 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
 using System.Linq;
-using Analects.SettingsService;
 using Caliburn.Micro;
-using Carnac.Enum;
 using Carnac.Logic;
-using Carnac.Logic.KeyMonitor;
+using Carnac.Logic.Enums;
+using Carnac.Logic.Models;
 using Carnac.Logic.Native;
-using Carnac.Models;
+using Carnac.Logic.Settings;
 using Carnac.Utilities;
 using Message = Carnac.Logic.Models.Message;
 using System.Reflection;
@@ -22,36 +21,33 @@ namespace Carnac.ViewModels
         IDisposable keySubscription;
         readonly IDisposable timerToken;
 
-        readonly ISettingsService settingsService;
-        private readonly IMessageProvider messageProvider;
+        readonly ISettingsProvider settingsProvider;
+        readonly IMessageProvider messageProvider;
+        readonly KeyShowViewModel keyShowViewModel;
 
         readonly TimeSpan fiveseconds = TimeSpan.FromSeconds(5);
         readonly TimeSpan sixseconds = TimeSpan.FromSeconds(6);
 
         [ImportingConstructor]
         public ShellViewModel(
-            ISettingsService settingsService,
+            ISettingsProvider settingsProvider,
             IScreenManager screenManager,
             ITimerFactory timerFactory,
             IWindowManager windowManager,
             IMessageProvider messageProvider)
         {
-            this.settingsService = settingsService;
+            this.settingsProvider = settingsProvider;
             this.messageProvider = messageProvider;
 
             Keys = new ObservableCollection<Message>();
             Screens = new ObservableCollection<DetailedScreen>(screenManager.GetScreens());
 
-            Settings = settingsService.Get<Settings>("PopupSettings");
-            if (Settings == null)
-            {
-                Settings = new Settings();
-                SetDefaultSettings();
-            }
+            Settings = settingsProvider.GetSettings<PopupSettings>();
 
             PlaceScreen();
 
-            windowManager.ShowWindow(new KeyShowViewModel(Keys, Settings));
+            keyShowViewModel = new KeyShowViewModel(Keys, Settings);
+            windowManager.ShowWindow(keyShowViewModel);
 
             timerToken = timerFactory.Start(1000, Cleanup);
         }
@@ -61,7 +57,7 @@ namespace Carnac.ViewModels
         public ObservableCollection<DetailedScreen> Screens { get; set; }
         public DetailedScreen SelectedScreen { get; set; }
 
-        public Settings Settings { get; set; }
+        public PopupSettings Settings { get; set; }
 
         public override string DisplayName
         {
@@ -99,6 +95,8 @@ namespace Carnac.ViewModels
                                                          "Reactive Extensions",
                                                          "Notify Property Weaver"
                                                      };
+
+
         public string Components
         {
             get { return string.Join(", ", components); }
@@ -184,20 +182,15 @@ namespace Carnac.ViewModels
 
             PlaceScreen();
 
-            settingsService.Set("PopupSettings", Settings);
-            settingsService.Save();
+            settingsProvider.SaveSettings(Settings);
         }
 
         public void SetDefaultSettings()
         {
-            Settings.FontSize = 40;
-            Settings.FontColor = "White";
-            Settings.ItemBackgroundColor = "Black";
-            Settings.ItemOpacity = 0.5;
-            Settings.ItemMaxWidth = 350;
-
-            SaveSettings();
+            Settings = settingsProvider.ResetToDefaults<PopupSettings>();
+            keyShowViewModel.Settings = Settings;
         }
+
         private void PlaceScreen()
         {
             if (Screens == null) 
