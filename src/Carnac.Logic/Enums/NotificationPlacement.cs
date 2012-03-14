@@ -1,4 +1,4 @@
-﻿namespace Carnac.Enum
+﻿namespace Carnac.Logic.Enums
 {
     public enum NotificationPlacement
     {

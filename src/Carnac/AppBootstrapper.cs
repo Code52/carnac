@@ -6,6 +6,7 @@ using System.Linq;
 using Caliburn.Micro;
 using Carnac.Logic;
 using Carnac.Logic.KeyMonitor;
+using Carnac.Logic.Settings;
 
 namespace Carnac
 {
@@ -33,6 +34,7 @@ namespace Carnac
             batch.AddExportedValue<IKeyProvider>(new KeyProvider(InterceptKeys.Current, new PasswordModeService()));
             batch.AddExportedValue<IWindowManager>(new WindowManager());
             batch.AddExportedValue<IEventAggregator>(new EventAggregator());
+            batch.AddExportedValue<ISettingsProvider>(new SettingsProvider());
             batch.AddExportedValue(container);
             batch.AddExportedValue(catalog);
 

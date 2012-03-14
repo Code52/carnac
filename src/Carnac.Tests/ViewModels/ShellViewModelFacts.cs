@@ -1,7 +1,7 @@
-﻿using Analects.SettingsService;
-using Caliburn.Micro;
+﻿using Caliburn.Micro;
 using Carnac.Logic;
-using Carnac.Models;
+using Carnac.Logic.Models;
+using Carnac.Logic.Settings;
 using Carnac.Utilities;
 using Carnac.ViewModels;
 using NSubstitute;
@@ -14,7 +14,7 @@ namespace Carnac.Tests.ViewModels
     {
         public class when_creating_the_new_viewmodel : SpecificationFor<ShellViewModel>
         {
-            private readonly ISettingsService settingsService = Substitute.For<ISettingsService>();
+            private readonly ISettingsProvider settingsService = Substitute.For<ISettingsProvider>();
             private readonly IScreenManager screenManager = Substitute.For<IScreenManager>();
             private readonly ITimerFactory timerFactory = Substitute.For<ITimerFactory>();
             private readonly IWindowManager windowManager = Substitute.For<IWindowManager>();
@@ -45,7 +45,7 @@ namespace Carnac.Tests.ViewModels
             [Fact]
             public void SettingsService_Always_Fetches_ExistingSettings()
             {
-                settingsService.Received().Get<Settings>("PopupSettings");
+                settingsService.Received().GetSettings<PopupSettings>();
             }
 
             [Fact]
@@ -57,16 +57,16 @@ namespace Carnac.Tests.ViewModels
 
         public class when_the_settings_file_is_defined : SpecificationFor<ShellViewModel>
         {
-            private readonly ISettingsService settingsService = Substitute.For<ISettingsService>();
+            private readonly ISettingsProvider settingsService = Substitute.For<ISettingsProvider>();
             private readonly IScreenManager screenManager = Substitute.For<IScreenManager>();
             private readonly ITimerFactory timerFactory = Substitute.For<ITimerFactory>();
             private readonly IWindowManager windowManager = Substitute.For<IWindowManager>();
             private readonly IMessageProvider messageProvider = Substitute.For<IMessageProvider>();
-            private readonly Settings settings = new Settings();
+            private readonly PopupSettings popupSettings = new PopupSettings();
 
             public override ShellViewModel Given()
             {
-                settingsService.Get<Settings>("PopupSettings").Returns(settings);
+                settingsService.GetSettings<PopupSettings>().Returns(popupSettings);
                 return new ShellViewModel(settingsService, screenManager, timerFactory, windowManager, messageProvider);
             }
 
@@ -78,22 +78,22 @@ namespace Carnac.Tests.ViewModels
             [Fact]
             public void the_settings_file_is_the_existing_instance()
             {
-                Assert.Equal(settings, Subject.Settings);
+                Assert.Equal(popupSettings, Subject.Settings);
             }
         }
 
         public class when_the_settings_file_is_not_defined : SpecificationFor<ShellViewModel>
         {
-            private readonly ISettingsService settingsService = Substitute.For<ISettingsService>();
+            private readonly ISettingsProvider settingsService = Substitute.For<ISettingsProvider>();
             private readonly IScreenManager screenManager = Substitute.For<IScreenManager>();
             private readonly ITimerFactory timerFactory = Substitute.For<ITimerFactory>();
             private readonly IWindowManager windowManager = Substitute.For<IWindowManager>();
             private readonly IMessageProvider messageProvider = Substitute.For<IMessageProvider>();
-            private readonly Settings settings;
+            private readonly PopupSettings popupSettings;
 
             public override ShellViewModel Given()
             {
-                settingsService.Get<Settings>("PopupSettings").Returns(settings);
+                settingsService.GetSettings<PopupSettings>().Returns(popupSettings);
                 return new ShellViewModel(settingsService, screenManager, timerFactory, windowManager, messageProvider);
             }
 

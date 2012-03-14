@@ -1,7 +1,8 @@
 ﻿<Window x:Class="Carnac.Views.KeyShowView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:ComponentModel="clr-namespace:System.ComponentModel;assembly=WindowsBase" Title="KeyShowView" 
+        xmlns:ComponentModel="clr-namespace:System.ComponentModel;assembly=WindowsBase"
+        Title="KeyShowView"
         ShowInTaskbar="False"
         AllowsTransparency="True"
         Background="Transparent"
@@ -15,13 +16,16 @@
         Focusable="False"
         Topmost="True">
     <Window.Resources>
-        <CollectionViewSource x:Key="cvs" Source="{Binding Keys}">
+        <CollectionViewSource x:Key="cvs"
+                              Source="{Binding Keys}">
             <CollectionViewSource.SortDescriptions>
-                <ComponentModel:SortDescription Direction="Descending" PropertyName="StartingTime" />
+                <ComponentModel:SortDescription Direction="Descending"
+                                                PropertyName="StartingTime" />
             </CollectionViewSource.SortDescriptions>
         </CollectionViewSource>
 
-        <DrawingBrush x:Key="Layer_1" Stretch="Uniform">
+        <DrawingBrush x:Key="Layer_1"
+                      Stretch="Uniform">
             <DrawingBrush.Drawing>
                 <DrawingGroup>
                     <DrawingGroup.Children>
@@ -57,41 +61,45 @@
     </Window.Resources>
 
 
-    <ListView ItemsSource="{Binding Source={StaticResource cvs}}" 
-			HorizontalAlignment="{Binding Settings.Alignment}" 
-			VerticalAlignment="Stretch"
-			Background="Transparent" 
-			Focusable="False" 
-			IsHitTestVisible="False"
-			BorderBrush="Transparent"
-			BorderThickness="0"
-            Margin="{Binding Settings.Margins}"
-            ScrollViewer.VerticalScrollBarVisibility="Hidden"
-            ScrollViewer.HorizontalScrollBarVisibility="Hidden">
+    <ListView ItemsSource="{Binding Source={StaticResource cvs}}"
+              HorizontalAlignment="{Binding Settings.Alignment}"
+              VerticalAlignment="Stretch"
+              Background="Transparent"
+              Focusable="False"
+              IsHitTestVisible="False"
+              BorderBrush="Transparent"
+              BorderThickness="0"
+              Margin="{Binding Settings.Margins}"
+              ScrollViewer.VerticalScrollBarVisibility="Hidden"
+              ScrollViewer.HorizontalScrollBarVisibility="Hidden">
         <ListView.LayoutTransform>
             <ScaleTransform ScaleY="{Binding Settings.ScaleTransform}" />
         </ListView.LayoutTransform>
         <ListView.ItemTemplate>
             <DataTemplate>
                 <Border Opacity="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListView}},Path=DataContext.Settings.ItemOpacity}"
-						x:Name="Border"
-						IsHitTestVisible="False" 
-						Focusable="False"
-						HorizontalAlignment="Stretch" 
-						BorderThickness="4"
-						CornerRadius="15" Margin="0, 0, 0, 3"
-						Padding="2">
+                        x:Name="Border"
+                        IsHitTestVisible="False"
+                        Focusable="False"
+                        HorizontalAlignment="Stretch"
+                        BorderThickness="4"
+                        CornerRadius="15"
+                        Margin="0, 0, 0, 3"
+                        Padding="2">
                     <Border.Background>
                         <SolidColorBrush Color="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListView}}, Path=DataContext.Settings.ItemBackgroundColor}" />
                     </Border.Background>
                     <Border.Style>
                         <Style>
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding IsDeleting}" Value="True">
+                                <DataTrigger Binding="{Binding IsDeleting}"
+                                             Value="True">
                                     <DataTrigger.EnterActions>
                                         <BeginStoryboard>
                                             <Storyboard>
-                                                <DoubleAnimation Storyboard.TargetProperty="Opacity" To="0" Duration="0:0:0.125"/>
+                                                <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                                                                 To="0"
+                                                                 Duration="0:0:0.125" />
                                             </Storyboard>
                                         </BeginStoryboard>
                                     </DataTrigger.EnterActions>
@@ -102,16 +110,15 @@
                     <Border.LayoutTransform>
                         <ScaleTransform ScaleY="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListView}},Path=DataContext.Settings.ScaleTransform}" />
                     </Border.LayoutTransform>
-                    <ListBox 
-							ItemsSource="{Binding Text}"
-							MaxWidth="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListView}},Path=DataContext.Settings.ItemMaxWidth}"
-							HorizontalAlignment="Stretch"
-							FontWeight="Bold" 
-							Focusable="False" 
-                            BorderBrush="{x:Null}"
-                            ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                            VerticalContentAlignment="Center"
-							IsHitTestVisible="False">
+                    <ListBox ItemsSource="{Binding Text}"
+                             MaxWidth="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListView}},Path=DataContext.Settings.ItemMaxWidth}"
+                             HorizontalAlignment="Stretch"
+                             FontWeight="Bold"
+                             Focusable="False"
+                             BorderBrush="{x:Null}"
+                             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                             VerticalContentAlignment="Center"
+                             IsHitTestVisible="False">
                         <ListBox.Background>
                             <SolidColorBrush Color="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListView}}, Path=DataContext.Settings.ItemBackgroundColor}" />
                         </ListBox.Background>
@@ -126,8 +133,8 @@
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
-                                    <Border x:Name="KeyCapBorder" 
-                                            Visibility="Collapsed" 
+                                    <Border x:Name="KeyCapBorder"
+                                            Visibility="Collapsed"
                                             CornerRadius="5"
                                             Margin="2"
                                             Padding="5">
@@ -135,54 +142,101 @@
                                             <SolidColorBrush Color="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListView}}, Path=DataContext.Settings.FontColor}" />
                                         </Border.Background>
                                         <StackPanel Orientation="Horizontal">
-                                            <Rectangle x:Name="icon" VerticalAlignment="Center" />
-                                            <TextBlock x:Name="KeyCap" Text="{Binding}">
+                                            <Rectangle x:Name="icon"
+                                                       VerticalAlignment="Center" />
+                                            <TextBlock x:Name="KeyCap"
+                                                       Text="{Binding}">
                                             <TextBlock.Foreground>
                                                 <SolidColorBrush Color="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListView}}, Path=DataContext.Settings.ItemBackgroundColor}" />
                                             </TextBlock.Foreground>
                                             </TextBlock>
                                         </StackPanel>
                                     </Border>
-                                    
-                                    <TextBlock x:Name="regular" Text="{Binding}" VerticalAlignment="Center" />
+
+                                    <TextBlock x:Name="regular"
+                                               Text="{Binding}"
+                                               VerticalAlignment="Center" />
                                 </StackPanel>
                                 <DataTemplate.Triggers>
-                                    <DataTrigger Binding="{Binding .}" Value="Return">
-                                        <Setter TargetName="KeyCapBorder" Property="Control.Visibility" Value="Visible" />
-                                        <Setter TargetName="regular" Property="Control.Visibility" Value="Collapsed" />
+                                    <DataTrigger Binding="{Binding .}"
+                                                 Value="Return">
+                                        <Setter TargetName="KeyCapBorder"
+                                                Property="Control.Visibility"
+                                                Value="Visible" />
+                                        <Setter TargetName="regular"
+                                                Property="Control.Visibility"
+                                                Value="Collapsed" />
                                     </DataTrigger>
 
-                                    <DataTrigger Binding="{Binding .}" Value="Back">
-                                        <Setter TargetName="KeyCapBorder" Property="Control.Visibility" Value="Visible" />
-                                        <Setter TargetName="regular" Property="Control.Visibility" Value="Collapsed" />
+                                    <DataTrigger Binding="{Binding .}"
+                                                 Value="Back">
+                                        <Setter TargetName="KeyCapBorder"
+                                                Property="Control.Visibility"
+                                                Value="Visible" />
+                                        <Setter TargetName="regular"
+                                                Property="Control.Visibility"
+                                                Value="Collapsed" />
                                     </DataTrigger>
 
-                                    <DataTrigger Binding="{Binding .}" Value="Escape">
-                                        <Setter TargetName="KeyCapBorder" Property="Control.Visibility" Value="Visible" />
-                                        <Setter TargetName="regular" Property="Control.Visibility" Value="Collapsed" />
+                                    <DataTrigger Binding="{Binding .}"
+                                                 Value="Escape">
+                                        <Setter TargetName="KeyCapBorder"
+                                                Property="Control.Visibility"
+                                                Value="Visible" />
+                                        <Setter TargetName="regular"
+                                                Property="Control.Visibility"
+                                                Value="Collapsed" />
                                     </DataTrigger>
 
-                                    <DataTrigger Binding="{Binding .}" Value="Alt">
-                                        <Setter TargetName="KeyCapBorder" Property="Control.Visibility" Value="Visible" />
-                                        <Setter TargetName="regular" Property="Control.Visibility" Value="Collapsed" />
+                                    <DataTrigger Binding="{Binding .}"
+                                                 Value="Alt">
+                                        <Setter TargetName="KeyCapBorder"
+                                                Property="Control.Visibility"
+                                                Value="Visible" />
+                                        <Setter TargetName="regular"
+                                                Property="Control.Visibility"
+                                                Value="Collapsed" />
                                     </DataTrigger>
-                                    <DataTrigger Binding="{Binding .}" Value="Ctrl">
-                                        <Setter TargetName="KeyCapBorder" Property="Control.Visibility" Value="Visible" />
-                                        <Setter TargetName="regular" Property="Control.Visibility" Value="Collapsed" />
+                                    <DataTrigger Binding="{Binding .}"
+                                                 Value="Ctrl">
+                                        <Setter TargetName="KeyCapBorder"
+                                                Property="Control.Visibility"
+                                                Value="Visible" />
+                                        <Setter TargetName="regular"
+                                                Property="Control.Visibility"
+                                                Value="Collapsed" />
                                     </DataTrigger>
 
-                                    <DataTrigger Binding="{Binding .}" Value="Shift">
-                                        <Setter TargetName="KeyCapBorder" Property="Control.Visibility" Value="Visible" />
-                                        <Setter TargetName="regular" Property="Control.Visibility" Value="Collapsed" />
+                                    <DataTrigger Binding="{Binding .}"
+                                                 Value="Shift">
+                                        <Setter TargetName="KeyCapBorder"
+                                                Property="Control.Visibility"
+                                                Value="Visible" />
+                                        <Setter TargetName="regular"
+                                                Property="Control.Visibility"
+                                                Value="Collapsed" />
                                     </DataTrigger>
 
-                                    <DataTrigger Binding="{Binding .}" Value="Win">
-                                        <Setter TargetName="regular" Property="Control.Visibility" Value="Collapsed" />
-                                        <Setter TargetName="KeyCapBorder" Property="Control.Visibility" Value="Visible" />
-                                        <Setter TargetName="KeyCap" Property="Control.Visibility" Value="Collapsed" />
-                                        <Setter TargetName="icon" Property="Rectangle.Fill" Value="{StaticResource Layer_1}" />
-                                        <Setter TargetName="icon" Property="Rectangle.Width" Value="50" />
-                                        <Setter TargetName="icon" Property="Rectangle.Height" Value="50" />
+                                    <DataTrigger Binding="{Binding .}"
+                                                 Value="Win">
+                                        <Setter TargetName="regular"
+                                                Property="Control.Visibility"
+                                                Value="Collapsed" />
+                                        <Setter TargetName="KeyCapBorder"
+                                                Property="Control.Visibility"
+                                                Value="Visible" />
+                                        <Setter TargetName="KeyCap"
+                                                Property="Control.Visibility"
+                                                Value="Collapsed" />
+                                        <Setter TargetName="icon"
+                                                Property="Rectangle.Fill"
+                                                Value="{StaticResource Layer_1}" />
+                                        <Setter TargetName="icon"
+                                                Property="Rectangle.Width"
+                                                Value="50" />
+                                        <Setter TargetName="icon"
+                                                Property="Rectangle.Height"
+                                                Value="50" />
                                     </DataTrigger>
 
                                 </DataTemplate.Triggers>

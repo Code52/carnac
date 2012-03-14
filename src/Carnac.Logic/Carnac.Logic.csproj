@@ -33,12 +33,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
     <Reference Include="System.Reactive">
       <HintPath>..\packages\Rx-Main.1.0.11226\lib\Net4\System.Reactive.dll</HintPath>
     </Reference>
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -53,6 +55,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Enums\NotificationPlacement.cs" />
     <Compile Include="IMessageProvider.cs" />
     <Compile Include="Internal\FixedQueue.cs" />
     <Compile Include="IKeyProvider.cs" />
@@ -68,10 +71,12 @@
     <Compile Include="KeyProvider.cs" />
     <Compile Include="MessageProvider.cs" />
     <Compile Include="Models\Message.cs" />
+    <Compile Include="Models\PopupSettings.cs" />
     <Compile Include="NotifyPropertyChanged.cs" />
     <Compile Include="PasswordModeService.cs" />
     <Compile Include="ReplaceKey.cs" />
     <Compile Include="ScreenManager.cs" />
+    <Compile Include="Settings\SettingsProvider.cs" />
     <Compile Include="ShortcutCollection.cs" />
     <Compile Include="ShortcutProvider.cs" />
     <Compile Include="Win32Methods.cs" />
@@ -107,4 +112,8 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <UsingTask TaskName="NotifyPropertyWeaverMsBuildTask.WeavingTask" AssemblyFile="$(SolutionDir)Tools\NotifyPropertyWeaverMsBuildTask.dll" />
+  <Target Name="AfterCompile">
+    <NotifyPropertyWeaverMsBuildTask.WeavingTask />
+  </Target>
 </Project>
