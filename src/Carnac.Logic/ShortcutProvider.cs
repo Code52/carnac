@@ -11,7 +11,7 @@ namespace Carnac.Logic
     [Export(typeof(IShortcutProvider))]
     public class ShortcutProvider : IShortcutProvider
     {
-                List<ShortcutCollection> shortcuts = new List<ShortcutCollection>();
+        readonly List<ShortcutCollection> shortcuts = new List<ShortcutCollection>();
 
         public ShortcutProvider()
         {
@@ -47,7 +47,7 @@ namespace Carnac.Logic
 
                         foreach (var keyCombo in keys.Children)
                         {
-                            List<KeyPressDefinition> definitions = new List<KeyPressDefinition>();
+                            var definitions = new List<KeyPressDefinition>();
                             string[] combos = keyCombo.ToString().Split(',');
                             foreach (string combo in combos)
                             {
@@ -55,7 +55,7 @@ namespace Carnac.Logic
                                 if (definition != null)
                                     definitions.Add(definition);
                             }
-                            if(definitions.Count > 0)
+                            if (definitions.Count > 0)
                                 shortcutCollection.Add(new KeyShortcut(name, definitions.ToArray()));
                         }
                     }
@@ -90,10 +90,10 @@ namespace Carnac.Logic
         {
             var keyPresses = keys.ToArray();
             var processName = keyPresses.Last().Process.ProcessName;
-            foreach(var shortcut in shortcuts.Where(s => (s.Process == processName) || string.IsNullOrWhiteSpace(s.Process)))
+            foreach (var shortcut in shortcuts.Where(s => (s.Process == processName) || string.IsNullOrWhiteSpace(s.Process)))
             {
                 var match = shortcut.GetShortcutsMatching(keyPresses);
-                if (match.Count() > 0) 
+                if (match.Count() > 0)
                     return match;
             }
 

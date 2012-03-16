@@ -59,7 +59,7 @@ namespace Carnac.Logic.Models
 
         private void AddText(string text)
         {
-            var formattedText = Format(text);
+            var formattedText = Format(text, lastKeyPress.IsShortcut);
 
             if (formattedText == "Back" && lastText == formattedText)
             {
@@ -77,7 +77,7 @@ namespace Carnac.Logic.Models
             }
         }
 
-        private static string Format(string text)
+        private static string Format(string text, bool isShortcut)
         {
             if (text == "Left")
                 return GetString(8592);
@@ -87,6 +87,14 @@ namespace Carnac.Logic.Models
                 return GetString(8594);
             if (text == "Down")
                 return GetString(8595);
+
+            // If the space is part of a shortcut sequence
+            // present it as a primitive key. E.g. Ctrl+Spc.
+            // Otherwise we want to preserve a space as part of
+            // what is probably a sentence.
+            if (text == " " && isShortcut)
+                return "Space";
+
             return text;
         }
 

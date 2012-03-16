@@ -4,6 +4,7 @@ using System.ComponentModel.Composition;
 using System.Linq;
 using System.Reactive.Subjects;
 using Carnac.Logic.Models;
+using Carnac.Logic.Settings;
 using Message = Carnac.Logic.Models.Message;
 
 namespace Carnac.Logic
@@ -14,11 +15,13 @@ namespace Carnac.Logic
         readonly Subject<Message> subject = new Subject<Message>();
         private readonly IShortcutProvider shortcutProvider;
         private IDisposable keyStream;
+        private readonly PopupSettings settings;
 
         [ImportingConstructor]
-        public MessageProvider(IKeyProvider keyProvider, IShortcutProvider shortcutProvider)
+        public MessageProvider(IKeyProvider keyProvider, IShortcutProvider shortcutProvider, ISettingsProvider settingsProvider)
         {
             this.shortcutProvider = shortcutProvider;
+            settings = settingsProvider.GetSettings<PopupSettings>();
             keyStream = keyProvider.Subscribe(this);
         }
 
@@ -69,6 +72,9 @@ namespace Carnac.Logic
                 }
             }
 
+            if (!value.IsShortcut && settings.DetectShortcutsOnly)
+                return;
+            
             if (ShouldCreateNewMessage(value))
             {
                 message = CreateNewMessage(value);
