@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reactive.Subjects;
 using System.Windows.Forms;
 using Carnac.Logic;
 using Carnac.Logic.KeyMonitor;
 using Carnac.Logic.Models;
+using Carnac.Logic.Settings;
 using NSubstitute;
 using Xunit;
 using Message = Carnac.Logic.Models.Message;
@@ -18,13 +18,16 @@ namespace Carnac.Tests
         readonly IShortcutProvider shortcutProvider;
         readonly MessageProvider messageProvider;
         readonly List<Message> messages = new List<Message>();
+        readonly ISettingsProvider settingsProvider;
 
         public MessageProviderFacts()
         {
+            settingsProvider = Substitute.For<ISettingsProvider>();
+            settingsProvider.GetSettings<PopupSettings>().Returns(new PopupSettings());
             shortcutProvider = Substitute.For<IShortcutProvider>();
             interceptKeysSource = new Subject<InterceptKeyEventArgs>();
-            messageProvider = new MessageProvider(new KeyProvider(interceptKeysSource, new PasswordModeService()),
-                                                  shortcutProvider);
+            var keyProvider = new KeyProvider(interceptKeysSource, new PasswordModeService());
+            messageProvider = new MessageProvider(keyProvider, shortcutProvider, settingsProvider);
         }
 
         [Fact]

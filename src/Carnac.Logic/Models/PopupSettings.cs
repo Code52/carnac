@@ -1,20 +1,25 @@
 ﻿using System;
-using Caliburn.Micro;
+using System.ComponentModel;
 using System.Windows;
-using Carnac.Enum;
-using Carnac.Logic;
-using Carnac.Views;
+using Carnac.Logic.Enums;
 
-namespace Carnac.Models
+namespace Carnac.Logic.Models
 {
-    [Serializable]
-    public class Settings : PropertyChangedBase
+    public class PopupSettings : NotifyPropertyChanged
     {
+        [DefaultValue(350)]
         public int ItemMaxWidth { get; set; }
+
+        [DefaultValue(0.5)]
         public double ItemOpacity { get; set; }
+
+        [DefaultValue("Black")]
         public string ItemBackgroundColor { get; set; }
 
+        [DefaultValue("White")]
         public string FontColor { get; set; }
+
+        [DefaultValue(40)]
         public int FontSize { get; set; }
 
         public int Screen { get; set; }
@@ -30,16 +35,26 @@ namespace Carnac.Models
             set
             {
                 left = value;
-                AppBootstrapper.Aggregator.Publish(new LeftChanged(value));
+                OnLeftChanged(EventArgs.Empty);
             }
+        }
+
+        public event EventHandler LeftChanged;
+
+        protected void OnLeftChanged(EventArgs e)
+        {
+            var handler = LeftChanged;
+            if (handler != null) handler(this, e);
         }
 
         [NotifyProperty(AlsoNotifyFor = new[] { "Margins" })]
         public int TopOffset { get; set; }
         [NotifyProperty(AlsoNotifyFor = new[] { "Margins" })]
         public int BottomOffset { get; set; }
+
         [NotifyProperty(AlsoNotifyFor = new[] { "Margins" })]
         public int LeftOffset { get; set; }
+
         [NotifyProperty(AlsoNotifyFor = new[] { "Margins" })]
         public int RightOffset { get; set; }
 
@@ -53,7 +68,6 @@ namespace Carnac.Models
             get { return Placement == NotificationPlacement.TopLeft || Placement == NotificationPlacement.BottomLeft ? "Left" : "Right"; }
         }
 
-
         public Thickness Margins
         {
             get { return new Thickness(LeftOffset, TopOffset, RightOffset, BottomOffset); }
@@ -63,5 +77,7 @@ namespace Carnac.Models
         {
             get { return Placement == NotificationPlacement.TopLeft || Placement == NotificationPlacement.TopRight ? "Ascending" : "Descending"; }
         }
+
+        public bool DetectShortcutsOnly { get; set; }
     }
 }

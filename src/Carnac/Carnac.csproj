@@ -112,12 +112,8 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Analects\Loader\Loader.cs" />
-    <Compile Include="Analects\SettingService\ISettingsService.cs" />
-    <Compile Include="Analects\SettingService\SettingsService.cs" />
-    <Compile Include="Enum\NotificationPlacement.cs" />
     <Compile Include="KeyMonitor\HotKey.cs" />
     <Compile Include="KeyMonitor\HotKeyWinApi.cs" />
-    <Compile Include="Models\Settings.cs" />
     <Compile Include="Utilities\ITimerFactory.cs" />
     <Compile Include="Utilities\ProcessUtilities.cs" />
     <Compile Include="Utilities\TimerFactory.cs" />
