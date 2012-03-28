@@ -89,7 +89,7 @@ namespace Carnac.Tests.ViewModels
             private readonly ITimerFactory timerFactory = Substitute.For<ITimerFactory>();
             private readonly IWindowManager windowManager = Substitute.For<IWindowManager>();
             private readonly IMessageProvider messageProvider = Substitute.For<IMessageProvider>();
-            private readonly PopupSettings popupSettings;
+            private readonly PopupSettings popupSettings = Substitute.For<PopupSettings>();
 
             public override ShellViewModel Given()
             {
