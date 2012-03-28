@@ -150,6 +150,7 @@
                                     <DataTrigger Binding="{Binding .}" Value="Return">
                                         <Setter TargetName="KeyCapBorder" Property="Control.Visibility" Value="Visible" />
                                         <Setter TargetName="regular" Property="Control.Visibility" Value="Collapsed" />
+                                        <Setter TargetName="KeyCap" Property="Text" Value="↵" />
                                     </DataTrigger>
 
                                     <DataTrigger Binding="{Binding .}" Value="Back">
