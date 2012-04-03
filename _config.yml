@@ -6,7 +6,7 @@ reponame: carnac
 accent: 7100B3
 darkaccent: 7100B3
 description: A WPF Markdown editor inspired by <a href="https://bitbucket.org/wcoenen/downmarker">Downmarker</a>. Read the original brief on <a href="http://code52.org">Code52</a>
-#downloadurl: https://github.com/downloads/Code52/DownmarkerWPF/MarkPad.82.zip
+downloadurl: https://github.com/downloads/Code52/carnac/Carnac.zip
 
 #feature1title: 'Side-by-side Preview'
 #feature2title: 'Single exe, portable'
