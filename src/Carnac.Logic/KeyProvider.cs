@@ -14,7 +14,7 @@ namespace Carnac.Logic
         private readonly IObservable<InterceptKeyEventArgs> interceptKeysSource;
         private readonly Dictionary<int, Process> processes;
         private readonly IPasswordModeService passwordModeService;
-        private readonly List<Keys> modifierKeys =
+        private readonly IList<Keys> modifierKeys =
             new List<Keys>
                 {
                     Keys.LControlKey,
@@ -85,7 +85,7 @@ namespace Carnac.Logic
             return new KeyPress(process, interceptKeyEventArgs, winKeyPressed, inputs);
         }
 
-        private IEnumerable<string> ToInputs(bool isLetter, bool winKeyPressed, InterceptKeyEventArgs interceptKeyEventArgs)
+        private static IEnumerable<string> ToInputs(bool isLetter, bool isWinKeyPressed, InterceptKeyEventArgs interceptKeyEventArgs)
         {
             var controlPressed = interceptKeyEventArgs.ControlPressed;
             var altPressed = interceptKeyEventArgs.AltPressed;
@@ -94,7 +94,7 @@ namespace Carnac.Logic
                 yield return "Ctrl";
             if (altPressed)
                 yield return "Alt";
-            if (winKeyPressed)
+            if (isWinKeyPressed)
                 yield return "Win";
 
             if (controlPressed || altPressed)
@@ -126,7 +126,7 @@ namespace Carnac.Logic
         {
             Process process;
 
-            int handle = GetForegroundWindow();
+            var handle = GetForegroundWindow();
 
             if (!processes.ContainsKey(handle))
             {

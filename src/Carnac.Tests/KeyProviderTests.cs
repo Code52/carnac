@@ -101,7 +101,7 @@ namespace Carnac.Tests
             Assert.Equal(new[] { "Win", "e" }, processedKeys.Single().Input);
         }
 
-        private IEnumerable<KeyPress> ToEnumerable(KeyProvider provider, KeyPlayer player)
+        private static IEnumerable<KeyPress> ToEnumerable(IObservable<KeyPress> provider, KeyPlayer player)
         {
             var keys = new List<KeyPress>();
 
