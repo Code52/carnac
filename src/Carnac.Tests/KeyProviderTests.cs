@@ -27,7 +27,7 @@ namespace Carnac.Tests
             var processedKeys = ToEnumerable(provider, player);
 
             // assert
-            Assert.Equal(new[]{"Ctrl", "Shift", "L"}, processedKeys.Single().Input);
+            Assert.Equal(new[] { "Ctrl", "Shift", "L" }, processedKeys.Single().Input);
         }
 
         [Fact]
@@ -41,6 +41,7 @@ namespace Carnac.Tests
             var processedKeys = ToEnumerable(provider, player);
 
             // assert
+
             Assert.Equal(new[] { "L" }, processedKeys.Single().Input);
         }
 
@@ -97,8 +98,7 @@ namespace Carnac.Tests
             var processedKeys = ToEnumerable(provider, player);
 
             // assert
-            //TODO I think for this case we need to use the TestScheduler.. Someone that knows Rx can fix this test :)
-            //Assert.Equal(new[] { "Win", "E" }, processedKeys.Single().Input);
+            Assert.Equal(new[] { "Win", "e" }, processedKeys.Single().Input);
         }
 
         private IEnumerable<KeyPress> ToEnumerable(KeyProvider provider, KeyPlayer player)

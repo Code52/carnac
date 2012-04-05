@@ -80,12 +80,12 @@ namespace Carnac.Logic
             var isLetter = interceptKeyEventArgs.Key >= Keys.A &&
                            interceptKeyEventArgs.Key <= Keys.Z;
 
-            var inputs = ToInputs(isLetter, interceptKeyEventArgs);
+            var inputs = ToInputs(isLetter, winKeyPressed, interceptKeyEventArgs);
 
             return new KeyPress(process, interceptKeyEventArgs, winKeyPressed, inputs);
         }
 
-        private IEnumerable<string> ToInputs(bool isLetter, InterceptKeyEventArgs interceptKeyEventArgs)
+        private IEnumerable<string> ToInputs(bool isLetter, bool winKeyPressed, InterceptKeyEventArgs interceptKeyEventArgs)
         {
             var controlPressed = interceptKeyEventArgs.ControlPressed;
             var altPressed = interceptKeyEventArgs.AltPressed;
