@@ -3,12 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
-using System.IO;
-using System.IO.IsolatedStorage;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.Serialization.Json;
-using System.Text;
 
 namespace Carnac.Logic.Settings
 {
@@ -30,37 +26,10 @@ namespace Carnac.Logic.Settings
 
     public interface ISettingsStorage
     {
+        string SerializeList(List<string> listOfItems);
+        List<string> DeserializeList(string serializedList);
         void Save(string key, Dictionary<string, string> settings);
         Dictionary<string, string> Load(string key);
-    }
-
-    public class IsolatedStorageSettingsStore : ISettingsStorage
-    {
-        const IsolatedStorageScope Scope = IsolatedStorageScope.Assembly | IsolatedStorageScope.User | IsolatedStorageScope.Roaming;
-
-        public void Save(string key, Dictionary<string, string> settings)
-        {
-            var serializer = new DataContractJsonSerializer(typeof(Dictionary<string, string>));
-
-            using (var isoStore = IsolatedStorageFile.GetStore(Scope, null, null))
-            using (var stream = new IsolatedStorageFileStream(key, FileMode.Create, isoStore))
-                serializer.WriteObject(stream, settings);
-        }
-
-        public Dictionary<string, string> Load(string key)
-        {
-            var serializer = new DataContractJsonSerializer(typeof(Dictionary<string, string>));
-            using (var isoStore = IsolatedStorageFile.GetStore(Scope, null, null))
-            {
-                if (isoStore.FileExists(key))
-                {
-                    using (var stream = new IsolatedStorageFileStream(key, FileMode.Open, isoStore))
-                        return (Dictionary<string, string>)serializer.ReadObject(stream);
-                }
-            }
-
-            return new Dictionary<string, string>();
-        }
     }
 
     public class SettingsProvider : ISettingsProvider
@@ -80,7 +49,7 @@ namespace Carnac.Logic.Settings
             if (!fresh && cache.ContainsKey(type))
                 return (T)cache[type];
 
-            var settingsLookup = settingsRepository.Load(FileKey<T>());
+            var settingsLookup = settingsRepository.Load(GetKey<T>());
             var settings = new T();
             var settingMetadata = ReadSettingMetadata<T>();
 
@@ -99,22 +68,22 @@ namespace Carnac.Logic.Settings
             return settings;
         }
 
-        private static object GetDefaultValue(SettingDescriptor setting)
+        object GetDefaultValue(SettingDescriptor setting)
         {
             return setting.DefaultValue ?? ConvertValue(null, setting);
         }
 
-        static string FileKey<T>()
+        static string GetKey<T>()
         {
-            return typeof(T).Name + ".settings";
+            return typeof(T).Name;
         }
 
-        static object ConvertValue(string storedValue, SettingDescriptor setting)
+        object ConvertValue(string storedValue, SettingDescriptor setting)
         {
             return ConvertValue(storedValue, setting.UnderlyingType);
         }
 
-        static object ConvertValue(string storedValue, Type underlyingType)
+        object ConvertValue(string storedValue, Type underlyingType)
         {
             if (underlyingType == typeof(string)) return storedValue;
             var isList = IsList(underlyingType);
@@ -141,14 +110,13 @@ namespace Carnac.Logic.Settings
             return converted;
         }
 
-        private static object ReadList(string storedValue, Type propertyType)
+        private object ReadList(string storedValue, Type propertyType)
         {
             var listItemType = propertyType.GetGenericArguments()[0];
             var list = CreateListInstance(propertyType);
             var listInterface = (IList)list;
 
-            var valueList = (List<string>)new DataContractJsonSerializer(typeof(List<string>))
-                                               .ReadObject(new MemoryStream(Encoding.Default.GetBytes(storedValue)));
+            var valueList = settingsRepository.DeserializeList(storedValue);
 
             foreach (var value in valueList)
             {
@@ -181,13 +149,13 @@ namespace Carnac.Logic.Settings
             {
                 var value = setting.ReadValue(settingsToSave) ?? setting.DefaultValue;
                 if (value == null && setting.UnderlyingType.IsEnum)
-                    value = Enum.GetValues(setting.UnderlyingType).Cast<object>().First();
+                    value = EnumHelper.GetValues(setting.UnderlyingType).First();
                 if (IsList(setting.UnderlyingType) && value != null)
                     settings[GetKey<T>(setting)] = WriteList(value);
                 else
                     settings[GetKey<T>(setting)] = Convert.ToString(value ?? string.Empty, CultureInfo.InvariantCulture);
             }
-            settingsRepository.Save(FileKey<T>(), settings);
+            settingsRepository.Save(GetKey<T>(), settings);
         }
 
         private string WriteList(object value)
@@ -197,12 +165,7 @@ namespace Carnac.Logic.Settings
                 select Convert.ToString(item ?? string.Empty, CultureInfo.CurrentCulture))
                 .ToList();
 
-            var ms = new MemoryStream();
-            var writer = JsonReaderWriterFactory.CreateJsonWriter(ms);
-            new DataContractJsonSerializer(typeof(List<string>)).WriteObject(ms, list);
-            writer.Flush();
-            var jsonString = Encoding.Default.GetString(ms.ToArray());
-            return jsonString;
+            return settingsRepository.SerializeList(list);
         }
 
         internal static string GetKey<T>(SettingDescriptor setting)
@@ -227,7 +190,7 @@ namespace Carnac.Logic.Settings
 
         public T ResetToDefaults<T>() where T : new()
         {
-            settingsRepository.Save(FileKey<T>(), new Dictionary<string, string>());
+            settingsRepository.Save(GetKey<T>(), new Dictionary<string, string>());
 
             var type = typeof (T);
             if (cache.ContainsKey(type))
@@ -308,5 +271,26 @@ namespace Carnac.Logic.Settings
 #pragma warning restore 67
         }
     }
+
+    public static class EnumHelper
+    {
+        public static IEnumerable<T> GetValues<T>()
+        {
+            return GetValues(typeof(T))
+                .OfType<T>();
+        }
+
+        public static IEnumerable<object> GetValues(Type enumType)
+        {
+            if (!enumType.IsEnum)
+                throw new ArgumentException("enumType must be an Enum type", "enumType");
+
+            return enumType
+                .GetFields()
+                .Where(field => field.IsLiteral)
+                .Select(field => field.GetValue(enumType));
+        }
+    }
+
     // ReSharper restore InconsistentNaming
 }
