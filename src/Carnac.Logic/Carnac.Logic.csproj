@@ -76,6 +76,7 @@
     <Compile Include="PasswordModeService.cs" />
     <Compile Include="ReplaceKey.cs" />
     <Compile Include="ScreenManager.cs" />
+    <Compile Include="Settings\IsolatedStorageSettingsStore.cs" />
     <Compile Include="Settings\SettingsProvider.cs" />
     <Compile Include="ShortcutCollection.cs" />
     <Compile Include="ShortcutProvider.cs" />
