@@ -17,11 +17,11 @@ shortcuts:
       keys:
       - Ctrl+\,Ctrl+N
 
-    - name: Build.BuildSolution
+    - name: Build Solution
       keys:
       - Ctrl+Shift+B
 
-    - name: Build.Cancel
+    - name: Cancel Build
       keys:
       - Ctrl+Break
 
@@ -266,225 +266,209 @@ shortcuts:
       keys:
       - Alt+F9,S
 
-    - name: Edit.Copy
+    - name: Copy
       keys:
       - Ctrl+C
       - Ctrl+Ins
 
-    - name: Edit.Cut
+    - name: Cut
       keys:
       - Ctrl+X
       - Shift+Del
 
-    - name: Edit.CycleClipboardRing
+    - name: CycleClipboardRing
       keys:
       - Ctrl+Shift+V
       - Ctrl+Shift+Ins
 
-    - name: Edit.Delete
-      keys:
-      - Del
-
-    - name: Edit.Find
+    - name: Find
       keys:
       - Ctrl+F
 
-    - name: Edit.FindAllReferences
+    - name: FindAllReferences
       keys:
       - Shift+F12
 
-    - name: Edit.FindinFiles
+    - name: FindinFiles
       keys:
       - Ctrl+Shift+F
 
-    - name: Edit.FindNext
+    - name: FindNext
       keys:
       - F3
 
-    - name: Edit.FindNextSelected
+    - name: FindNextSelected
       keys:
       - Ctrl+F3
 
-    - name: Edit.FindPrevious
+    - name: FindPrevious
       keys:
       - Shift+F3
 
-    - name: Edit.FindPreviousSelected
+    - name: FindPreviousSelected
       keys:
       - Ctrl+Shift+F3
 
-    - name: Edit.FindSymbol
+    - name: FindSymbol
       keys:
       - Alt+F12
 
-    - name: Edit.GenerateMethod
+    - name: GenerateMethod
       keys:
       - Ctrl+K,Ctrl+M
 
-    - name: Edit.GoTo
+    - name: GoTo
       keys:
       - Ctrl+G
 
-    - name: Edit.GoToDeclaration
+    - name: GoToDeclaration
       keys:
       - Ctrl+F12
 
-    - name: Edit.GoToDefinition
+    - name: GoToDefinition
       keys:
       - F12
 
-    - name: Edit.GoToFindCombo
+    - name: GoToFindCombo
       keys:
       - Ctrl+D
 
-    - name: Edit.GoToNextLocation
+    - name: GoToNextLocation
       keys:
       - F8
 
-    - name: Edit.GoToPrevLocation
+    - name: GoToPrevLocation
       keys:
       - Shift+F8
 
-    - name: Edit.InsertSnippet
+    - name: InsertSnippet
       keys:
       - Ctrl+K,Ctrl+X
 
-    - name: Edit.MoveControlDown
+    - name: MoveControlDown
       keys:
       - Ctrl+Down Arrow
 
-    - name: Edit.MoveControlDownGrid
+    - name: MoveControlDownGrid
       keys:
       - Down Arrow
 
-    - name: Edit.MoveControlLeft
+    - name: MoveControlLeft
       keys:
       - Ctrl+Left Arrow
 
-    - name: Edit.MoveControlLeftGrid
+    - name: MoveControlLeftGrid
       keys:
       - Left Arrow
 
-    - name: Edit.MoveControlRight
+    - name: MoveControlRight
       keys:
       - Ctrl+Right Arrow
 
-    - name: Edit.MoveControlRightGrid
+    - name: MoveControlRightGrid
       keys:
       - Right Arrow
 
-    - name: Edit.MoveControlUp
+    - name: MoveControlUp
       keys:
       - Ctrl+Up Arrow
 
-    - name: Edit.MoveControlUpGrid
+    - name: MoveControlUpGrid
       keys:
       - Up Arrow
 
-    - name: Edit.NavigateTo
+    - name: NavigateTo
       keys:
       - Ctrl+,
 
-    - name: Edit.NextBookmark
+    - name: NextBookmark
       keys:
       - Ctrl+K,Ctrl+N
 
-    - name: Edit.NextBookmarkInFolder
+    - name: NextBookmarkInFolder
       keys:
       - Ctrl+Shift+K,Ctrl+Shift+N
 
-    - name: Edit.OpenFile
+    - name: OpenFile
       keys:
       - Ctrl+Shift+G
 
-    - name: Edit.Paste
+    - name: Paste
       keys:
       - Ctrl+V
       - Shift+Ins
 
-    - name: Edit.PreviousBookmark
+    - name: PreviousBookmark
       keys:
       - Ctrl+K,Ctrl+P
 
-    - name: Edit.PreviousBookmarkInFolder
+    - name: PreviousBookmarkInFolder
       keys:
       - Ctrl+Shift+K,Ctrl+Shift+P
 
-    - name: Edit.QuickFindSymbol
+    - name: QuickFindSymbol
       keys:
       - Shift+Alt+F12
 
-    - name: Edit.Redo
+    - name: Redo
       keys:
       - Ctrl+Y
       - Ctrl+Shift+Z
       - Shift+Alt+Bkspce
 
-    - name: Edit.Replace
+    - name: Replace
       keys:
       - Ctrl+H
 
-    - name: Edit.ReplaceinFiles
+    - name: ReplaceinFiles
       keys:
       - Ctrl+Shift+H
 
-    - name: Edit.SelectAll
+    - name: SelectAll
       keys:
       - Ctrl+A
 
-    - name: Edit.SelectNextControl
-      keys:
-      - Tab
-
-    - name: Edit.SelectPreviousControl
-      keys:
-      - Shift+Tab
-
-    - name: Edit.ShowTileGrid
-      keys:
-      - Enter
-
-    - name: Edit.SizeControlDown
+    - name: SizeControlDown
       keys:
       - Ctrl+Shift+Down Arrow
 
-    - name: Edit.SizeControlDownGrid
+    - name: SizeControlDownGrid
       keys:
       - Shift+Down Arrow
 
-    - name: Edit.SizeControlLeft
+    - name: SizeControlLeft
       keys:
       - Ctrl+Shift+Left Arrow
 
-    - name: Edit.SizeControlLeftGrid
+    - name: SizeControlLeftGrid
       keys:
       - Shift+Left Arrow
 
-    - name: Edit.SizeControlRight
+    - name: SizeControlRight
       keys:
       - Ctrl+Shift+Right Arrow
 
-    - name: Edit.SizeControlRightGrid
+    - name: SizeControlRightGrid
       keys:
       - Shift+Right Arrow
 
-    - name: Edit.SizeControlUp
+    - name: SizeControlUp
       keys:
       - Ctrl+Shift+Up Arrow
 
-    - name: Edit.SizeControlUpGrid
+    - name: SizeControlUpGrid
       keys:
       - Shift+Up Arrow
 
-    - name: Edit.StopSearch
+    - name: StopSearch
       keys:
       - Alt+F3,S
 
-    - name: Edit.SurroundWith
+    - name: SurroundWith
       keys:
       - Ctrl+K,Ctrl+S
 
-    - name: Edit.Undo
+    - name: Undo
       keys:
       - Ctrl+Z
       - Alt+Bkspce
@@ -514,39 +498,39 @@ shortcuts:
       keys:
       - Alt+F4
 
-    - name: File.NewFile
+    - name: New File
       keys:
       - Ctrl+N
 
-    - name: File.NewProject
+    - name: New Project
       keys:
       - Ctrl+Shift+N
 
-    - name: File.NewWebSite
+    - name: New WebSite
       keys:
       - Shift+Alt+N
 
-    - name: File.OpenFile
+    - name: Open File
       keys:
       - Ctrl+O
 
-    - name: File.OpenProject
+    - name: Open Project
       keys:
       - Ctrl+Shift+O
 
-    - name: File.OpenWebSite
+    - name: Open WebSite
       keys:
       - Shift+Alt+O
 
-    - name: File.Print
+    - name: Print
       keys:
       - Ctrl+P
 
-    - name: File.SaveAll
+    - name: Save All
       keys:
       - Ctrl+Shift+S
 
-    - name: File.SaveSelectedItems
+    - name: Save
       keys:
       - Ctrl+S
 
