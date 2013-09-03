@@ -166,8 +166,8 @@
                                     <DataTrigger Binding="{Binding .}"
                                                  Value=" ">
                                         <Setter TargetName="regular"
-                                                Property="Control.Width"
-                                                Value="20" />
+                                                Property="Control.MinWidth"
+                                                Value="10" />
                                     </DataTrigger>
                                     <DataTrigger Binding="{Binding .}"
                                                  Value="Return">
