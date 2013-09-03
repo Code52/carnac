@@ -23,7 +23,6 @@ namespace Carnac.ViewModels
 
         readonly ISettingsProvider settingsProvider;
         readonly IMessageProvider messageProvider;
-        readonly KeyShowViewModel keyShowViewModel;
 
         readonly TimeSpan fiveseconds = TimeSpan.FromSeconds(5);
         readonly TimeSpan sixseconds = TimeSpan.FromSeconds(6);
@@ -46,10 +45,11 @@ namespace Carnac.ViewModels
 
             PlaceScreen();
 
-            keyShowViewModel = new KeyShowViewModel(Keys, Settings);
+            var keyShowViewModel = new KeyShowViewModel(Keys, Settings);
             windowManager.ShowWindow(keyShowViewModel);
 
             timerToken = timerFactory.Start(1000, Cleanup);
+            DisplayName = "Carnac";
         }
 
         public ObservableCollection<Message> Keys { get; private set; }
@@ -58,12 +58,6 @@ namespace Carnac.ViewModels
         public DetailedScreen SelectedScreen { get; set; }
 
         public PopupSettings Settings { get; set; }
-
-        public override string DisplayName
-        {
-            get { return "Carnac"; }
-            set { }
-        }
 
         public string Version
         {
