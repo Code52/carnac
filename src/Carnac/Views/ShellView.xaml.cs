@@ -5,7 +5,6 @@ using System.Reflection;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Forms;
-using System.Windows.Input;
 using Carnac.Logic.Native;
 using Carnac.Utilities;
 using Carnac.ViewModels;
@@ -49,14 +48,8 @@ namespace Carnac.Views
         {
             Show();
             WindowState = WindowState.Normal;
-            this.Topmost = true;  // When it comes back, make sure it's on top...
-            this.Topmost = false; // and then it doesn't need to be anymore.
-        }
-
-        private void OnMouseDown(object sender, MouseButtonEventArgs e)
-        {
-            if (e.LeftButton == MouseButtonState.Pressed)
-                DragMove();
+            Topmost = true;  // When it comes back, make sure it's on top...
+            Topmost = false; // and then it doesn't need to be anymore.
         }
 
         protected override void OnStateChanged(EventArgs e)
@@ -72,7 +65,7 @@ namespace Carnac.Views
         protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
         {
             base.OnClosing(e);
-            System.Windows.Application.Current.Shutdown();
+            Application.Current.Shutdown();
         }
 
         private void RadioChecked(object sender, RoutedEventArgs e)
@@ -96,7 +89,7 @@ namespace Carnac.Views
     public class PlacementMarginConverter : IMultiValueConverter
     {
         public object Convert(object[] values, Type targetType, object parameter,
-            System.Globalization.CultureInfo culture)
+            CultureInfo culture)
         {
             if ((bool)values[2] == false || values[0] == DependencyProperty.UnsetValue || values[1] == DependencyProperty.UnsetValue)
                 return new Thickness(0);
@@ -104,19 +97,20 @@ namespace Carnac.Views
             var or = (Thickness)values[0];
             var sc = (DetailedScreen)values[1];
 
-            Thickness th = new Thickness();
-
-            th.Top = or.Top * (sc.RelativeHeight / sc.Height);
-            th.Bottom = or.Bottom * (sc.RelativeHeight / sc.Height);
-            th.Left = or.Left * (sc.RelativeWidth / sc.Width);
-            th.Right = or.Right * (sc.RelativeWidth / sc.Width);
+            var th = new Thickness
+            {
+                Top = or.Top*(sc.RelativeHeight/sc.Height),
+                Bottom = or.Bottom*(sc.RelativeHeight/sc.Height),
+                Left = or.Left*(sc.RelativeWidth/sc.Width),
+                Right = or.Right*(sc.RelativeWidth/sc.Width)
+            };
 
             return th;
 
         }
 
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter,
-            System.Globalization.CultureInfo culture)
+            CultureInfo culture)
         {
             throw new NotImplementedException();
         }

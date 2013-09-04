@@ -16,3 +16,5 @@ post-build*
 _ReSharper.*
 deploy-to-ec2*
 *.ncrunchsolution
+*.orig
+Thumbs.db

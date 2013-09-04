@@ -7,7 +7,6 @@
                       xmlns:views="clr-namespace:Carnac.Views"
                       xmlns:viewModels="clr-namespace:Carnac.ViewModels"
                       xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-                      MouseDown="OnMouseDown"
                       Icon="../icon.ico"
         ShowTitleBar="False"
         mc:Ignorable="d"
@@ -74,7 +73,8 @@
     <Window.Foreground>
         <SolidColorBrush Color="{DynamicResource BlackBrush}" />
     </Window.Foreground>
-    <TabControl Margin="0,12">
+
+    <TabControl>
         <TabItem Header="General">
             <StackPanel Margin="10,0,0,0" Orientation="Vertical">
                 <ItemsControl ItemsSource="{Binding Screens}" BorderBrush="{x:Null}" Background="{x:Null}" VerticalAlignment="Top" Foreground="White">

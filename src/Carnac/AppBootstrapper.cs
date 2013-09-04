@@ -20,7 +20,6 @@ namespace Carnac
         /// </summary>
         protected override void Configure()
         {
-
             Aggregator = new EventAggregator();
 
             var catalog = new AggregateCatalog(

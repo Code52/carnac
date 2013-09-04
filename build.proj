@@ -1,30 +1,175 @@
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  
+
   <UsingTask AssemblyFile=".\tools\xunit\xunit.runner.msbuild.dll" TaskName="Xunit.Runner.MSBuild.xunit" />
 
   <PropertyGroup>
-  	<OutputPath>.\src\Carnac\bin\$(Configuration)</OutputPath>
+    <Configuration Condition="'$(Configuration)' == ''">Debug</Configuration>
+    <Root>$(MSBuildProjectDirectory)\</Root>
+    <CarnacProjectDir>$(Root)src\Carnac\</CarnacProjectDir>
+    <OutputPath>$(CarnacProjectDir)bin\$(Configuration)\</OutputPath>
   </PropertyGroup>
+
+  <!--
+============================================================
+            RegexTransform
+ 
+Transforms the input Items parameter by evaluating the
+regular expression in their Find metadata and
+replacing with their ReplaceWith metadata. Optional, the
+options for the regular expression evaluation can be specified.
+ 
+Example input item:
+        <RegexTransform Include="$(BuildRoot)Src\GlobalAssemblyInfo.cs">
+            <Find>AssemblyFileVersion\(".*?"\)</Find>
+            <ReplaceWith>AssemblyFileVersion("$(FileVersion)")</ReplaceWith>
+            <Options>Multiline | IgnorePatternWhitespace</Options>
+        </RegexTransform>
+ 
+Invoking the target:
+    <RegexTransform Items="@(RegexTransform)" />
+============================================================
+-->
+  <UsingTask TaskName="RegexTransform"
+             TaskFactory="CodeTaskFactory"
+             AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
+    <ParameterGroup>
+      <Items ParameterType="Microsoft.Build.Framework.ITaskItem[]" />
+    </ParameterGroup>
+    <Task>
+      <Using Namespace="System.IO" />
+      <Using Namespace="System.Text.RegularExpressions" />
+      <Using Namespace="Microsoft.Build.Framework" />
+      <Code Type="Fragment"
+            Language="cs">
+        <![CDATA[
+       foreach(var item in Items)
+       {
+         string fileName = item.GetMetadata("FullPath");
+         string find = item.GetMetadata("Find");
+         string replaceWith = item.GetMetadata("ReplaceWith");
+         string optionsValue = item.GetMetadata("Options") ?? "";
+ 
+         var options = string.IsNullOrWhiteSpace(optionsValue) ?
+             RegexOptions.None : (RegexOptions)Enum.Parse(typeof(RegexOptions), optionsValue.Replace('|', ','));
+ 
+         if(!File.Exists(fileName))
+         {
+           Log.LogError("Could not find file: {0}", fileName);
+           return false;
+         }
+         string content = File.ReadAllText(fileName);
+         File.WriteAllText(
+           fileName,
+           Regex.Replace(
+             content,
+             find,
+             replaceWith,
+             options
+           )
+         );
+       }
+     ]]>
+      </Code>
+    </Task>
+  </UsingTask>
 
   <Target Name="Compile">
     <Message Text=" ===========Compiling code===========" Importance="High" />
-    <MSBuild Projects="./src/Carnac.sln" Properties="Configuration=$(Configuration)" />
+    <MSBuild Projects="$(Root)src\Carnac.sln" Properties="Configuration=$(Configuration)" />
   </Target>
 
   <Target Name="Test" DependsOnTargets="Compile">
 
-  	<Message Text="===========Tests===========" Importance="High" />
+    <Message Text="===========Tests===========" Importance="High" />
 
-  	<ItemGroup>
-  		<TestFiles Include="src\Carnac.Tests\bin\$(Configuration)\*Tests.dll" />
-	</ItemGroup>
+    <ItemGroup>
+      <TestFiles Include="$(Root)src\Carnac.Tests\bin\$(Configuration)\*Tests.dll" />
+    </ItemGroup>
 
     <xunit Assembly="@(TestFiles)" />
   </Target>
 
   <Target Name="Package" DependsOnTargets="Test">
+    <!--http://msdn.microsoft.com/en-us/library/6wc2ccdc.aspx-->
+    <PropertyGroup>
+      <Thumbprint>
+        <!-- Insert generated thumbprint here -->
+      </Thumbprint>
+      <DeployUrl></DeployUrl>
+      <SupportUrl>https://github.com/Code52/carnac</SupportUrl>
+      <Version Condition="'$(Version)' == ''">0.0.0.9</Version>
+      <VersionDir>$(OutputPath)$(Version)\</VersionDir>
+      <AppManifest>$(VersionDir)Carnac.exe.manifest</AppManifest>
+    </PropertyGroup>
+    <ItemGroup>
+      <Dependencies Include="$(OutputPath)*.dll" />
+      <Keymaps Include="$(OutputPath)Keymaps\*.*" />
+    </ItemGroup>
 
-  	
+    <Move SourceFiles="@(Keymaps)" DestinationFolder="$(VersionDir)Keymaps" />
+    <Move SourceFiles="@(Dependencies)" DestinationFolder="$(VersionDir)" />
+    <Move SourceFiles="$(OutputPath)Carnac.exe" DestinationFolder="$(VersionDir)" />
+    <Move SourceFiles="$(OutputPath)Carnac.pdb" DestinationFolder="$(VersionDir)" />
+    <Copy SourceFiles="$(CarnacProjectDir)icon.embedded.ico" DestinationFolder="$(VersionDir)" />
+
+    <ItemGroup>
+      <EntryPoint Include="$(VersionDir)Carnac.exe" />
+      <Files Include="$(VersionDir)Carnac.pdb">
+        <IsDataFile>true</IsDataFile>
+      </Files>
+      <KeymapFiles Include="$(VersionDir)Keymaps\*.*">
+        <IsDataFile>true</IsDataFile>
+      </KeymapFiles>
+      <ClickOnceDependencies Include="$(VersionDir)*.dll">
+        <AssemblyType>Managed</AssemblyType>
+      </ClickOnceDependencies>
+      <IconFile Include="$(VersionDir)icon.embedded.ico"/>
+      <FilesToRename Include="$(VersionDir)**\*.*" Exclude="**\*.manifest" />
+    </ItemGroup>
+
+    <CreateItem Include="@(KeymapFiles)" AdditionalMetadata="TargetPath=Keymaps/%(Filename)%(Extension)">
+      <Output TaskParameter="Include" ItemName="KeymapFiles"/>
+    </CreateItem>
+
+    <GenerateApplicationManifest
+            AssemblyName="Carnac.exe"
+            AssemblyVersion="$(Version)"
+            Description="TestApp"
+            EntryPoint="@(EntryPoint)"
+            Files="@(Files)"
+            IconFile="@(IconFile)"
+            OutputManifest="$(AppManifest)"
+            Dependencies="@(ClickOnceDependencies)" />
+
+    <GenerateDeploymentManifest
+            AssemblyName="Carnac.application"
+            AssemblyVersion="$(Version)"
+            DeploymentUrl="$(DeployUrl)"
+            Description="TestDeploy"
+            EntryPoint="$(AppManifest)"
+            MapFileExtensions="True"
+            Install="true"
+            OutputManifest="$(OutputPath)Carnac.application"
+            Product="Carnac"
+            Publisher="Code52"
+            SupportUrl="$(SupportUrl)"
+            UpdateEnabled="false">
+      <Output
+          ItemName="DeployManifest"
+          TaskParameter="OutputManifest"/>
+    </GenerateDeploymentManifest>
+    
+    <ItemGroup>
+      <RegexTransform Include="$(OutputPath)Carnac.application">
+        <Find><![CDATA[codebase="Carnac.exe.manifest"]]></Find>
+        <ReplaceWith>codebase="$(Version)\Carnac.exe.manifest"</ReplaceWith>
+        <Options>Singleline</Options>
+      </RegexTransform>
+    </ItemGroup>
+
+    <RegexTransform Items="@(RegexTransform)" />
+
+    <Move SourceFiles="@(FilesToRename)" DestinationFiles="@(FilesToRename->'%(RootDir)%(Directory)%(FileName)%(Extension).deploy')" />
   </Target>
 
 

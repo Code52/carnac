@@ -17,6 +17,7 @@ namespace Carnac.Logic
         {
             string folder = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName) + @"\Keymaps\";
             string filter = "*.yml";
+            if (!Directory.Exists(folder)) return;
             string[] files = Directory.GetFiles(folder, filter);
 
             var yaml = new YamlStream();
