@@ -173,4 +173,15 @@ Invoking the target:
   </Target>
 
 
+  <Target Name="PublishInstallToAzure">
+
+    <!--To build and publish to azure: msbuild build.proj /p:BlobTargetUrl=https://myaccount.blob.core.windows.net/mycontainer/ /p:BlobTargetKey=key /target:PublishInstallToAzure-->
+    <!--$(BlobTargetUrl) = https://myaccount.blob.core.windows.net/mycontainer/ -->
+
+    <!--Upload everything except the application manifest as it should be done last (once everything else is uploaded)-->
+    <Move SourceFiles="$(OutputPath)Carnac.application" DestinationFolder="$(OutputPath)ClickOnceApplicationFile\" />
+    <Exec Command="$(Root)tools\AzCopy.exe $(OutputPath) $(BlobTargetUrl) /destkey:$(BlobTargetKey) /S /V /Y" />
+    <Exec Command="$(Root)tools\AzCopy.exe $(OutputPath)ClickOnceApplicationFile\ $(BlobTargetUrl) /destkey:$(BlobTargetKey) /S /V /Y" />
+  </Target>
+
 </Project>
