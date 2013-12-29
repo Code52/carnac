@@ -2,6 +2,9 @@
 
 A keyboard logging and presentation utility for presentations, screencasts, and to help you become a better keyboard user.
 
+### Installation
+You can install via ClickOnce from [http://ginnivan.blob.core.windows.net/carnac/Carnac.application](http://ginnivan.blob.core.windows.net/carnac/Carnac.application)
+
 ### Getting started
 
 **Getting started with Git and GitHub**
