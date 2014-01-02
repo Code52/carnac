@@ -95,7 +95,7 @@ Invoking the target:
       <Thumbprint>
         <!-- Insert generated thumbprint here -->
       </Thumbprint>
-      <DeployUrl></DeployUrl>
+      <DeployUrl Condition="'$(DeployUrl)' == ''"></DeployUrl>
       <SupportUrl>https://github.com/Code52/carnac</SupportUrl>
       <Version Condition="'$(Version)' == ''">0.0.0.9</Version>
       <VersionDir>$(OutputPath)$(Version)\</VersionDir>
