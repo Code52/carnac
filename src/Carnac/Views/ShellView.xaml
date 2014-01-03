@@ -7,11 +7,12 @@
                       xmlns:views="clr-namespace:Carnac.Views"
                       xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" x:Class="Carnac.Views.ShellView"
                       Width="610" Height="420" Icon="../icon.ico" ShowTitleBar="False"
+                      Foreground="{DynamicResource BlackBrush}"
                       d:DataContext="{d:DesignInstance viewModels:ShellViewModel}" mc:Ignorable="d">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colours.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colors.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
                 <ResourceDictionary
@@ -66,10 +67,6 @@
 
         </ResourceDictionary>
     </Window.Resources>
-
-    <Window.Foreground>
-        <SolidColorBrush Color="{DynamicResource BlackBrush}" />
-    </Window.Foreground>
 
     <TabControl>
         <TabItem Header="General">
