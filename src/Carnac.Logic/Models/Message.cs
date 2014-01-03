@@ -1,6 +1,7 @@
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows.Documents;
 
 namespace Carnac.Logic.Models
 {
@@ -30,6 +31,8 @@ namespace Carnac.Logic.Models
         public bool IsDeleting { get; set; }
 
         private string shortcutName;
+        readonly string[] repeatDetectionText = { "Back", "Left", "Right", "Down", "Up"};
+
         public string ShortcutName
         {
             get { return shortcutName; }
@@ -61,7 +64,7 @@ namespace Carnac.Logic.Models
         {
             var formattedText = Format(text, lastKeyPress.IsShortcut);
 
-            if (formattedText == "Back" && lastText == formattedText)
+            if (repeatDetectionText.Contains(text) && Text.Any())
             {
                 var repeatText = string.Format(" x {0} ", ++lastTextRepeatCount);
                 if (Text.Last() == lastText)

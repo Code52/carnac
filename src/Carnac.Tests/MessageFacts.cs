@@ -23,6 +23,20 @@ namespace Carnac.Tests
         }
 
         [Fact]
+        public void message_groups_multiple_arrow_key_presses_together()
+        {
+            // arrange
+            var message = new Message();
+            message.AddKey(new KeyPress(null, new InterceptKeyEventArgs(Keys.Down, KeyDirection.Down, false, false, false), false, new[] { "Down" }));
+
+            // act
+            message.AddKey(new KeyPress(null, new InterceptKeyEventArgs(Keys.Down, KeyDirection.Down, false, false, false), false, new[] { "Down" }));
+
+            // assert
+            Assert.Equal("↓ x 2 ", string.Join(string.Empty, message.Text));
+        }
+
+        [Fact]
         public void multiple_shortcuts_have_comma_inserted_between_input()
         {
             // arrange
