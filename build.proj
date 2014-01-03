@@ -6,7 +6,7 @@
     <Configuration Condition="'$(Configuration)' == ''">Debug</Configuration>
     <Root>$(MSBuildProjectDirectory)\</Root>
     <CarnacProjectDir>$(Root)src\Carnac\</CarnacProjectDir>
-    <OutputPath>$(CarnacProjectDir)bin\$(Configuration)\</OutputPath>
+    <OutputPath Condition="'$(OutputPath)' == ''">$(CarnacProjectDir)bin\$(Configuration)\</OutputPath>
   </PropertyGroup>
 
   <!--
