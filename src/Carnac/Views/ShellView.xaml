@@ -8,7 +8,9 @@
                       xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" x:Class="Carnac.Views.ShellView"
                       Width="610" Height="420" Icon="../icon.ico" ShowTitleBar="False"
                       Foreground="{DynamicResource BlackBrush}"
-                      d:DataContext="{d:DesignInstance viewModels:ShellViewModel}" mc:Ignorable="d">
+                      d:DataContext="{d:DesignInstance viewModels:ShellViewModel}" mc:Ignorable="d"
+                      ShowMinButton="False" ShowMaxRestoreButton="False"
+                      SaveWindowPosition="True">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

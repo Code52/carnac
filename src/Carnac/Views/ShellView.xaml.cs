@@ -1,9 +1,8 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Drawing;
-using System.Globalization;
 using System.Reflection;
 using System.Windows;
-using System.Windows.Data;
 using System.Windows.Forms;
 using Carnac.Logic.Native;
 using Carnac.Utilities;
@@ -25,27 +24,32 @@ namespace Carnac.Views
                 Application.Current.Shutdown();
             }
 
-            var item = new MenuItem
+            var exitMenuItem = new MenuItem
             {
-                Text = "Exit"
+                Text = Properties.Resources.ShellView_Exit
             };
-
-            item.Click += (sender, args) => Close();
 
             var iconStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Carnac.icon.embedded.ico");
 
             var ni = new NotifyIcon
                          {
                              Icon = new Icon(iconStream),
-                             ContextMenu = new ContextMenu(new[] { item })
+                             ContextMenu = new ContextMenu(new[] { exitMenuItem })
                          };
 
-            ni.Click += NotifyIconClick;
+            exitMenuItem.Click += (sender, args) =>
+            {
+                ni.Visible = false;
+                Application.Current.Shutdown();
+            };
+            ni.MouseClick += NotifyIconClick;
             ni.Visible = true;
         }
 
-        private void NotifyIconClick(object sender, EventArgs e)
+        void NotifyIconClick(object sender, MouseEventArgs mouseEventArgs)
         {
+            if (mouseEventArgs.Button == MouseButtons.Right) return;
+
             Show();
             WindowState = WindowState.Normal;
             Topmost = true;  // When it comes back, make sure it's on top...
@@ -62,10 +66,11 @@ namespace Carnac.Views
             }
         }
 
-        protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
+        protected override void OnClosing(CancelEventArgs e)
         {
+            e.Cancel = true;
+            Hide();
             base.OnClosing(e);
-            Application.Current.Shutdown();
         }
 
         private void RadioChecked(object sender, RoutedEventArgs e)
@@ -85,36 +90,4 @@ namespace Carnac.Views
             dc.SelectedScreen = tag;
         }
     }
-
-    public class PlacementMarginConverter : IMultiValueConverter
-    {
-        public object Convert(object[] values, Type targetType, object parameter,
-            CultureInfo culture)
-        {
-            if ((bool)values[2] == false || values[0] == DependencyProperty.UnsetValue || values[1] == DependencyProperty.UnsetValue)
-                return new Thickness(0);
-
-            var or = (Thickness)values[0];
-            var sc = (DetailedScreen)values[1];
-
-            var th = new Thickness
-            {
-                Top = or.Top*(sc.RelativeHeight/sc.Height),
-                Bottom = or.Bottom*(sc.RelativeHeight/sc.Height),
-                Left = or.Left*(sc.RelativeWidth/sc.Width),
-                Right = or.Right*(sc.RelativeWidth/sc.Width)
-            };
-
-            return th;
-
-        }
-
-        public object[] ConvertBack(object value, Type[] targetTypes, object parameter,
-            CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-    
 }

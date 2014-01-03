@@ -78,11 +78,10 @@ namespace Carnac.ViewModels
         readonly List<string> components = new List<string>
                                                        {
                                                          "MahApps.Metro",
-                                                         "Analects",
+                                                         "Fody",
                                                          "Caliburn Micro",
                                                          "NSubstitute",
-                                                         "Reactive Extensions",
-                                                         "Notify Property Weaver"
+                                                         "Reactive Extensions"
                                                      };
         public string Authors
         {
@@ -174,6 +173,7 @@ namespace Carnac.ViewModels
 
             PlaceScreen();
 
+            Settings.SettingsConfigured = true;
             settingsProvider.SaveSettings(Settings);
         }
 

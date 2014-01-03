@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 using System.Linq;
+using System.Windows;
 using Caliburn.Micro;
 using Carnac.Logic;
 using Carnac.Logic.KeyMonitor;
+using Carnac.Logic.Models;
+using MahApps.Metro.Controls;
 using SettingsProviderNet;
 
 namespace Carnac
@@ -14,6 +17,8 @@ namespace Carnac
     {
         public static EventAggregator Aggregator { get; set; }
         CompositionContainer container;
+        CarnacWindowManager windowManager;
+        SettingsProvider settingsProvider;
 
         /// <summary>
         /// By default, we are configured to use MEF
@@ -31,9 +36,11 @@ namespace Carnac
             var batch = new CompositionBatch();
 
             batch.AddExportedValue<IKeyProvider>(new KeyProvider(InterceptKeys.Current, new PasswordModeService()));
-            batch.AddExportedValue<IWindowManager>(new WindowManager());
+            windowManager = new CarnacWindowManager();
+            batch.AddExportedValue<IWindowManager>(windowManager);
             batch.AddExportedValue<IEventAggregator>(new EventAggregator());
-            batch.AddExportedValue<ISettingsProvider>(new SettingsProvider(new RoamingAppDataStorage("Carnac")));
+            settingsProvider = new SettingsProvider(new RoamingAppDataStorage("Carnac"));
+            batch.AddExportedValue<ISettingsProvider>(settingsProvider);
             batch.AddExportedValue(container);
             batch.AddExportedValue(catalog);
 
@@ -43,7 +50,7 @@ namespace Carnac
         protected override object GetInstance(Type serviceType, string key)
         {
             string contract = string.IsNullOrEmpty(key) ? AttributedModelServices.GetContractName(serviceType) : key;
-            var exports = container.GetExportedValues<object>(contract);
+            var exports = container.GetExportedValues<object>(contract).ToArray();
 
             if (exports.Any())
                 return exports.First();
@@ -60,5 +67,15 @@ namespace Carnac
         {
             container.SatisfyImportsOnce(instance);
         }
+
+        protected override void OnStartup(object sender, StartupEventArgs e)
+        {
+            Shell = (IShell) IoC.GetInstance(typeof (IShell), null);
+            var window = windowManager.CreateWindow(Shell);
+            if (!settingsProvider.GetSettings<PopupSettings>().SettingsConfigured)
+                window.Show();
+        }
+
+        public IShell Shell { get; set; }
     }
 }

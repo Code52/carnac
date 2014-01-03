@@ -1,3 +1,4 @@
 ﻿namespace Carnac {
-    public interface IShell {}
+    public interface IShell {
+    }
 }
