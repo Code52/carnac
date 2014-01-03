@@ -1,6 +1,10 @@
 <ProjectConfiguration>
   <CopyReferencedAssembliesToWorkspace>false</CopyReferencedAssembliesToWorkspace>
   <ConsiderInconclusiveTestsAsPassing>false</ConsiderInconclusiveTestsAsPassing>
+  <PreloadReferencedAssemblies>false</PreloadReferencedAssemblies>
+  <AllowDynamicCodeContractChecking>true</AllowDynamicCodeContractChecking>
+  <AllowStaticCodeContractChecking>false</AllowStaticCodeContractChecking>
+  <AllowCodeAnalysis>false</AllowCodeAnalysis>
   <IgnoreThisComponentCompletely>false</IgnoreThisComponentCompletely>
   <RunPreBuildEvents>false</RunPreBuildEvents>
   <RunPostBuildEvents>false</RunPostBuildEvents>
@@ -8,10 +12,14 @@
   <InstrumentAssembly>true</InstrumentAssembly>
   <PreventSigningOfAssembly>false</PreventSigningOfAssembly>
   <AnalyseExecutionTimes>true</AnalyseExecutionTimes>
+  <DetectStackOverflow>true</DetectStackOverflow>
   <IncludeStaticReferencesInWorkspace>true</IncludeStaticReferencesInWorkspace>
   <DefaultTestTimeout>60000</DefaultTestTimeout>
   <UseBuildConfiguration></UseBuildConfiguration>
+  <UseBuildPlatform />
   <ProxyProcessPath></ProxyProcessPath>
   <UseCPUArchitecture>AutoDetect</UseCPUArchitecture>
-  <AdditionalFilesToInclude>..\tools\NotifyPropertyWeaverMsBuildTask.dll</AdditionalFilesToInclude>
+  <MSTestThreadApartmentState>STA</MSTestThreadApartmentState>
+  <BuildProcessArchitecture>x86</BuildProcessArchitecture>
+  <AdditionalFilesToInclude>..\packages\Fody.1.19.1.0\FodyCommon.dll;..\packages\Fody.1.19.1.0\FodyCommon.pdb;..\packages\Fody.1.19.1.0\FodyIsolated.dll;..\packages\Fody.1.19.1.0\FodyIsolated.pdb;..\packages\Fody.1.19.1.0\Mono.Cecil.dll;..\packages\Fody.1.19.1.0\Mono.Cecil.Mdb.dll;..\packages\Fody.1.19.1.0\Mono.Cecil.Mdb.pdb;..\packages\Fody.1.19.1.0\Mono.Cecil.pdb;..\packages\Fody.1.19.1.0\Mono.Cecil.Pdb.dll;..\packages\Fody.1.19.1.0\Mono.Cecil.Pdb.pdb;..\packages\Fody.1.19.1.0\Mono.Cecil.Rocks.dll;..\packages\Fody.1.19.1.0\Mono.Cecil.Rocks.pdb</AdditionalFilesToInclude>
 </ProjectConfiguration>
