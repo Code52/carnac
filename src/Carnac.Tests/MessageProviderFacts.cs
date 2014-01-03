@@ -5,8 +5,8 @@ using System.Windows.Forms;
 using Carnac.Logic;
 using Carnac.Logic.KeyMonitor;
 using Carnac.Logic.Models;
-using Carnac.Logic.Settings;
 using NSubstitute;
+using SettingsProviderNet;
 using Xunit;
 using Message = Carnac.Logic.Models.Message;
 

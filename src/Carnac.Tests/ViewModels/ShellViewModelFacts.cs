@@ -1,10 +1,10 @@
 ﻿using Caliburn.Micro;
 using Carnac.Logic;
 using Carnac.Logic.Models;
-using Carnac.Logic.Settings;
 using Carnac.Utilities;
 using Carnac.ViewModels;
 using NSubstitute;
+using SettingsProviderNet;
 using Xunit;
 using Action = System.Action;
 

@@ -4,7 +4,7 @@ using System.ComponentModel.Composition;
 using System.Linq;
 using System.Reactive.Subjects;
 using Carnac.Logic.Models;
-using Carnac.Logic.Settings;
+using SettingsProviderNet;
 using Message = Carnac.Logic.Models.Message;
 
 namespace Carnac.Logic
