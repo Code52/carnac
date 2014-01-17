@@ -9,6 +9,34 @@ namespace Carnac.Tests
     public class MessageFacts
     {
         [Fact]
+        public void message_does_not_group_different_letters()
+        {
+            // arrange
+            var message = new Message();
+            message.AddKey(new KeyPress(null, new InterceptKeyEventArgs(Keys.Back, KeyDirection.Down, false, false, false), false, new[] { "a" }));
+
+            // act
+            message.AddKey(new KeyPress(null, new InterceptKeyEventArgs(Keys.Back, KeyDirection.Down, false, false, false), false, new[] { "b" }));
+
+            // assert
+            Assert.Equal("ab", string.Join(string.Empty, message.Text));
+        }
+
+        [Fact]
+        public void message_does_not_group_letter_and_backspace()
+        {
+            // arrange
+            var message = new Message();
+            message.AddKey(new KeyPress(null, new InterceptKeyEventArgs(Keys.Back, KeyDirection.Down, false, false, false), false, new[] { "a" }));
+
+            // act
+            message.AddKey(new KeyPress(null, new InterceptKeyEventArgs(Keys.Back, KeyDirection.Down, false, false, false), false, new[] { "Back" }));
+
+            // assert
+            Assert.Equal("aBack", string.Join(string.Empty, message.Text));
+        }
+
+        [Fact]
         public void message_groups_multiple_backspace_key_presses_together()
         {
             // arrange
