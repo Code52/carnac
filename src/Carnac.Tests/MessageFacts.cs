@@ -51,7 +51,21 @@ namespace Carnac.Tests
         }
 
         [Fact]
-        public void message_groups_multiple_arrow_key_presses_together()
+        public void message_does_not_group_different_arrow_key_presses_together()
+        {
+            // arrange
+            var message = new Message();
+            message.AddKey(new KeyPress(null, new InterceptKeyEventArgs(Keys.Up, KeyDirection.Down, false, false, false), false, new[] { "Up" }));
+
+            // act
+            message.AddKey(new KeyPress(null, new InterceptKeyEventArgs(Keys.Down, KeyDirection.Down, false, false, false), false, new[] { "Down" }));
+
+            // assert
+            Assert.Equal("↑↓", string.Join(string.Empty, message.Text));
+        }
+
+        [Fact]
+        public void message_groups_multiple_equal_arrow_key_presses_together()
         {
             // arrange
             var message = new Message();
