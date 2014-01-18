@@ -64,7 +64,7 @@ namespace Carnac.Logic.Models
         {
             var formattedText = Format(text, lastKeyPress.IsShortcut);
 
-            if (repeatDetectionText.Contains(text) && Text.Any())
+            if (lastText == formattedText && repeatDetectionText.Contains(text) && Text.Any())
             {
                 var repeatText = string.Format(" x {0} ", ++lastTextRepeatCount);
                 if (Text.Last() == lastText)
