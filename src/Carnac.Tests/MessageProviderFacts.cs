@@ -12,21 +12,22 @@ using Message = Carnac.Logic.Models.Message;
 
 namespace Carnac.Tests
 {
-    public class MessageProviderFacts : IObserver<Message>
+    public class MessageProviderFacts
     {
         readonly Subject<InterceptKeyEventArgs> interceptKeysSource;
         readonly IShortcutProvider shortcutProvider;
         readonly MessageProvider messageProvider;
         readonly List<Message> messages = new List<Message>();
-        readonly ISettingsProvider settingsProvider;
 
         public MessageProviderFacts()
         {
-            settingsProvider = Substitute.For<ISettingsProvider>();
+            var settingsProvider = Substitute.For<ISettingsProvider>();
             settingsProvider.GetSettings<PopupSettings>().Returns(new PopupSettings());
             shortcutProvider = Substitute.For<IShortcutProvider>();
             interceptKeysSource = new Subject<InterceptKeyEventArgs>();
-            var keyProvider = new KeyProvider(interceptKeysSource, new PasswordModeService());
+            var source = Substitute.For<IInterceptKeys>();
+            source.GetKeyStream().Returns(interceptKeysSource);
+            var keyProvider = new KeyProvider(source, new PasswordModeService());
             messageProvider = new MessageProvider(keyProvider, shortcutProvider, settingsProvider);
         }
 
@@ -34,7 +35,7 @@ namespace Carnac.Tests
         public void key_with_modifiers_raises_a_new_message()
         {
             // arrange
-            messageProvider.Subscribe(this);
+            messageProvider.GetMessageStream().Subscribe(value => messages.Add(value));
             KeyStreams.LetterL().Play(interceptKeysSource);
 
             // act
@@ -48,7 +49,7 @@ namespace Carnac.Tests
         public void recognises_shortcuts()
         {
             // arrange
-            messageProvider.Subscribe(this);
+            messageProvider.GetMessageStream().Subscribe(value => messages.Add(value));
             shortcutProvider.GetShortcutsMatching(Arg.Any<IEnumerable<KeyPress>>())
                 .Returns(new []{new KeyShortcut("MyShortcut", new KeyPressDefinition(Keys.L, shiftPressed:true, controlPressed:true))});
 
@@ -64,7 +65,7 @@ namespace Carnac.Tests
         public void does_not_show_shortcut_name_on_partial_match()
         {
             // arrange
-            messageProvider.Subscribe(this);
+            messageProvider.GetMessageStream().Subscribe(value => messages.Add(value));
             shortcutProvider.GetShortcutsMatching(Arg.Any<IEnumerable<KeyPress>>())
                 .Returns(new[] { new KeyShortcut("SomeShortcut",
                     new KeyPressDefinition(Keys.U, controlPressed: true),
@@ -82,7 +83,7 @@ namespace Carnac.Tests
         public void does_show_shortcut_name_on_full_match()
         {
             // arrange
-            messageProvider.Subscribe(this);
+            messageProvider.GetMessageStream().Subscribe(value => messages.Add(value));
             shortcutProvider.GetShortcutsMatching(Arg.Any<IEnumerable<KeyPress>>())
                 .Returns(new[] { new KeyShortcut("SomeShortcut",
                     new KeyPressDefinition(Keys.U, controlPressed: true),
@@ -96,9 +97,5 @@ namespace Carnac.Tests
             Assert.Equal(1, messages.Count);
             Assert.Equal("SomeShortcut", messages[0].ShortcutName);
         }
-
-        public void OnNext(Message value) { messages.Add(value); }
-        public void OnError(Exception error) { }
-        public void OnCompleted() { }
     }
 }

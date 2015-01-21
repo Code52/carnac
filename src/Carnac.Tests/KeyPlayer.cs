@@ -5,7 +5,7 @@ using Carnac.Logic.KeyMonitor;
 
 namespace Carnac.Tests
 {
-    public class KeyPlayer : List<InterceptKeyEventArgs>, IObservable<InterceptKeyEventArgs>
+    public class KeyPlayer : List<InterceptKeyEventArgs>, IInterceptKeys
     {
         readonly Subject<InterceptKeyEventArgs> subject = new Subject<InterceptKeyEventArgs>();
 
@@ -29,6 +29,11 @@ namespace Carnac.Tests
             {
                 interceptKeysSource.OnNext(key);
             }
+        }
+
+        public IObservable<InterceptKeyEventArgs> GetKeyStream()
+        {
+            return subject;
         }
     }
 }

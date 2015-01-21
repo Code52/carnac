@@ -16,7 +16,7 @@ using System.Collections.Generic;
 namespace Carnac.ViewModels
 {
     [Export(typeof(IShell))]
-    public class ShellViewModel : Screen, IShell, IObserver<Message>
+    public class ShellViewModel : Screen, IShell
     {
         IDisposable keySubscription;
         readonly IDisposable timerToken;
@@ -120,7 +120,7 @@ namespace Carnac.ViewModels
 
         protected override void OnActivate()
         {
-            keySubscription = messageProvider.Subscribe(this);
+            keySubscription = messageProvider.GetMessageStream().Subscribe(OnNext, OnError, OnCompleted);
         }
 
         protected override void OnDeactivate(bool close)

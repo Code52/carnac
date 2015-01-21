@@ -1,35 +1,15 @@
 using System;
+using System.Reactive.Linq;
 using Microsoft.Win32;
 
 namespace Carnac.Logic.KeyMonitor
 {
     public class DesktopLockEventService : IDesktopLockEventService
     {
-        public event EventHandler<EventArgs> DesktopUnlockedEvent;
-        public event EventHandler<EventArgs> DesktopLockedEvent;
-
-        public DesktopLockEventService()
+        public IObservable<SessionSwitchEventArgs> GetSessionSwitchStream()
         {
-            SystemEvents.SessionSwitch += OnSystemEventsOnSessionSwitch;
-        }
-
-        void OnSystemEventsOnSessionSwitch(object sender, SessionSwitchEventArgs args)
-        {
-            if (args.Reason == SessionSwitchReason.SessionUnlock)
-            {
-                OnDesktopUnlockedEvent();
-            }
-        }
-
-        private void OnDesktopUnlockedEvent()
-        {
-            var handler = DesktopUnlockedEvent;
-            if (handler != null) handler(this, EventArgs.Empty);
-        }
-
-        public void Dispose()
-        {
-            SystemEvents.SessionSwitch += OnSystemEventsOnSessionSwitch;
+            return Observable.FromEvent<SessionSwitchEventHandler, SessionSwitchEventArgs>(
+                    add => SystemEvents.SessionSwitch += add, remove => SystemEvents.SessionSwitch -= remove);
         }
     }
 }
