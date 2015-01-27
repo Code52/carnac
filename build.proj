@@ -73,7 +73,12 @@ Invoking the target:
     </Task>
   </UsingTask>
 
-  <Target Name="Compile">
+  <Target Name="Restore">
+    <Message Text=" ===========Restoring NuGet packages===========" Importance="High" />
+    <Exec Command="$(Root)src\.nuget\nuget.exe restore $(Root)src\Carnac.sln" />
+  </Target>
+
+  <Target Name="Compile" DependsOnTargets="Restore">
     <Message Text=" ===========Compiling code===========" Importance="High" />
     <MSBuild Projects="$(Root)src\Carnac.sln" Properties="Configuration=$(Configuration)" />
   </Target>
