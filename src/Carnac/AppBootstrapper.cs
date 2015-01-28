@@ -8,7 +8,6 @@ using Caliburn.Micro;
 using Carnac.Logic;
 using Carnac.Logic.KeyMonitor;
 using Carnac.Logic.Models;
-using MahApps.Metro.Controls;
 using SettingsProviderNet;
 
 namespace Carnac
