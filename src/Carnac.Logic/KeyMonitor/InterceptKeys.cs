@@ -9,18 +9,13 @@ using Carnac.Logic.Win32Methods;
 
 namespace Carnac.Logic.KeyMonitor
 {
-    public interface IInterceptKeys
-    {
-        IObservable<InterceptKeyEventArgs> GetKeyStream();
-    }
-
     [PermissionSet(SecurityAction.LinkDemand, Name = "FullTrust")]
     [PermissionSet(SecurityAction.InheritanceDemand, Name = "FullTrust")]
     public class InterceptKeys : IInterceptKeys
     {
         public static readonly InterceptKeys Current = new InterceptKeys();
-        LowLevelKeyboardProc callback;
         readonly IObservable<InterceptKeyEventArgs> keyStream;
+        LowLevelKeyboardProc callback;
 
         private InterceptKeys()
         {

@@ -18,4 +18,4 @@ deploy-to-ec2*
 *.ncrunchsolution
 *.orig
 Thumbs.db
-src/Carnac.sln.ide
+src/Carnac.sln.ide/
