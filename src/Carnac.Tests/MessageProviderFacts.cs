@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Windows.Forms;
 using Carnac.Logic;
 using Carnac.Logic.KeyMonitor;
 using Carnac.Logic.Models;
+using Microsoft.Win32;
 using NSubstitute;
 using SettingsProviderNet;
 using Xunit;
@@ -27,7 +29,9 @@ namespace Carnac.Tests
             interceptKeysSource = new Subject<InterceptKeyEventArgs>();
             var source = Substitute.For<IInterceptKeys>();
             source.GetKeyStream().Returns(interceptKeysSource);
-            var keyProvider = new KeyProvider(source, new PasswordModeService());
+            var desktopLockEventService = Substitute.For<IDesktopLockEventService>();
+            desktopLockEventService.GetSessionSwitchStream().Returns(Observable.Never<SessionSwitchEventArgs>());
+            var keyProvider = new KeyProvider(source, new PasswordModeService(), desktopLockEventService);
             messageProvider = new MessageProvider(keyProvider, shortcutProvider, settingsProvider);
         }
 

@@ -35,7 +35,7 @@ namespace Carnac
 
             var batch = new CompositionBatch();
 
-            batch.AddExportedValue<IKeyProvider>(new KeyProvider(InterceptKeys.Current, new PasswordModeService()));
+            batch.AddExportedValue<IKeyProvider>(new KeyProvider(InterceptKeys.Current, new PasswordModeService(), new DesktopLockEventService()));
             windowManager = new CarnacWindowManager();
             batch.AddExportedValue<IWindowManager>(windowManager);
             batch.AddExportedValue<IEventAggregator>(new EventAggregator());
