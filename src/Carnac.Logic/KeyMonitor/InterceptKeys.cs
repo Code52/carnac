@@ -4,6 +4,7 @@ using System.Reactive.Subjects;
 using System.Runtime.InteropServices;
 using System.Security.Permissions;
 using System.Windows.Forms;
+using System.Windows.Input;
 
 namespace Carnac.Logic.KeyMonitor
 {
@@ -18,11 +19,74 @@ namespace Carnac.Logic.KeyMonitor
         bool disposed;
         IntPtr hookId = IntPtr.Zero;
         decimal subscriberCount;
+        readonly bool disposeDesktopUnlockedEventService;
+        readonly IDesktopLockEventService desktopLockEventService;
+        Keys? winKeyAtDesktopLocked;
 
         InterceptKeys()
+            :this(new DesktopLockEventService())
         {
+            // if needed, the other c'tor can be used to pass in an object owned by something
+            // else, in which case that owner would be responsible for disposing the object.
+            disposeDesktopUnlockedEventService = true;
+        }
+
+        InterceptKeys(IDesktopLockEventService desktopLockEventService)
+        {
+            if (desktopLockEventService == null) throw new ArgumentNullException("desktopLockEventService");
             subject = new Subject<InterceptKeyEventArgs>();
             callback = HookCallback;
+            this.desktopLockEventService = desktopLockEventService;
+            this.desktopLockEventService.DesktopUnlockedEvent += DesktopLockEventServiceDesktopUnlockEvent;
+            this.desktopLockEventService.DesktopUnlockedEvent += DesktopLockEventServiceDesktopLockEvent;
+        }
+
+        /// <summary>
+        /// Handle desktop lock event.
+        /// Keep track of the state of the Window key(s) when lock occurs so we can check their state
+        /// at unlock and simulate a key event to mirror current state of the windows keys, if needed.
+        /// </summary>
+        /// <param name="sender">who sent the event; not used, should be EventArgs.Empty</param>
+        /// <param name="e">the event args; not used, should be EventArgs.Empty</param>
+        void DesktopLockEventServiceDesktopLockEvent(object sender, EventArgs e)
+        {
+            // save which Win key is pressed, if any.
+            if(Keyboard.IsKeyDown(Key.LWin))
+            {
+                winKeyAtDesktopLocked = Keys.LWin;
+            }
+            else if (Keyboard.IsKeyDown(Key.RWin))
+            {
+                winKeyAtDesktopLocked = Keys.RWin;
+            }
+            else winKeyAtDesktopLocked = null;
+        }
+
+        /// <summary>
+        /// Handle desktop unlock event.
+        /// Simulate a key event to mirror current state of the windows keys, if needed.
+        /// </summary>
+        /// <param name="sender">who sent the event; not used, should be EventArgs.Empty</param>
+        /// <param name="e">the event args; not used, should be EventArgs.Empty</param>
+        void DesktopLockEventServiceDesktopUnlockEvent(object sender, EventArgs e)
+        {
+            if (!winKeyAtDesktopLocked.HasValue) return; // key wasn't pressed at lock
+            if (Keyboard.IsKeyDown(winKeyAtDesktopLocked.Value == Keys.LWin ? Key.LWin : Key.RWin))
+                return; // key still down
+
+            var interceptKeyEventArgs = new InterceptKeyEventArgs(
+                winKeyAtDesktopLocked.Value,
+                KeyDirection.Up,
+                Keyboard.IsKeyDown(Key.LeftAlt) || Keyboard.IsKeyDown(Key.RightAlt),
+                Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl),
+                Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift));
+
+            subject.OnNext(interceptKeyEventArgs);
+            Debug.Write(winKeyAtDesktopLocked.Value);
+            if (interceptKeyEventArgs.Handled)
+            {
+                Debug.WriteLine(" handled");
+            }
         }
 
         public static InterceptKeys Current
@@ -128,6 +192,13 @@ namespace Carnac.Logic.KeyMonitor
                     if (subject != null)
                     {
                         subject.Dispose();
+                    }
+
+                    desktopLockEventService.DesktopUnlockedEvent -= DesktopLockEventServiceDesktopLockEvent;
+
+                    if (disposeDesktopUnlockedEventService)
+                    {
+                        desktopLockEventService.Dispose();
                     }
                 }
 
