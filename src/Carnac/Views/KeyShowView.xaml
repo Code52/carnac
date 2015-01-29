@@ -8,7 +8,7 @@
     <Window.Resources>
         <CollectionViewSource x:Key="KeysViewSource" Source="{Binding Keys}">
             <CollectionViewSource.SortDescriptions>
-                <componentModel:SortDescription Direction="Descending" PropertyName="StartingTime" />
+                <componentModel:SortDescription Direction="Descending" PropertyName="LastMessage" />
             </CollectionViewSource.SortDescriptions>
         </CollectionViewSource>
 

@@ -22,8 +22,8 @@ namespace Carnac.Logic
             oneSecond = TimeSpan.FromSeconds(1);
             return acc.ProcessName != key.ProcessName ||
                    key.LastMessage.Subtract(acc.LastMessage) > oneSecond ||
-                   acc.IsShortcut ||
-                   key.IsShortcut;
+                   !acc.CanBeMerged ||
+                   !key.CanBeMerged;
         }
     }
 }

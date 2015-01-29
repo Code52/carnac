@@ -27,9 +27,10 @@ namespace Carnac.Logic.Models
         {
             ProcessName = key.Process.ProcessName;
             AddKey(key);
+            CanBeMerged = !key.HasModifierPressed;
         }
 
-        public Message(DateTime firstKey, IEnumerable<KeyPress> keys, KeyShortcut shortcut)
+        public Message(IEnumerable<KeyPress> keys, KeyShortcut shortcut)
             : this()
         {
             var distinctProcessName = keys.Select(k => k.Process.ProcessName).Distinct();
@@ -37,18 +38,15 @@ namespace Carnac.Logic.Models
                 throw new InvalidOperationException("Keys are from different processes");
 
             ProcessName = distinctProcessName.Single();
-            StartingTime = firstKey;
             foreach (var keyPress in keys)
             {
                 AddKey(keyPress);
             }
             ShortcutName = shortcut.Name;
-            IsShortcut = true;
+            CanBeMerged = false;
         }
 
         public string ProcessName { get; private set; }
-
-        public DateTime StartingTime { get; private set; }
 
         public DateTime LastMessage { get; private set; }
 
@@ -60,7 +58,7 @@ namespace Carnac.Logic.Models
 
         public bool IsDeleting { get; set; }
 
-        public bool IsShortcut { get; private set; }
+        public bool CanBeMerged { get; private set; }
 
         public string ShortcutName
         {

@@ -67,7 +67,7 @@ namespace Carnac.Tests
         }
 
         [Fact]
-        public void does_not_show_shortcut_name_on_partial_match()
+        public void does_not_show_key_press_on_partial_match()
         {
             // arrange
             messageProvider.GetMessageStream().Subscribe(value => messages.Add(value));
@@ -80,8 +80,28 @@ namespace Carnac.Tests
             KeyStreams.CtrlU().Play(interceptKeysSource);
 
             // assert
-            Assert.Equal(1, messages.Count);
+            Assert.Equal(0, messages.Count);
             Assert.NotEqual("SomeShortcut", messages[0].ShortcutName);
+        }
+
+        [Fact]
+        public void produces_two_messages_when_shortcut_is_broken()
+        {
+            // arrange
+            messageProvider.GetMessageStream().Subscribe(value => messages.Add(value));
+            shortcutProvider.GetShortcutsStartingWith(Arg.Any<KeyPress>())
+                .Returns(new List<KeyShortcut> { new KeyShortcut("SomeShortcut",
+                    new KeyPressDefinition(Keys.U, controlPressed: true),
+                    new KeyPressDefinition(Keys.L)) });
+
+            // act
+            KeyStreams.CtrlU().Play(interceptKeysSource);
+            KeyStreams.Number1().Play(interceptKeysSource);
+
+            // assert
+            Assert.Equal(2, messages.Count);
+            Assert.Equal("Ctrl + U", string.Join("", messages[0].Text));
+            Assert.Equal("1", string.Join("", messages[1].Text));
         }
 
         [Fact]

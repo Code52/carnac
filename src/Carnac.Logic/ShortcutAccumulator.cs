@@ -10,7 +10,6 @@ namespace Carnac.Logic
         List<KeyShortcut> possibleKeyShortcuts;
         Message[] messages;
         readonly List<KeyPress> keys;
-        DateTime shortcutStartedAt;
 
         public ShortcutAccumulator()
         {
@@ -55,7 +54,7 @@ namespace Carnac.Logic
             if (HasCompletedValue)
                 throw new InvalidOperationException();
 
-            messages = new[] { new Message(shortcutStartedAt, Keys, shortcut) };
+            messages = new[] { new Message(Keys, shortcut) };
             HasCompletedValue = true;
         }
 
@@ -70,7 +69,6 @@ namespace Carnac.Logic
         public void BeginShortcut(KeyPress key, List<KeyShortcut> possibleShortcuts)
         {
             keys.Add(key);
-            shortcutStartedAt = DateTime.Now;
             EvaluateShortcuts(possibleShortcuts);
         }
 
