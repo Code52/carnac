@@ -8,14 +8,17 @@ namespace Carnac.Tests
 {
     public class MessageFacts
     {
+        readonly Processinfo fakeProcess = new Processinfo("FakeProcess");
+        readonly Processinfo fakeProcess2 = new Processinfo("FakeProcess2");
+
         [Fact]
         public void message_does_not_group_different_letters()
         {
             // arrange
-            var message = new Message(new KeyPress(null, new InterceptKeyEventArgs(Keys.Back, KeyDirection.Down, false, false, false), false, new[] { "a" }));
+            var message = new Message(new KeyPress(fakeProcess, new InterceptKeyEventArgs(Keys.Back, KeyDirection.Down, false, false, false), false, new[] { "a" }));
 
             // act
-            message.Merge(new Message(new KeyPress(null, new InterceptKeyEventArgs(Keys.Back, KeyDirection.Down, false, false, false), false, new[] { "b" })));
+            message.Merge(new Message(new KeyPress(fakeProcess, new InterceptKeyEventArgs(Keys.Back, KeyDirection.Down, false, false, false), false, new[] { "b" })));
 
             // assert
             Assert.Equal("ab", string.Join(string.Empty, message.Text));
@@ -25,10 +28,10 @@ namespace Carnac.Tests
         public void message_does_not_group_letter_and_backspace()
         {
             // arrange
-            var message = new Message(new KeyPress(null, new InterceptKeyEventArgs(Keys.Back, KeyDirection.Down, false, false, false), false, new[] { "a" }));
+            var message = new Message(new KeyPress(fakeProcess, new InterceptKeyEventArgs(Keys.Back, KeyDirection.Down, false, false, false), false, new[] { "a" }));
 
             // act
-            message.Merge(new Message(new KeyPress(null, new InterceptKeyEventArgs(Keys.Back, KeyDirection.Down, false, false, false), false, new[] { "Back" })));
+            message.Merge(new Message(new KeyPress(fakeProcess, new InterceptKeyEventArgs(Keys.Back, KeyDirection.Down, false, false, false), false, new[] { "Back" })));
 
             // assert
             Assert.Equal("aBack", string.Join(string.Empty, message.Text));
@@ -38,10 +41,10 @@ namespace Carnac.Tests
         public void message_groups_multiple_backspace_key_presses_together()
         {
             // arrange
-            var message = new Message(new KeyPress(null, new InterceptKeyEventArgs(Keys.Back, KeyDirection.Down, false, false, false), false, new[] { "Back" }));
+            var message = new Message(new KeyPress(fakeProcess, new InterceptKeyEventArgs(Keys.Back, KeyDirection.Down, false, false, false), false, new[] { "Back" }));
 
             // act
-            message.Merge(new Message(new KeyPress(null, new InterceptKeyEventArgs(Keys.Back, KeyDirection.Down, false, false, false), false, new[] { "Back" })));
+            message.Merge(new Message(new KeyPress(fakeProcess, new InterceptKeyEventArgs(Keys.Back, KeyDirection.Down, false, false, false), false, new[] { "Back" })));
 
             // assert
             Assert.Equal("Back x 2 ", string.Join(string.Empty, message.Text));
@@ -51,10 +54,23 @@ namespace Carnac.Tests
         public void message_does_not_group_different_arrow_key_presses_together()
         {
             // arrange
-            var message = new Message(new KeyPress(null, new InterceptKeyEventArgs(Keys.Up, KeyDirection.Down, false, false, false), false, new[] { "Up" }));
+            var message = new Message(new KeyPress(fakeProcess, new InterceptKeyEventArgs(Keys.Up, KeyDirection.Down, false, false, false), false, new[] { "Up" }));
 
             // act
-            message.Merge(new Message(new KeyPress(null, new InterceptKeyEventArgs(Keys.Down, KeyDirection.Down, false, false, false), false, new[] { "Down" })));
+            message.Merge(new Message(new KeyPress(fakeProcess, new InterceptKeyEventArgs(Keys.Down, KeyDirection.Down, false, false, false), false, new[] { "Down" })));
+
+            // assert
+            Assert.Equal("↑↓", string.Join(string.Empty, message.Text));
+        }
+
+        [Fact]
+        public void message_does_not_group_messages_from_different_processes_together()
+        {
+            // arrange
+            var message = new Message(new KeyPress(fakeProcess, new InterceptKeyEventArgs(Keys.Up, KeyDirection.Down, false, false, false), false, new[] { "Up" }));
+
+            // act
+            message.Merge(new Message(new KeyPress(fakeProcess2, new InterceptKeyEventArgs(Keys.Down, KeyDirection.Down, false, false, false), false, new[] { "Down" })));
 
             // assert
             Assert.Equal("↑↓", string.Join(string.Empty, message.Text));
@@ -64,10 +80,10 @@ namespace Carnac.Tests
         public void message_groups_multiple_equal_arrow_key_presses_together()
         {
             // arrange
-            var message = new Message(new KeyPress(null, new InterceptKeyEventArgs(Keys.Down, KeyDirection.Down, false, false, false), false, new[] { "Down" }));
+            var message = new Message(new KeyPress(fakeProcess, new InterceptKeyEventArgs(Keys.Down, KeyDirection.Down, false, false, false), false, new[] { "Down" }));
 
             // act
-            message.Merge(new Message(new KeyPress(null, new InterceptKeyEventArgs(Keys.Down, KeyDirection.Down, false, false, false), false, new[] { "Down" })));
+            message.Merge(new Message(new KeyPress(fakeProcess, new InterceptKeyEventArgs(Keys.Down, KeyDirection.Down, false, false, false), false, new[] { "Down" })));
 
             // assert
             Assert.Equal("↓ x 2 ", string.Join(string.Empty, message.Text));
@@ -77,10 +93,10 @@ namespace Carnac.Tests
         public void multiple_shortcuts_have_comma_inserted_between_input()
         {
             // arrange
-            var message = new Message(new KeyPress(null, new InterceptKeyEventArgs(Keys.R, KeyDirection.Down, false, true, false), false, new[] { "Control", "R" }));
+            var message = new Message(new KeyPress(fakeProcess, new InterceptKeyEventArgs(Keys.R, KeyDirection.Down, false, true, false), false, new[] { "Control", "R" }));
 
             // act
-            message.Merge(new Message(new KeyPress(null, new InterceptKeyEventArgs(Keys.T, KeyDirection.Down, false, true, false), false, new[] { "Control", "T" })));
+            message.Merge(new Message(new KeyPress(fakeProcess, new InterceptKeyEventArgs(Keys.T, KeyDirection.Down, false, true, false), false, new[] { "Control", "T" })));
 
             // assert
             Assert.Equal("Control + R, Control + T", string.Join(string.Empty, message.Text));

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Windows.Forms;
 using Carnac.Logic.KeyMonitor;
 
@@ -8,7 +7,7 @@ namespace Carnac.Logic.Models
 {
     public class KeyPress : KeyPressDefinition
     {
-        public KeyPress(Process process, InterceptKeyEventArgs interceptKeyEventArgs, bool winkeyPressed, IEnumerable<string> input):
+        public KeyPress(Processinfo process, InterceptKeyEventArgs interceptKeyEventArgs, bool winkeyPressed, IEnumerable<string> input):
             base(interceptKeyEventArgs.Key, winkeyPressed, interceptKeyEventArgs.ShiftPressed, interceptKeyEventArgs.AltPressed, interceptKeyEventArgs.ControlPressed)
         {
             Process = process;
@@ -19,7 +18,7 @@ namespace Carnac.Logic.Models
 
         public DateTime Timestamp { get; private set; }
 
-        public Process Process { get; private set; }
+        public Processinfo Process { get; private set; }
 
         public InterceptKeyEventArgs InterceptKeyEventArgs { get; private set; }
 

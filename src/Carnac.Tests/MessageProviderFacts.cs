@@ -26,6 +26,7 @@ namespace Carnac.Tests
             var settingsProvider = Substitute.For<ISettingsProvider>();
             settingsProvider.GetSettings<PopupSettings>().Returns(new PopupSettings());
             shortcutProvider = Substitute.For<IShortcutProvider>();
+            shortcutProvider.GetShortcutsStartingWith(Arg.Any<KeyPress>()).Returns(new List<KeyShortcut>());
             interceptKeysSource = new Subject<InterceptKeyEventArgs>();
             var source = Substitute.For<IInterceptKeys>();
             source.GetKeyStream().Returns(interceptKeysSource);
@@ -100,6 +101,30 @@ namespace Carnac.Tests
             // assert
             Assert.Equal(1, messages.Count);
             Assert.Equal("SomeShortcut", messages[0].ShortcutName);
+        }
+
+        [Fact]
+        public void keeps_order_of_streams()
+        {
+            // arrange
+            messageProvider.GetMessageStream().Subscribe(value => messages.Add(value));
+            shortcutProvider
+                .GetShortcutsStartingWith(Arg.Any<KeyPress>())
+                .Returns(new List<KeyShortcut> { new KeyShortcut("SomeShortcut",
+                    new KeyPressDefinition(Keys.U, controlPressed: true),
+                    new KeyPressDefinition(Keys.L)) });
+
+            // act
+            KeyStreams.CtrlU().Play(interceptKeysSource);
+            KeyStreams.LetterL().Play(interceptKeysSource);
+            KeyStreams.Number1().Play(interceptKeysSource);
+            KeyStreams.LetterL().Play(interceptKeysSource);
+
+            // assert
+            Assert.Equal(2, messages.Count);
+            Assert.Equal("Ctrl + U, l [SomeShortcut]", string.Join("", messages[0].Text));
+            Assert.Equal("SomeShortcut", messages[0].ShortcutName);
+            Assert.Equal("1l", string.Join("", messages[1].Text));
         }
     }
 }

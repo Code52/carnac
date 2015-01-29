@@ -37,6 +37,11 @@ namespace Carnac.Logic
             keys.Add(key);
             var newPossibleShortcuts = possibleKeyShortcuts.Where(s => s.StartsWith(keys)).ToList();
 
+            EvaluateShortcuts(newPossibleShortcuts);
+        }
+
+        void EvaluateShortcuts(List<KeyShortcut> newPossibleShortcuts)
+        {
             if (!newPossibleShortcuts.Any())
                 NoMatchingShortcut();
             else if (newPossibleShortcuts.Any(s => s.IsMatch(keys)))
@@ -64,9 +69,9 @@ namespace Carnac.Logic
 
         public void BeginShortcut(KeyPress key, List<KeyShortcut> possibleShortcuts)
         {
-            possibleKeyShortcuts = possibleShortcuts;
             keys.Add(key);
             shortcutStartedAt = DateTime.Now;
+            EvaluateShortcuts(possibleShortcuts);
         }
 
         /// <summary>
@@ -94,7 +99,10 @@ namespace Carnac.Logic
 
         public ShortcutAccumulator ProcessKey(IShortcutProvider shortcutProvider, KeyPress key)
         {
-            if (!keys.Any() || HasCompletedValue)
+            if (HasCompletedValue)
+                return new ShortcutAccumulator().ProcessKey(shortcutProvider, key);
+
+            if (!keys.Any())
             {
                 var possibleShortcuts = shortcutProvider.GetShortcutsStartingWith(key);
                 if (possibleShortcuts.Any())

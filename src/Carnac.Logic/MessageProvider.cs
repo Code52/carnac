@@ -42,7 +42,8 @@ namespace Carnac.Logic
                 .Scan(new ShortcutAccumulator(), (acc, key) => acc.ProcessKey(shortcutProvider, key))
                 .Where(c => c.HasCompletedValue)
                 .SelectMany(c => c.GetMessages())
-                .Scan(new Message(), (acc, key) => messageMerger.MergeIfNeeded(acc, key));
+                .Scan(new Message(), (acc, key) => messageMerger.MergeIfNeeded(acc, key))
+                .DistinctUntilChanged();
         }
 
         //private bool ShouldCreateNewMessage(KeyPress value)

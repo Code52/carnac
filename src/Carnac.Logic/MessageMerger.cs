@@ -4,7 +4,7 @@ using Carnac.Logic.Models;
 
 namespace Carnac.Logic
 {
-    [Export]
+    [Export(typeof(IMessageMerger))]
     public class MessageMerger : IMessageMerger
     {
         TimeSpan oneSecond;
