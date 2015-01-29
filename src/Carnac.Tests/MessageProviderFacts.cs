@@ -54,7 +54,7 @@ namespace Carnac.Tests
         {
             // arrange
             messageProvider.GetMessageStream().Subscribe(value => messages.Add(value));
-            shortcutProvider.GetShortcutsMatching(Arg.Any<IEnumerable<KeyPress>>())
+            shortcutProvider.GetShortcutsStartingWith(Arg.Any<KeyPress[]>())
                 .Returns(new []{new KeyShortcut("MyShortcut", new KeyPressDefinition(Keys.L, shiftPressed:true, controlPressed:true))});
 
             // act
@@ -70,7 +70,7 @@ namespace Carnac.Tests
         {
             // arrange
             messageProvider.GetMessageStream().Subscribe(value => messages.Add(value));
-            shortcutProvider.GetShortcutsMatching(Arg.Any<IEnumerable<KeyPress>>())
+            shortcutProvider.GetShortcutsStartingWith(Arg.Any<KeyPress[]>())
                 .Returns(new[] { new KeyShortcut("SomeShortcut",
                     new KeyPressDefinition(Keys.U, controlPressed: true),
                     new KeyPressDefinition(Keys.L)) });
@@ -88,7 +88,7 @@ namespace Carnac.Tests
         {
             // arrange
             messageProvider.GetMessageStream().Subscribe(value => messages.Add(value));
-            shortcutProvider.GetShortcutsMatching(Arg.Any<IEnumerable<KeyPress>>())
+            shortcutProvider.GetShortcutsStartingWith(Arg.Any<KeyPress[]>())
                 .Returns(new[] { new KeyShortcut("SomeShortcut",
                     new KeyPressDefinition(Keys.U, controlPressed: true),
                     new KeyPressDefinition(Keys.L)) });

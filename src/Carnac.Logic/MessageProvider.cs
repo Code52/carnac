@@ -36,7 +36,7 @@ namespace Carnac.Logic
 
             var currentKeyPress = new[] {value};
             var keyPresses = CurrentMessage == null ? currentKeyPress : CurrentMessage.Keys.Concat(currentKeyPress).ToArray();
-            var possibleShortcuts = GetPossibleShortcuts(keyPresses).ToList();
+            var possibleShortcuts = shortcutProvider.GetShortcutsStartingWith(keyPresses).ToList();
             if (possibleShortcuts.Any())
             {
                 var shortcut = possibleShortcuts.FirstOrDefault(s => s.IsMatch(keyPresses));
@@ -51,7 +51,7 @@ namespace Carnac.Logic
             }
 
             // Haven't matched a Chord, try just the last keypress
-            var keyShortcuts = GetPossibleShortcuts(currentKeyPress).ToList();
+            var keyShortcuts = shortcutProvider.GetShortcutsStartingWith(currentKeyPress).ToList();
             if (keyShortcuts.Any())
             {
                 var shortcut = keyShortcuts.FirstOrDefault(s => s.IsMatch(currentKeyPress));
@@ -106,11 +106,6 @@ namespace Carnac.Logic
         private bool LastKeyPressWasShortcut()
         {
             return CurrentMessage.Keys.Last().IsShortcut;
-        }
-
-        private IEnumerable<KeyShortcut> GetPossibleShortcuts(IEnumerable<KeyPress> keyPresses)
-        {
-            return shortcutProvider.GetShortcutsMatching(keyPresses);
         }
 
         private bool IsOlderThanOneSecond()

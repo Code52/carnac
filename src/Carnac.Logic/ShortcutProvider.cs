@@ -87,19 +87,13 @@ namespace Carnac.Logic
             return null;
         }
 
-        public IEnumerable<KeyShortcut> GetShortcutsMatching(IEnumerable<KeyPress> keys)
+        public KeyShortcut[] GetShortcutsStartingWith(KeyPress[] keys)
         {
-            var keyPresses = keys.ToArray();
-            var processName = keyPresses.Last().Process.ProcessName;
-            foreach (var shortcut in shortcuts.Where(s => (s.Process == processName) || string.IsNullOrWhiteSpace(s.Process)))
-            {
-                var match = shortcut.GetShortcutsMatching(keyPresses);
-                if (match.Count() > 0)
-                    return match;
-            }
-
-            return Enumerable.Empty<KeyShortcut>();
+            var processName = keys.Last().Process.ProcessName;
+            return shortcuts
+                .Where(s => (s.Process == processName) || string.IsNullOrWhiteSpace(s.Process))
+                .SelectMany(shortcut => shortcut.GetShortcutsMatching(keys))
+                .ToArray();
         }
-
     }
 }
