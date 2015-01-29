@@ -32,7 +32,7 @@ namespace Carnac.Tests
             var desktopLockEventService = Substitute.For<IDesktopLockEventService>();
             desktopLockEventService.GetSessionSwitchStream().Returns(Observable.Never<SessionSwitchEventArgs>());
             var keyProvider = new KeyProvider(source, new PasswordModeService(), desktopLockEventService);
-            messageProvider = new MessageProvider(keyProvider, shortcutProvider, settingsProvider);
+            messageProvider = new MessageProvider(keyProvider, shortcutProvider, settingsProvider, new MessageMerger());
         }
 
         [Fact]
@@ -54,8 +54,8 @@ namespace Carnac.Tests
         {
             // arrange
             messageProvider.GetMessageStream().Subscribe(value => messages.Add(value));
-            shortcutProvider.GetShortcutsStartingWith(Arg.Any<KeyPress[]>())
-                .Returns(new []{new KeyShortcut("MyShortcut", new KeyPressDefinition(Keys.L, shiftPressed:true, controlPressed:true))});
+            shortcutProvider.GetShortcutsStartingWith(Arg.Any<KeyPress>())
+                .Returns(new List<KeyShortcut> { new KeyShortcut("MyShortcut", new KeyPressDefinition(Keys.L, shiftPressed: true, controlPressed: true)) });
 
             // act
             KeyStreams.CtrlShiftL().Play(interceptKeysSource);
@@ -70,8 +70,8 @@ namespace Carnac.Tests
         {
             // arrange
             messageProvider.GetMessageStream().Subscribe(value => messages.Add(value));
-            shortcutProvider.GetShortcutsStartingWith(Arg.Any<KeyPress[]>())
-                .Returns(new[] { new KeyShortcut("SomeShortcut",
+            shortcutProvider.GetShortcutsStartingWith(Arg.Any<KeyPress>())
+                .Returns(new List<KeyShortcut> { new KeyShortcut("SomeShortcut",
                     new KeyPressDefinition(Keys.U, controlPressed: true),
                     new KeyPressDefinition(Keys.L)) });
 
@@ -88,8 +88,8 @@ namespace Carnac.Tests
         {
             // arrange
             messageProvider.GetMessageStream().Subscribe(value => messages.Add(value));
-            shortcutProvider.GetShortcutsStartingWith(Arg.Any<KeyPress[]>())
-                .Returns(new[] { new KeyShortcut("SomeShortcut",
+            shortcutProvider.GetShortcutsStartingWith(Arg.Any<KeyPress>())
+                .Returns(new List<KeyShortcut> { new KeyShortcut("SomeShortcut",
                     new KeyPressDefinition(Keys.U, controlPressed: true),
                     new KeyPressDefinition(Keys.L)) });
 

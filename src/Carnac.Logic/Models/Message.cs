@@ -15,7 +15,7 @@ namespace Carnac.Logic.Models
         private KeyPress lastKeyPress;
         private string shortcutName;
 
-        private Message()
+        public Message()
         {
             textCollection = new ObservableCollection<string>();
             keyCollection = new ObservableCollection<KeyPress>();
@@ -43,6 +43,7 @@ namespace Carnac.Logic.Models
                 AddKey(keyPress);
             }
             ShortcutName = shortcut.Name;
+            IsShortcut = true;
         }
 
         public string ProcessName { get; private set; }
@@ -59,6 +60,8 @@ namespace Carnac.Logic.Models
 
         public bool IsDeleting { get; set; }
 
+        public bool IsShortcut { get; private set; }
+
         public string ShortcutName
         {
             get { return shortcutName; }
@@ -73,7 +76,7 @@ namespace Carnac.Logic.Models
         private void AddKey(KeyPress keyPress)
         {
             keyCollection.Add(keyPress);
-            if (lastKeyPress != null && lastKeyPress.IsShortcut)
+            if (lastKeyPress != null && lastKeyPress.HasModifierPressed)
                 textCollection.Add(", ");
             lastKeyPress = keyPress;
             var first = true;
@@ -90,7 +93,7 @@ namespace Carnac.Logic.Models
 
         private void AddText(string text)
         {
-            var formattedText = Format(text, lastKeyPress.IsShortcut);
+            var formattedText = Format(text, lastKeyPress.HasModifierPressed);
 
             if (lastText == formattedText && repeatDetectionText.Contains(text) && Text.Any())
             {
@@ -132,6 +135,16 @@ namespace Carnac.Logic.Models
         private static string GetString(int decimalValue)
         {
             return new string(new[] { (char)decimalValue });
+        }
+
+        public Message Merge(Message key)
+        {
+            foreach (var keyPress in key.Keys)
+            {
+                AddKey(keyPress);
+            }
+
+            return this;
         }
     }
 }

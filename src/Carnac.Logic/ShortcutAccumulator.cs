@@ -5,14 +5,14 @@ using Carnac.Logic.Models;
 
 namespace Carnac.Logic
 {
-    public class KeyPressAccumulator
+    public class ShortcutAccumulator
     {
         List<KeyShortcut> possibleKeyShortcuts;
         Message[] messages;
         readonly List<KeyPress> keys;
         DateTime shortcutStartedAt;
 
-        public KeyPressAccumulator()
+        public ShortcutAccumulator()
         {
             keys = new List<KeyPress>();
         }
@@ -22,7 +22,7 @@ namespace Carnac.Logic
             get { return keys; }
         }
 
-        public bool IsComplete { get; private set; }
+        public bool HasCompletedValue { get; private set; }
 
         public void Add(KeyPress key)
         {
@@ -47,16 +47,16 @@ namespace Carnac.Logic
 
         public void ShortcutCompleted(KeyShortcut shortcut)
         {
-            if (IsComplete)
+            if (HasCompletedValue)
                 throw new InvalidOperationException();
 
             messages = new[] { new Message(shortcutStartedAt, Keys, shortcut) };
-            IsComplete = true;
+            HasCompletedValue = true;
         }
 
         public Message[] GetMessages()
         {
-            if (!IsComplete)
+            if (!HasCompletedValue)
                 throw new InvalidOperationException();
 
             return messages;
@@ -75,21 +75,38 @@ namespace Carnac.Logic
         /// <param name="key"></param>
         public void Complete(KeyPress key)
         {
-            if (IsComplete)
+            if (HasCompletedValue)
                 throw new InvalidOperationException();
 
-            IsComplete = true;
+            HasCompletedValue = true;
             messages = new[] { new Message(key) };
         }
 
         void NoMatchingShortcut()
         {
-            if (IsComplete)
+            if (HasCompletedValue)
                 throw new InvalidOperationException();
 
             // When we have no matching shortcut just break all key presses into individual messages
-            IsComplete = true;
+            HasCompletedValue = true;
             messages = keys.Select(k => new Message(k)).ToArray();
+        }
+
+        public ShortcutAccumulator ProcessKey(IShortcutProvider shortcutProvider, KeyPress key)
+        {
+            if (!keys.Any() || HasCompletedValue)
+            {
+                var possibleShortcuts = shortcutProvider.GetShortcutsStartingWith(key);
+                if (possibleShortcuts.Any())
+                    BeginShortcut(key, possibleShortcuts);
+                else
+                    Complete(key);
+
+                return this;
+            }
+
+            Add(key);
+            return this;
         }
     }
 }

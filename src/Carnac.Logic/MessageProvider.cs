@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel.Composition;
-using System.Linq;
 using System.Reactive.Linq;
 using Carnac.Logic.Models;
 using SettingsProviderNet;
@@ -10,42 +9,40 @@ namespace Carnac.Logic
     [Export(typeof(IMessageProvider))]
     public class MessageProvider : IMessageProvider
     {
-        private readonly IShortcutProvider shortcutProvider;
-        private readonly IObservable<KeyPress> keyStream;
-        private readonly PopupSettings settings;
+        readonly IShortcutProvider shortcutProvider;
+        readonly IObservable<KeyPress> keyStream;
+        readonly PopupSettings settings;
+        readonly IMessageMerger messageMerger;
 
         [ImportingConstructor]
-        public MessageProvider(IKeyProvider keyProvider, IShortcutProvider shortcutProvider, ISettingsProvider settingsProvider)
+        public MessageProvider(IKeyProvider keyProvider, IShortcutProvider shortcutProvider, ISettingsProvider settingsProvider, IMessageMerger messageMerger)
         {
             this.shortcutProvider = shortcutProvider;
+            this.messageMerger = messageMerger;
             settings = settingsProvider.GetSettings<PopupSettings>();
             keyStream = keyProvider.GetKeyStream();
         }
 
         public IObservable<Message> GetMessageStream()
         {
-            var chords = keyStream
-                .Scan(default(KeyPressAccumulator), (acc, key) =>
-                {
-                    // If our accumulator is complete start a new one
-                    if (acc == null || acc.IsComplete)
-                    {
-                        acc = new KeyPressAccumulator();
-                        var possibleShortcuts = shortcutProvider.GetShortcutsStartingWith(key);
-                        if (possibleShortcuts.Any())
-                            acc.BeginShortcut(key, possibleShortcuts);
-                        else
-                            acc.Complete(key);
+            /*
+            shortcut Acc stream:
+               - ! before item means HasCompletedValue is false
+               - [1 & 2] means multiple messages are returned from get messages (1 and 2 in this case), others are a single message returned
 
-                        return acc;
-                    }
+            message merger:
+               - * before items indicates the previous message has been modified (key has been merged into acc), otherwise new acc is created
 
-                    acc.Add(key);
-                    return acc;
-                });
-            return chords
-                .Where(c => c.IsComplete)
-                .SelectMany(c => c.GetMessages());
+            keystream   :  a---b---ctrl+r----ctrl+r----------ctrl+r----a--------------↓---↓
+            shortcut Acc:  a---b---!ctrl+r---ctrl+r,ctrl+r---!ctrl+r---[ctrl+r & a]---↓---↓
+            sel many    :  a---b-------------ctrl+r,ctrl+r-------------ctrl+r---a-----↓---↓
+            msg merger  :  a---*ab-----------ctrl+r,ctrl+r-------------ctrl+r---a-----↓---*'↓ x2'
+            */
+            return keyStream
+                .Scan(new ShortcutAccumulator(), (acc, key) => acc.ProcessKey(shortcutProvider, key))
+                .Where(c => c.HasCompletedValue)
+                .SelectMany(c => c.GetMessages())
+                .Scan(new Message(), (acc, key) => messageMerger.MergeIfNeeded(acc, key));
         }
 
         //private bool ShouldCreateNewMessage(KeyPress value)

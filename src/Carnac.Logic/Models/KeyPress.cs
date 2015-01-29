@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Windows.Forms;
@@ -13,13 +14,18 @@ namespace Carnac.Logic.Models
             Process = process;
             InterceptKeyEventArgs = interceptKeyEventArgs;
             Input = input;
+            Timestamp = DateTime.Now;
         }
 
+        public DateTime Timestamp { get; private set; }
+
         public Process Process { get; private set; }
+
         public InterceptKeyEventArgs InterceptKeyEventArgs { get; private set; }
+
         public IEnumerable<string> Input { get; private set; }
 
-        public bool IsShortcut
+        public bool HasModifierPressed
         {
             get
             {
@@ -31,7 +37,7 @@ namespace Carnac.Logic.Models
         {
             get
             {
-                return InterceptKeyEventArgs.Key >= Keys.A && InterceptKeyEventArgs.Key <= Keys.Z;
+                return !HasModifierPressed && InterceptKeyEventArgs.Key >= Keys.A && InterceptKeyEventArgs.Key <= Keys.Z;
             }
         }
     }
