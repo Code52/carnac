@@ -1,0 +1,11 @@
+# Set the default behavior, in case people don't have core.autocrlf set.
+* text=auto
+
+*.cmd text eol=lf
+*.md text eol=lf
+*.config text eol=crlf
+*.yaml text eol=crlf
+*.cs text eol=crlf
+*.xaml text eol=crlf
+*.csproj text eol=crlf
+*.sln text eol=crlf
