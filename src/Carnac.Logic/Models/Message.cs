@@ -1,19 +1,21 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Windows.Documents;
 
 namespace Carnac.Logic.Models
 {
     public class Message : NotifyPropertyChanged
     {
+        readonly string[] repeatDetectionText = { "Back", "Left", "Right", "Down", "Up" };
         private readonly ObservableCollection<string> textCollection;
         private readonly ObservableCollection<KeyPress> keyCollection;
         private int lastTextRepeatCount = 1;
         private string lastText;
         private KeyPress lastKeyPress;
+        private string shortcutName;
 
-        public Message()
+        private Message()
         {
             textCollection = new ObservableCollection<string>();
             keyCollection = new ObservableCollection<KeyPress>();
@@ -21,22 +23,46 @@ namespace Carnac.Logic.Models
             Keys = new ReadOnlyObservableCollection<KeyPress>(keyCollection);
         }
 
-        public string ProcessName { get; set; }
+        public Message(KeyPress key) : this()
+        {
+            ProcessName = key.Process.ProcessName;
+            AddKey(key);
+        }
 
-        public DateTime StartingTime { get; set; }
+        public Message(DateTime firstKey, IEnumerable<KeyPress> keys, KeyShortcut shortcut)
+            : this()
+        {
+            var distinctProcessName = keys.Select(k => k.Process.ProcessName).Distinct();
+            if (distinctProcessName.Count() != 1)
+                throw new InvalidOperationException("Keys are from different processes");
+
+            ProcessName = distinctProcessName.Single();
+            StartingTime = firstKey;
+            foreach (var keyPress in keys)
+            {
+                AddKey(keyPress);
+            }
+            ShortcutName = shortcut.Name;
+        }
+
+        public string ProcessName { get; private set; }
+
+        public DateTime StartingTime { get; private set; }
+
         public DateTime LastMessage { get; private set; }
-        public ReadOnlyObservableCollection<string> Text { get; private set; }
-        public ReadOnlyObservableCollection<KeyPress> Keys { get; private set; }
-        public int Count { get; private set; }
-        public bool IsDeleting { get; set; }
 
-        private string shortcutName;
-        readonly string[] repeatDetectionText = { "Back", "Left", "Right", "Down", "Up"};
+        public ReadOnlyObservableCollection<string> Text { get; private set; }
+
+        public ReadOnlyObservableCollection<KeyPress> Keys { get; private set; }
+
+        public int Count { get; private set; }
+
+        public bool IsDeleting { get; set; }
 
         public string ShortcutName
         {
             get { return shortcutName; }
-            set
+            private set
             {
                 shortcutName = value;
                 if (!string.IsNullOrEmpty(shortcutName))
@@ -44,7 +70,7 @@ namespace Carnac.Logic.Models
             }
         }
 
-        public void AddKey(KeyPress keyPress)
+        private void AddKey(KeyPress keyPress)
         {
             keyCollection.Add(keyPress);
             if (lastKeyPress != null && lastKeyPress.IsShortcut)

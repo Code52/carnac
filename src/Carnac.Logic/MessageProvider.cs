@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
 using System.Reactive.Linq;
@@ -23,99 +22,55 @@ namespace Carnac.Logic
             keyStream = keyProvider.GetKeyStream();
         }
 
-        public Message CurrentMessage { get; private set; }
-
         public IObservable<Message> GetMessageStream()
         {
-            return keyStream.Select(OnNext).DistinctUntilChanged();
-        }
-
-        public Message OnNext(KeyPress value)
-        {
-            Message message;
-
-            var currentKeyPress = new[] {value};
-            var keyPresses = CurrentMessage == null ? currentKeyPress : CurrentMessage.Keys.Concat(currentKeyPress).ToArray();
-            var possibleShortcuts = shortcutProvider.GetShortcutsStartingWith(keyPresses).ToList();
-            if (possibleShortcuts.Any())
-            {
-                var shortcut = possibleShortcuts.FirstOrDefault(s => s.IsMatch(keyPresses));
-                if (shortcut != null)
+            var chords = keyStream
+                .Scan(default(KeyPressAccumulator), (acc, key) =>
                 {
-                    message = CurrentMessage ?? CreateNewMessage(value);
-                    message.AddKey(value);
-                    message.ShortcutName = shortcut.Name;
-                    //Have duplicated as it was easier for now, this should be cleaned up
-                    return CurrentMessage;
-                }
-            }
+                    // If our accumulator is complete start a new one
+                    if (acc == null || acc.IsComplete)
+                    {
+                        acc = new KeyPressAccumulator();
+                        var possibleShortcuts = shortcutProvider.GetShortcutsStartingWith(key);
+                        if (possibleShortcuts.Any())
+                            acc.BeginShortcut(key, possibleShortcuts);
+                        else
+                            acc.Complete(key);
 
-            // Haven't matched a Chord, try just the last keypress
-            var keyShortcuts = shortcutProvider.GetShortcutsStartingWith(currentKeyPress).ToList();
-            if (keyShortcuts.Any())
-            {
-                var shortcut = keyShortcuts.FirstOrDefault(s => s.IsMatch(currentKeyPress));
-                if (shortcut != null)
-                {
-                    //For matching last keypress, we want a new message
-                    message = CreateNewMessage(value);
-                    message.AddKey(value);
-                    message.ShortcutName = shortcut.Name;
-                    //Have duplicated as it was easier for now, this should be cleaned up
-                    return CurrentMessage;
-                }
-            }
+                        return acc;
+                    }
 
-            if (!value.IsShortcut && settings.DetectShortcutsOnly)
-                return CurrentMessage;
-            
-            if (ShouldCreateNewMessage(value))
-            {
-                message = CreateNewMessage(value);
-            }
-            else
-                message = CurrentMessage ?? CreateNewMessage(value);
-
-            message.AddKey(value);
-
-            return CurrentMessage;
+                    acc.Add(key);
+                    return acc;
+                });
+            return chords
+                .Where(c => c.IsComplete)
+                .SelectMany(c => c.GetMessages());
         }
 
-        private Message CreateNewMessage(KeyPress value)
-        {
-            var message = new Message
-                                  {
-                                      StartingTime = DateTime.Now,
-                                      ProcessName = value.Process.ProcessName
-                                  };
+        //private bool ShouldCreateNewMessage(KeyPress value)
+        //{
+        //    return
+        //        CurrentMessage == null ||
+        //        IsDifferentProcess(value) ||
+        //        IsOlderThanOneSecond() ||
+        //        LastKeyPressWasShortcut() ||
+        //        value.IsShortcut;
+        //}
 
-            CurrentMessage = message;
-            return message;
-        }
+        //private bool LastKeyPressWasShortcut()
+        //{
+        //    return CurrentMessage.Keys.Last().IsShortcut;
+        //}
 
-        private bool ShouldCreateNewMessage(KeyPress value)
-        {
-            return
-                CurrentMessage == null ||
-                IsDifferentProcess(value) ||
-                IsOlderThanOneSecond() ||
-                LastKeyPressWasShortcut() ||
-                value.IsShortcut;
-        }
+        //private bool IsOlderThanOneSecond()
+        //{
+        //    return CurrentMessage.LastMessage < DateTime.Now.AddSeconds(-1);
+        //}
 
-        private bool LastKeyPressWasShortcut()
-        {
-            return CurrentMessage.Keys.Last().IsShortcut;
-        }
-
-        private bool IsOlderThanOneSecond()
-        {
-            return CurrentMessage.LastMessage < DateTime.Now.AddSeconds(-1);
-        }
-
-        private bool IsDifferentProcess(KeyPress value)
-        {
-            return CurrentMessage.ProcessName != value.Process.ProcessName;
-        }
+        //private bool IsDifferentProcess(KeyPress value)
+        //{
+        //    return CurrentMessage.ProcessName != value.Process.ProcessName;
+        //}
     }
 }
