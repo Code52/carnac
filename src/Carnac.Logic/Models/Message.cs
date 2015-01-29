@@ -24,10 +24,10 @@ namespace Carnac.Logic.Models
         public string ProcessName { get; set; }
 
         public DateTime StartingTime { get; set; }
-        public DateTime LastMessage { get; set; }
+        public DateTime LastMessage { get; private set; }
         public ReadOnlyObservableCollection<string> Text { get; private set; }
         public ReadOnlyObservableCollection<KeyPress> Keys { get; private set; }
-        public int Count { get; set; }
+        public int Count { get; private set; }
         public bool IsDeleting { get; set; }
 
         private string shortcutName;
@@ -58,6 +58,8 @@ namespace Carnac.Logic.Models
                 AddText(text);
                 first = false;
             }
+            Count++;
+            LastMessage = DateTime.Now;
         }
 
         private void AddText(string text)

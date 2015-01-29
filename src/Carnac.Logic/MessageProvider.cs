@@ -45,8 +45,6 @@ namespace Carnac.Logic
                     message = CurrentMessage ?? CreateNewMessage(value);
                     message.AddKey(value);
                     message.ShortcutName = shortcut.Name;
-                    message.LastMessage = DateTime.Now;
-                    message.Count++;
                     //Have duplicated as it was easier for now, this should be cleaned up
                     return CurrentMessage;
                 }
@@ -63,8 +61,6 @@ namespace Carnac.Logic
                     message = CreateNewMessage(value);
                     message.AddKey(value);
                     message.ShortcutName = shortcut.Name;
-                    message.LastMessage = DateTime.Now;
-                    message.Count++;
                     //Have duplicated as it was easier for now, this should be cleaned up
                     return CurrentMessage;
                 }
@@ -81,8 +77,6 @@ namespace Carnac.Logic
                 message = CurrentMessage ?? CreateNewMessage(value);
 
             message.AddKey(value);
-            message.LastMessage = DateTime.Now;
-            message.Count++;
 
             return CurrentMessage;
         }
