@@ -45,30 +45,5 @@ namespace Carnac.Logic
                 .Scan(new Message(), (acc, key) => messageMerger.MergeIfNeeded(acc, key))
                 .DistinctUntilChanged();
         }
-
-        //private bool ShouldCreateNewMessage(KeyPress value)
-        //{
-        //    return
-        //        CurrentMessage == null ||
-        //        IsDifferentProcess(value) ||
-        //        IsOlderThanOneSecond() ||
-        //        LastKeyPressWasShortcut() ||
-        //        value.IsShortcut;
-        //}
-
-        //private bool LastKeyPressWasShortcut()
-        //{
-        //    return CurrentMessage.Keys.Last().IsShortcut;
-        //}
-
-        //private bool IsOlderThanOneSecond()
-        //{
-        //    return CurrentMessage.LastMessage < DateTime.Now.AddSeconds(-1);
-        //}
-
-        //private bool IsDifferentProcess(KeyPress value)
-        //{
-        //    return CurrentMessage.ProcessName != value.Process.ProcessName;
-        //}
     }
 }
