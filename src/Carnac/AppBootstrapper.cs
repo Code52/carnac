@@ -8,7 +8,6 @@ using Caliburn.Micro;
 using Carnac.Logic;
 using Carnac.Logic.KeyMonitor;
 using Carnac.Logic.Models;
-using MahApps.Metro.Controls;
 using SettingsProviderNet;
 
 namespace Carnac
@@ -35,7 +34,7 @@ namespace Carnac
 
             var batch = new CompositionBatch();
 
-            batch.AddExportedValue<IKeyProvider>(new KeyProvider(InterceptKeys.Current, new PasswordModeService()));
+            batch.AddExportedValue<IKeyProvider>(new KeyProvider(InterceptKeys.Current, new PasswordModeService(), new DesktopLockEventService()));
             windowManager = new CarnacWindowManager();
             batch.AddExportedValue<IWindowManager>(windowManager);
             batch.AddExportedValue<IEventAggregator>(new EventAggregator());

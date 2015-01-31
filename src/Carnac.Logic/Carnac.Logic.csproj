@@ -85,6 +85,7 @@
     <Compile Include="IPasswordModeService.cs" />
     <Compile Include="IScreenManager.cs" />
     <Compile Include="IShortcutProvider.cs" />
+    <Compile Include="KeyMonitor\IInterceptKeys.cs" />
     <Compile Include="KeyMonitor\DesktopLockEventService.cs" />
     <Compile Include="KeyMonitor\IDesktopLockEventService.cs" />
     <Compile Include="KeyMonitor\InterceptKeyEventArgs.cs" />

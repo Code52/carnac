@@ -1,19 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using Carnac.Logic.KeyMonitor;
 using Carnac.Logic.Models;
+using Microsoft.Win32;
 
 namespace Carnac.Logic
 {
     public class KeyProvider : IKeyProvider
     {
-        private readonly IObservable<InterceptKeyEventArgs> interceptKeysSource;
+        private readonly IInterceptKeys interceptKeysSource;
         private readonly Dictionary<int, Process> processes;
         private readonly IPasswordModeService passwordModeService;
+        readonly IDesktopLockEventService desktopLockEventService;
+
         private readonly IList<Keys> modifierKeys =
             new List<Keys>
                 {
@@ -38,21 +42,37 @@ namespace Carnac.Logic
         [DllImport("user32.dll")]
         private static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
 
-        public KeyProvider(IObservable<InterceptKeyEventArgs> interceptKeysSource, IPasswordModeService passwordModeService)
+        public KeyProvider(IInterceptKeys interceptKeysSource, IPasswordModeService passwordModeService, IDesktopLockEventService desktopLockEventService)
         {
             processes = new Dictionary<int, Process>();
             this.interceptKeysSource = interceptKeysSource;
             this.passwordModeService = passwordModeService;
+            this.desktopLockEventService = desktopLockEventService;
         }
 
-        public IDisposable Subscribe(IObserver<KeyPress> observer)
+        public IObservable<KeyPress> GetKeyStream()
         {
-            return interceptKeysSource
-                .Select(DetectWindowsKey)
-                .Where(k => !IsModifierKeyPress(k) && k.KeyDirection == KeyDirection.Down)
-                .Select(ToCarnacKeyPress)
-                .Where(k => !passwordModeService.CheckPasswordMode(k.InterceptKeyEventArgs))
-                .Subscribe(observer);
+            // We are using an observable create to tie the lifetimes of the session switch stream and the keystream
+            return Observable.Create<KeyPress>(observable =>
+            {
+                // When desktop is locked we will not get the keyup, because we track the windows key
+                // specially we need to set it to not being pressed anymore
+                var sessionSwitchStream = desktopLockEventService.GetSessionSwitchStream()
+                .Subscribe(ss =>
+                {
+                    if (ss.Reason == SessionSwitchReason.SessionLock)
+                        winKeyPressed = false;
+                }, observable.OnError);
+
+                var keyStreamObservable = interceptKeysSource.GetKeyStream()
+                    .Select(DetectWindowsKey)
+                    .Where(k => !IsModifierKeyPress(k) && k.KeyDirection == KeyDirection.Down)
+                    .Select(ToCarnacKeyPress)
+                    .Where(k => !passwordModeService.CheckPasswordMode(k.InterceptKeyEventArgs))
+                    .Subscribe(observable.OnNext, observable.OnError, observable.OnCompleted);
+
+                return new CompositeDisposable(sessionSwitchStream, keyStreamObservable);
+            });
         }
 
         private InterceptKeyEventArgs DetectWindowsKey(InterceptKeyEventArgs interceptKeyEventArgs)

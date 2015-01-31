@@ -2,19 +2,17 @@
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
-using System.Reactive.Subjects;
+using System.Reactive.Linq;
 using Carnac.Logic.Models;
 using SettingsProviderNet;
-using Message = Carnac.Logic.Models.Message;
 
 namespace Carnac.Logic
 {
     [Export(typeof(IMessageProvider))]
-    public class MessageProvider : IMessageProvider, IObserver<KeyPress>
+    public class MessageProvider : IMessageProvider
     {
-        readonly Subject<Message> subject = new Subject<Message>();
         private readonly IShortcutProvider shortcutProvider;
-        private IDisposable keyStream;
+        private readonly IObservable<KeyPress> keyStream;
         private readonly PopupSettings settings;
 
         [ImportingConstructor]
@@ -22,17 +20,17 @@ namespace Carnac.Logic
         {
             this.shortcutProvider = shortcutProvider;
             settings = settingsProvider.GetSettings<PopupSettings>();
-            keyStream = keyProvider.Subscribe(this);
+            keyStream = keyProvider.GetKeyStream();
         }
 
         public Message CurrentMessage { get; private set; }
 
-        public IDisposable Subscribe(IObserver<Message> observer)
+        public IObservable<Message> GetMessageStream()
         {
-            return subject.Subscribe(observer);
+            return keyStream.Select(OnNext).DistinctUntilChanged();
         }
 
-        public void OnNext(KeyPress value)
+        public Message OnNext(KeyPress value)
         {
             Message message;
 
@@ -50,7 +48,7 @@ namespace Carnac.Logic
                     message.LastMessage = DateTime.Now;
                     message.Count++;
                     //Have duplicated as it was easier for now, this should be cleaned up
-                    return;
+                    return CurrentMessage;
                 }
             }
 
@@ -68,12 +66,12 @@ namespace Carnac.Logic
                     message.LastMessage = DateTime.Now;
                     message.Count++;
                     //Have duplicated as it was easier for now, this should be cleaned up
-                    return;
+                    return CurrentMessage;
                 }
             }
 
             if (!value.IsShortcut && settings.DetectShortcutsOnly)
-                return;
+                return CurrentMessage;
             
             if (ShouldCreateNewMessage(value))
             {
@@ -85,6 +83,8 @@ namespace Carnac.Logic
             message.AddKey(value);
             message.LastMessage = DateTime.Now;
             message.Count++;
+
+            return CurrentMessage;
         }
 
         private Message CreateNewMessage(KeyPress value)
@@ -96,7 +96,6 @@ namespace Carnac.Logic
                                   };
 
             CurrentMessage = message;
-            subject.OnNext(message);
             return message;
         }
 
@@ -128,16 +127,6 @@ namespace Carnac.Logic
         private bool IsDifferentProcess(KeyPress value)
         {
             return CurrentMessage.ProcessName != value.Process.ProcessName;
-        }
-
-        public void OnError(Exception error)
-        {
-
-        }
-
-        public void OnCompleted()
-        {
-
         }
     }
 }

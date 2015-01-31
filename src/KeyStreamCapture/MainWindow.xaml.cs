@@ -13,15 +13,20 @@ using Microsoft.CSharp;
 
 namespace KeyStreamCapture
 {
-    public partial class MainWindow : IObserver<InterceptKeyEventArgs>
+    public partial class MainWindow
     {
         private readonly List<InterceptKeyEventArgs> keys = new List<InterceptKeyEventArgs>();
+        IDisposable subscription;
         private bool capturing;
 
         public MainWindow()
         {
             InitializeComponent();
-            InterceptKeys.Current.Subscribe(this);
+            subscription = InterceptKeys.Current.GetKeyStream().Subscribe(value =>
+            {
+                if (capturing)
+                    keys.Add(value);
+            });
         }
 
         private void StartCapture(object sender, RoutedEventArgs e)
@@ -73,7 +78,7 @@ namespace KeyStreamCapture
                 var sb = new StringBuilder();
                 using(var stringWriter = new StringWriter(sb))
                 {
-                    provider.GenerateCodeFromMember(method, stringWriter, cgo);                    
+                    provider.GenerateCodeFromMember(method, stringWriter, cgo);
                 }
                 textBox.Text = sb.ToString();
             }
@@ -81,23 +86,7 @@ namespace KeyStreamCapture
 
         protected override void OnClosed(EventArgs e)
         {
-            
-        }
-
-        public void OnNext(InterceptKeyEventArgs value)
-        {
-            if (capturing)
-                keys.Add(value);
-        }
-
-        public void OnError(Exception error)
-        {
-
-        }
-
-        public void OnCompleted()
-        {
-
+            subscription.Dispose();
         }
     }
 }

@@ -1,10 +1,10 @@
 using System;
+using Microsoft.Win32;
 
 namespace Carnac.Logic.KeyMonitor
 {
-    public interface IDesktopLockEventService : IDisposable
+    public interface IDesktopLockEventService
     {
-        event EventHandler<EventArgs> DesktopUnlockedEvent;
-        event EventHandler<EventArgs> DesktopLockedEvent;
+        IObservable<SessionSwitchEventArgs> GetSessionSwitchStream();
     }
 }
