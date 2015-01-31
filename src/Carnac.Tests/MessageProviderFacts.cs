@@ -8,7 +8,6 @@ using Carnac.Logic.KeyMonitor;
 using Carnac.Logic.Models;
 using Microsoft.Win32;
 using NSubstitute;
-using SettingsProviderNet;
 using Xunit;
 using Message = Carnac.Logic.Models.Message;
 
@@ -20,11 +19,10 @@ namespace Carnac.Tests
         readonly IShortcutProvider shortcutProvider;
         readonly MessageProvider messageProvider;
         readonly List<Message> messages = new List<Message>();
+        readonly IObservable<KeyPress> keysStream;
 
         public MessageProviderFacts()
         {
-            var settingsProvider = Substitute.For<ISettingsProvider>();
-            settingsProvider.GetSettings<PopupSettings>().Returns(new PopupSettings());
             shortcutProvider = Substitute.For<IShortcutProvider>();
             shortcutProvider.GetShortcutsStartingWith(Arg.Any<KeyPress>()).Returns(new List<KeyShortcut>());
             interceptKeysSource = new Subject<InterceptKeyEventArgs>();
@@ -32,15 +30,15 @@ namespace Carnac.Tests
             source.GetKeyStream().Returns(interceptKeysSource);
             var desktopLockEventService = Substitute.For<IDesktopLockEventService>();
             desktopLockEventService.GetSessionSwitchStream().Returns(Observable.Never<SessionSwitchEventArgs>());
-            var keyProvider = new KeyProvider(source, new PasswordModeService(), desktopLockEventService);
-            messageProvider = new MessageProvider(keyProvider, shortcutProvider, settingsProvider, new MessageMerger());
+            keysStream = new KeyProvider(source, new PasswordModeService(), desktopLockEventService).GetKeyStream();
+            messageProvider = new MessageProvider(shortcutProvider, new PopupSettings(), new MessageMerger());
         }
 
         [Fact]
         public void key_with_modifiers_raises_a_new_message()
         {
             // arrange
-            messageProvider.GetMessageStream().Subscribe(value => messages.Add(value));
+            messageProvider.GetMessageStream(keysStream).Subscribe(value => messages.Add(value));
             KeyStreams.LetterL().Play(interceptKeysSource);
 
             // act
@@ -54,7 +52,7 @@ namespace Carnac.Tests
         public void recognises_shortcuts()
         {
             // arrange
-            messageProvider.GetMessageStream().Subscribe(value => messages.Add(value));
+            messageProvider.GetMessageStream(keysStream).Subscribe(value => messages.Add(value));
             shortcutProvider.GetShortcutsStartingWith(Arg.Any<KeyPress>())
                 .Returns(new List<KeyShortcut> { new KeyShortcut("MyShortcut", new KeyPressDefinition(Keys.L, shiftPressed: true, controlPressed: true)) });
 
@@ -70,7 +68,7 @@ namespace Carnac.Tests
         public void does_not_show_key_press_on_partial_match()
         {
             // arrange
-            messageProvider.GetMessageStream().Subscribe(value => messages.Add(value));
+            messageProvider.GetMessageStream(keysStream).Subscribe(value => messages.Add(value));
             shortcutProvider.GetShortcutsStartingWith(Arg.Any<KeyPress>())
                 .Returns(new List<KeyShortcut> { new KeyShortcut("SomeShortcut",
                     new KeyPressDefinition(Keys.U, controlPressed: true),
@@ -87,7 +85,7 @@ namespace Carnac.Tests
         public void produces_two_messages_when_shortcut_is_broken()
         {
             // arrange
-            messageProvider.GetMessageStream().Subscribe(value => messages.Add(value));
+            messageProvider.GetMessageStream(keysStream).Subscribe(value => messages.Add(value));
             shortcutProvider.GetShortcutsStartingWith(Arg.Any<KeyPress>())
                 .Returns(new List<KeyShortcut> { new KeyShortcut("SomeShortcut",
                     new KeyPressDefinition(Keys.U, controlPressed: true),
@@ -107,7 +105,7 @@ namespace Carnac.Tests
         public void does_show_shortcut_name_on_full_match()
         {
             // arrange
-            messageProvider.GetMessageStream().Subscribe(value => messages.Add(value));
+            messageProvider.GetMessageStream(keysStream).Subscribe(value => messages.Add(value));
             shortcutProvider.GetShortcutsStartingWith(Arg.Any<KeyPress>())
                 .Returns(new List<KeyShortcut> { new KeyShortcut("SomeShortcut",
                     new KeyPressDefinition(Keys.U, controlPressed: true),
@@ -126,7 +124,7 @@ namespace Carnac.Tests
         public void keeps_order_of_streams()
         {
             // arrange
-            messageProvider.GetMessageStream().Subscribe(value => messages.Add(value));
+            messageProvider.GetMessageStream(keysStream).Subscribe(value => messages.Add(value));
             shortcutProvider
                 .GetShortcutsStartingWith(Arg.Any<KeyPress>())
                 .Returns(new List<KeyShortcut> { new KeyShortcut("SomeShortcut",

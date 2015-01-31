@@ -2,7 +2,6 @@
 using System.ComponentModel.Composition;
 using System.Reactive.Linq;
 using Carnac.Logic.Models;
-using SettingsProviderNet;
 
 namespace Carnac.Logic
 {
@@ -10,20 +9,18 @@ namespace Carnac.Logic
     public class MessageProvider : IMessageProvider
     {
         readonly IShortcutProvider shortcutProvider;
-        readonly IObservable<KeyPress> keyStream;
         readonly PopupSettings settings;
         readonly IMessageMerger messageMerger;
 
         [ImportingConstructor]
-        public MessageProvider(IKeyProvider keyProvider, IShortcutProvider shortcutProvider, ISettingsProvider settingsProvider, IMessageMerger messageMerger)
+        public MessageProvider(IShortcutProvider shortcutProvider, PopupSettings settings, IMessageMerger messageMerger)
         {
             this.shortcutProvider = shortcutProvider;
             this.messageMerger = messageMerger;
-            settings = settingsProvider.GetSettings<PopupSettings>();
-            keyStream = keyProvider.GetKeyStream();
+            this.settings = settings;
         }
 
-        public IObservable<Message> GetMessageStream()
+        public IObservable<Message> GetMessageStream(IObservable<KeyPress> keyStream)
         {
             /*
             shortcut Acc stream:

@@ -1,42 +1,32 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
+using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using Caliburn.Micro;
 using Carnac.Logic;
 using Carnac.Logic.Enums;
 using Carnac.Logic.Models;
 using Carnac.Logic.Native;
-using Carnac.Utilities;
 using SettingsProviderNet;
 using Message = Carnac.Logic.Models.Message;
-using System.Reflection;
-using System.Collections.Generic;
 
 namespace Carnac.ViewModels
 {
     [Export(typeof(IShell))]
     public class ShellViewModel : Screen, IShell
     {
-        IDisposable keySubscription;
-        readonly IDisposable timerToken;
-
         readonly ISettingsProvider settingsProvider;
-        readonly IMessageProvider messageProvider;
-
-        readonly TimeSpan fiveseconds = TimeSpan.FromSeconds(5);
-        readonly TimeSpan sixseconds = TimeSpan.FromSeconds(6);
 
         [ImportingConstructor]
         public ShellViewModel(
             ISettingsProvider settingsProvider,
             IScreenManager screenManager,
-            ITimerFactory timerFactory,
-            IWindowManager windowManager,
-            IMessageProvider messageProvider)
+            IWindowManager windowManager)
         {
             this.settingsProvider = settingsProvider;
-            this.messageProvider = messageProvider;
 
             Keys = new ObservableCollection<Message>();
             Screens = new ObservableCollection<DetailedScreen>(screenManager.GetScreens());
@@ -45,10 +35,6 @@ namespace Carnac.ViewModels
 
             PlaceScreen();
 
-            var keyShowViewModel = new KeyShowViewModel(Keys, Settings);
-            windowManager.ShowWindow(keyShowViewModel);
-
-            timerToken = timerFactory.Start(1000, Cleanup);
             DisplayName = "Carnac";
         }
 
@@ -97,52 +83,12 @@ namespace Carnac.ViewModels
         {
             try
             {
-                System.Diagnostics.Process.Start("http://code52.org/carnac/");
+                Process.Start("http://code52.org/carnac/");
             }
             catch //I forget what exceptions can be raised if the browser is crashed?
             {
 
             }
-        }
-
-        public void Cleanup()
-        {
-            var deleting =
-                Keys.Where(k => DateTime.Now.Subtract(k.LastMessage) > fiveseconds && k.IsDeleting == false).ToList();
-            foreach (var y in deleting)
-                y.IsDeleting = true;
-
-            var deleted =
-                Keys.Where(k => DateTime.Now.Subtract(k.LastMessage) > sixseconds && k.IsDeleting).ToList();
-            foreach (var y in deleted)
-                Keys.Remove(y);
-        }
-
-        protected override void OnActivate()
-        {
-            keySubscription = messageProvider.GetMessageStream().Subscribe(OnNext, OnError, OnCompleted);
-        }
-
-        protected override void OnDeactivate(bool close)
-        {
-            keySubscription.Dispose();
-            timerToken.Dispose();
-        }
-
-        public void OnNext(Message value)
-        {
-            if (Keys.Count > 10)
-                Keys.RemoveAt(0);
-
-            Keys.Add(value);
-        }
-
-        public void OnError(Exception error)
-        {
-        }
-
-        public void OnCompleted()
-        {
         }
 
         public void SaveSettingsGeneral()
