@@ -6,7 +6,6 @@ using System.Windows;
 using System.Windows.Forms;
 using Carnac.Logic.Native;
 using Carnac.Utilities;
-using Carnac.ViewModels;
 
 namespace Carnac.UI
 {

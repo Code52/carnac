@@ -3,12 +3,13 @@
                       xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-                      xmlns:viewModels="clr-namespace:Carnac.ViewModels"
-                      xmlns:views="clr-namespace:Carnac.Views"
-                      xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" x:Class="Carnac.UI.PreferencesView"
+        xmlns:views="clr-namespace:Carnac.Views"
+                      xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+                      xmlns:ui="clr-namespace:Carnac.UI"
+                      x:Class="Carnac.UI.PreferencesView"
                       Width="610" Height="420" Icon="../icon.ico" 
                       Foreground="{DynamicResource BlackBrush}"
-                      d:DataContext="{d:DesignInstance viewModels:PreferencesViewModel}" mc:Ignorable="d"
+                      d:DataContext="{d:DesignInstance ui:PreferencesViewModel}" mc:Ignorable="d"
                       >
     <!--ShowTitleBar="False" ShowMinButton="False" ShowMaxRestoreButton="False"
                       SaveWindowPosition="True"-->

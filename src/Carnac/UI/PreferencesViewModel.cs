@@ -10,7 +10,7 @@ using Carnac.Logic.Models;
 using Carnac.Logic.Native;
 using SettingsProviderNet;
 
-namespace Carnac.ViewModels
+namespace Carnac.UI
 {
     [Export(typeof(IShell))]
     public class PreferencesViewModel : NotifyPropertyChanged

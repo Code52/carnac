@@ -3,7 +3,7 @@ using Carnac.Logic;
 using Carnac.Logic.Models;
 using Message = Carnac.Logic.Models.Message;
 
-namespace Carnac.ViewModels
+namespace Carnac.UI
 {
     public class KeyShowViewModel: NotifyPropertyChanged
     {

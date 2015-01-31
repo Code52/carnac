@@ -4,8 +4,6 @@ using Carnac.Logic.KeyMonitor;
 using Carnac.Logic.Models;
 using Carnac.UI;
 using Carnac.Utilities;
-using Carnac.ViewModels;
-using Carnac.Views;
 using SettingsProviderNet;
 
 namespace Carnac
@@ -46,7 +44,7 @@ namespace Carnac
             keyShowView = new KeyShowView(new KeyShowViewModel(preferencesViewModel.Keys, settings));
             keyShowView.Show();
 
-            carnac = new KeysController(preferencesViewModel.Keys, messageProvider, keyProvider);
+            carnac = new KeysController(preferencesViewModel.Keys, messageProvider, keyProvider, new ConcurrencyService());
             carnac.Start();
 
             base.OnStartup(e);

@@ -1,6 +1,6 @@
 ﻿using Carnac.Logic;
 using Carnac.Logic.Models;
-using Carnac.ViewModels;
+using Carnac.UI;
 using NSubstitute;
 using SettingsProviderNet;
 using Xunit;
