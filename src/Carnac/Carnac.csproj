@@ -124,8 +124,6 @@
     <Compile Include="UI\PreferencesField.cs" />
     <Compile Include="Utilities\DesignTimeHelper.cs" />
     <Compile Include="Utilities\ConcurrencyService.cs" />
-    <Compile Include="KeyMonitor\HotKey.cs" />
-    <Compile Include="KeyMonitor\HotKeyWinApi.cs" />
     <Compile Include="UI\AvailableColor.cs" />
     <Compile Include="Utilities\ProcessUtilities.cs" />
     <Compile Include="UI\KeyShowViewModel.cs" />
