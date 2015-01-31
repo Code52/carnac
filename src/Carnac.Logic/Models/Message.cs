@@ -43,6 +43,7 @@ namespace Carnac.Logic.Models
                 AddKey(keyPress);
             }
             ShortcutName = shortcut.Name;
+            IsShortcut = true;
             CanBeMerged = false;
         }
 
@@ -70,6 +71,8 @@ namespace Carnac.Logic.Models
                     AddText(string.Format(" [{0}]", value));
             }
         }
+
+        public bool IsShortcut { get; private set; }
 
         private void AddKey(KeyPress keyPress)
         {
