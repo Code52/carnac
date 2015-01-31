@@ -82,8 +82,12 @@
                 </DataTemplate>
         </ResourceDictionary>
     </Window.Resources>
-
-    <TabControl>
+    <Grid>
+	    <Grid.RowDefinitions>
+		    <RowDefinition Height="*" />
+		    <RowDefinition Height="Auto" />
+	    </Grid.RowDefinitions>
+	    <TabControl>
         <TabItem Header="General">
             <StackPanel Margin="10,0,0,0" Orientation="Vertical">
                 <ItemsControl VerticalAlignment="Top" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White"
@@ -220,8 +224,6 @@
                              Text="{Binding ElementName=SettingsRightOffset,
                                             Path=Value}" />
                 </StackPanel>
-                <Button x:Name="SaveSettingsGeneral" Width="50" Margin="0 5 50 5" HorizontalAlignment="Right"
-                        Content="Save" />
             </StackPanel>
         </TabItem>
         <TabItem Header="Appearance">
@@ -269,10 +271,6 @@
                                Foreground="White" Text="Shortcuts Only" />
                     <CheckBox Margin="5 5 20 5" IsChecked="{Binding Settings.DetectShortcutsOnly}" />
                 </StackPanel>
-                <StackPanel Margin="0 5 50 5" HorizontalAlignment="Right" Orientation="Horizontal">
-                    <Button x:Name="SetDefaultSettings" Width="150" Margin="0 0 5 0" Content="Reset to Defaults" />
-                    <Button x:Name="SaveSettings" Width="50" Content="Save" />
-                </StackPanel>
             </StackPanel>
         </TabItem>
         <TabItem Header="About">
@@ -290,7 +288,7 @@
                         <Run Text="Carnac uses" />
                     </TextBlock>
                     <TextBlock Margin="0,4,0,0" Foreground="White" Text="{Binding Components}" TextWrapping="Wrap" />
-                    <Button x:Name="Visit" Width="145" Margin="0,60,0,0" HorizontalAlignment="Center"
+                    <Button Width="145" Margin="0,60,0,0" HorizontalAlignment="Center" Command="{Binding VisitCommand}"
                             Content="Visit Carnac Website" Style="{DynamicResource SquareButtonStyle}" />
                 </StackPanel>
                 <StackPanel>
@@ -303,10 +301,14 @@
                     <TextBlock Height="20.83" Margin="0,-10,0,0" HorizontalAlignment="Left" FontWeight="Bold"
                                Foreground="White" TextWrapping="Wrap">
                         <Run Text="version " /><Run Text=" " /><Run Text="{Binding Version, Mode=OneTime}" />
-                        <Run Text=" " /><Run Text="{Binding Configuration, Mode=OneTime}" />
                     </TextBlock>
                 </StackPanel>
             </StackPanel>
         </TabItem>
     </TabControl>
+    <StackPanel HorizontalAlignment="Right" Orientation="Horizontal" Grid.Row="1">
+                    <Button Width="150" Margin="0 0 5 0" Content="Reset to Defaults" Command="{Binding ResetToDefaultsCommand}" />
+                    <Button Width="50" Content="Save" Command="{Binding SaveCommand}" />
+        </StackPanel>
+    </Grid>
 </controls:MetroWindow>

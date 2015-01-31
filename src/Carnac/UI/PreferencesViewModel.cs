@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
+using System.Windows.Input;
 using System.Windows.Media;
 using Carnac.Logic;
 using Carnac.Logic.Enums;
@@ -16,9 +17,7 @@ namespace Carnac.UI
     {
         readonly ISettingsProvider settingsProvider;
         
-        public PreferencesViewModel(
-            ISettingsProvider settingsProvider,
-            IScreenManager screenManager)
+        public PreferencesViewModel(ISettingsProvider settingsProvider, IScreenManager screenManager)
         {
             this.settingsProvider = settingsProvider;
 
@@ -44,13 +43,24 @@ namespace Carnac.UI
 
                 AvailableColors.Add(availableColor);
             }
+
+            SaveCommand = new DelegateCommand(SaveSettings);
+            ResetToDefaultsCommand = new DelegateCommand(() => settingsProvider.ResetToDefaults<PopupSettings>());
+            VisitCommand = new DelegateCommand(Visit);
         }
+
+        public ICommand VisitCommand { get; private set; }
+
+        public ICommand ResetToDefaultsCommand { get; private set; }
+
+        public ICommand SaveCommand { get; private set; }
 
         public ObservableCollection<AvailableColor> AvailableColors { get; private set; }
 
         public ObservableCollection<Message> Keys { get; private set; }
 
         public ObservableCollection<DetailedScreen> Screens { get; set; }
+
         public DetailedScreen SelectedScreen { get; set; }
 
         public PopupSettings Settings { get; set; }
@@ -92,7 +102,7 @@ namespace Carnac.UI
 
         public AvailableColor ItemBackgroundColor { get; set; }
 
-        public void Visit()
+        private void Visit()
         {
             try
             {
@@ -100,16 +110,11 @@ namespace Carnac.UI
             }
             catch //I forget what exceptions can be raised if the browser is crashed?
             {
-
+                // ignored
             }
         }
 
-        public void SaveSettingsGeneral()
-        {
-            SaveSettings();
-        }
-
-        public void SaveSettings()
+        private void SaveSettings()
         {
             if (Screens.Count < 1)
                 return;
@@ -136,11 +141,6 @@ namespace Carnac.UI
             Settings.FontColor = FontColor.Name;
             Settings.ItemBackgroundColor = ItemBackgroundColor.Name;
             settingsProvider.SaveSettings(Settings);
-        }
-
-        public void SetDefaultSettings()
-        {
-            settingsProvider.ResetToDefaults<PopupSettings>();
         }
 
         private void PlaceScreen()

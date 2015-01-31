@@ -120,6 +120,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="CarnacTrayIcon.cs" />
+    <Compile Include="UI\DelegateCommand.cs" />
     <Compile Include="Utilities\ConcurrencyService.cs" />
     <Compile Include="KeyMonitor\HotKey.cs" />
     <Compile Include="KeyMonitor\HotKeyWinApi.cs" />
