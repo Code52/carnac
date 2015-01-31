@@ -121,6 +121,8 @@
     </ApplicationDefinition>
     <Compile Include="CarnacTrayIcon.cs" />
     <Compile Include="UI\DelegateCommand.cs" />
+    <Compile Include="UI\PreferencesField.cs" />
+    <Compile Include="Utilities\DesignTimeHelper.cs" />
     <Compile Include="Utilities\ConcurrencyService.cs" />
     <Compile Include="KeyMonitor\HotKey.cs" />
     <Compile Include="KeyMonitor\HotKeyWinApi.cs" />
@@ -140,6 +142,9 @@
       <DependentUpon>PreferencesView.xaml</DependentUpon>
     </Compile>
     <Page Include="Resources\Icons.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UI\KeyShowView.xaml">
