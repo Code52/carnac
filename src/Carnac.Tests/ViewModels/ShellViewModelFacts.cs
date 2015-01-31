@@ -1,5 +1,4 @@
-﻿using Caliburn.Micro;
-using Carnac.Logic;
+﻿using Carnac.Logic;
 using Carnac.Logic.Models;
 using Carnac.ViewModels;
 using NSubstitute;
@@ -14,11 +13,10 @@ namespace Carnac.Tests.ViewModels
         {
             private readonly ISettingsProvider settingsService = Substitute.For<ISettingsProvider>();
             private readonly IScreenManager screenManager = Substitute.For<IScreenManager>();
-            private readonly IWindowManager windowManager = Substitute.For<IWindowManager>();
 
             public override ShellViewModel Given()
             {
-                return new ShellViewModel(settingsService, screenManager, windowManager);
+                return new ShellViewModel(settingsService, screenManager);
             }
 
             public override void When()
@@ -43,13 +41,12 @@ namespace Carnac.Tests.ViewModels
         {
             private readonly ISettingsProvider settingsService = Substitute.For<ISettingsProvider>();
             private readonly IScreenManager screenManager = Substitute.For<IScreenManager>();
-            private readonly IWindowManager windowManager = Substitute.For<IWindowManager>();
             private readonly PopupSettings popupSettings = new PopupSettings();
 
             public override ShellViewModel Given()
             {
                 settingsService.GetSettings<PopupSettings>().Returns(popupSettings);
-                return new ShellViewModel(settingsService, screenManager, windowManager);
+                return new ShellViewModel(settingsService, screenManager);
             }
 
             public override void When()
@@ -68,13 +65,12 @@ namespace Carnac.Tests.ViewModels
         {
             private readonly ISettingsProvider settingsService = Substitute.For<ISettingsProvider>();
             private readonly IScreenManager screenManager = Substitute.For<IScreenManager>();
-            private readonly IWindowManager windowManager = Substitute.For<IWindowManager>();
             private readonly PopupSettings popupSettings = Substitute.For<PopupSettings>();
 
             public override ShellViewModel Given()
             {
                 settingsService.GetSettings<PopupSettings>().Returns(popupSettings);
-                return new ShellViewModel(settingsService, screenManager, windowManager);
+                return new ShellViewModel(settingsService, screenManager);
             }
 
             public override void When()

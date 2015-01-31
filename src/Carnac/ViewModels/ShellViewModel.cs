@@ -1,30 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
-using Caliburn.Micro;
 using Carnac.Logic;
 using Carnac.Logic.Enums;
 using Carnac.Logic.Models;
 using Carnac.Logic.Native;
 using SettingsProviderNet;
-using Message = Carnac.Logic.Models.Message;
 
 namespace Carnac.ViewModels
 {
     [Export(typeof(IShell))]
-    public class ShellViewModel : Screen, IShell
+    public class ShellViewModel : NotifyPropertyChanged
     {
         readonly ISettingsProvider settingsProvider;
 
         [ImportingConstructor]
         public ShellViewModel(
             ISettingsProvider settingsProvider,
-            IScreenManager screenManager,
-            IWindowManager windowManager)
+            IScreenManager screenManager)
         {
             this.settingsProvider = settingsProvider;
 
@@ -35,7 +31,7 @@ namespace Carnac.ViewModels
 
             PlaceScreen();
 
-            DisplayName = "Carnac";
+            //DisplayName = "Carnac";
         }
 
         public ObservableCollection<Message> Keys { get; private set; }

@@ -7,53 +7,15 @@ using System.Windows.Forms;
 using Carnac.Logic.Native;
 using Carnac.Utilities;
 using Carnac.ViewModels;
-using Application = System.Windows.Application;
 
 namespace Carnac.Views
 {
     public partial class ShellView
     {
-        public ShellView()
+        public ShellView(ShellViewModel viewModel)
         {
+            DataContext = viewModel;
             InitializeComponent();
-
-            // Check if there was instance before this. If there was-close the current one.  
-            if (ProcessUtilities.ThisProcessIsAlreadyRunning())
-            {
-                ProcessUtilities.SetFocusToPreviousInstance("Carnac");
-                Application.Current.Shutdown();
-            }
-
-            var exitMenuItem = new MenuItem
-            {
-                Text = Properties.Resources.ShellView_Exit
-            };
-
-            var iconStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Carnac.icon.embedded.ico");
-
-            var ni = new NotifyIcon
-                         {
-                             Icon = new Icon(iconStream),
-                             ContextMenu = new ContextMenu(new[] { exitMenuItem })
-                         };
-
-            exitMenuItem.Click += (sender, args) =>
-            {
-                ni.Visible = false;
-                Application.Current.Shutdown();
-            };
-            ni.MouseClick += NotifyIconClick;
-            ni.Visible = true;
-        }
-
-        void NotifyIconClick(object sender, MouseEventArgs mouseEventArgs)
-        {
-            if (mouseEventArgs.Button == MouseButtons.Right) return;
-
-            Show();
-            WindowState = WindowState.Normal;
-            Topmost = true;  // When it comes back, make sure it's on top...
-            Topmost = false; // and then it doesn't need to be anymore.
         }
 
         protected override void OnStateChanged(EventArgs e)

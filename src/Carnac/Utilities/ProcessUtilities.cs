@@ -35,7 +35,8 @@ namespace Carnac.Utilities
         public static bool ThisProcessIsAlreadyRunning()
         {
             bool createdNew;
-            mutex = new Mutex(false, Application.Current.MainWindow.GetType().Assembly.FullName, out createdNew);
+            var fullName = Application.Current.GetType().Assembly.FullName;
+            mutex = new Mutex(false, fullName, out createdNew);
             return !createdNew;
         }
 
