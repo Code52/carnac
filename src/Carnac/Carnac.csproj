@@ -152,24 +152,24 @@
     <Compile Include="KeyMonitor\HotKeyWinApi.cs" />
     <Compile Include="KeysController.cs" />
     <Compile Include="Utilities\ProcessUtilities.cs" />
-    <Compile Include="ViewModels\KeyShowViewModel.cs" />
-    <Compile Include="ViewModels\PreferencesViewModel.cs" />
+    <Compile Include="UI\KeyShowViewModel.cs" />
+    <Compile Include="UI\PreferencesViewModel.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="IShell.cs" />
-    <Compile Include="Views\KeyShowView.xaml.cs">
+    <Compile Include="UI\KeyShowView.xaml.cs">
       <DependentUpon>KeyShowView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\PlacementMarginConverter.cs" />
+    <Compile Include="Utilities\PlacementMarginConverter.cs" />
     <Compile Include="UI\PreferencesView.xaml.cs">
       <DependentUpon>PreferencesView.xaml</DependentUpon>
     </Compile>
     <Page Include="Resources\Icons.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\KeyShowView.xaml">
+    <Page Include="UI\KeyShowView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
