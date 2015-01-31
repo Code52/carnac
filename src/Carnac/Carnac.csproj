@@ -155,10 +155,7 @@
     <Compile Include="KeyMonitor\HotKey.cs" />
     <Compile Include="KeyMonitor\HotKeyWinApi.cs" />
     <Compile Include="KeysController.cs" />
-    <Compile Include="Utilities\ITimerFactory.cs" />
     <Compile Include="Utilities\ProcessUtilities.cs" />
-    <Compile Include="Utilities\TimerFactory.cs" />
-    <Compile Include="Utilities\TimerState.cs" />
     <Compile Include="ViewModels\KeyShowViewModel.cs" />
     <Compile Include="ViewModels\ShellViewModel.cs" />
     <Compile Include="App.xaml.cs">
