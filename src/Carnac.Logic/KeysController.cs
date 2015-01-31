@@ -2,10 +2,9 @@ using System;
 using System.Collections.ObjectModel;
 using System.Reactive;
 using System.Reactive.Linq;
-using Carnac.Logic;
 using Carnac.Logic.Models;
 
-namespace Carnac
+namespace Carnac.Logic
 {
     public class KeysController : IDisposable
     {

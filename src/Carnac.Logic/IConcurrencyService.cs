@@ -1,6 +1,6 @@
 using System.Reactive.Concurrency;
 
-namespace Carnac
+namespace Carnac.Logic
 {
     public interface IConcurrencyService
     {

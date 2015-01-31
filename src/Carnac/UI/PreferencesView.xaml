@@ -3,8 +3,8 @@
                       xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-                      xmlns:views="clr-namespace:Carnac.Views"
                       xmlns:ui="clr-namespace:Carnac.UI"
+                      xmlns:utilities="clr-namespace:Carnac.Utilities"
                       x:Class="Carnac.UI.PreferencesView"
                       Width="610" Height="420" Icon="../icon.ico" 
                       Foreground="{DynamicResource BlackBrush}"
@@ -24,7 +24,7 @@
                     Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseDark.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
-            <views:PlacementMarginConverter x:Key="PlacementMarginConverter" />
+            <utilities:PlacementMarginConverter x:Key="PlacementMarginConverter" />
             <Style x:Key="PlacementButton" TargetType="{x:Type RadioButton}">
                 <Setter Property="SnapsToDevicePixels" Value="true" />
                 <Setter Property="OverridesDefaultStyle" Value="true" />
@@ -278,7 +278,7 @@
         <TabItem Header="About">
             <StackPanel Margin="20,40,0,0" Orientation="Horizontal">
                 <StackPanel Width="340">
-                    <TextBlock Margin="0,-7,-0.001,0" HorizontalAlignment="Left" VerticalAlignment="Bottom"
+                    <TextBlock Margin="0,-7,0,0" HorizontalAlignment="Left" VerticalAlignment="Bottom"
                                FontFamily="Segoe UI Light" FontSize="18.667" Foreground="#FF41B1E1" TextWrapping="Wrap">
                         <Run Text="a code52 project" />
                     </TextBlock>

@@ -64,16 +64,16 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Rx-PlatformServices.2.2.5\lib\net40\System.Reactive.PlatformServices.dll</HintPath>
     </Reference>
-    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
     <Reference Include="YamlDotNet">
       <HintPath>..\packages\YamlDotNet.3.5.1\lib\net35\YamlDotNet.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ActionType.cs" />
     <Compile Include="Enums\NotificationPlacement.cs" />
+    <Compile Include="IConcurrencyService.cs" />
     <Compile Include="IMessageMerger.cs" />
     <Compile Include="IMessageProvider.cs" />
     <Compile Include="Internal\FixedQueue.cs" />
@@ -87,6 +87,7 @@
     <Compile Include="KeyMonitor\InterceptKeyEventArgs.cs" />
     <Compile Include="KeyMonitor\InterceptKeys.cs" />
     <Compile Include="KeyMonitor\KeyDirection.cs" />
+    <Compile Include="KeysController.cs" />
     <Compile Include="MessageMerger.cs" />
     <Compile Include="Models\Processinfo.cs" />
     <Compile Include="ShortcutAccumulator.cs" />

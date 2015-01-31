@@ -1,7 +1,8 @@
 using System.Reactive.Concurrency;
 using System.Threading;
+using Carnac.Logic;
 
-namespace Carnac
+namespace Carnac.Utilities
 {
     public class ConcurrencyService : IConcurrencyService
     {

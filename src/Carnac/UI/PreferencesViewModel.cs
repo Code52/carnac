@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel.Composition;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
@@ -13,12 +12,10 @@ using SettingsProviderNet;
 
 namespace Carnac.UI
 {
-    [Export(typeof(IShell))]
     public class PreferencesViewModel : NotifyPropertyChanged
     {
         readonly ISettingsProvider settingsProvider;
-
-        [ImportingConstructor]
+        
         public PreferencesViewModel(
             ISettingsProvider settingsProvider,
             IScreenManager screenManager)
@@ -78,7 +75,6 @@ namespace Carnac.UI
                                                        {
                                                          "MahApps.Metro",
                                                          "Fody",
-                                                         "Caliburn Micro",
                                                          "NSubstitute",
                                                          "Reactive Extensions"
                                                      };
