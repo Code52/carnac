@@ -16,6 +16,7 @@ namespace Carnac.Tests.ViewModels
 
             public override PreferencesViewModel Given()
             {
+                settingsService.GetSettings<PopupSettings>().Returns(new PopupSettings());
                 return new PreferencesViewModel(settingsService, screenManager);
             }
 

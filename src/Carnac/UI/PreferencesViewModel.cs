@@ -4,6 +4,7 @@ using System.ComponentModel.Composition;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
+using System.Windows.Media;
 using Carnac.Logic;
 using Carnac.Logic.Enums;
 using Carnac.Logic.Models;
@@ -31,8 +32,24 @@ namespace Carnac.UI
 
             PlaceScreen();
 
-            //DisplayName = "Carnac";
+            AvailableColors = new ObservableCollection<AvailableColor>();
+            var properties = typeof(Colors).GetProperties(BindingFlags.Static | BindingFlags.Public);
+            foreach (var prop in properties)
+            {
+                var name = prop.Name;
+                var value = (Color)prop.GetValue(null, null);
+
+                var availableColor = new AvailableColor(name, value);
+                if (Settings.FontColor == name)
+                    FontColor = availableColor;
+                if (Settings.ItemBackgroundColor == name)
+                    ItemBackgroundColor = availableColor;
+
+                AvailableColors.Add(availableColor);
+            }
         }
+
+        public ObservableCollection<AvailableColor> AvailableColors { get; private set; }
 
         public ObservableCollection<Message> Keys { get; private set; }
 
@@ -75,6 +92,10 @@ namespace Carnac.UI
             get { return string.Join(", ", components); }
         }
 
+        public AvailableColor FontColor { get; set; }
+
+        public AvailableColor ItemBackgroundColor { get; set; }
+
         public void Visit()
         {
             try
@@ -116,6 +137,8 @@ namespace Carnac.UI
             PlaceScreen();
 
             Settings.SettingsConfigured = true;
+            Settings.FontColor = FontColor.Name;
+            Settings.ItemBackgroundColor = ItemBackgroundColor.Name;
             settingsProvider.SaveSettings(Settings);
         }
 
