@@ -21,9 +21,29 @@ namespace Carnac.Logic
             get { return keys; }
         }
 
+        public ShortcutAccumulator ProcessKey(IShortcutProvider shortcutProvider, KeyPress key)
+        {
+            if (HasCompletedValue)
+                return new ShortcutAccumulator().ProcessKey(shortcutProvider, key);
+
+            if (!keys.Any())
+            {
+                var possibleShortcuts = shortcutProvider.GetShortcutsStartingWith(key);
+                if (possibleShortcuts.Any())
+                    BeginShortcut(key, possibleShortcuts);
+                else
+                    Complete(key);
+
+                return this;
+            }
+
+            Add(key);
+            return this;
+        }
+
         public bool HasCompletedValue { get; private set; }
 
-        public void Add(KeyPress key)
+        void Add(KeyPress key)
         {
             var isFirstKey = keys.Count == 0;
 
@@ -49,7 +69,7 @@ namespace Carnac.Logic
                 possibleKeyShortcuts = newPossibleShortcuts;
         }
 
-        public void ShortcutCompleted(KeyShortcut shortcut)
+        void ShortcutCompleted(KeyShortcut shortcut)
         {
             if (HasCompletedValue)
                 throw new InvalidOperationException();
@@ -66,17 +86,13 @@ namespace Carnac.Logic
             return messages;
         }
 
-        public void BeginShortcut(KeyPress key, List<KeyShortcut> possibleShortcuts)
+        void BeginShortcut(KeyPress key, List<KeyShortcut> possibleShortcuts)
         {
             keys.Add(key);
             EvaluateShortcuts(possibleShortcuts);
         }
 
-        /// <summary>
-        /// Is not the start of a possbile chord
-        /// </summary>
-        /// <param name="key"></param>
-        public void Complete(KeyPress key)
+        void Complete(KeyPress key)
         {
             if (HasCompletedValue)
                 throw new InvalidOperationException();
@@ -93,26 +109,6 @@ namespace Carnac.Logic
             // When we have no matching shortcut just break all key presses into individual messages
             HasCompletedValue = true;
             messages = keys.Select(k => new Message(k)).ToArray();
-        }
-
-        public ShortcutAccumulator ProcessKey(IShortcutProvider shortcutProvider, KeyPress key)
-        {
-            if (HasCompletedValue)
-                return new ShortcutAccumulator().ProcessKey(shortcutProvider, key);
-
-            if (!keys.Any())
-            {
-                var possibleShortcuts = shortcutProvider.GetShortcutsStartingWith(key);
-                if (possibleShortcuts.Any())
-                    BeginShortcut(key, possibleShortcuts);
-                else
-                    Complete(key);
-
-                return this;
-            }
-
-            Add(key);
-            return this;
         }
     }
 }

@@ -81,7 +81,6 @@ namespace Carnac.Tests
 
             // assert
             Assert.Equal(0, messages.Count);
-            Assert.NotEqual("SomeShortcut", messages[0].ShortcutName);
         }
 
         [Fact]
