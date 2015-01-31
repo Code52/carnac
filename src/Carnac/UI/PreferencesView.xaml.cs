@@ -8,11 +8,11 @@ using Carnac.Logic.Native;
 using Carnac.Utilities;
 using Carnac.ViewModels;
 
-namespace Carnac.Views
+namespace Carnac.UI
 {
-    public partial class ShellView
+    public partial class PreferencesView
     {
-        public ShellView(ShellViewModel viewModel)
+        public PreferencesView(PreferencesViewModel viewModel)
         {
             DataContext = viewModel;
             InitializeComponent();
@@ -37,7 +37,7 @@ namespace Carnac.Views
 
         private void RadioChecked(object sender, RoutedEventArgs e)
         {
-            var dc = DataContext as ShellViewModel;
+            var dc = DataContext as PreferencesViewModel;
             if (dc == null)
                 return;
 

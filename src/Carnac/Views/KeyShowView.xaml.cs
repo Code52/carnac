@@ -10,8 +10,9 @@ namespace Carnac.Views
 {
     public partial class KeyShowView
     {
-        public KeyShowView()
+        public KeyShowView(KeyShowViewModel keyShowViewModel)
         {
+            DataContext = keyShowViewModel;
             InitializeComponent();
         }
 

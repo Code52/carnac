@@ -5,10 +5,10 @@
                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                       xmlns:viewModels="clr-namespace:Carnac.ViewModels"
                       xmlns:views="clr-namespace:Carnac.Views"
-                      xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" x:Class="Carnac.Views.ShellView"
+                      xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" x:Class="Carnac.UI.PreferencesView"
                       Width="610" Height="420" Icon="../icon.ico" 
                       Foreground="{DynamicResource BlackBrush}"
-                      d:DataContext="{d:DesignInstance viewModels:ShellViewModel}" mc:Ignorable="d"
+                      d:DataContext="{d:DesignInstance viewModels:PreferencesViewModel}" mc:Ignorable="d"
                       >
     <!--ShowTitleBar="False" ShowMinButton="False" ShowMaxRestoreButton="False"
                       SaveWindowPosition="True"-->

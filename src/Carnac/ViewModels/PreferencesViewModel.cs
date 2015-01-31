@@ -13,12 +13,12 @@ using SettingsProviderNet;
 namespace Carnac.ViewModels
 {
     [Export(typeof(IShell))]
-    public class ShellViewModel : NotifyPropertyChanged
+    public class PreferencesViewModel : NotifyPropertyChanged
     {
         readonly ISettingsProvider settingsProvider;
 
         [ImportingConstructor]
-        public ShellViewModel(
+        public PreferencesViewModel(
             ISettingsProvider settingsProvider,
             IScreenManager screenManager)
         {

@@ -153,7 +153,7 @@
     <Compile Include="KeysController.cs" />
     <Compile Include="Utilities\ProcessUtilities.cs" />
     <Compile Include="ViewModels\KeyShowViewModel.cs" />
-    <Compile Include="ViewModels\ShellViewModel.cs" />
+    <Compile Include="ViewModels\PreferencesViewModel.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -163,8 +163,8 @@
       <DependentUpon>KeyShowView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\PlacementMarginConverter.cs" />
-    <Compile Include="Views\ShellView.xaml.cs">
-      <DependentUpon>ShellView.xaml</DependentUpon>
+    <Compile Include="UI\PreferencesView.xaml.cs">
+      <DependentUpon>PreferencesView.xaml</DependentUpon>
     </Compile>
     <Page Include="Resources\Icons.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -173,9 +173,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\ShellView.xaml">
+    <Page Include="UI\PreferencesView.xaml">
       <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
+      <SubType>
+      </SubType>
     </Page>
   </ItemGroup>
   <ItemGroup>
@@ -230,9 +231,7 @@
   <ItemGroup>
     <Resource Include="Resources\Entypo-license.txt" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="UI\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target AfterTargets="AfterBuild;NonWinFodyTarget" Name="CleanReferenceCopyLocalPaths">
     <Delete Files="@(ReferenceCopyLocalPaths->'$(OutDir)%(DestinationSubDirectory)%(Filename)%(Extension)')" />
