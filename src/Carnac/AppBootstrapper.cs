@@ -31,7 +31,7 @@ namespace Carnac
             windowManager.ShowWindow(keyShowViewModel);
 
             var messageProvider = new MessageProvider(new ShortcutProvider(), Shell.Settings, new MessageMerger());
-            carnac = new KeysController(Shell.Keys, messageProvider, keyProvider);
+            carnac = new KeysController(Shell.Keys, messageProvider, keyProvider, new ConcurrencyService());
 
             var window = windowManager.CreateWindow(Shell);
             if (!settingsProvider.GetSettings<PopupSettings>().SettingsConfigured)

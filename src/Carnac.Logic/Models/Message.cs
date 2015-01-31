@@ -1,7 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
+using System.Reactive;
+using System.Reactive.Linq;
 
 namespace Carnac.Logic.Models
 {
@@ -21,6 +24,11 @@ namespace Carnac.Logic.Models
             keyCollection = new ObservableCollection<KeyPress>();
             Text = new ReadOnlyObservableCollection<string>(textCollection);
             Keys = new ReadOnlyObservableCollection<KeyPress>(keyCollection);
+            Updated = Observable.FromEvent<PropertyChangedEventHandler, PropertyChangedEventArgs>(
+                    handler => (sender, e) => handler(e),
+                    add => PropertyChanged += add,
+                    remove => PropertyChanged -= remove)
+                .Select(_ => Unit.Default);
         }
 
         public Message(KeyPress key) : this()
@@ -73,6 +81,8 @@ namespace Carnac.Logic.Models
         }
 
         public bool IsShortcut { get; private set; }
+
+        public IObservable<Unit> Updated { get; private set; }
 
         private void AddKey(KeyPress keyPress)
         {
