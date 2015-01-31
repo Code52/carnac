@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Reactive.Concurrency;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using System.Windows.Forms;
 using Carnac.Logic;
 using Carnac.Logic.KeyMonitor;
@@ -18,7 +20,7 @@ namespace Carnac.Tests
         readonly ObservableCollection<Message> keysCollection = new ObservableCollection<Message>();
         readonly TestScheduler testScheduler;
         readonly KeysController sut;
-        IObservable<Message> messageStream;
+        readonly Subject<Message> messageStream;
 
         public KeysControllerFacts()
         {
@@ -29,6 +31,7 @@ namespace Carnac.Tests
             var concurrencyService = Substitute.For<IConcurrencyService>();
             concurrencyService.UiScheduler.Returns(testScheduler);
             concurrencyService.Default.Returns(testScheduler);
+            messageStream = new Subject<Message>();
             sut = new KeysController(keysCollection, messageProvider, keyProvider, concurrencyService);
         }
 
@@ -36,10 +39,9 @@ namespace Carnac.Tests
         public void MessagesAreAddedIntoKeysColletion()
         {
             var message = new Message(A);
-            messageStream = Observable.Return(message);
 
             sut.Start();
-            testScheduler.AdvanceBy(5); // Push it a long a few ticks to allow query to execute
+            ProvideMessage(message);
 
             keysCollection.ShouldContain(message);
             message.IsDeleting.ShouldBe(false);
@@ -49,10 +51,9 @@ namespace Carnac.Tests
         public void MessagesAreFlaggedAsDeletingAfter5Seconds()
         {
             var message = new Message(A);
-            messageStream = Observable.Return(message);
 
             sut.Start();
-            testScheduler.AdvanceBy(5); // Push it a long a few ticks to allow query to execute
+            ProvideMessage(message);
             testScheduler.AdvanceBy(TimeSpan.FromSeconds(5).Ticks);
 
             message.IsDeleting.ShouldBe(true);
@@ -62,10 +63,9 @@ namespace Carnac.Tests
         public void MessagesIsRemovedAfter6Seconds()
         {
             var message = new Message(A);
-            messageStream = Observable.Return(message);
 
             sut.Start();
-            testScheduler.AdvanceBy(5); // Push it a long a few ticks to allow query to execute
+            ProvideMessage(message);
             testScheduler.AdvanceBy(TimeSpan.FromSeconds(6).Ticks);
             
             keysCollection.ShouldNotContain(message);
@@ -75,10 +75,9 @@ namespace Carnac.Tests
         public void MessageTimeoutIsStartedAgainIfMessageIsUpdated()
         {
             var message = new Message(A);
-            messageStream = Observable.Return(message);
 
             sut.Start();
-            testScheduler.AdvanceBy(5); // Push it a long a few ticks to allow query to execute
+            ProvideMessage(message);
             testScheduler.AdvanceBy(TimeSpan.FromSeconds(3).Ticks);
             message.Merge(new Message(A));
             testScheduler.AdvanceBy(TimeSpan.FromSeconds(3).Ticks);
@@ -91,10 +90,9 @@ namespace Carnac.Tests
         public void UnsubscribesFromMessageUpdatesAfterDeleteTimeout()
         {
             var message = new Message(A);
-            messageStream = Observable.Return(message);
 
             sut.Start();
-            testScheduler.AdvanceBy(5);
+            ProvideMessage(message);
             testScheduler.AdvanceBy(TimeSpan.FromSeconds(5).Ticks);
             message.IsDeleting = false;
             message.Merge(new Message(A)); // This will trigger an update of the message
@@ -103,6 +101,13 @@ namespace Carnac.Tests
 
             // If we didn't unsubscribe to updates we would have triggered another inner sequence which would try to delete again.
             message.IsDeleting.ShouldBe(false);
+        }
+
+        void ProvideMessage(Message message)
+        {
+            testScheduler.AdvanceBy(5); // Need to tick to allows merge to be setup properly
+            messageStream.OnNext(message);
+            testScheduler.AdvanceBy(10); // Few more ticks to allow the message to be processed
         }
 
         static KeyPress A

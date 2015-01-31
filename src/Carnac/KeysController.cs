@@ -27,7 +27,7 @@ namespace Carnac
 
         public void Start()
         {
-            var messageStream = messageProvider.GetMessageStream(keyProvider.GetKeyStream());
+            var messageStream = messageProvider.GetMessageStream(keyProvider.GetKeyStream()).Publish().RefCount();
 
             var addMessageStream = messageStream.Select(m => Tuple.Create(m, ActionType.Add));
 
@@ -69,7 +69,7 @@ namespace Carnac
                 .Delay(onesecond, concurrencyService.Default)
                 .Select(m => Tuple.Create(m.Item1, ActionType.Remove));
             
-            var actionStream = addMessageStream.Merge(fadeOutMessageStream).Merge(removeMessageStream);
+            var actionStream = removeMessageStream.Merge(fadeOutMessageStream).Merge(addMessageStream);
 
             actionSubscription = actionStream
                 .ObserveOn(concurrencyService.UiScheduler)
@@ -91,6 +91,9 @@ namespace Carnac
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
+            }, ex =>
+            {
+                
             });
 
         }
