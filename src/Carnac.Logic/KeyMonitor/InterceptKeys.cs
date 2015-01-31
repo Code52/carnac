@@ -5,7 +5,6 @@ using System.Reactive.Linq;
 using System.Runtime.InteropServices;
 using System.Security.Permissions;
 using System.Windows.Forms;
-using Carnac.Logic.Win32Methods;
 
 namespace Carnac.Logic.KeyMonitor
 {
@@ -15,9 +14,10 @@ namespace Carnac.Logic.KeyMonitor
     {
         public static readonly InterceptKeys Current = new InterceptKeys();
         readonly IObservable<InterceptKeyEventArgs> keyStream;
-        LowLevelKeyboardProc callback;
+        // ReSharper disable once PrivateFieldCanBeConvertedToLocalVariable
+        Win32Methods.LowLevelKeyboardProc callback;
 
-        private InterceptKeys()
+        InterceptKeys()
         {
             keyStream = Observable.Create<InterceptKeyEventArgs>(observer =>
             {
@@ -34,13 +34,14 @@ namespace Carnac.Logic.KeyMonitor
                             return (IntPtr)1;
                     }
 
-                    return CallNextHookEx(hookId, nCode, wParam, lParam);
+                    // ReSharper disable once AccessToModifiedClosure
+                    return Win32Methods.CallNextHookEx(hookId, nCode, wParam, lParam);
                 };
                 hookId = SetHook(callback);
                 return Disposable.Create(() =>
                 {
                     Debug.Write("Unsubscribed from keys");
-                    UnhookWindowsHookEx(hookId);
+                    Win32Methods.UnhookWindowsHookEx(hookId);
                     callback = null;
                 });
             })
@@ -52,22 +53,22 @@ namespace Carnac.Logic.KeyMonitor
             return keyStream;
         }
 
-        InterceptKeyEventArgs CreateEventArgs(IntPtr wParam, IntPtr lParam)
+        static InterceptKeyEventArgs CreateEventArgs(IntPtr wParam, IntPtr lParam)
         {
             bool alt = (Control.ModifierKeys & Keys.Alt) != 0;
             bool control = (Control.ModifierKeys & Keys.Control) != 0;
             bool shift = (Control.ModifierKeys & Keys.Shift) != 0;
-            bool keyDown = wParam == (IntPtr)WM_KEYDOWN;
-            bool keyUp = wParam == (IntPtr)WM_KEYUP;
+            bool keyDown = wParam == (IntPtr)Win32Methods.WM_KEYDOWN;
+            bool keyUp = wParam == (IntPtr)Win32Methods.WM_KEYUP;
             int vkCode = Marshal.ReadInt32(lParam);
             var key = (Keys)vkCode;
             //http://msdn.microsoft.com/en-us/library/windows/desktop/ms646286(v=vs.85).aspx
-            if (key != Keys.RMenu && key != Keys.LMenu && wParam == (IntPtr)WM_SYSKEYDOWN)
+            if (key != Keys.RMenu && key != Keys.LMenu && wParam == (IntPtr)Win32Methods.WM_SYSKEYDOWN)
             {
                 alt = true;
                 keyDown = true;
             }
-            if (key != Keys.RMenu && key != Keys.LMenu && wParam == (IntPtr)WM_SYSKEYUP)
+            if (key != Keys.RMenu && key != Keys.LMenu && wParam == (IntPtr)Win32Methods.WM_SYSKEYUP)
             {
                 alt = true;
                 keyUp = true;
@@ -81,14 +82,14 @@ namespace Carnac.Logic.KeyMonitor
                 alt, control, shift);
         }
 
-        static IntPtr SetHook(LowLevelKeyboardProc proc)
+        static IntPtr SetHook(Win32Methods.LowLevelKeyboardProc proc)
         {
             //TODO: This requires FullTrust to use the Process class - is there any options for doing this in MediumTrust?
             //
             using (Process curProcess = Process.GetCurrentProcess())
             using (ProcessModule curModule = curProcess.MainModule)
             {
-                return SetWindowsHookEx(WH_KEYBOARD_LL, proc, GetModuleHandle(curModule.ModuleName), 0);
+                return Win32Methods.SetWindowsHookEx(Win32Methods.WH_KEYBOARD_LL, proc, Win32Methods.GetModuleHandle(curModule.ModuleName), 0);
             }
         }
     }
