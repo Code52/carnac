@@ -99,19 +99,19 @@ namespace Carnac.UI
 
         public AvailableColor ItemBackgroundColor { get; set; }
 
-        private void Visit()
+        void Visit()
         {
             try
             {
                 Process.Start("http://code52.org/carnac/");
             }
-            catch //I forget what exceptions can be raised if the browser is crashed?
+            catch
             {
-                // ignored
+                //I forget what exceptions can be raised if the browser is crashed?
             }
         }
 
-        private void SaveSettings()
+        void SaveSettings()
         {
             if (Screens.Count < 1)
                 return;
@@ -140,7 +140,7 @@ namespace Carnac.UI
             settingsProvider.SaveSettings(Settings);
         }
 
-        private void PlaceScreen()
+        void PlaceScreen()
         {
             if (Screens == null) 
                 return;

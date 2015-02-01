@@ -8,10 +8,10 @@ namespace Carnac.Logic
 {
     public class PasswordModeService : IPasswordModeService
     {
-        private readonly FixedQueue<InterceptKeyEventArgs> log;
-        private InterceptKeyEventArgs[] passwordKeyCombination;
-        private readonly InterceptKeyEventArgsEqualityComparer comparer = new InterceptKeyEventArgsEqualityComparer();
-        private bool currentMode;
+        readonly InterceptKeyEventArgsEqualityComparer comparer = new InterceptKeyEventArgsEqualityComparer();
+        readonly FixedQueue<InterceptKeyEventArgs> log;
+        InterceptKeyEventArgs[] passwordKeyCombination;
+        bool currentMode;
 
         public PasswordModeService()
         {
@@ -50,7 +50,7 @@ namespace Carnac.Logic
             }
         }
 
-        private class InterceptKeyEventArgsEqualityComparer : IEqualityComparer<InterceptKeyEventArgs>
+        class InterceptKeyEventArgsEqualityComparer : IEqualityComparer<InterceptKeyEventArgs>
         {
             public bool Equals(InterceptKeyEventArgs x, InterceptKeyEventArgs y)
             {

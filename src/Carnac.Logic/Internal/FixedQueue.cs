@@ -1,11 +1,12 @@
+using System.Collections;
 using System.Collections.Generic;
 
 namespace Carnac.Logic.Internal
 {
     internal class FixedQueue<T> : IEnumerable<T>
     {
-        private readonly int fixedSize;
-        private readonly Queue<T> queue;
+        readonly int fixedSize;
+        readonly Queue<T> queue;
 
         public FixedQueue(int fixedSize)
         {
@@ -32,7 +33,7 @@ namespace Carnac.Logic.Internal
             return queue.GetEnumerator();
         }
 
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
         }

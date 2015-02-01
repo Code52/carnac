@@ -1,18 +1,15 @@
 ﻿using System;
-using System.ComponentModel.Composition;
 using System.Reactive.Linq;
 using Carnac.Logic.Models;
 
 namespace Carnac.Logic
 {
-    [Export(typeof(IMessageProvider))]
     public class MessageProvider : IMessageProvider
     {
         readonly IShortcutProvider shortcutProvider;
         readonly PopupSettings settings;
         readonly IMessageMerger messageMerger;
 
-        [ImportingConstructor]
         public MessageProvider(IShortcutProvider shortcutProvider, PopupSettings settings, IMessageMerger messageMerger)
         {
             this.shortcutProvider = shortcutProvider;

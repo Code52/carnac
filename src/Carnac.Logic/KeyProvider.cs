@@ -13,9 +13,9 @@ namespace Carnac.Logic
 {
     public class KeyProvider : IKeyProvider
     {
-        private readonly IInterceptKeys interceptKeysSource;
-        private readonly Dictionary<int, Process> processes;
-        private readonly IPasswordModeService passwordModeService;
+        readonly IInterceptKeys interceptKeysSource;
+        readonly Dictionary<int, Process> processes;
+        readonly IPasswordModeService passwordModeService;
         readonly IDesktopLockEventService desktopLockEventService;
 
         private readonly IList<Keys> modifierKeys =
@@ -75,7 +75,7 @@ namespace Carnac.Logic
             });
         }
 
-        private InterceptKeyEventArgs DetectWindowsKey(InterceptKeyEventArgs interceptKeyEventArgs)
+        InterceptKeyEventArgs DetectWindowsKey(InterceptKeyEventArgs interceptKeyEventArgs)
         {
             if (interceptKeyEventArgs.Key == Keys.LWin || interceptKeyEventArgs.Key == Keys.RWin)
             {
@@ -88,12 +88,12 @@ namespace Carnac.Logic
             return interceptKeyEventArgs;
         }
 
-        private bool IsModifierKeyPress(InterceptKeyEventArgs interceptKeyEventArgs)
+        bool IsModifierKeyPress(InterceptKeyEventArgs interceptKeyEventArgs)
         {
             return modifierKeys.Contains(interceptKeyEventArgs.Key);
         }
 
-        private KeyPress ToCarnacKeyPress(InterceptKeyEventArgs interceptKeyEventArgs)
+        KeyPress ToCarnacKeyPress(InterceptKeyEventArgs interceptKeyEventArgs)
         {
             var process = GetAssociatedProcess();
 
@@ -105,7 +105,7 @@ namespace Carnac.Logic
             return new KeyPress(new ProcessInfo(process.ProcessName), interceptKeyEventArgs, winKeyPressed, inputs);
         }
 
-        private static IEnumerable<string> ToInputs(bool isLetter, bool isWinKeyPressed, InterceptKeyEventArgs interceptKeyEventArgs)
+        static IEnumerable<string> ToInputs(bool isLetter, bool isWinKeyPressed, InterceptKeyEventArgs interceptKeyEventArgs)
         {
             var controlPressed = interceptKeyEventArgs.ControlPressed;
             var altPressed = interceptKeyEventArgs.AltPressed;
@@ -142,7 +142,7 @@ namespace Carnac.Logic
             }
         }
 
-        private Process GetAssociatedProcess()
+        Process GetAssociatedProcess()
         {
             Process process;
 

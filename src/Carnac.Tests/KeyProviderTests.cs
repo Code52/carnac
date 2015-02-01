@@ -13,7 +13,7 @@ namespace Carnac.Tests
 {
     public class KeyProviderTests
     {
-        private readonly IPasswordModeService passwordModeService;
+        readonly IPasswordModeService passwordModeService;
         readonly IDesktopLockEventService desktopLockEventService;
 
         public KeyProviderTests()
@@ -108,7 +108,7 @@ namespace Carnac.Tests
             Assert.Equal(new[] { "Win", "e" }, processedKeys.Single().Input);
         }
 
-        private static IEnumerable<KeyPress> ToEnumerable(IKeyProvider provider, KeyPlayer player)
+        static IEnumerable<KeyPress> ToEnumerable(IKeyProvider provider, KeyPlayer player)
         {
             var keys = new List<KeyPress>();
 

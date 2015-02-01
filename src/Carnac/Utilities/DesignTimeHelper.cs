@@ -13,7 +13,7 @@ namespace Carnac.Utilities
         /// <summary>
         /// Indicates whether or not the framework is in design-time mode.
         /// </summary>
-        private static bool InDesignMode
+        static bool InDesignMode
         {
             get
             {
@@ -43,7 +43,7 @@ namespace Carnac.Utilities
         {
             dependencyObject.SetValue(BackgroundProperty, value);
         }
-        private static void BackgroundChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        static void BackgroundChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             if (!InDesignMode)
                 return;
@@ -51,5 +51,4 @@ namespace Carnac.Utilities
             d.GetType().GetProperty("Background").SetValue(d, e.NewValue, null);
         }
     }
-
 }

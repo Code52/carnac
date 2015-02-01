@@ -6,7 +6,7 @@ namespace Carnac.Logic
 {
     public class KeyShortcut
     {
-        private readonly KeyPressDefinition[] keyCombinations;
+        readonly KeyPressDefinition[] keyCombinations;
 
         public KeyShortcut(string name, params KeyPressDefinition[] keyCombinations)
         {

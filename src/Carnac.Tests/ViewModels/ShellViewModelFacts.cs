@@ -11,8 +11,8 @@ namespace Carnac.Tests.ViewModels
     {
         public class when_creating_the_new_viewmodel : SpecificationFor<PreferencesViewModel>
         {
-            private readonly ISettingsProvider settingsService = Substitute.For<ISettingsProvider>();
-            private readonly IScreenManager screenManager = Substitute.For<IScreenManager>();
+            readonly ISettingsProvider settingsService = Substitute.For<ISettingsProvider>();
+            readonly IScreenManager screenManager = Substitute.For<IScreenManager>();
 
             public override PreferencesViewModel Given()
             {
@@ -40,9 +40,9 @@ namespace Carnac.Tests.ViewModels
 
         public class when_the_settings_file_is_defined : SpecificationFor<PreferencesViewModel>
         {
-            private readonly ISettingsProvider settingsService = Substitute.For<ISettingsProvider>();
-            private readonly IScreenManager screenManager = Substitute.For<IScreenManager>();
-            private readonly PopupSettings popupSettings = new PopupSettings();
+            readonly ISettingsProvider settingsService = Substitute.For<ISettingsProvider>();
+            readonly IScreenManager screenManager = Substitute.For<IScreenManager>();
+            readonly PopupSettings popupSettings = new PopupSettings();
 
             public override PreferencesViewModel Given()
             {
@@ -64,9 +64,9 @@ namespace Carnac.Tests.ViewModels
 
         public class when_the_settings_file_is_not_defined : SpecificationFor<PreferencesViewModel>
         {
-            private readonly ISettingsProvider settingsService = Substitute.For<ISettingsProvider>();
-            private readonly IScreenManager screenManager = Substitute.For<IScreenManager>();
-            private readonly PopupSettings popupSettings = Substitute.For<PopupSettings>();
+            readonly ISettingsProvider settingsService = Substitute.For<ISettingsProvider>();
+            readonly IScreenManager screenManager = Substitute.For<IScreenManager>();
+            readonly PopupSettings popupSettings = Substitute.For<PopupSettings>();
 
             public override PreferencesViewModel Given()
             {
