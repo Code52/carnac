@@ -91,7 +91,7 @@ namespace Carnac.Logic
         {
             var processName = keys.Process.ProcessName;
             return shortcuts
-                .Where(s => (s.Process == processName) || string.IsNullOrWhiteSpace(s.Process))
+                .Where(s => s.Process == processName || string.IsNullOrWhiteSpace(s.Process))
                 .SelectMany(shortcut => shortcut.GetShortcutsMatching(new[] { keys }))
                 .ToList();
         }

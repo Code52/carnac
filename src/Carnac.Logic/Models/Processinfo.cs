@@ -1,8 +1,8 @@
 namespace Carnac.Logic.Models
 {
-    public class Processinfo
+    public class ProcessInfo
     {
-        public Processinfo(string processName)
+        public ProcessInfo(string processName)
         {
             ProcessName = processName;
         }

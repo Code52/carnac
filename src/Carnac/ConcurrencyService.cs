@@ -5,23 +5,14 @@ namespace Carnac
 {
     public class ConcurrencyService : IConcurrencyService
     {
-        readonly IScheduler uiScheduler;
-        readonly IScheduler defaultScheduler;
-
         public ConcurrencyService()
         {
-            uiScheduler = new SynchronizationContextScheduler(SynchronizationContext.Current);
-            defaultScheduler = Scheduler.Default;
+            MainThreadScheduler = new SynchronizationContextScheduler(SynchronizationContext.Current);
+            Default = Scheduler.Default;
         }
 
-        public IScheduler UiScheduler
-        {
-            get { return uiScheduler; }
-        }
+        public IScheduler MainThreadScheduler { get; private set; }
 
-        public IScheduler Default
-        {
-            get { return defaultScheduler; }
-        }
+        public IScheduler Default { get; private set; }
     }
 }

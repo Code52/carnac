@@ -7,7 +7,7 @@ namespace Carnac.Logic.Models
 {
     public class KeyPress : KeyPressDefinition
     {
-        public KeyPress(Processinfo process, InterceptKeyEventArgs interceptKeyEventArgs, bool winkeyPressed, IEnumerable<string> input):
+        public KeyPress(ProcessInfo process, InterceptKeyEventArgs interceptKeyEventArgs, bool winkeyPressed, IEnumerable<string> input):
             base(interceptKeyEventArgs.Key, winkeyPressed, interceptKeyEventArgs.ShiftPressed, interceptKeyEventArgs.AltPressed, interceptKeyEventArgs.ControlPressed)
         {
             Process = process;
@@ -18,7 +18,7 @@ namespace Carnac.Logic.Models
 
         public DateTime Timestamp { get; private set; }
 
-        public Processinfo Process { get; private set; }
+        public ProcessInfo Process { get; private set; }
 
         public InterceptKeyEventArgs InterceptKeyEventArgs { get; private set; }
 

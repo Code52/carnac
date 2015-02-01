@@ -41,6 +41,14 @@ namespace Carnac.Logic
             return this;
         }
 
+        public Message[] GetMessages()
+        {
+            if (!HasCompletedValue)
+                throw new InvalidOperationException();
+
+            return messages;
+        }
+
         public bool HasCompletedValue { get; private set; }
 
         void Add(KeyPress key)
@@ -69,6 +77,12 @@ namespace Carnac.Logic
                 possibleKeyShortcuts = newPossibleShortcuts;
         }
 
+        void BeginShortcut(KeyPress key, List<KeyShortcut> possibleShortcuts)
+        {
+            keys.Add(key);
+            EvaluateShortcuts(possibleShortcuts);
+        }
+
         void ShortcutCompleted(KeyShortcut shortcut)
         {
             if (HasCompletedValue)
@@ -76,29 +90,6 @@ namespace Carnac.Logic
 
             messages = new[] { new Message(Keys, shortcut) };
             HasCompletedValue = true;
-        }
-
-        public Message[] GetMessages()
-        {
-            if (!HasCompletedValue)
-                throw new InvalidOperationException();
-
-            return messages;
-        }
-
-        void BeginShortcut(KeyPress key, List<KeyShortcut> possibleShortcuts)
-        {
-            keys.Add(key);
-            EvaluateShortcuts(possibleShortcuts);
-        }
-
-        void Complete(KeyPress key)
-        {
-            if (HasCompletedValue)
-                throw new InvalidOperationException();
-
-            HasCompletedValue = true;
-            messages = new[] { new Message(key) };
         }
 
         void NoMatchingShortcut()
@@ -109,6 +100,15 @@ namespace Carnac.Logic
             // When we have no matching shortcut just break all key presses into individual messages
             HasCompletedValue = true;
             messages = keys.Select(k => new Message(k)).ToArray();
+        }
+
+        void Complete(KeyPress key)
+        {
+            if (HasCompletedValue)
+                throw new InvalidOperationException();
+
+            HasCompletedValue = true;
+            messages = new[] { new Message(key) };
         }
     }
 }

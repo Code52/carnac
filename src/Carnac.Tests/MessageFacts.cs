@@ -8,8 +8,8 @@ namespace Carnac.Tests
 {
     public class MessageFacts
     {
-        readonly Processinfo fakeProcess = new Processinfo("FakeProcess");
-        readonly Processinfo fakeProcess2 = new Processinfo("FakeProcess2");
+        readonly ProcessInfo fakeProcess = new ProcessInfo("FakeProcess");
+        readonly ProcessInfo fakeProcess2 = new ProcessInfo("FakeProcess2");
 
         [Fact]
         public void message_does_not_group_different_letters()

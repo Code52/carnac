@@ -9,11 +9,11 @@ namespace Carnac
 {
     public class KeysController : IDisposable
     {
+        static readonly TimeSpan FiveSeconds = TimeSpan.FromSeconds(5);
+        static readonly TimeSpan OneSecond = TimeSpan.FromSeconds(1);
         readonly ObservableCollection<Message> keys;
         readonly IMessageProvider messageProvider;
         readonly IKeyProvider keyProvider;
-        readonly TimeSpan fiveseconds = TimeSpan.FromSeconds(5);
-        readonly TimeSpan onesecond = TimeSpan.FromSeconds(1);
         readonly IConcurrencyService concurrencyService;
         IDisposable actionSubscription;
 
@@ -57,7 +57,7 @@ namespace Carnac
                     */
                     return message.Updated
                         .StartWith(Unit.Default)
-                        .Select(_ => Observable.Timer(fiveseconds, concurrencyService.Default))
+                        .Select(_ => Observable.Timer(FiveSeconds, concurrencyService.Default))
                         .Switch()
                         .Select(_ => message)
                         .Take(1);
@@ -66,14 +66,14 @@ namespace Carnac
 
             // Finally we just put a one second delay on the messages from the fade out stream and flag to remove.
             var removeMessageStream = fadeOutMessageStream
-                .Delay(onesecond, concurrencyService.Default)
+                .Delay(OneSecond, concurrencyService.Default)
                 .Select(m => Tuple.Create(m.Item1, ActionType.Remove));
             
             var actionStream = removeMessageStream.Merge(fadeOutMessageStream).Merge(addMessageStream);
 
             actionSubscription = actionStream
-                .ObserveOn(concurrencyService.UiScheduler)
-                .SubscribeOn(concurrencyService.UiScheduler) // Because we mutate message state we need to do everything on UI thread. 
+                .ObserveOn(concurrencyService.MainThreadScheduler)
+                .SubscribeOn(concurrencyService.MainThreadScheduler) // Because we mutate message state we need to do everything on UI thread. 
                                                              // If we introduced a 'Update' action to this feed we could remove mutation from the stream
                 .Subscribe(action =>
             {

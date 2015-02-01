@@ -7,21 +7,17 @@ namespace Carnac.Logic
     [Export(typeof(IMessageMerger))]
     public class MessageMerger : IMessageMerger
     {
-        TimeSpan oneSecond;
+        static readonly TimeSpan OneSecond = TimeSpan.FromSeconds(1);
 
         public Message MergeIfNeeded(Message acc, Message key)
         {
-            if (ShouldCreateNewMessage(acc, key))
-                return key;
-
-            return acc.Merge(key);
+            return ShouldCreateNewMessage(acc, key) ? key : acc.Merge(key);
         }
 
-        bool ShouldCreateNewMessage(Message acc, Message key)
+        static bool ShouldCreateNewMessage(Message acc, Message key)
         {
-            oneSecond = TimeSpan.FromSeconds(1);
             return acc.ProcessName != key.ProcessName ||
-                   key.LastMessage.Subtract(acc.LastMessage) > oneSecond ||
+                   key.LastMessage.Subtract(acc.LastMessage) > OneSecond ||
                    !acc.CanBeMerged ||
                    !key.CanBeMerged;
         }

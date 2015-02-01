@@ -29,7 +29,7 @@ namespace Carnac.Tests
             messageProvider.GetMessageStream(Arg.Any<IObservable<KeyPress>>()).Returns(_ => messageStream);
             var keyProvider = Substitute.For<IKeyProvider>();
             var concurrencyService = Substitute.For<IConcurrencyService>();
-            concurrencyService.UiScheduler.Returns(testScheduler);
+            concurrencyService.MainThreadScheduler.Returns(testScheduler);
             concurrencyService.Default.Returns(testScheduler);
             messageStream = new Subject<Message>();
             sut = new KeysController(keysCollection, messageProvider, keyProvider, concurrencyService);
@@ -114,7 +114,7 @@ namespace Carnac.Tests
         {
             get
             {
-                return new KeyPress(new Processinfo("foo"),
+                return new KeyPress(new ProcessInfo("foo"),
                     new InterceptKeyEventArgs(Keys.A, KeyDirection.Down, false, false, false), false, new[] {"a"});
             }
         }

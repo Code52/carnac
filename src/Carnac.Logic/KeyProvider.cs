@@ -102,7 +102,7 @@ namespace Carnac.Logic
 
             var inputs = ToInputs(isLetter, winKeyPressed, interceptKeyEventArgs);
 
-            return new KeyPress(new Processinfo(process.ProcessName), interceptKeyEventArgs, winKeyPressed, inputs);
+            return new KeyPress(new ProcessInfo(process.ProcessName), interceptKeyEventArgs, winKeyPressed, inputs);
         }
 
         private static IEnumerable<string> ToInputs(bool isLetter, bool isWinKeyPressed, InterceptKeyEventArgs interceptKeyEventArgs)

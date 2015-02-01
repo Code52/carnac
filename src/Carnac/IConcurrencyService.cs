@@ -4,7 +4,7 @@ namespace Carnac
 {
     public interface IConcurrencyService
     {
-        IScheduler UiScheduler { get; }
+        IScheduler MainThreadScheduler { get; }
         IScheduler Default { get; }
     }
 }
