@@ -69,7 +69,7 @@ namespace Carnac.Logic
                     .Where(k => !IsModifierKeyPress(k) && k.KeyDirection == KeyDirection.Down)
                     .Select(ToCarnacKeyPress)
                     .Where(k => !passwordModeService.CheckPasswordMode(k.InterceptKeyEventArgs))
-                    .Subscribe(observable.OnNext, observable.OnError, observable.OnCompleted);
+                    .Subscribe(observable);
 
                 return new CompositeDisposable(sessionSwitchStreamSubscription, keyStreamSubsription);
             });

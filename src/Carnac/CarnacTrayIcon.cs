@@ -28,13 +28,14 @@ namespace Carnac
             exitMenuItem.Click += (sender, args) =>
             {
                 trayIcon.Visible = false;
-                Application.Current.Shutdown();
+                ShutdownCarnac();
             };
             trayIcon.MouseClick += NotifyIconClick;
             trayIcon.Visible = true;
         }
 
         public event Action OpenPreferences = () => { }; 
+        public event Action ShutdownCarnac = () => { }; 
 
         void NotifyIconClick(object sender, MouseEventArgs mouseEventArgs)
         {

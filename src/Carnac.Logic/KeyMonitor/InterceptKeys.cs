@@ -21,7 +21,7 @@ namespace Carnac.Logic.KeyMonitor
         {
             keyStream = Observable.Create<InterceptKeyEventArgs>(observer =>
             {
-                Debug.Write("Subscribed to keys");
+                Debug.WriteLine("Subscribed to keys");
                 IntPtr hookId = IntPtr.Zero;
                 // Need to hold onto this callback, otherwise it will get GC'd as it is an unmanged callback
                 callback = (nCode, wParam, lParam) =>
@@ -40,7 +40,7 @@ namespace Carnac.Logic.KeyMonitor
                 hookId = SetHook(callback);
                 return Disposable.Create(() =>
                 {
-                    Debug.Write("Unsubscribed from keys");
+                    Debug.WriteLine("Unsubscribed from keys");
                     Win32Methods.UnhookWindowsHookEx(hookId);
                     callback = null;
                 });

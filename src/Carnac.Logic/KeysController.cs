@@ -1,12 +1,13 @@
 using System;
 using System.Collections.ObjectModel;
 using System.Reactive;
+using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using Carnac.Logic.Models;
 
 namespace Carnac.Logic
 {
-    public class KeysController : IDisposable
+    public class KeysController
     {
         static readonly TimeSpan FiveSeconds = TimeSpan.FromSeconds(5);
         static readonly TimeSpan OneSecond = TimeSpan.FromSeconds(1);
@@ -14,7 +15,6 @@ namespace Carnac.Logic
         readonly IMessageProvider messageProvider;
         readonly IKeyProvider keyProvider;
         readonly IConcurrencyService concurrencyService;
-        IDisposable actionSubscription;
 
         public KeysController(ObservableCollection<Message> keys, IMessageProvider messageProvider, IKeyProvider keyProvider, IConcurrencyService concurrencyService)
         {
@@ -24,11 +24,14 @@ namespace Carnac.Logic
             this.concurrencyService = concurrencyService;
         }
 
-        public void Start()
+        public IDisposable Start()
         {
-            var messageStream = messageProvider.GetMessageStream(keyProvider.GetKeyStream()).Publish().RefCount();
+            var messageStream = messageProvider.GetMessageStream(keyProvider.GetKeyStream()).Publish();
 
-            var addMessageStream = messageStream.Select(m => Tuple.Create(m, ActionType.Add));
+            var addMessageSubscription = messageStream
+                .ObserveOn(concurrencyService.MainThreadScheduler)
+                .SubscribeOn(concurrencyService.MainThreadScheduler)
+                .Subscribe(key => keys.Add(key));
 
             /*
             Fade out is a rolling query.
@@ -60,49 +63,24 @@ namespace Carnac.Logic
                         .Switch()
                         .Select(_ => message)
                         .Take(1);
-                })
-                .Select(m => Tuple.Create(m, ActionType.FadeOut));
+                });
+            var fadeOutMessageSubscription = fadeOutMessageStream
+                .ObserveOn(concurrencyService.MainThreadScheduler)
+                .SubscribeOn(concurrencyService.MainThreadScheduler)
+                .Subscribe(m => m.IsDeleting = true);
 
             // Finally we just put a one second delay on the messages from the fade out stream and flag to remove.
             var removeMessageStream = fadeOutMessageStream
                 .Delay(OneSecond, concurrencyService.Default)
-                .Select(m => Tuple.Create(m.Item1, ActionType.Remove));
-            
-            var actionStream = Observable.Merge(
-                removeMessageStream, 
-                fadeOutMessageStream, 
-                addMessageStream);
-
-            actionSubscription = actionStream
                 .ObserveOn(concurrencyService.MainThreadScheduler)
-                .SubscribeOn(concurrencyService.MainThreadScheduler) // Because we mutate message state we need to do everything on UI thread. 
-                                                             // If we introduced a 'Update' action to this feed we could remove mutation from the stream
-                .Subscribe(action =>
-            {
-                switch (action.Item2)
-                {
-                    case ActionType.Add:
-                        keys.Add(action.Item1);
-                        break;
-                    case ActionType.Remove:
-                        keys.Remove(action.Item1);
-                        break;
-                    case ActionType.FadeOut:
-                        action.Item1.IsDeleting = true;
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
-            }, ex =>
-            {
-                
-            });
+                .SubscribeOn(concurrencyService.MainThreadScheduler)
+                .Subscribe(m => keys.Remove(m));
 
-        }
-
-        public void Dispose()
-        {
-            actionSubscription.Dispose();
+            return new CompositeDisposable(
+                messageStream.Connect(), 
+                addMessageSubscription, 
+                fadeOutMessageSubscription,
+                removeMessageStream);
         }
     }
 }

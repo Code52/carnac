@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Windows;
 using Carnac.Logic;
 using Carnac.Logic.KeyMonitor;
@@ -19,6 +20,7 @@ namespace Carnac
         CarnacTrayIcon trayIcon;
         KeysController carnac;
         ObservableCollection<Message> keyCollection;
+        IDisposable shutdownCarnac;
 
         public App()
         {
@@ -40,23 +42,23 @@ namespace Carnac
 
             trayIcon = new CarnacTrayIcon();
             trayIcon.OpenPreferences += TrayIconOnOpenPreferences;
+            trayIcon.ShutdownCarnac += TrayIconOnShutdownCarnac;
             keyCollection = new ObservableCollection<Message>();
             keyShowView = new KeyShowView(new KeyShowViewModel(keyCollection, settings));
             keyShowView.Show();
 
             carnac = new KeysController(keyCollection, messageProvider, keyProvider, new ConcurrencyService());
-            carnac.Start();
+            shutdownCarnac = carnac.Start();
 
             base.OnStartup(e);
         }
 
-        protected override void OnExit(ExitEventArgs e)
+        void TrayIconOnShutdownCarnac()
         {
-            trayIcon.Dispose();
-            carnac.Dispose();
             ProcessUtilities.DestroyMutex();
-
-            base.OnExit(e);
+            trayIcon.Dispose();
+            shutdownCarnac.Dispose();
+            Shutdown();
         }
 
         void TrayIconOnOpenPreferences()
