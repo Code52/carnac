@@ -1,46 +1,63 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel.Composition;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
-using Caliburn.Micro;
+using System.Windows.Input;
+using System.Windows.Media;
 using Carnac.Logic;
 using Carnac.Logic.Enums;
 using Carnac.Logic.Models;
 using Carnac.Logic.Native;
 using SettingsProviderNet;
-using Message = Carnac.Logic.Models.Message;
 
-namespace Carnac.ViewModels
+namespace Carnac.UI
 {
-    [Export(typeof(IShell))]
-    public class ShellViewModel : Screen, IShell
+    public class PreferencesViewModel : NotifyPropertyChanged
     {
         readonly ISettingsProvider settingsProvider;
-
-        [ImportingConstructor]
-        public ShellViewModel(
-            ISettingsProvider settingsProvider,
-            IScreenManager screenManager,
-            IWindowManager windowManager)
+        
+        public PreferencesViewModel(ISettingsProvider settingsProvider, IScreenManager screenManager)
         {
             this.settingsProvider = settingsProvider;
-
-            Keys = new ObservableCollection<Message>();
+            
             Screens = new ObservableCollection<DetailedScreen>(screenManager.GetScreens());
 
             Settings = settingsProvider.GetSettings<PopupSettings>();
 
             PlaceScreen();
 
-            DisplayName = "Carnac";
+            AvailableColors = new ObservableCollection<AvailableColor>();
+            var properties = typeof(Colors).GetProperties(BindingFlags.Static | BindingFlags.Public);
+            foreach (var prop in properties)
+            {
+                var name = prop.Name;
+                var value = (Color)prop.GetValue(null, null);
+
+                var availableColor = new AvailableColor(name, value);
+                if (Settings.FontColor == name)
+                    FontColor = availableColor;
+                if (Settings.ItemBackgroundColor == name)
+                    ItemBackgroundColor = availableColor;
+
+                AvailableColors.Add(availableColor);
+            }
+
+            SaveCommand = new DelegateCommand(SaveSettings);
+            ResetToDefaultsCommand = new DelegateCommand(() => settingsProvider.ResetToDefaults<PopupSettings>());
+            VisitCommand = new DelegateCommand(Visit);
         }
 
-        public ObservableCollection<Message> Keys { get; private set; }
+        public ICommand VisitCommand { get; private set; }
+
+        public ICommand ResetToDefaultsCommand { get; private set; }
+
+        public ICommand SaveCommand { get; private set; }
+
+        public ObservableCollection<AvailableColor> AvailableColors { get; private set; }
 
         public ObservableCollection<DetailedScreen> Screens { get; set; }
+
         public DetailedScreen SelectedScreen { get; set; }
 
         public PopupSettings Settings { get; set; }
@@ -65,7 +82,6 @@ namespace Carnac.ViewModels
                                                        {
                                                          "MahApps.Metro",
                                                          "Fody",
-                                                         "Caliburn Micro",
                                                          "NSubstitute",
                                                          "Reactive Extensions"
                                                      };
@@ -79,24 +95,23 @@ namespace Carnac.ViewModels
             get { return string.Join(", ", components); }
         }
 
-        public void Visit()
+        public AvailableColor FontColor { get; set; }
+
+        public AvailableColor ItemBackgroundColor { get; set; }
+
+        void Visit()
         {
             try
             {
                 Process.Start("http://code52.org/carnac/");
             }
-            catch //I forget what exceptions can be raised if the browser is crashed?
+            catch
             {
-
+                //I forget what exceptions can be raised if the browser is crashed?
             }
         }
 
-        public void SaveSettingsGeneral()
-        {
-            SaveSettings();
-        }
-
-        public void SaveSettings()
+        void SaveSettings()
         {
             if (Screens.Count < 1)
                 return;
@@ -120,15 +135,12 @@ namespace Carnac.ViewModels
             PlaceScreen();
 
             Settings.SettingsConfigured = true;
+            Settings.FontColor = FontColor.Name;
+            Settings.ItemBackgroundColor = ItemBackgroundColor.Name;
             settingsProvider.SaveSettings(Settings);
         }
 
-        public void SetDefaultSettings()
-        {
-            settingsProvider.ResetToDefaults<PopupSettings>();
-        }
-
-        private void PlaceScreen()
+        void PlaceScreen()
         {
             if (Screens == null) 
                 return;

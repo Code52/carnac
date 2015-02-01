@@ -1,4 +1,4 @@
-namespace Carnac
+namespace Carnac.Logic
 {
     public enum ActionType
     {

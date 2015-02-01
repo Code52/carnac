@@ -4,7 +4,7 @@ using System.Windows;
 using System.Windows.Data;
 using Carnac.Logic.Native;
 
-namespace Carnac.Views
+namespace Carnac.Utilities
 {
     public class PlacementMarginConverter : IMultiValueConverter
     {

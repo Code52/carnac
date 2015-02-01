@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.ComponentModel.Composition;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -8,7 +7,6 @@ using YamlDotNet.RepresentationModel;
 
 namespace Carnac.Logic
 {
-    [Export(typeof(IShortcutProvider))]
     public class ShortcutProvider : IShortcutProvider
     {
         readonly List<ShortcutCollection> shortcuts = new List<ShortcutCollection>();
@@ -66,12 +64,21 @@ namespace Carnac.Logic
             }
         }
 
-        private string GetValueByKey(YamlMappingNode node, string name)
+        public List<KeyShortcut> GetShortcutsStartingWith(KeyPress keys)
+        {
+            var processName = keys.Process.ProcessName;
+            return shortcuts
+                .Where(s => s.Process == processName || string.IsNullOrWhiteSpace(s.Process))
+                .SelectMany(shortcut => shortcut.GetShortcutsMatching(new[] { keys }))
+                .ToList();
+        }
+
+        string GetValueByKey(YamlMappingNode node, string name)
         {
             return node.Children.First(n => n.Key.ToString() == name).Value.ToString();
         }
 
-        private KeyPressDefinition GetKeyPressDefintion(string combo)
+        KeyPressDefinition GetKeyPressDefintion(string combo)
         {
             combo = combo.ToLower();
             var key = combo.Split('+').Last();
@@ -85,15 +92,6 @@ namespace Carnac.Logic
                          altPressed: combo.Contains("alt"),
                          winkeyPressed: combo.Contains("win"));
             return null;
-        }
-
-        public List<KeyShortcut> GetShortcutsStartingWith(KeyPress keys)
-        {
-            var processName = keys.Process.ProcessName;
-            return shortcuts
-                .Where(s => s.Process == processName || string.IsNullOrWhiteSpace(s.Process))
-                .SelectMany(shortcut => shortcut.GetShortcutsMatching(new[] { keys }))
-                .ToList();
         }
     }
 }

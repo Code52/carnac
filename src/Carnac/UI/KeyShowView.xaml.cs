@@ -3,15 +3,15 @@ using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Interop;
 using Carnac.Logic;
-using Carnac.ViewModels;
 using Timer = System.Timers.Timer;
 
-namespace Carnac.Views
+namespace Carnac.UI
 {
     public partial class KeyShowView
     {
-        public KeyShowView()
+        public KeyShowView(KeyShowViewModel keyShowViewModel)
         {
+            DataContext = keyShowViewModel;
             InitializeComponent();
         }
 

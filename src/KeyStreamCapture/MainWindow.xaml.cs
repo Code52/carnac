@@ -15,9 +15,9 @@ namespace KeyStreamCapture
 {
     public partial class MainWindow
     {
-        private readonly List<InterceptKeyEventArgs> keys = new List<InterceptKeyEventArgs>();
+        readonly List<InterceptKeyEventArgs> keys = new List<InterceptKeyEventArgs>();
         readonly IDisposable subscription;
-        private bool capturing;
+        bool capturing;
 
         public MainWindow()
         {

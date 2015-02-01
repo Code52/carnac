@@ -28,7 +28,7 @@ namespace Carnac.Logic.Models
         public NotificationPlacement Placement { get; set; }
 
         //Used to determine which from it's leftmost co-ord
-        private double left;
+        double left;
         public double Left
         {
             get { return left; }

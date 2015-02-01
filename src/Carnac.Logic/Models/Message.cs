@@ -11,12 +11,12 @@ namespace Carnac.Logic.Models
     public class Message : NotifyPropertyChanged
     {
         readonly string[] repeatDetectionText = { "Back", "Left", "Right", "Down", "Up" };
-        private readonly ObservableCollection<string> textCollection;
-        private readonly ObservableCollection<KeyPress> keyCollection;
-        private int lastTextRepeatCount = 1;
-        private string lastText;
-        private KeyPress lastKeyPress;
-        private string shortcutName;
+        readonly ObservableCollection<string> textCollection;
+        readonly ObservableCollection<KeyPress> keyCollection;
+        int lastTextRepeatCount = 1;
+        string lastText;
+        KeyPress lastKeyPress;
+        string shortcutName;
 
         public Message()
         {
@@ -84,7 +84,17 @@ namespace Carnac.Logic.Models
 
         public IObservable<Unit> Updated { get; private set; }
 
-        private void AddKey(KeyPress keyPress)
+        public Message Merge(Message key)
+        {
+            foreach (var keyPress in key.Keys)
+            {
+                AddKey(keyPress);
+            }
+
+            return this;
+        }
+
+        void AddKey(KeyPress keyPress)
         {
             keyCollection.Add(keyPress);
             if (lastKeyPress != null && lastKeyPress.HasModifierPressed)
@@ -102,7 +112,7 @@ namespace Carnac.Logic.Models
             LastMessage = DateTime.Now;
         }
 
-        private void AddText(string text)
+        void AddText(string text)
         {
             var formattedText = Format(text, lastKeyPress.HasModifierPressed);
 
@@ -122,7 +132,7 @@ namespace Carnac.Logic.Models
             }
         }
 
-        private static string Format(string text, bool isShortcut)
+        static string Format(string text, bool isShortcut)
         {
             if (text == "Left")
                 return GetString(8592);
@@ -143,19 +153,9 @@ namespace Carnac.Logic.Models
             return text;
         }
 
-        private static string GetString(int decimalValue)
+        static string GetString(int decimalValue)
         {
             return new string(new[] { (char)decimalValue });
-        }
-
-        public Message Merge(Message key)
-        {
-            foreach (var keyPress in key.Keys)
-            {
-                AddKey(keyPress);
-            }
-
-            return this;
         }
     }
 }

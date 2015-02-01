@@ -1,0 +1,144 @@
+<UserControl x:Class="Carnac.PositionOnMonitorSelector"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:ui="clr-namespace:Carnac.UI"
+             xmlns:utilities="clr-namespace:Carnac.Utilities"
+             mc:Ignorable="d"
+             x:Name="ScreenSelector" d:DataContext="{d:DesignInstance ui:PreferencesViewModel}">
+    <UserControl.Resources>
+        <utilities:PlacementMarginConverter x:Key="PlacementMarginConverter" />
+            <Style x:Key="PlacementButton" TargetType="{x:Type RadioButton}">
+                <Setter Property="SnapsToDevicePixels" Value="true" />
+                <Setter Property="OverridesDefaultStyle" Value="true" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type RadioButton}">
+                            <Border BorderThickness="0">
+                                <Grid Width="30" Height="30">
+                                    <Rectangle x:Name="Border" Stroke="Black" StrokeThickness="2" />
+                                    <Path x:Name="Check" Margin="4"
+                                          Data="M0,1 22,1 22,5 0,5Z M0,7 20,7 20,11 0,11Z M0,13 18,13 18,16 0,16Z M0,18 16,18 16,21 0,21Z" />
+                                    <Rectangle x:Name="MouseOver" Margin="2" Fill="White" />
+                                    <ContentPresenter Margin="4,0,0,0" HorizontalAlignment="Left"
+                                                      VerticalAlignment="Center" RecognizesAccessKey="True" />
+                                </Grid>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsChecked" Value="true">
+                                    <Setter TargetName="Border" Property="Stroke" Value="White" />
+                                    <Setter TargetName="Border" Property="StrokeDashArray" Value="" />
+                                    <Setter TargetName="Check" Property="Fill" Value="White" />
+                                    <Setter TargetName="Check" Property="Opacity" Value="1" />
+                                    <Setter TargetName="MouseOver" Property="Opacity" Value="0.001" />
+                                </Trigger>
+                                <Trigger Property="IsChecked" Value="false">
+                                    <Setter TargetName="Border" Property="Stroke" Value="Silver" />
+                                    <Setter TargetName="Border" Property="StrokeDashArray" Value="2 1" />
+                                    <Setter TargetName="Check" Property="Fill" Value="Silver" />
+                                    <Setter TargetName="Check" Property="Opacity" Value="0.001" />
+                                    <Setter TargetName="MouseOver" Property="Opacity" Value="0.001" />
+                                </Trigger>
+                                <Trigger Property="IsMouseOver" Value="true">
+                                    <Setter TargetName="Border" Property="Stroke" Value="White" />
+                                    <Setter TargetName="Check" Property="Fill" Value="White" />
+                                    <Setter TargetName="MouseOver" Property="Opacity" Value="0.3" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+    </UserControl.Resources>
+	<ItemsControl VerticalAlignment="Top" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White"
+	              ItemsSource="{Binding Screens}">
+		<ItemsControl.Style>
+			<Style>
+				<Style.Resources>
+					<SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Transparent" />
+					<SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="Transparent" />
+				</Style.Resources>
+			</Style>
+		</ItemsControl.Style>
+		<ItemsControl.ItemsPanel>
+			<ItemsPanelTemplate>
+				<StackPanel IsItemsHost="True" Orientation="Horizontal" />
+			</ItemsPanelTemplate>
+		</ItemsControl.ItemsPanel>
+		<ItemsControl.ItemTemplate>
+			<DataTemplate>
+				<StackPanel Margin="5,5,5,5" VerticalAlignment="Bottom">
+					<Grid Width="{Binding RelativeWidth}" Height="{Binding RelativeHeight}" Margin="0"
+					      HorizontalAlignment="Left">
+						<Rectangle Fill="{DynamicResource AccentColorBrush}" />
+						<TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="96"
+						           FontWeight="SemiBold" Text="{Binding Index}" TextWrapping="Wrap" />
+						<RadioButton x:Name="rbTL" HorizontalAlignment="Left" VerticalAlignment="Top"
+						             Checked="RadioChecked" Content="" GroupName="Placement"
+						             IsChecked="{Binding NotificationPlacementTopLeft}"
+						             Style="{StaticResource PlacementButton}" Tag="{Binding}">
+							<RadioButton.Margin>
+								<MultiBinding Converter="{StaticResource PlacementMarginConverter}">
+									<Binding Path="DataContext.Settings.Margins"
+									         Source="{x:Reference ScreenSelector}" />
+									<Binding Path="DataContext.SelectedScreen"
+									         Source="{x:Reference ScreenSelector}" />
+									<Binding Path="IsChecked" RelativeSource="{RelativeSource Self}" />
+								</MultiBinding>
+							</RadioButton.Margin>
+						</RadioButton>
+						<RadioButton x:Name="rbBL" HorizontalAlignment="Left" VerticalAlignment="Bottom"
+						             Checked="RadioChecked" Content="" GroupName="Placement"
+						             IsChecked="{Binding NotificationPlacementBottomLeft}"
+						             Style="{StaticResource PlacementButton}" Tag="{Binding}">
+							<RadioButton.Margin>
+								<MultiBinding Converter="{StaticResource PlacementMarginConverter}">
+									<Binding Path="DataContext.Settings.Margins"
+									         Source="{x:Reference ScreenSelector}" />
+									<Binding Path="DataContext.SelectedScreen"
+									         Source="{x:Reference ScreenSelector}" />
+									<Binding Path="IsChecked" RelativeSource="{RelativeSource Self}" />
+								</MultiBinding>
+							</RadioButton.Margin>
+						</RadioButton>
+						<RadioButton x:Name="rbTR" HorizontalAlignment="Right" VerticalAlignment="Top"
+						             Checked="RadioChecked" Content="" GroupName="Placement"
+						             IsChecked="{Binding NotificationPlacementTopRight}"
+						             Style="{StaticResource PlacementButton}" Tag="{Binding}">
+							<RadioButton.Margin>
+								<MultiBinding Converter="{StaticResource PlacementMarginConverter}">
+									<Binding Path="DataContext.Settings.Margins"
+									         Source="{x:Reference ScreenSelector}" />
+									<Binding Path="DataContext.SelectedScreen"
+									         Source="{x:Reference ScreenSelector}" />
+									<Binding Path="IsChecked" RelativeSource="{RelativeSource Self}" />
+								</MultiBinding>
+							</RadioButton.Margin>
+						</RadioButton>
+						<RadioButton x:Name="rbBR" HorizontalAlignment="Right" VerticalAlignment="Bottom"
+						             Checked="RadioChecked" Content="" GroupName="Placement"
+						             IsChecked="{Binding NotificationPlacementBottomRight}"
+						             Style="{StaticResource PlacementButton}" Tag="{Binding}">
+							<RadioButton.Margin>
+								<MultiBinding Converter="{StaticResource PlacementMarginConverter}">
+									<Binding Path="DataContext.Settings.Margins"
+									         Source="{x:Reference ScreenSelector}" />
+									<Binding Path="DataContext.SelectedScreen"
+									         Source="{x:Reference ScreenSelector}" />
+									<Binding Path="IsChecked" RelativeSource="{RelativeSource Self}" />
+								</MultiBinding>
+							</RadioButton.Margin>
+						</RadioButton>
+					</Grid>
+					<TextBlock HorizontalAlignment="Left" FontSize="18.667" FontWeight="SemiBold"
+					           Text="{Binding FriendlyName}" TextWrapping="Wrap" />
+					<TextBlock HorizontalAlignment="Left" FontSize="14" TextWrapping="Wrap">
+						<Run Text="{Binding Width}" />
+						x<Run Text="{Binding Height}" />
+					</TextBlock>
+				</StackPanel>
+			</DataTemplate>
+		</ItemsControl.ItemTemplate>
+	</ItemsControl>
+</UserControl>

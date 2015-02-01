@@ -1,10 +1,8 @@
 ﻿using System;
-using System.ComponentModel.Composition;
 using Carnac.Logic.Models;
 
 namespace Carnac.Logic
 {
-    [Export(typeof(IMessageMerger))]
     public class MessageMerger : IMessageMerger
     {
         static readonly TimeSpan OneSecond = TimeSpan.FromSeconds(1);
