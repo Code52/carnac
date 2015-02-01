@@ -5,6 +5,6 @@ namespace Carnac.Logic
 {
     public interface IShortcutProvider
     {
-        IEnumerable<KeyShortcut> GetShortcutsMatching(IEnumerable<KeyPress> keys);
+        List<KeyShortcut> GetShortcutsStartingWith(KeyPress keyPress);
     }
 }

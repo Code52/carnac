@@ -102,7 +102,7 @@ namespace Carnac.Logic
 
             var inputs = ToInputs(isLetter, winKeyPressed, interceptKeyEventArgs);
 
-            return new KeyPress(process, interceptKeyEventArgs, winKeyPressed, inputs);
+            return new KeyPress(new ProcessInfo(process.ProcessName), interceptKeyEventArgs, winKeyPressed, inputs);
         }
 
         private static IEnumerable<string> ToInputs(bool isLetter, bool isWinKeyPressed, InterceptKeyEventArgs interceptKeyEventArgs)
@@ -150,9 +150,9 @@ namespace Carnac.Logic
 
             if (!processes.ContainsKey(handle))
             {
-                uint processID;
-                GetWindowThreadProcessId(new IntPtr(handle), out processID);
-                var p = Process.GetProcessById(Convert.ToInt32(processID));
+                uint processId;
+                GetWindowThreadProcessId(new IntPtr(handle), out processId);
+                var p = Process.GetProcessById(Convert.ToInt32(processId));
                 processes.Add(handle, p);
                 process = p;
             }

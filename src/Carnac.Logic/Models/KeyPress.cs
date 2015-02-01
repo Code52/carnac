@@ -1,5 +1,5 @@
+using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Windows.Forms;
 using Carnac.Logic.KeyMonitor;
 
@@ -7,19 +7,24 @@ namespace Carnac.Logic.Models
 {
     public class KeyPress : KeyPressDefinition
     {
-        public KeyPress(Process process, InterceptKeyEventArgs interceptKeyEventArgs, bool winkeyPressed, IEnumerable<string> input):
+        public KeyPress(ProcessInfo process, InterceptKeyEventArgs interceptKeyEventArgs, bool winkeyPressed, IEnumerable<string> input):
             base(interceptKeyEventArgs.Key, winkeyPressed, interceptKeyEventArgs.ShiftPressed, interceptKeyEventArgs.AltPressed, interceptKeyEventArgs.ControlPressed)
         {
             Process = process;
             InterceptKeyEventArgs = interceptKeyEventArgs;
             Input = input;
+            Timestamp = DateTime.Now;
         }
 
-        public Process Process { get; private set; }
+        public DateTime Timestamp { get; private set; }
+
+        public ProcessInfo Process { get; private set; }
+
         public InterceptKeyEventArgs InterceptKeyEventArgs { get; private set; }
+
         public IEnumerable<string> Input { get; private set; }
 
-        public bool IsShortcut
+        public bool HasModifierPressed
         {
             get
             {
@@ -31,7 +36,7 @@ namespace Carnac.Logic.Models
         {
             get
             {
-                return InterceptKeyEventArgs.Key >= Keys.A && InterceptKeyEventArgs.Key <= Keys.Z;
+                return !HasModifierPressed && InterceptKeyEventArgs.Key >= Keys.A && InterceptKeyEventArgs.Key <= Keys.Z;
             }
         }
     }

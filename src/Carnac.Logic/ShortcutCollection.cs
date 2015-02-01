@@ -8,12 +8,12 @@ namespace Carnac.Logic
     public class ShortcutCollection : Collection<KeyShortcut>
     {
         public string Group { get; set; }
+
         public string Process { get; set; }
 
-        public IEnumerable<KeyShortcut> GetShortcutsMatching(IEnumerable<KeyPress> keys)
+        public KeyShortcut[] GetShortcutsMatching(IEnumerable<KeyPress> keys)
         {
-            var matches = this.Where(s => s.StartsWith(keys));
-            return matches;
+            return this.Where(s => s.StartsWith(keys)).ToArray();
         }
     }
 }

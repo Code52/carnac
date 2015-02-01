@@ -1,132 +1,47 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.Linq;
 using System.Reactive.Linq;
 using Carnac.Logic.Models;
-using SettingsProviderNet;
 
 namespace Carnac.Logic
 {
     [Export(typeof(IMessageProvider))]
     public class MessageProvider : IMessageProvider
     {
-        private readonly IShortcutProvider shortcutProvider;
-        private readonly IObservable<KeyPress> keyStream;
-        private readonly PopupSettings settings;
+        readonly IShortcutProvider shortcutProvider;
+        readonly PopupSettings settings;
+        readonly IMessageMerger messageMerger;
 
         [ImportingConstructor]
-        public MessageProvider(IKeyProvider keyProvider, IShortcutProvider shortcutProvider, ISettingsProvider settingsProvider)
+        public MessageProvider(IShortcutProvider shortcutProvider, PopupSettings settings, IMessageMerger messageMerger)
         {
             this.shortcutProvider = shortcutProvider;
-            settings = settingsProvider.GetSettings<PopupSettings>();
-            keyStream = keyProvider.GetKeyStream();
+            this.messageMerger = messageMerger;
+            this.settings = settings;
         }
 
-        public Message CurrentMessage { get; private set; }
-
-        public IObservable<Message> GetMessageStream()
+        public IObservable<Message> GetMessageStream(IObservable<KeyPress> keyStream)
         {
-            return keyStream.Select(OnNext).DistinctUntilChanged();
-        }
+            /*
+            shortcut Acc stream:
+               - ! before item means HasCompletedValue is false
+               - [1 & 2] means multiple messages are returned from get messages (1 and 2 in this case), others are a single message returned
 
-        public Message OnNext(KeyPress value)
-        {
-            Message message;
+            message merger:
+               - * before items indicates the previous message has been modified (key has been merged into acc), otherwise new acc is created
 
-            var currentKeyPress = new[] {value};
-            var keyPresses = CurrentMessage == null ? currentKeyPress : CurrentMessage.Keys.Concat(currentKeyPress).ToArray();
-            var possibleShortcuts = GetPossibleShortcuts(keyPresses).ToList();
-            if (possibleShortcuts.Any())
-            {
-                var shortcut = possibleShortcuts.FirstOrDefault(s => s.IsMatch(keyPresses));
-                if (shortcut != null)
-                {
-                    message = CurrentMessage ?? CreateNewMessage(value);
-                    message.AddKey(value);
-                    message.ShortcutName = shortcut.Name;
-                    message.LastMessage = DateTime.Now;
-                    message.Count++;
-                    //Have duplicated as it was easier for now, this should be cleaned up
-                    return CurrentMessage;
-                }
-            }
-
-            // Haven't matched a Chord, try just the last keypress
-            var keyShortcuts = GetPossibleShortcuts(currentKeyPress).ToList();
-            if (keyShortcuts.Any())
-            {
-                var shortcut = keyShortcuts.FirstOrDefault(s => s.IsMatch(currentKeyPress));
-                if (shortcut != null)
-                {
-                    //For matching last keypress, we want a new message
-                    message = CreateNewMessage(value);
-                    message.AddKey(value);
-                    message.ShortcutName = shortcut.Name;
-                    message.LastMessage = DateTime.Now;
-                    message.Count++;
-                    //Have duplicated as it was easier for now, this should be cleaned up
-                    return CurrentMessage;
-                }
-            }
-
-            if (!value.IsShortcut && settings.DetectShortcutsOnly)
-                return CurrentMessage;
-            
-            if (ShouldCreateNewMessage(value))
-            {
-                message = CreateNewMessage(value);
-            }
-            else
-                message = CurrentMessage ?? CreateNewMessage(value);
-
-            message.AddKey(value);
-            message.LastMessage = DateTime.Now;
-            message.Count++;
-
-            return CurrentMessage;
-        }
-
-        private Message CreateNewMessage(KeyPress value)
-        {
-            var message = new Message
-                                  {
-                                      StartingTime = DateTime.Now,
-                                      ProcessName = value.Process.ProcessName
-                                  };
-
-            CurrentMessage = message;
-            return message;
-        }
-
-        private bool ShouldCreateNewMessage(KeyPress value)
-        {
-            return
-                CurrentMessage == null ||
-                IsDifferentProcess(value) ||
-                IsOlderThanOneSecond() ||
-                LastKeyPressWasShortcut() ||
-                value.IsShortcut;
-        }
-
-        private bool LastKeyPressWasShortcut()
-        {
-            return CurrentMessage.Keys.Last().IsShortcut;
-        }
-
-        private IEnumerable<KeyShortcut> GetPossibleShortcuts(IEnumerable<KeyPress> keyPresses)
-        {
-            return shortcutProvider.GetShortcutsMatching(keyPresses);
-        }
-
-        private bool IsOlderThanOneSecond()
-        {
-            return CurrentMessage.LastMessage < DateTime.Now.AddSeconds(-1);
-        }
-
-        private bool IsDifferentProcess(KeyPress value)
-        {
-            return CurrentMessage.ProcessName != value.Process.ProcessName;
+            keystream   :  a---b---ctrl+r----ctrl+r----------ctrl+r----a--------------↓---↓
+            shortcut Acc:  a---b---!ctrl+r---ctrl+r,ctrl+r---!ctrl+r---[ctrl+r & a]---↓---↓
+            sel many    :  a---b-------------ctrl+r,ctrl+r-------------ctrl+r---a-----↓---↓
+            msg merger  :  a---*ab-----------ctrl+r,ctrl+r-------------ctrl+r---a-----↓---*'↓ x2'
+            */
+            return keyStream
+                .Scan(new ShortcutAccumulator(), (acc, key) => acc.ProcessKey(shortcutProvider, key))
+                .Where(c => c.HasCompletedValue)
+                .SelectMany(c => c.GetMessages())
+                .Scan(new Message(), (acc, key) => messageMerger.MergeIfNeeded(acc, key))
+                .DistinctUntilChanged()
+                .Where(m => !settings.DetectShortcutsOnly || m.IsShortcut);
         }
     }
 }
