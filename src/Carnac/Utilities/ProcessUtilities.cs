@@ -8,7 +8,7 @@ namespace Carnac.Utilities
 {
     public static class ProcessUtilities
     {
-        private static Mutex mutex = null;
+        static Mutex mutex;
 
         [DllImport("user32.dll", SetLastError = true)]
         static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
@@ -38,6 +38,13 @@ namespace Carnac.Utilities
             var fullName = Application.Current.GetType().Assembly.FullName;
             mutex = new Mutex(false, fullName, out createdNew);
             return !createdNew;
+        }
+
+        public static void DestroyMutex()
+        {
+            if (mutex == null) return;
+            mutex.Dispose();
+            mutex = null;
         }
 
         /// Set focus to the previous instance of the specified program.

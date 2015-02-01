@@ -54,6 +54,7 @@ namespace Carnac
         {
             trayIcon.Dispose();
             carnac.Dispose();
+            ProcessUtilities.DestroyMutex();
 
             base.OnExit(e);
         }
