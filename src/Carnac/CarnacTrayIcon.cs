@@ -30,7 +30,7 @@ namespace Carnac
                 trayIcon.Visible = false;
                 Application.Current.Shutdown();
             };
-            trayIcon.DoubleClick += NotifyIconClick;
+            trayIcon.Click += NotifyIconClick;
             trayIcon.Visible = true;
         }
 

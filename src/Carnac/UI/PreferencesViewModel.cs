@@ -20,8 +20,7 @@ namespace Carnac.UI
         public PreferencesViewModel(ISettingsProvider settingsProvider, IScreenManager screenManager)
         {
             this.settingsProvider = settingsProvider;
-
-            Keys = new ObservableCollection<Message>();
+            
             Screens = new ObservableCollection<DetailedScreen>(screenManager.GetScreens());
 
             Settings = settingsProvider.GetSettings<PopupSettings>();
@@ -56,8 +55,6 @@ namespace Carnac.UI
         public ICommand SaveCommand { get; private set; }
 
         public ObservableCollection<AvailableColor> AvailableColors { get; private set; }
-
-        public ObservableCollection<Message> Keys { get; private set; }
 
         public ObservableCollection<DetailedScreen> Screens { get; set; }
 
