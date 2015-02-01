@@ -68,7 +68,7 @@
         <ListView.ItemTemplate>
             <DataTemplate>
                 <Border x:Name="Border" Margin="0, 0, 0, 3" HorizontalAlignment="Stretch"
-                        Opacity="{Binding DataContext.Settings.ItemOpacity, ElementName=This}"
+                        Opacity="{Binding DataContext.Settings.ItemOpacity, Source={x:Reference This}}"
                         IsHitTestVisible="True" Focusable="True" BorderThickness="4" CornerRadius="15" Padding="3">
                     <Border.Background>
                         <SolidColorBrush Color="{Binding DataContext.Settings.ItemBackgroundColor, Source={x:Reference This}}" />
