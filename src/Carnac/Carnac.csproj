@@ -120,6 +120,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="CarnacTrayIcon.cs" />
+    <Compile Include="PositionOnMonitorSelector.xaml.cs">
+      <DependentUpon>PositionOnMonitorSelector.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\DelegateCommand.cs" />
     <Compile Include="UI\PreferencesField.cs" />
     <Compile Include="Utilities\DesignTimeHelper.cs" />
@@ -139,6 +142,9 @@
     <Compile Include="UI\PreferencesView.xaml.cs">
       <DependentUpon>PreferencesView.xaml</DependentUpon>
     </Compile>
+    <Page Include="PositionOnMonitorSelector.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Resources\Icons.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
