@@ -68,7 +68,10 @@ namespace Carnac.Logic
                 .Delay(OneSecond, concurrencyService.Default)
                 .Select(m => Tuple.Create(m.Item1, ActionType.Remove));
             
-            var actionStream = removeMessageStream.Merge(fadeOutMessageStream).Merge(addMessageStream);
+            var actionStream = Observable.Merge(
+                removeMessageStream, 
+                fadeOutMessageStream, 
+                addMessageStream);
 
             actionSubscription = actionStream
                 .ObserveOn(concurrencyService.MainThreadScheduler)

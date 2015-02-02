@@ -10,7 +10,7 @@ namespace Carnac.Logic.Models
 {
     public class Message : NotifyPropertyChanged
     {
-        readonly string[] repeatDetectionText = { "Back", "Left", "Right", "Down", "Up" };
+        static readonly string[] RepeatDetectionText = { "Back", "Left", "Right", "Down", "Up" };
         readonly ObservableCollection<string> textCollection;
         readonly ObservableCollection<KeyPress> keyCollection;
         int lastTextRepeatCount = 1;
@@ -116,7 +116,7 @@ namespace Carnac.Logic.Models
         {
             var formattedText = Format(text, lastKeyPress.HasModifierPressed);
 
-            if (lastText == formattedText && repeatDetectionText.Contains(text) && Text.Any())
+            if (lastText == formattedText && RepeatDetectionText.Contains(text) && Text.Any())
             {
                 var repeatText = string.Format(" x {0} ", ++lastTextRepeatCount);
                 if (Text.Last() == lastText)
