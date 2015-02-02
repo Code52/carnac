@@ -11,11 +11,12 @@ namespace Carnac.Logic
     {
         static readonly TimeSpan FiveSeconds = TimeSpan.FromSeconds(5);
         static readonly TimeSpan OneSecond = TimeSpan.FromSeconds(1);
+
+        readonly SerialDisposable stopCarnacDisposable = new SerialDisposable();
         readonly ObservableCollection<Message> messages;
         readonly IMessageProvider messageProvider;
         readonly IKeyProvider keyProvider;
         readonly IConcurrencyService concurrencyService;
-        IDisposable stopCarnacDisposable;
 
         public MessageController(ObservableCollection<Message> messages, IMessageProvider messageProvider, IKeyProvider keyProvider, IConcurrencyService concurrencyService)
         {
@@ -27,8 +28,6 @@ namespace Carnac.Logic
 
         public void Start()
         {
-            if (stopCarnacDisposable != null) throw new InvalidOperationException("Carnac cannot be started more than once");
-
             var keyStream = keyProvider.GetKeyStream();
             var messageStream = messageProvider.GetMessageStream(keyStream).Publish();
 
@@ -80,7 +79,7 @@ namespace Carnac.Logic
                 .SubscribeOn(concurrencyService.MainThreadScheduler)
                 .Subscribe(m => messages.Remove(m));
 
-            stopCarnacDisposable = new CompositeDisposable(
+            stopCarnacDisposable.Disposable = new CompositeDisposable(
                 messageStream.Connect(), 
                 addMessageSubscription, 
                 fadeOutMessageSubscription,
@@ -89,7 +88,7 @@ namespace Carnac.Logic
 
         public void Dispose()
         {
-            if (stopCarnacDisposable != null) stopCarnacDisposable.Dispose();
+            stopCarnacDisposable.Dispose();
         }
     }
 }
