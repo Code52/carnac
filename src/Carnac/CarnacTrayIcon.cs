@@ -30,15 +30,16 @@ namespace Carnac
                 trayIcon.Visible = false;
                 Application.Current.Shutdown();
             };
-            trayIcon.Click += NotifyIconClick;
+            trayIcon.MouseClick += NotifyIconClick;
             trayIcon.Visible = true;
         }
 
         public event Action OpenPreferences = () => { }; 
 
-        void NotifyIconClick(object sender, EventArgs mouseEventArgs)
+        void NotifyIconClick(object sender, MouseEventArgs mouseEventArgs)
         {
-            OpenPreferences();
+            if (mouseEventArgs.Button == MouseButtons.Left)
+                OpenPreferences();
         }
 
         public void Dispose()
