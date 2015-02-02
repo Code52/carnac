@@ -9,7 +9,7 @@ namespace Carnac.Logic
 {
     public class ShortcutProvider : IShortcutProvider
     {
-        readonly List<ShortcutCollection> shortcuts = new List<ShortcutCollection>();
+        readonly List<ShortcutCollection> shortcuts;
 
         public ShortcutProvider()
         {
@@ -18,50 +18,7 @@ namespace Carnac.Logic
             if (!Directory.Exists(folder)) return;
             string[] files = Directory.GetFiles(folder, filter);
 
-            var yaml = new YamlStream();
-
-            foreach (string file in files)
-            {
-                yaml.Load(File.OpenText(file));
-                var root = yaml.Documents[0].RootNode;
-
-                var collection = root as YamlMappingNode;
-                if (collection != null)
-                {
-                    string group = GetValueByKey(collection, "group");
-                    string process = GetValueByKey(collection, "process");
-                    var shortcutCollection = new ShortcutCollection { Process = process, Group = group };
-
-
-                    var groupShortcuts = collection.Children.First(n => n.Key.ToString() == "shortcuts").Value as YamlSequenceNode;
-
-                    foreach (YamlMappingNode entry in groupShortcuts.Children)
-                    {
-                        string name = GetValueByKey(entry, "name");
-
-                        if (entry.Children.First(n => n.Key.ToString() == "keys").Value as YamlSequenceNode == null)
-                            continue;
-
-                        var keys = entry.Children.First(n => n.Key.ToString() == "keys").Value as YamlSequenceNode;
-
-                        foreach (var keyCombo in keys.Children)
-                        {
-                            var definitions = new List<KeyPressDefinition>();
-                            string[] combos = keyCombo.ToString().Split(',');
-                            foreach (string combo in combos)
-                            {
-                                var definition = GetKeyPressDefintion(combo);
-                                if (definition != null)
-                                    definitions.Add(definition);
-                            }
-                            if (definitions.Count > 0)
-                                shortcutCollection.Add(new KeyShortcut(name, definitions.ToArray()));
-                        }
-                    }
-
-                    shortcuts.Add(shortcutCollection);
-                }
-            }
+            shortcuts = GetYamlMappings(files).Select(GetShortcuts).ToList();
         }
 
         public List<KeyShortcut> GetShortcutsStartingWith(KeyPress keys)
@@ -73,12 +30,12 @@ namespace Carnac.Logic
                 .ToList();
         }
 
-        string GetValueByKey(YamlMappingNode node, string name)
+        static string GetValueByKey(YamlMappingNode node, string name)
         {
             return node.Children.First(n => n.Key.ToString() == name).Value.ToString();
         }
 
-        KeyPressDefinition GetKeyPressDefintion(string combo)
+        static KeyPressDefinition GetKeyPressDefintion(string combo)
         {
             combo = combo.ToLower();
             var key = combo.Split('+').Last();
@@ -92,6 +49,55 @@ namespace Carnac.Logic
                          altPressed: combo.Contains("alt"),
                          winkeyPressed: combo.Contains("win"));
             return null;
+        }
+
+        static IEnumerable<YamlMappingNode> GetYamlMappings(IEnumerable<string> filePaths)
+        {
+            var yaml = new YamlStream();
+
+            foreach (var file in filePaths)
+            {
+                yaml.Load(File.OpenText(file));
+                var root = yaml.Documents[0].RootNode;
+
+                var collection = root as YamlMappingNode;
+                if (collection != null)
+                    yield return collection;
+            }
+        }
+
+        static ShortcutCollection GetShortcuts(YamlMappingNode collection)
+        {
+            string group = GetValueByKey(collection, "group");
+            string process = GetValueByKey(collection, "process");
+
+            var shortCuts = from groupShortcuts in collection.Children.Where(n => n.Key.ToString() == "shortcuts").Take(1).Select(x => x.Value).OfType<YamlSequenceNode>()
+                            from shortcut in GetKeyShortcuts(groupShortcuts)
+                            select shortcut;
+
+            return new ShortcutCollection(shortCuts.ToList())
+            {
+                Process = process, 
+                Group = @group
+            };
+        }
+
+        static IEnumerable<KeyShortcut> GetKeyShortcuts(YamlSequenceNode groupShortcuts)
+        {
+            return from entry in groupShortcuts.Children.OfType<YamlMappingNode>()
+                   from keys in entry.Children.Where(n => n.Key.ToString() == "keys").Take(1).Select(x=>x.Value).OfType<YamlSequenceNode>()
+                   let name = GetValueByKey(entry, "name")
+                   from definitions in keys.Children.Select(KeyPressDefinitions).Where(definitions => definitions.Count > 0)
+                   select new KeyShortcut(name, definitions.ToArray());
+        }
+
+        static List<KeyPressDefinition> KeyPressDefinitions(YamlNode keyCombo)
+        {
+            return keyCombo.ToString()
+                .Split(',')
+                .Select(GetKeyPressDefintion)
+                .Where(definition => definition != null)
+                .ToList();
         }
     }
 }
