@@ -73,7 +73,7 @@ namespace Carnac.Logic
                 .Subscribe(m => m.IsDeleting = true);
 
             // Finally we just put a one second delay on the messages from the fade out stream and flag to remove.
-            var removeMessageStream = fadeOutMessageStream
+            var removeMessageSubscription = fadeOutMessageStream
                 .Delay(OneSecond, concurrencyService.Default)
                 .ObserveOn(concurrencyService.MainThreadScheduler)
                 .SubscribeOn(concurrencyService.MainThreadScheduler)
@@ -83,7 +83,7 @@ namespace Carnac.Logic
                 messageStream.Connect(), 
                 addMessageSubscription, 
                 fadeOutMessageSubscription,
-                removeMessageStream);
+                removeMessageSubscription);
         }
 
         public void Dispose()

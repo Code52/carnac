@@ -64,14 +64,14 @@ namespace Carnac.Logic
                         winKeyPressed = false;
                 }, observable.OnError);
 
-                var keyStreamSubsription = interceptKeysSource.GetKeyStream()
+                var keyStreamSubscription = interceptKeysSource.GetKeyStream()
                     .Select(DetectWindowsKey)
                     .Where(k => !IsModifierKeyPress(k) && k.KeyDirection == KeyDirection.Down)
                     .Select(ToCarnacKeyPress)
                     .Where(k => !passwordModeService.CheckPasswordMode(k.InterceptKeyEventArgs))
                     .Subscribe(observable);
 
-                return new CompositeDisposable(sessionSwitchStreamSubscription, keyStreamSubsription);
+                return new CompositeDisposable(sessionSwitchStreamSubscription, keyStreamSubscription);
             });
         }
 
