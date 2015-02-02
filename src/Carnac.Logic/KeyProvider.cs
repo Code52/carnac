@@ -57,21 +57,21 @@ namespace Carnac.Logic
             {
                 // When desktop is locked we will not get the keyup, because we track the windows key
                 // specially we need to set it to not being pressed anymore
-                var sessionSwitchStream = desktopLockEventService.GetSessionSwitchStream()
+                var sessionSwitchStreamSubscription = desktopLockEventService.GetSessionSwitchStream()
                 .Subscribe(ss =>
                 {
                     if (ss.Reason == SessionSwitchReason.SessionLock)
                         winKeyPressed = false;
                 }, observable.OnError);
 
-                var keyStreamObservable = interceptKeysSource.GetKeyStream()
+                var keyStreamSubsription = interceptKeysSource.GetKeyStream()
                     .Select(DetectWindowsKey)
                     .Where(k => !IsModifierKeyPress(k) && k.KeyDirection == KeyDirection.Down)
                     .Select(ToCarnacKeyPress)
                     .Where(k => !passwordModeService.CheckPasswordMode(k.InterceptKeyEventArgs))
                     .Subscribe(observable.OnNext, observable.OnError, observable.OnCompleted);
 
-                return new CompositeDisposable(sessionSwitchStream, keyStreamObservable);
+                return new CompositeDisposable(sessionSwitchStreamSubscription, keyStreamSubsription);
             });
         }
 

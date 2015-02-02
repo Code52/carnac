@@ -10,8 +10,8 @@ namespace Carnac.Logic.KeyMonitor
         {
             return Observable.FromEvent<SessionSwitchEventHandler, SessionSwitchEventArgs>(
                 handler => (sender, e) => handler(e),
-                add => SystemEvents.SessionSwitch += add, 
-                remove => SystemEvents.SessionSwitch -= remove);
+                handler => SystemEvents.SessionSwitch += handler,
+                handler => SystemEvents.SessionSwitch -= handler);
         }
     }
 }
