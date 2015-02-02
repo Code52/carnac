@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using System.Reactive.Concurrency;
-using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Windows.Forms;
 using Carnac.Logic;
@@ -19,7 +17,7 @@ namespace Carnac.Tests
     {
         readonly ObservableCollection<Message> keysCollection = new ObservableCollection<Message>();
         readonly TestScheduler testScheduler;
-        readonly KeysController sut;
+        readonly MessageController sut;
         readonly Subject<Message> messageStream;
 
         public KeysControllerFacts()
@@ -32,7 +30,7 @@ namespace Carnac.Tests
             concurrencyService.MainThreadScheduler.Returns(testScheduler);
             concurrencyService.Default.Returns(testScheduler);
             messageStream = new Subject<Message>();
-            sut = new KeysController(keysCollection, messageProvider, keyProvider, concurrencyService);
+            sut = new MessageController(keysCollection, messageProvider, keyProvider, concurrencyService);
         }
 
         [Fact]

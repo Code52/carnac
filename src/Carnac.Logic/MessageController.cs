@@ -7,31 +7,35 @@ using Carnac.Logic.Models;
 
 namespace Carnac.Logic
 {
-    public class KeysController
+    public class MessageController : IDisposable
     {
         static readonly TimeSpan FiveSeconds = TimeSpan.FromSeconds(5);
         static readonly TimeSpan OneSecond = TimeSpan.FromSeconds(1);
-        readonly ObservableCollection<Message> keys;
+        readonly ObservableCollection<Message> messages;
         readonly IMessageProvider messageProvider;
         readonly IKeyProvider keyProvider;
         readonly IConcurrencyService concurrencyService;
+        IDisposable stopCarnacDisposable;
 
-        public KeysController(ObservableCollection<Message> keys, IMessageProvider messageProvider, IKeyProvider keyProvider, IConcurrencyService concurrencyService)
+        public MessageController(ObservableCollection<Message> messages, IMessageProvider messageProvider, IKeyProvider keyProvider, IConcurrencyService concurrencyService)
         {
-            this.keys = keys;
+            this.messages = messages;
             this.messageProvider = messageProvider;
             this.keyProvider = keyProvider;
             this.concurrencyService = concurrencyService;
         }
 
-        public IDisposable Start()
+        public void Start()
         {
-            var messageStream = messageProvider.GetMessageStream(keyProvider.GetKeyStream()).Publish();
+            if (stopCarnacDisposable != null) throw new InvalidOperationException("Carnac cannot be started more than once");
+
+            var keyStream = keyProvider.GetKeyStream();
+            var messageStream = messageProvider.GetMessageStream(keyStream).Publish();
 
             var addMessageSubscription = messageStream
                 .ObserveOn(concurrencyService.MainThreadScheduler)
                 .SubscribeOn(concurrencyService.MainThreadScheduler)
-                .Subscribe(key => keys.Add(key));
+                .Subscribe(message => messages.Add(message));
 
             /*
             Fade out is a rolling query.
@@ -74,13 +78,18 @@ namespace Carnac.Logic
                 .Delay(OneSecond, concurrencyService.Default)
                 .ObserveOn(concurrencyService.MainThreadScheduler)
                 .SubscribeOn(concurrencyService.MainThreadScheduler)
-                .Subscribe(m => keys.Remove(m));
+                .Subscribe(m => messages.Remove(m));
 
-            return new CompositeDisposable(
+            stopCarnacDisposable = new CompositeDisposable(
                 messageStream.Connect(), 
                 addMessageSubscription, 
                 fadeOutMessageSubscription,
                 removeMessageStream);
+        }
+
+        public void Dispose()
+        {
+            if (stopCarnacDisposable != null) stopCarnacDisposable.Dispose();
         }
     }
 }

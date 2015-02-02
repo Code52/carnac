@@ -18,9 +18,8 @@ namespace Carnac
         readonly PopupSettings settings;
         KeyShowView keyShowView;
         CarnacTrayIcon trayIcon;
-        KeysController carnac;
+        MessageController carnac;
         ObservableCollection<Message> keyCollection;
-        IDisposable shutdownCarnac;
 
         public App()
         {
@@ -47,8 +46,8 @@ namespace Carnac
             keyShowView = new KeyShowView(new KeyShowViewModel(keyCollection, settings));
             keyShowView.Show();
 
-            carnac = new KeysController(keyCollection, messageProvider, keyProvider, new ConcurrencyService());
-            shutdownCarnac = carnac.Start();
+            carnac = new MessageController(keyCollection, messageProvider, keyProvider, new ConcurrencyService());
+            carnac.Start();
 
             base.OnStartup(e);
         }
@@ -57,7 +56,7 @@ namespace Carnac
         {
             ProcessUtilities.DestroyMutex();
             trayIcon.Dispose();
-            shutdownCarnac.Dispose();
+            carnac.Dispose();
             Shutdown();
         }
 
