@@ -50,11 +50,7 @@ namespace Carnac.Logic.Models
 
             ProcessName = distinctProcessName.Single();
 
-            var distinctProcessIcon = keys.Select(k => k.Process.ProcessIcon).Distinct();
-            if (distinctProcessIcon.Count() != 1)
-                throw new InvalidOperationException("Keys are from different processes");
-
-            ProcessIcon = distinctProcessIcon.Single();
+            var ProcessIcon = keys.Single(k => k.Process.ProcessName == ProcessName).Process.ProcessIcon;
 
             foreach (var keyPress in keys)
             {

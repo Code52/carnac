@@ -108,16 +108,15 @@ namespace Carnac.Logic
             var inputs = ToInputs(isLetter, winKeyPressed, interceptKeyEventArgs);
             try
             {
-                Icon icon = Icon.ExtractAssociatedIcon(process.MainModule.FileName);
-
-                return new KeyPress(new ProcessInfo(process.ProcessName, icon.ToImageSource()), interceptKeyEventArgs, winKeyPressed, inputs);
+                string processFileName = process.MainModule.FileName;
+                ImageSource image = IconUtilities.GetProcessIconAsImageSource(processFileName);
+                return new KeyPress(new ProcessInfo(process.ProcessName, image), interceptKeyEventArgs, winKeyPressed, inputs);
             }
             catch (System.Exception)
             {
                 return new KeyPress(new ProcessInfo(process.ProcessName), interceptKeyEventArgs, winKeyPressed, inputs); ;
             }
         }
-
 
         static IEnumerable<string> ToInputs(bool isLetter, bool isWinKeyPressed, InterceptKeyEventArgs interceptKeyEventArgs)
         {
