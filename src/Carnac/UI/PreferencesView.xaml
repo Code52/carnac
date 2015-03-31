@@ -132,6 +132,9 @@
                         <ui:PreferencesField Header="Shortcuts Only">
                             <CheckBox IsChecked="{Binding Settings.DetectShortcutsOnly}" />
                         </ui:PreferencesField>
+                        <ui:PreferencesField Header="Show Application Icon">
+                            <CheckBox IsChecked="{Binding Settings.ShowApplicationIcon}" />
+                        </ui:PreferencesField>
                     </StackPanel>
                     <StackPanel HorizontalAlignment="Right" Orientation="Horizontal" Grid.Row="1" Margin="5">
                         <Button Width="150" Margin="0 0 5 0" Content="Reset to Defaults" Command="{Binding ResetToDefaultsCommand}" />

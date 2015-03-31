@@ -15,6 +15,7 @@
                 <componentModel:SortDescription Direction="Descending" PropertyName="LastMessage" />
             </CollectionViewSource.SortDescriptions>
         </CollectionViewSource>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
 
         <DrawingBrush x:Key="Layer1" Stretch="Uniform">
             <DrawingBrush.Drawing>
@@ -92,7 +93,10 @@
                     <Border.LayoutTransform>
                         <ScaleTransform ScaleY="{Binding DataContext.Settings.ScaleTransform, Source={x:Reference This}}" />
                     </Border.LayoutTransform>
-                    <ListBox MaxWidth="{Binding DataContext.Settings.ItemMaxWidth, Source={x:Reference This}}"
+                    <StackPanel Orientation="Horizontal">
+                        <Image Margin="3" Width="20" Height="20"  Visibility="{Binding DataContext.Settings.ShowApplicationIcon,Source={x:Reference This},
+                            Converter={StaticResource BooleanToVisibilityConverter}}" Source="{Binding ProcessIcon}" />
+                        <ListBox MaxWidth="{Binding DataContext.Settings.ItemMaxWidth, Source={x:Reference This}}"
                              HorizontalAlignment="Stretch" VerticalContentAlignment="Center" ItemsSource="{Binding Text}"
                              FontWeight="Bold" Focusable="False" BorderBrush="{x:Null}"
                              ScrollViewer.HorizontalScrollBarVisibility="Disabled" IsHitTestVisible="False">
@@ -123,7 +127,7 @@
                                         </Border.Background>
                                         <StackPanel Orientation="Horizontal">
                                             <Rectangle x:Name="icon" VerticalAlignment="Center" />
-                                            <TextBlock x:Name="KeyCap" Text="{Binding}">
+                                            <TextBlock x:Name="KeyCap" Text="{Binding  }">
                                                 <TextBlock.Foreground>
                                                     <SolidColorBrush Color="{Binding DataContext.Settings.ItemBackgroundColor, Source={x:Reference This}}" />
                                                 </TextBlock.Foreground>
@@ -131,7 +135,8 @@
                                         </StackPanel>
                                     </Border>
 
-                                    <TextBlock x:Name="regular" Margin="0" VerticalAlignment="Center" Text="{Binding}"
+                          
+                                    <TextBlock x:Name="regular" Margin="0" VerticalAlignment="Center" Text="{Binding }"
                                                Padding="0" />
                                 </StackPanel>
                                 <DataTemplate.Triggers>
@@ -181,6 +186,7 @@
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
+                    </StackPanel>
                 </Border>
             </DataTemplate>
         </ListView.ItemTemplate>

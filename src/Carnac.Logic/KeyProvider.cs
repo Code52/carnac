@@ -8,6 +8,11 @@ using System.Windows.Forms;
 using Carnac.Logic.KeyMonitor;
 using Carnac.Logic.Models;
 using Microsoft.Win32;
+using System.Drawing;
+using System.Windows.Media;
+using System.Windows.Interop;
+using System.Windows;
+using System.Windows.Media.Imaging;
 
 namespace Carnac.Logic
 {
@@ -101,9 +106,18 @@ namespace Carnac.Logic
                            interceptKeyEventArgs.Key <= Keys.Z;
 
             var inputs = ToInputs(isLetter, winKeyPressed, interceptKeyEventArgs);
+            try
+            {
+                Icon icon = Icon.ExtractAssociatedIcon(process.MainModule.FileName);
 
-            return new KeyPress(new ProcessInfo(process.ProcessName), interceptKeyEventArgs, winKeyPressed, inputs);
+                return new KeyPress(new ProcessInfo(process.ProcessName, icon.ToImageSource()), interceptKeyEventArgs, winKeyPressed, inputs);
+            }
+            catch (System.Exception)
+            {
+                return new KeyPress(new ProcessInfo(process.ProcessName), interceptKeyEventArgs, winKeyPressed, inputs); ;
+            }
         }
+
 
         static IEnumerable<string> ToInputs(bool isLetter, bool isWinKeyPressed, InterceptKeyEventArgs interceptKeyEventArgs)
         {

@@ -5,6 +5,8 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
+using System.Drawing;
+using System.Windows.Media;
 
 namespace Carnac.Logic.Models
 {
@@ -34,6 +36,7 @@ namespace Carnac.Logic.Models
         public Message(KeyPress key) : this()
         {
             ProcessName = key.Process.ProcessName;
+            ProcessIcon = key.Process.ProcessIcon;
             AddKey(key);
             CanBeMerged = !key.HasModifierPressed;
         }
@@ -46,6 +49,13 @@ namespace Carnac.Logic.Models
                 throw new InvalidOperationException("Keys are from different processes");
 
             ProcessName = distinctProcessName.Single();
+
+            var distinctProcessIcon = keys.Select(k => k.Process.ProcessIcon).Distinct();
+            if (distinctProcessIcon.Count() != 1)
+                throw new InvalidOperationException("Keys are from different processes");
+
+            ProcessIcon = distinctProcessIcon.Single();
+
             foreach (var keyPress in keys)
             {
                 AddKey(keyPress);
@@ -56,6 +66,8 @@ namespace Carnac.Logic.Models
         }
 
         public string ProcessName { get; private set; }
+
+        public ImageSource ProcessIcon { get; private set; }
 
         public DateTime LastMessage { get; private set; }
 
