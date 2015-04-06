@@ -50,8 +50,6 @@ namespace Carnac.Logic.Models
 
             ProcessName = distinctProcessName.Single();
 
-            var ProcessIcon = keys.Single(k => k.Process.ProcessName == ProcessName).Process.ProcessIcon;
-
             foreach (var keyPress in keys)
             {
                 AddKey(keyPress);
