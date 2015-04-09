@@ -1,3 +1,5 @@
+using System.Windows.Media;
+using System.Drawing;
 namespace Carnac.Logic.Models
 {
     public class ProcessInfo
@@ -7,6 +9,14 @@ namespace Carnac.Logic.Models
             ProcessName = processName;
         }
 
+        public ProcessInfo(string processName, ImageSource processIcon)
+        {
+            ProcessName = processName;
+            ProcessIcon = processIcon;
+        }
+
         public string ProcessName { get; private set; }
+
+        public ImageSource ProcessIcon { get; private set; }
     }
 }
