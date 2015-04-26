@@ -8,11 +8,7 @@ using System.Windows.Forms;
 using Carnac.Logic.KeyMonitor;
 using Carnac.Logic.Models;
 using Microsoft.Win32;
-using System.Drawing;
 using System.Windows.Media;
-using System.Windows.Interop;
-using System.Windows;
-using System.Windows.Media.Imaging;
 
 namespace Carnac.Logic
 {

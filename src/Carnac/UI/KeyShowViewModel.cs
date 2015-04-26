@@ -1,7 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using Carnac.Logic;
 using Carnac.Logic.Models;
-using Message = Carnac.Logic.Models.Message;
 
 namespace Carnac.UI
 {

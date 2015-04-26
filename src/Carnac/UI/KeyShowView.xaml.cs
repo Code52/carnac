@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using System.Timers;
 using System.Windows;
 using System.Windows.Interop;
 using Carnac.Logic;
-using Timer = System.Timers.Timer;
 
 namespace Carnac.UI
 {
