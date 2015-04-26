@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Runtime.InteropServices;
@@ -101,7 +102,7 @@ namespace Carnac.Logic
             var isLetter = interceptKeyEventArgs.Key >= Keys.A &&
                            interceptKeyEventArgs.Key <= Keys.Z;
 
-            var inputs = ToInputs(isLetter, winKeyPressed, interceptKeyEventArgs);
+            var inputs = ToInputs(isLetter, winKeyPressed, interceptKeyEventArgs).ToArray();
             try
             {
                 string processFileName = process.MainModule.FileName;
