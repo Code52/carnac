@@ -54,7 +54,7 @@ namespace Carnac.Logic
         public IObservable<KeyPress> GetKeyStream()
         {
             // We are using an observable create to tie the lifetimes of the session switch stream and the keystream
-            return Observable.Create<KeyPress>(observable =>
+            return Observable.Create<KeyPress>(observer =>
             {
                 // When desktop is locked we will not get the keyup, because we track the windows key
                 // specially we need to set it to not being pressed anymore
@@ -63,14 +63,14 @@ namespace Carnac.Logic
                 {
                     if (ss.Reason == SessionSwitchReason.SessionLock)
                         winKeyPressed = false;
-                }, observable.OnError);
+                }, observer.OnError);
 
                 var keyStreamSubsription = interceptKeysSource.GetKeyStream()
                     .Select(DetectWindowsKey)
                     .Where(k => !IsModifierKeyPress(k) && k.KeyDirection == KeyDirection.Down)
                     .Select(ToCarnacKeyPress)
                     .Where(k => !passwordModeService.CheckPasswordMode(k.InterceptKeyEventArgs))
-                    .Subscribe(observable.OnNext, observable.OnError, observable.OnCompleted);
+                    .Subscribe(observer);
 
                 return new CompositeDisposable(sessionSwitchStreamSubscription, keyStreamSubsription);
             });
