@@ -113,7 +113,6 @@ namespace Carnac.Tests
             var keys = new List<KeyPress>();
 
             provider.GetKeyStream().Subscribe(keys.Add);
-            player.Play();
 
             return keys;
         }
