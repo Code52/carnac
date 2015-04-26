@@ -9,11 +9,6 @@ namespace Carnac.Tests
     {
         readonly Subject<InterceptKeyEventArgs> subject = new Subject<InterceptKeyEventArgs>();
 
-        public IDisposable Subscribe(IObserver<InterceptKeyEventArgs> observer)
-        {
-            return subject.Subscribe(observer);
-        }
-
         public void Play()
         {
             foreach (var key in this)
