@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using System.Reactive.Concurrency;
-using System.Reactive.Linq;
-using System.Reactive.Subjects;
 using System.Windows.Forms;
 using Carnac.Logic;
 using Carnac.Logic.KeyMonitor;
@@ -17,97 +14,90 @@ namespace Carnac.Tests
 {
     public class KeysControllerFacts
     {
+        const int MessageAOnNextTick = 100;
+
         readonly ObservableCollection<Message> keysCollection = new ObservableCollection<Message>();
         readonly TestScheduler testScheduler;
+        readonly Message messageA = new Message(A);
         readonly KeysController sut;
-        readonly Subject<Message> messageStream;
 
         public KeysControllerFacts()
         {
             testScheduler = new TestScheduler();
+            var messageSequence = testScheduler.CreateColdObservable(
+                ReactiveTest.OnNext(MessageAOnNextTick, messageA)
+                );
+
+            sut = CreateKeysController(messageSequence);
+        }
+
+        KeysController CreateKeysController(IObservable<Message> messageStream)
+        {
             var messageProvider = Substitute.For<IMessageProvider>();
             messageProvider.GetMessageStream(Arg.Any<IObservable<KeyPress>>()).Returns(_ => messageStream);
             var keyProvider = Substitute.For<IKeyProvider>();
             var concurrencyService = Substitute.For<IConcurrencyService>();
             concurrencyService.MainThreadScheduler.Returns(testScheduler);
             concurrencyService.Default.Returns(testScheduler);
-            messageStream = new Subject<Message>();
-            sut = new KeysController(keysCollection, messageProvider, keyProvider, concurrencyService);
+            return new KeysController(keysCollection, messageProvider, keyProvider, concurrencyService);
         }
 
         [Fact]
         public void MessagesAreAddedIntoKeysColletion()
         {
-            var message = new Message(A);
-
             sut.Start();
-            ProvideMessage(message);
+            testScheduler.AdvanceTo(MessageAOnNextTick);
+            testScheduler.AdvanceBy(2);//ObserveOn+SubscribeOn cost
 
-            keysCollection.ShouldContain(message);
-            message.IsDeleting.ShouldBe(false);
+            keysCollection.ShouldContain(messageA);
+            messageA.IsDeleting.ShouldBe(false);
         }
 
         [Fact]
         public void MessagesAreFlaggedAsDeletingAfter5Seconds()
         {
-            var message = new Message(A);
-
             sut.Start();
-            ProvideMessage(message);
+            testScheduler.AdvanceBy(MessageAOnNextTick + 2);
             testScheduler.AdvanceBy(TimeSpan.FromSeconds(5).Ticks);
 
-            message.IsDeleting.ShouldBe(true);
+            messageA.IsDeleting.ShouldBe(true);
         }
 
         [Fact]
         public void MessagesIsRemovedAfter6Seconds()
         {
-            var message = new Message(A);
-
             sut.Start();
-            ProvideMessage(message);
+            testScheduler.AdvanceBy(MessageAOnNextTick + 2);
             testScheduler.AdvanceBy(TimeSpan.FromSeconds(6).Ticks);
-            
-            keysCollection.ShouldNotContain(message);
+
+            keysCollection.ShouldNotContain(messageA);
         }
 
         [Fact]
         public void MessageTimeoutIsStartedAgainIfMessageIsUpdated()
         {
-            var message = new Message(A);
-
             sut.Start();
-            ProvideMessage(message);
             testScheduler.AdvanceBy(TimeSpan.FromSeconds(3).Ticks);
-            message.Merge(new Message(A));
+            messageA.Merge(new Message(A));                             //Hmmm, can we change this to an immutable style? -LC
             testScheduler.AdvanceBy(TimeSpan.FromSeconds(3).Ticks);
 
-            message.IsDeleting.ShouldBe(false);
-            keysCollection.ShouldContain(message);
+            messageA.IsDeleting.ShouldBe(false);
+            keysCollection.ShouldContain(messageA);
         }
 
         [Fact]
         public void UnsubscribesFromMessageUpdatesAfterDeleteTimeout()
         {
-            var message = new Message(A);
-
             sut.Start();
-            ProvideMessage(message);
+            testScheduler.AdvanceBy(MessageAOnNextTick + 2);
             testScheduler.AdvanceBy(TimeSpan.FromSeconds(5).Ticks);
-            message.IsDeleting = false;
-            message.Merge(new Message(A)); // This will trigger an update of the message
+            messageA.IsDeleting = false;
+            messageA.Merge(new Message(A)); // This will trigger an update of the message
             testScheduler.AdvanceBy(5);
             testScheduler.AdvanceBy(TimeSpan.FromSeconds(5).Ticks);
 
             // If we didn't unsubscribe to updates we would have triggered another inner sequence which would try to delete again.
-            message.IsDeleting.ShouldBe(false);
-        }
-
-        void ProvideMessage(Message message)
-        {
-            testScheduler.AdvanceBy(5); // Need to tick to allows merge to be setup properly
-            messageStream.OnNext(message);
-            testScheduler.AdvanceBy(10); // Few more ticks to allow the message to be processed
+            messageA.IsDeleting.ShouldBe(false);
         }
 
         static KeyPress A
@@ -115,7 +105,7 @@ namespace Carnac.Tests
             get
             {
                 return new KeyPress(new ProcessInfo("foo"),
-                    new InterceptKeyEventArgs(Keys.A, KeyDirection.Down, false, false, false), false, new[] {"a"});
+                    new InterceptKeyEventArgs(Keys.A, KeyDirection.Down, false, false, false), false, new[] { "a" });
             }
         }
     }

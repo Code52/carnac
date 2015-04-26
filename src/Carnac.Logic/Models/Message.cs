@@ -5,7 +5,6 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
-using System.Drawing;
 using System.Windows.Media;
 
 namespace Carnac.Logic.Models
