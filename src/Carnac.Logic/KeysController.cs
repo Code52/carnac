@@ -1,6 +1,7 @@
 using System;
 using System.Collections.ObjectModel;
 using System.Reactive;
+using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using Carnac.Logic.Models;
 
@@ -14,7 +15,7 @@ namespace Carnac.Logic
         readonly IMessageProvider messageProvider;
         readonly IKeyProvider keyProvider;
         readonly IConcurrencyService concurrencyService;
-        IDisposable actionSubscription;
+        readonly SingleAssignmentDisposable actionSubscription = new SingleAssignmentDisposable();
 
         public KeysController(ObservableCollection<Message> keys, IMessageProvider messageProvider, IKeyProvider keyProvider, IConcurrencyService concurrencyService)
         {
@@ -73,7 +74,7 @@ namespace Carnac.Logic
                 fadeOutMessageStream, 
                 addMessageStream);
 
-            actionSubscription = actionStream
+            actionSubscription.Disposable = actionStream
                 .ObserveOn(concurrencyService.MainThreadScheduler)
                 .SubscribeOn(concurrencyService.MainThreadScheduler) // Because we mutate message state we need to do everything on UI thread. 
                                                              // If we introduced a 'Update' action to this feed we could remove mutation from the stream
