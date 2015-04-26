@@ -7,9 +7,9 @@ namespace Carnac.Logic
     {
         static readonly TimeSpan OneSecond = TimeSpan.FromSeconds(1);
 
-        public Message MergeIfNeeded(Message acc, Message key)
+        public Message MergeIfNeeded(Message accumulatingMessage, Message newMessage)
         {
-            return ShouldCreateNewMessage(acc, key) ? key : acc.Merge(key);
+            return ShouldCreateNewMessage(accumulatingMessage, newMessage) ? newMessage : accumulatingMessage.Merge(newMessage);
         }
 
         static bool ShouldCreateNewMessage(Message acc, Message key)

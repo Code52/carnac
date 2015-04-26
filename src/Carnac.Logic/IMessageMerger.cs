@@ -4,6 +4,6 @@ namespace Carnac.Logic
 {
     public interface IMessageMerger
     {
-        Message MergeIfNeeded(Message acc, Message key);
+        Message MergeIfNeeded(Message accumulatingMessage, Message newMessage);
     }
 }
