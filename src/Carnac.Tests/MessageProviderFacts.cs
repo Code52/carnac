@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Windows.Forms;
@@ -39,10 +40,11 @@ namespace Carnac.Tests
         {
             // arrange
             messageProvider.GetMessageStream(keysStream).Subscribe(value => messages.Add(value));
-            KeyStreams.LetterL().Play(interceptKeysSource);
 
             // act
-            KeyStreams.CtrlShiftL().Play(interceptKeysSource);
+            KeyStreams.LetterL()
+                .Concat(KeyStreams.CtrlShiftL())
+                .Subscribe(interceptKeysSource);
 
             // assert
             Assert.Equal(2, messages.Count);
@@ -57,7 +59,7 @@ namespace Carnac.Tests
                 .Returns(new List<KeyShortcut> { new KeyShortcut("MyShortcut", new KeyPressDefinition(Keys.L, shiftPressed: true, controlPressed: true)) });
 
             // act
-            KeyStreams.CtrlShiftL().Play(interceptKeysSource);
+            KeyStreams.CtrlShiftL().Subscribe(interceptKeysSource);
 
             // assert
             Assert.Equal(1, messages.Count);
@@ -75,7 +77,7 @@ namespace Carnac.Tests
                     new KeyPressDefinition(Keys.L)) });
 
             // act
-            KeyStreams.CtrlU().Play(interceptKeysSource);
+            KeyStreams.CtrlU().Subscribe(interceptKeysSource);
 
             // assert
             Assert.Equal(0, messages.Count);
@@ -92,8 +94,9 @@ namespace Carnac.Tests
                     new KeyPressDefinition(Keys.L)) });
 
             // act
-            KeyStreams.CtrlU().Play(interceptKeysSource);
-            KeyStreams.Number1().Play(interceptKeysSource);
+            KeyStreams.CtrlU()
+                .Concat(KeyStreams.Number1())
+                .Subscribe(interceptKeysSource);
 
             // assert
             Assert.Equal(2, messages.Count);
@@ -112,8 +115,9 @@ namespace Carnac.Tests
                     new KeyPressDefinition(Keys.L)) });
 
             // act
-            KeyStreams.CtrlU().Play(interceptKeysSource);
-            KeyStreams.LetterL().Play(interceptKeysSource);
+            KeyStreams.CtrlU()
+                .Concat(KeyStreams.LetterL())
+                .Subscribe(interceptKeysSource);
 
             // assert
             Assert.Equal(1, messages.Count);
@@ -132,10 +136,12 @@ namespace Carnac.Tests
                     new KeyPressDefinition(Keys.L)) });
 
             // act
-            KeyStreams.CtrlU().Play(interceptKeysSource);
-            KeyStreams.LetterL().Play(interceptKeysSource);
-            KeyStreams.Number1().Play(interceptKeysSource);
-            KeyStreams.LetterL().Play(interceptKeysSource);
+            KeyStreams.CtrlU()
+                .Concat(KeyStreams.LetterL())
+                .Concat(KeyStreams.Number1())
+                .Concat(KeyStreams.LetterL())
+                .Subscribe(interceptKeysSource);
+           
 
             // assert
             Assert.Equal(2, messages.Count);
