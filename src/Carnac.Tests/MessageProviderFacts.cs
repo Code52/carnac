@@ -15,22 +15,22 @@ namespace Carnac.Tests
     public class MessageProviderFacts
     {
         readonly IShortcutProvider shortcutProvider;
-        readonly MessageProvider messageProvider;
 
         public MessageProviderFacts()
         {
             shortcutProvider = Substitute.For<IShortcutProvider>();
             shortcutProvider.GetShortcutsStartingWith(Arg.Any<KeyPress>()).Returns(new List<KeyShortcut>());
-            messageProvider = new MessageProvider(shortcutProvider, new PopupSettings(), new MessageMerger());
+            
         }
 
-        static KeyProvider CreateKeyProvider(IObservable<InterceptKeyEventArgs> keysStreamSource)
+        MessageProvider CreateMessageProvider(IObservable<InterceptKeyEventArgs> keysStreamSource)
         {
             var source = Substitute.For<IInterceptKeys>();
             source.GetKeyStream().Returns(keysStreamSource);
             var desktopLockEventService = Substitute.For<IDesktopLockEventService>();
             desktopLockEventService.GetSessionSwitchStream().Returns(Observable.Never<SessionSwitchEventArgs>());
-            return new KeyProvider(source, new PasswordModeService(), desktopLockEventService);
+            var keyProvider = new KeyProvider(source, new PasswordModeService(), desktopLockEventService);
+            return new MessageProvider(shortcutProvider, keyProvider, new PopupSettings(), new MessageMerger());
         }
 
         [Fact]
@@ -40,10 +40,10 @@ namespace Carnac.Tests
             var keySequence = KeyStreams.LetterL()
                 .Concat(KeyStreams.CtrlShiftL())
                 .ToObservable();
-            var keyProvider = CreateKeyProvider(keySequence);
+            var sut = CreateMessageProvider(keySequence);
 
             // act
-            var messages = messageProvider.GetMessageStream(keyProvider.GetKeyStream()).ToList().Single();
+            var messages = sut.GetMessageStream().ToList().Single();
 
             // assert
             Assert.Equal(2, messages.Count);
@@ -54,12 +54,12 @@ namespace Carnac.Tests
         {
             // arrange
             var keySequence = KeyStreams.CtrlShiftL().ToObservable();
-            var keyProvider = CreateKeyProvider(keySequence);
+            var sut = CreateMessageProvider(keySequence);
             shortcutProvider.GetShortcutsStartingWith(Arg.Any<KeyPress>())
                 .Returns(new List<KeyShortcut> { new KeyShortcut("MyShortcut", new KeyPressDefinition(Keys.L, shiftPressed: true, controlPressed: true)) });
 
             // act
-            var messages = messageProvider.GetMessageStream(keyProvider.GetKeyStream()).ToList().Single();
+            var messages = sut.GetMessageStream().ToList().Single();
 
             // assert
             Assert.Equal(1, messages.Count);
@@ -71,14 +71,14 @@ namespace Carnac.Tests
         {
             // arrange
             var keySequence = KeyStreams.CtrlU().ToObservable();
-            var keyProvider = CreateKeyProvider(keySequence);
+            var sut = CreateMessageProvider(keySequence);
             shortcutProvider.GetShortcutsStartingWith(Arg.Any<KeyPress>())
                 .Returns(new List<KeyShortcut> { new KeyShortcut("SomeShortcut",
                     new KeyPressDefinition(Keys.U, controlPressed: true),
                     new KeyPressDefinition(Keys.L)) });
 
             // act
-            var messages = messageProvider.GetMessageStream(keyProvider.GetKeyStream()).ToList().Single();
+            var messages = sut.GetMessageStream().ToList().Single();
 
             // assert
             Assert.Equal(0, messages.Count);
@@ -91,14 +91,14 @@ namespace Carnac.Tests
             var keySequence = KeyStreams.CtrlU()
                 .Concat(KeyStreams.Number1())
                 .ToObservable();
-            var keyProvider = CreateKeyProvider(keySequence);
+            var sut = CreateMessageProvider(keySequence);
             shortcutProvider.GetShortcutsStartingWith(Arg.Any<KeyPress>())
                 .Returns(new List<KeyShortcut> { new KeyShortcut("SomeShortcut",
                     new KeyPressDefinition(Keys.U, controlPressed: true),
                     new KeyPressDefinition(Keys.L)) });
 
             // act
-            var messages = messageProvider.GetMessageStream(keyProvider.GetKeyStream()).ToList().Single();
+            var messages = sut.GetMessageStream().ToList().Single();
 
             // assert
             Assert.Equal(2, messages.Count);
@@ -113,14 +113,14 @@ namespace Carnac.Tests
             var keySequence = KeyStreams.CtrlU()
                 .Concat(KeyStreams.LetterL())
                 .ToObservable();
-            var keyProvider = CreateKeyProvider(keySequence);
+            var sut = CreateMessageProvider(keySequence);
             shortcutProvider.GetShortcutsStartingWith(Arg.Any<KeyPress>())
                 .Returns(new List<KeyShortcut> { new KeyShortcut("SomeShortcut",
                     new KeyPressDefinition(Keys.U, controlPressed: true),
                     new KeyPressDefinition(Keys.L)) });
 
             // act
-            var messages = messageProvider.GetMessageStream(keyProvider.GetKeyStream()).ToList().Single();
+            var messages = sut.GetMessageStream().ToList().Single();
 
             // assert
             Assert.Equal(1, messages.Count);
@@ -136,7 +136,7 @@ namespace Carnac.Tests
                 .Concat(KeyStreams.Number1())
                 .Concat(KeyStreams.LetterL())
                 .ToObservable();
-            var keyProvider = CreateKeyProvider(keySequence);
+            var sut = CreateMessageProvider(keySequence);
             shortcutProvider
                 .GetShortcutsStartingWith(Arg.Any<KeyPress>())
                 .Returns(new List<KeyShortcut> { new KeyShortcut("SomeShortcut",
@@ -144,7 +144,7 @@ namespace Carnac.Tests
                     new KeyPressDefinition(Keys.L)) });
 
             // act
-            var messages = messageProvider.GetMessageStream(keyProvider.GetKeyStream()).ToList().Single();
+            var messages = sut.GetMessageStream().ToList().Single();
 
             // assert
             Assert.Equal(2, messages.Count);

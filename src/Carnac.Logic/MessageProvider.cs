@@ -7,18 +7,20 @@ namespace Carnac.Logic
     public class MessageProvider : IMessageProvider
     {
         readonly IShortcutProvider shortcutProvider;
+        readonly IKeyProvider keyProvider;
         readonly PopupSettings settings;
         readonly IMessageMerger messageMerger;
 
-        public MessageProvider(IShortcutProvider shortcutProvider, PopupSettings settings, IMessageMerger messageMerger)
+        public MessageProvider(IShortcutProvider shortcutProvider, IKeyProvider keyProvider, PopupSettings settings, IMessageMerger messageMerger)
         {
             this.shortcutProvider = shortcutProvider;
+            this.keyProvider = keyProvider;
             this.messageMerger = messageMerger;
             this.settings = settings;
         }
 
         //TODO: Kind of an anti pattern (IMO) to pass in an Observable Sequence to a method. Either inject via DI the source of the sequence, or push the values at this object with concrete method calls. -LC
-        public IObservable<Message> GetMessageStream(IObservable<KeyPress> keyStream)
+        public IObservable<Message> GetMessageStream()
         {
             /*
             shortcut Acc stream:
@@ -33,7 +35,7 @@ namespace Carnac.Logic
             sel many    :  a---b-------------ctrl+r,ctrl+r-------------ctrl+r---a-----↓---↓
             msg merger  :  a---*ab-----------ctrl+r,ctrl+r-------------ctrl+r---a-----↓---*'↓ x2'
             */
-            return keyStream
+            return keyProvider.GetKeyStream()
                 .Scan(new ShortcutAccumulator(), (acc, key) => acc.ProcessKey(shortcutProvider, key))
                 .Where(c => c.HasCompletedValue)
                 .SelectMany(c => c.GetMessages())

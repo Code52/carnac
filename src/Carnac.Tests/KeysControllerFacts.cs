@@ -34,12 +34,11 @@ namespace Carnac.Tests
         KeysController CreateKeysController(IObservable<Message> messageStream)
         {
             var messageProvider = Substitute.For<IMessageProvider>();
-            messageProvider.GetMessageStream(Arg.Any<IObservable<KeyPress>>()).Returns(_ => messageStream);
-            var keyProvider = Substitute.For<IKeyProvider>();
+            messageProvider.GetMessageStream().Returns(_ => messageStream);
             var concurrencyService = Substitute.For<IConcurrencyService>();
             concurrencyService.MainThreadScheduler.Returns(testScheduler);
             concurrencyService.Default.Returns(testScheduler);
-            return new KeysController(keysCollection, messageProvider, keyProvider, concurrencyService);
+            return new KeysController(keysCollection, messageProvider, concurrencyService);
         }
 
         [Fact]

@@ -13,21 +13,19 @@ namespace Carnac.Logic
         static readonly TimeSpan OneSecond = TimeSpan.FromSeconds(1);
         readonly ObservableCollection<Message> keys;
         readonly IMessageProvider messageProvider;
-        readonly IKeyProvider keyProvider;
         readonly IConcurrencyService concurrencyService;
         readonly SingleAssignmentDisposable actionSubscription = new SingleAssignmentDisposable();
 
-        public KeysController(ObservableCollection<Message> keys, IMessageProvider messageProvider, IKeyProvider keyProvider, IConcurrencyService concurrencyService)
+        public KeysController(ObservableCollection<Message> keys, IMessageProvider messageProvider,  IConcurrencyService concurrencyService)
         {
             this.keys = keys;
             this.messageProvider = messageProvider;
-            this.keyProvider = keyProvider;
             this.concurrencyService = concurrencyService;
         }
 
         public void Start()
         {
-            var messageStream = messageProvider.GetMessageStream(keyProvider.GetKeyStream()).Publish().RefCount();
+            var messageStream = messageProvider.GetMessageStream().Publish().RefCount();
 
             var addMessageStream = messageStream.Select(m => Tuple.Create(m, ActionType.Add));
 
@@ -98,7 +96,6 @@ namespace Carnac.Logic
             {
                 
             });
-
         }
 
         public void Dispose()

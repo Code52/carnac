@@ -25,7 +25,7 @@ namespace Carnac
             settingsProvider = new SettingsProvider(new RoamingAppDataStorage("Carnac"));
             keyProvider = new KeyProvider(InterceptKeys.Current, new PasswordModeService(), new DesktopLockEventService());
             settings = settingsProvider.GetSettings<PopupSettings>();
-            messageProvider = new MessageProvider(new ShortcutProvider(), settings, new MessageMerger());
+            messageProvider = new MessageProvider(new ShortcutProvider(), keyProvider, settings, new MessageMerger());
         }
 
         protected override void OnStartup(StartupEventArgs e)
@@ -44,7 +44,7 @@ namespace Carnac
             keyShowView = new KeyShowView(new KeyShowViewModel(keyCollection, settings));
             keyShowView.Show();
 
-            carnac = new KeysController(keyCollection, messageProvider, keyProvider, new ConcurrencyService());
+            carnac = new KeysController(keyCollection, messageProvider, new ConcurrencyService());
             carnac.Start();
 
             base.OnStartup(e);
