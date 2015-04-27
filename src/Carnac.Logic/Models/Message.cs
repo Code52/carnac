@@ -14,17 +14,24 @@ namespace Carnac.Logic.Models
         static readonly string[] RepeatDetectionText = { "Back", "Left", "Right", "Down", "Up" };
         readonly ObservableCollection<string> textCollection;
         readonly ObservableCollection<KeyPress> keyCollection;
+        readonly ReadOnlyObservableCollection<string> roTextCollection;
+        readonly ReadOnlyObservableCollection<KeyPress> roKeysCollection;
+        readonly string processName;
+        readonly ImageSource processIcon;
+        readonly string shortcutName;
+        readonly bool canBeMerged;
+        readonly bool isShortcut;
         int lastTextRepeatCount = 1;
         string lastText;
         KeyPress lastKeyPress;
-        string shortcutName;
+
 
         public Message()
         {
             textCollection = new ObservableCollection<string>();
             keyCollection = new ObservableCollection<KeyPress>();
-            Text = new ReadOnlyObservableCollection<string>(textCollection);
-            Keys = new ReadOnlyObservableCollection<KeyPress>(keyCollection);
+            roTextCollection = new ReadOnlyObservableCollection<string>(textCollection);
+            roKeysCollection = new ReadOnlyObservableCollection<KeyPress>(keyCollection);
             Updated = Observable.FromEvent<PropertyChangedEventHandler, PropertyChangedEventArgs>(
                     handler => (sender, e) => handler(e),
                     add => PropertyChanged += add,
@@ -32,60 +39,59 @@ namespace Carnac.Logic.Models
                 .Select(_ => Unit.Default);
         }
 
-        public Message(KeyPress key) : this()
+        public Message(KeyPress key)
+            : this()
         {
-            ProcessName = key.Process.ProcessName;
-            ProcessIcon = key.Process.ProcessIcon;
+            processName = key.Process.ProcessName;
+            processIcon = key.Process.ProcessIcon;
             AddKey(key);
-            CanBeMerged = !key.HasModifierPressed;
+            canBeMerged = !key.HasModifierPressed;
         }
 
         public Message(IEnumerable<KeyPress> keys, KeyShortcut shortcut)
             : this()
         {
-            var distinctProcessName = keys.Select(k => k.Process.ProcessName).Distinct();
+            var allKeys = keys.ToArray();
+            var distinctProcessName = allKeys.Select(k => k.Process.ProcessName)
+                .Distinct()
+                .ToArray();
             if (distinctProcessName.Count() != 1)
                 throw new InvalidOperationException("Keys are from different processes");
 
-            ProcessName = distinctProcessName.Single();
+            processName = distinctProcessName.Single();
+            processIcon = allKeys.First().Process.ProcessIcon;
 
-            foreach (var keyPress in keys)
+            foreach (var keyPress in allKeys)
             {
                 AddKey(keyPress);
             }
-            ShortcutName = shortcut.Name;
-            IsShortcut = true;
-            CanBeMerged = false;
+            shortcutName = shortcut.Name;
+            if (!string.IsNullOrEmpty(shortcutName))
+                AddText(string.Format(" [{0}]", shortcutName));
+            isShortcut = true;
+            canBeMerged = false;
         }
 
-        public string ProcessName { get; private set; }
+        public string ProcessName { get { return processName; } }
 
-        public ImageSource ProcessIcon { get; private set; }
+        public ImageSource ProcessIcon { get { return processIcon; } }
 
-        public DateTime LastMessage { get; private set; }
+        public string ShortcutName { get { return shortcutName; } }
 
-        public ReadOnlyObservableCollection<string> Text { get; private set; }
+        public bool CanBeMerged { get { return canBeMerged; } }
 
-        public ReadOnlyObservableCollection<KeyPress> Keys { get; private set; }
+        public bool IsShortcut { get { return isShortcut; } }
 
-        public int Count { get; private set; }
+        public ReadOnlyObservableCollection<string> Text { get { return roTextCollection; } }
+
+        public ReadOnlyObservableCollection<KeyPress> Keys { get { return roKeysCollection; } }
+
+
+        public DateTime LastMessage { get; private set; } //AddKey
+
+        public int Count { get; private set; }            //AddKey
 
         public bool IsDeleting { get; set; }
-
-        public bool CanBeMerged { get; private set; }
-
-        public string ShortcutName
-        {
-            get { return shortcutName; }
-            private set
-            {
-                shortcutName = value;
-                if (!string.IsNullOrEmpty(shortcutName))
-                    AddText(string.Format(" [{0}]", value));
-            }
-        }
-
-        public bool IsShortcut { get; private set; }
 
         public IObservable<Unit> Updated { get; private set; }
 
@@ -99,6 +105,9 @@ namespace Carnac.Logic.Models
             return this;
         }
 
+        //ctor(KeyPress key)
+        //ctor(IEnumerable<KeyPress> keys, KeyShortcut shortcut)
+        //Merge(Message key)
         void AddKey(KeyPress keyPress)
         {
             keyCollection.Add(keyPress);
@@ -117,6 +126,7 @@ namespace Carnac.Logic.Models
             LastMessage = DateTime.Now;
         }
 
+        //AddKey(KeyPress keyPress)
         void AddText(string text)
         {
             var formattedText = Format(text, lastKeyPress.HasModifierPressed);
