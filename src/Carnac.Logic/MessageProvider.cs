@@ -19,7 +19,6 @@ namespace Carnac.Logic
             this.settings = settings;
         }
 
-        //TODO: Kind of an anti pattern (IMO) to pass in an Observable Sequence to a method. Either inject via DI the source of the sequence, or push the values at this object with concrete method calls. -LC
         public IObservable<Message> GetMessageStream()
         {
             /*

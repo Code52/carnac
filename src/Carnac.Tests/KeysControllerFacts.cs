@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows.Forms;
 using Carnac.Logic;
 using Carnac.Logic.KeyMonitor;
@@ -59,7 +60,8 @@ namespace Carnac.Tests
             testScheduler.AdvanceBy(MessageAOnNextTick + 2);
             testScheduler.AdvanceBy(TimeSpan.FromSeconds(5).Ticks);
 
-            messageA.IsDeleting.ShouldBe(true);
+            Assert.Single(keysCollection);
+            keysCollection.Single().ShouldBe(messageA.FadeOut());
         }
 
         [Fact]
@@ -69,35 +71,40 @@ namespace Carnac.Tests
             testScheduler.AdvanceBy(MessageAOnNextTick + 2);
             testScheduler.AdvanceBy(TimeSpan.FromSeconds(6).Ticks);
 
-            keysCollection.ShouldNotContain(messageA);
+            keysCollection.ShouldBeEmpty();
         }
 
         [Fact]
         public void MessageTimeoutIsStartedAgainIfMessageIsUpdated()
         {
-            sut.Start();
-            testScheduler.AdvanceBy(TimeSpan.FromSeconds(3).Ticks);
-            messageA.Merge(new Message(A));                             //Hmmm, can we change this to an immutable style? -LC
-            testScheduler.AdvanceBy(TimeSpan.FromSeconds(3).Ticks);
+            var messageSequence = testScheduler.CreateColdObservable(
+                ReactiveTest.OnNext(MessageAOnNextTick, messageA),
+                ReactiveTest.OnNext(TimeSpan.FromSeconds(3).Ticks, messageA.Merge(new Message(A)))
+                );
 
-            messageA.IsDeleting.ShouldBe(false);
+            var localSut = CreateKeysController(messageSequence);
+
+            localSut.Start();
+            testScheduler.AdvanceBy(TimeSpan.FromSeconds(6).Ticks);
+
+            keysCollection.Single().IsDeleting.ShouldBe(false);
             keysCollection.ShouldContain(messageA);
         }
 
-        [Fact]
-        public void UnsubscribesFromMessageUpdatesAfterDeleteTimeout()
-        {
-            sut.Start();
-            testScheduler.AdvanceBy(MessageAOnNextTick + 2);
-            testScheduler.AdvanceBy(TimeSpan.FromSeconds(5).Ticks);
-            messageA.IsDeleting = false;
-            messageA.Merge(new Message(A)); // This will trigger an update of the message
-            testScheduler.AdvanceBy(5);
-            testScheduler.AdvanceBy(TimeSpan.FromSeconds(5).Ticks);
+        //[Fact]
+        //public void UnsubscribesFromMessageUpdatesAfterDeleteTimeout()
+        //{
+        //    sut.Start();
+        //    testScheduler.AdvanceBy(MessageAOnNextTick + 2);
+        //    testScheduler.AdvanceBy(TimeSpan.FromSeconds(5).Ticks);
+        //    messageA.IsDeleting = false;
+        //    messageA.Merge(new Message(A)); // This will trigger an update of the message
+        //    testScheduler.AdvanceBy(5);
+        //    testScheduler.AdvanceBy(TimeSpan.FromSeconds(5).Ticks);
 
-            // If we didn't unsubscribe to updates we would have triggered another inner sequence which would try to delete again.
-            messageA.IsDeleting.ShouldBe(false);
-        }
+        //    // If we didn't unsubscribe to updates we would have triggered another inner sequence which would try to delete again.
+        //    messageA.IsDeleting.ShouldBe(false);
+        //}
 
         static KeyPress A
         {

@@ -9,7 +9,9 @@ namespace Carnac.Logic
 
         public Message MergeIfNeeded(Message accumulatingMessage, Message newMessage)
         {
-            return ShouldCreateNewMessage(accumulatingMessage, newMessage) ? newMessage : accumulatingMessage.Merge(newMessage);
+            return ShouldCreateNewMessage(accumulatingMessage, newMessage)
+                ? newMessage
+                : accumulatingMessage.Merge(newMessage);
         }
 
         static bool ShouldCreateNewMessage(Message acc, Message key)

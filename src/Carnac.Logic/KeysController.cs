@@ -16,7 +16,7 @@ namespace Carnac.Logic
         readonly IConcurrencyService concurrencyService;
         readonly SingleAssignmentDisposable actionSubscription = new SingleAssignmentDisposable();
 
-        public KeysController(ObservableCollection<Message> keys, IMessageProvider messageProvider,  IConcurrencyService concurrencyService)
+        public KeysController(ObservableCollection<Message> keys, IMessageProvider messageProvider, IConcurrencyService concurrencyService)
         {
             this.keys = keys;
             this.messageProvider = messageProvider;
@@ -25,77 +25,36 @@ namespace Carnac.Logic
 
         public void Start()
         {
-            var messageStream = messageProvider.GetMessageStream().Publish().RefCount();
+            var messageStream = messageProvider.GetMessageStream().Publish();
 
-            var addMessageStream = messageStream.Select(m => Tuple.Create(m, ActionType.Add));
+            var addMessageSubscription = messageStream
+                .ObserveOn(concurrencyService.MainThreadScheduler)
+                .Subscribe(newMessage=>keys.Add(newMessage));
 
-            /*
-            Fade out is a rolling query.
-
-            In the below marble diagram each - represents one second
-            a--------b---------a----*ab----
-            -----a|
-                     -----b|
-                               ---------ab|
-            -----a--------b-------------ab
-
-            The inner sequence you an see happening after each press waits 5 seconds before releasing the message and completing the inner stream (take(1)).
-            */
-            var fadeOutMessageStream = messageStream
-                .SelectMany(message =>
+            var fadeOutMessageSeq = messageStream
+                .SelectMany(Observable.Return)
+                .Delay(FiveSeconds, concurrencyService.Default)
+                .Select(m => Tuple.Create(m, m.FadeOut()))
+                .Publish();
+            var fadeOutMessageSubscription = fadeOutMessageSeq
+                .Subscribe(t =>
                 {
-                    /*
-                    Inner sequence diagram (x is an update, @ is the start of an observable.Timer(), o is a timer firing)
-
-                    x---x----x-----
-                    @---|
-                        @----|
-                             @-----o|
-                    ---------------x|
-                    */
-                    return message.Updated
-                        .StartWith(Unit.Default)
-                        .Select(_ => Observable.Timer(FiveSeconds, concurrencyService.Default))
-                        .Switch()
-                        .Select(_ => message)
-                        .Take(1);
-                })
-                .Select(m => Tuple.Create(m, ActionType.FadeOut));
+                    var idx = keys.IndexOf(t.Item1);
+                    keys[idx] = t.Item2;
+                });
 
             // Finally we just put a one second delay on the messages from the fade out stream and flag to remove.
-            var removeMessageStream = fadeOutMessageStream
+            var removeMessageSubscription = fadeOutMessageSeq
                 .Delay(OneSecond, concurrencyService.Default)
-                .Select(m => Tuple.Create(m.Item1, ActionType.Remove));
-            
-            var actionStream = Observable.Merge(
-                removeMessageStream, 
-                fadeOutMessageStream, 
-                addMessageStream);
+                .Subscribe(t => keys.Remove(t.Item2));
 
-            actionSubscription.Disposable = actionStream
-                .ObserveOn(concurrencyService.MainThreadScheduler)
-                .SubscribeOn(concurrencyService.MainThreadScheduler) // Because we mutate message state we need to do everything on UI thread. 
-                                                             // If we introduced a 'Update' action to this feed we could remove mutation from the stream
-                .Subscribe(action =>
-            {
-                switch (action.Item2)
-                {
-                    case ActionType.Add:
-                        keys.Add(action.Item1);
-                        break;
-                    case ActionType.Remove:
-                        keys.Remove(action.Item1);
-                        break;
-                    case ActionType.FadeOut:
-                        action.Item1.IsDeleting = true;
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
-            }, ex =>
-            {
-                
-            });
+
+            actionSubscription.Disposable = new CompositeDisposable(
+                addMessageSubscription,
+                fadeOutMessageSubscription,
+                removeMessageSubscription,
+                fadeOutMessageSeq.Connect(),
+                messageStream.Connect());
         }
 
         public void Dispose()
