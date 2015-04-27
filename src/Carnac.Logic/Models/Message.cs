@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using System.Reactive;
@@ -32,10 +33,10 @@ namespace Carnac.Logic.Models
             keyCollection = new ObservableCollection<KeyPress>();
             roTextCollection = new ReadOnlyObservableCollection<string>(textCollection);
             roKeysCollection = new ReadOnlyObservableCollection<KeyPress>(keyCollection);
-            Updated = Observable.FromEvent<PropertyChangedEventHandler, PropertyChangedEventArgs>(
+            Updated = Observable.FromEvent<NotifyCollectionChangedEventHandler, NotifyCollectionChangedEventArgs>(
                     handler => (sender, e) => handler(e),
-                    add => PropertyChanged += add,
-                    remove => PropertyChanged -= remove)
+                    add => keyCollection.CollectionChanged += add,
+                    remove => keyCollection.CollectionChanged -= remove)
                 .Select(_ => Unit.Default);
         }
 
@@ -89,15 +90,13 @@ namespace Carnac.Logic.Models
 
         public DateTime LastMessage { get; private set; } //AddKey
 
-        public int Count { get; private set; }            //AddKey
-
         public bool IsDeleting { get; set; }
 
         public IObservable<Unit> Updated { get; private set; }
 
-        public Message Merge(Message key)
+        public Message Merge(Message message)
         {
-            foreach (var keyPress in key.Keys)
+            foreach (var keyPress in message.Keys)
             {
                 AddKey(keyPress);
             }
@@ -105,9 +104,9 @@ namespace Carnac.Logic.Models
             return this;
         }
 
-        //ctor(KeyPress key)
+        //ctor(KeyPress message)
         //ctor(IEnumerable<KeyPress> keys, KeyShortcut shortcut)
-        //Merge(Message key)
+        //Merge(Message message)
         void AddKey(KeyPress keyPress)
         {
             keyCollection.Add(keyPress);
@@ -122,7 +121,7 @@ namespace Carnac.Logic.Models
                 AddText(text);
                 first = false;
             }
-            Count++;
+            
             LastMessage = DateTime.Now;
         }
 
