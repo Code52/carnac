@@ -29,24 +29,31 @@ namespace Carnac.Logic
 
             var addMessageSubscription = messageStream
                 .ObserveOn(concurrencyService.MainThreadScheduler)
-                .Subscribe(newMessage=>keys.Add(newMessage));
+                .Subscribe(newMessage =>
+                    {
+                        if (newMessage.Previous != null)
+                        {
+                            keys.Remove(newMessage.Previous);
+                        }
+                        keys.Add(newMessage);
+                    });
 
             var fadeOutMessageSeq = messageStream
-                .SelectMany(Observable.Return)
                 .Delay(FiveSeconds, concurrencyService.Default)
-                .Select(m => Tuple.Create(m, m.FadeOut()))
+                .Select(m => m.FadeOut())
                 .Publish();
             var fadeOutMessageSubscription = fadeOutMessageSeq
-                .Subscribe(t =>
+                .Subscribe(msg =>
                 {
-                    var idx = keys.IndexOf(t.Item1);
-                    keys[idx] = t.Item2;
+                    var idx = keys.IndexOf(msg.Previous);
+                    if(idx>-1)
+                        keys[idx] = msg;
                 });
 
             // Finally we just put a one second delay on the messages from the fade out stream and flag to remove.
             var removeMessageSubscription = fadeOutMessageSeq
                 .Delay(OneSecond, concurrencyService.Default)
-                .Subscribe(t => keys.Remove(t.Item2));
+                .Subscribe(msg => keys.Remove(msg));
 
 
             actionSubscription.Disposable = new CompositeDisposable(

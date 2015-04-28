@@ -2,9 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Reactive;
 using System.Windows.Media;
 
+
+//Sentinel Message
+//New Message                   --> Scheduled to be faded out in 5s (if present)
+//Updated/Replacement Message   --> Scheduled to be faded out in 5s (if present)
+//Expiring Message              --> Scheduled to be removed in 5s
+//
 namespace Carnac.Logic.Models
 {
     public class Message
@@ -19,6 +24,7 @@ namespace Carnac.Logic.Models
         readonly bool isShortcut;
         readonly bool isDeleting;
         readonly DateTime lastMessage;
+        Message _previous;
 
         public Message()
         {
@@ -63,12 +69,14 @@ namespace Carnac.Logic.Models
         private Message(Message initial, Message appended)
             : this(initial.Keys.Concat(appended.Keys), new KeyShortcut(initial.ShortcutName))
         {
+            _previous = initial;
         }
 
         private Message(Message initial, bool isDeleting)
             : this(initial.Keys, new KeyShortcut(initial.ShortcutName))
         {
             this.isDeleting = isDeleting;
+            _previous = initial;
             lastMessage = initial.lastMessage;
         }
 
@@ -82,11 +90,12 @@ namespace Carnac.Logic.Models
 
         public bool IsShortcut { get { return isShortcut; } }
 
+        public Message Previous {get { return _previous; }}
+
         public ReadOnlyCollection<string> Text { get { return textCollection; } }
 
         public ReadOnlyCollection<KeyPress> Keys { get { return keyCollection; } }
 
-        //TODO: Rename to timestamp - LC
         public DateTime LastMessage { get { return lastMessage; } }
 
         public bool IsDeleting { get { return isDeleting; } }
@@ -102,7 +111,7 @@ namespace Carnac.Logic.Models
         }
 
 
-        static IEnumerable<string> CreateTextSequence(IList<KeyPress> keys)
+        static IEnumerable<string> CreateTextSequence(IEnumerable<KeyPress> keys)
         {
             return keys.Scan(Tuple.Create<KeyPress, KeyPress>(null, null), (acc, cur) => Tuple.Create(acc.Item2, cur))
                 .SelectMany(pair =>
@@ -147,7 +156,7 @@ namespace Carnac.Logic.Models
 
         static IEnumerable<string> Collate(IEnumerable<string> textEntries)
         {
-            return textEntries.Scan(new List<RepeatedText>(),
+            return textEntries.Aggregate(new List<RepeatedText>(),
                 (acc, curr) =>
                 {
                     if (acc.Any() && acc.Last().IsRepeatedBy(curr))
@@ -160,7 +169,7 @@ namespace Carnac.Logic.Models
                     }
                     return acc;
                 })
-                .Select(rt => rt.ToString());
+                .Select(rt=>rt.ToString());
         }
 
         static IEnumerable<T> Join<T>(IEnumerable<T> source, T separator)
