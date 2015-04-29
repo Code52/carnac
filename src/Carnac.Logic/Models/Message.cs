@@ -32,7 +32,7 @@ namespace Carnac.Logic.Models
             canBeMerged = !key.HasModifierPressed;
 
             keys = new ReadOnlyCollection<KeyPress>(new[] { key });
-            textCollection = new ReadOnlyCollection<string>(CreateTextSequence(new[] { key }).ToArray());
+            textCollection = new ReadOnlyCollection<string>(CreateTextSequence(key).ToArray());
         }
 
         public Message(IEnumerable<KeyPress> keys, KeyShortcut shortcut)
@@ -56,7 +56,7 @@ namespace Carnac.Logic.Models
             var textSeq = CreateTextSequence(allKeys).ToList();
             if (!string.IsNullOrEmpty(shortcutName))
                 textSeq.Add(string.Format(" [{0}]", shortcutName));
-            textCollection = new ReadOnlyCollection<string>(textSeq.ToArray());
+            textCollection = new ReadOnlyCollection<string>(textSeq);
         }
 
         private Message(Message initial, Message appended)
@@ -101,6 +101,11 @@ namespace Carnac.Logic.Models
         public Message FadeOut()
         {
             return new Message(this, true);
+        }
+
+        static IEnumerable<string> CreateTextSequence(KeyPress key)
+        {
+            return CreateTextSequence(new[] {key});
         }
 
         static IEnumerable<string> CreateTextSequence(IEnumerable<KeyPress> keys)

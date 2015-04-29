@@ -2,8 +2,9 @@
 
 namespace Carnac.Logic
 {
+    //TODO: Just push logic into Message itself. -LC
     public interface IMessageMerger
     {
-        Message MergeIfNeeded(Message accumulatingMessage, Message newMessage);
+        Message MergeIfNeeded(Message previousMessage, Message newMessage);
     }
 }

@@ -1,5 +1,4 @@
-﻿using System.Collections.ObjectModel;
-using System.Windows;
+﻿using System.Windows;
 using Carnac.Logic;
 using Carnac.Logic.KeyMonitor;
 using Carnac.Logic.Models;
@@ -17,7 +16,6 @@ namespace Carnac
         KeyShowView keyShowView;
         CarnacTrayIcon trayIcon;
         KeysController carnac;
-        ObservableCollection<Message> keyCollection;
 
         public App()
         {
@@ -39,11 +37,11 @@ namespace Carnac
 
             trayIcon = new CarnacTrayIcon();
             trayIcon.OpenPreferences += TrayIconOnOpenPreferences;
-            keyCollection = new ObservableCollection<Message>();
-            keyShowView = new KeyShowView(new KeyShowViewModel(keyCollection, settings));
+            var keyShowViewModel = new KeyShowViewModel(settings);
+            keyShowView = new KeyShowView(keyShowViewModel);
             keyShowView.Show();
 
-            carnac = new KeysController(keyCollection, messageProvider, new ConcurrencyService());
+            carnac = new KeysController(keyShowViewModel.Messages, messageProvider, new ConcurrencyService());
             carnac.Start();
 
             base.OnStartup(e);

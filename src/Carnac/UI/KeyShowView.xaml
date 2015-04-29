@@ -10,7 +10,7 @@
         WindowStyle="None" SnapsToDevicePixels="True" FontSize="{Binding Settings.FontSize}" Focusable="False"
         Topmost="True" x:Name="This" d:DataContext="{d:DesignInstance ui:KeyShowViewModel}">
     <Window.Resources>
-        <CollectionViewSource x:Key="KeysViewSource" Source="{Binding Keys}">
+        <CollectionViewSource x:Key="KeysViewSource" Source="{Binding Messages}">
             <CollectionViewSource.SortDescriptions>
                 <componentModel:SortDescription Direction="Descending" PropertyName="LastMessage" />
             </CollectionViewSource.SortDescriptions>
