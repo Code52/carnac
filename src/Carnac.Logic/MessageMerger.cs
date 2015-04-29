@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using Carnac.Logic.Models;
 
 namespace Carnac.Logic
@@ -14,12 +15,20 @@ namespace Carnac.Logic
                 : accumulatingMessage.Merge(newMessage);
         }
 
-        static bool ShouldCreateNewMessage(Message acc, Message key)
+        static bool ShouldCreateNewMessage(Message previous, Message current)
         {
-            return acc.ProcessName != key.ProcessName ||
-                   key.LastMessage.Subtract(acc.LastMessage) > OneSecond ||
-                   !acc.CanBeMerged ||
-                   !key.CanBeMerged;
+            var should = previous.ProcessName != current.ProcessName ||
+                   current.LastMessage.Subtract(previous.LastMessage) > OneSecond ||
+                   !previous.CanBeMerged ||
+                   !current.CanBeMerged;
+
+            var x = string.Format("ProcessNameDiffer:{0}, Over1Second:{1}, previousCantBeMerged:{2}, currentCantBeMerged:{3}",
+                previous.ProcessName != current.ProcessName,
+                current.LastMessage.Subtract(previous.LastMessage) > OneSecond,
+                !previous.CanBeMerged,
+                !current.CanBeMerged);
+            Trace.WriteLine(x);
+            return should;
         }
     }
 }

@@ -10,14 +10,14 @@ namespace Carnac.Logic
     {
         static readonly TimeSpan FiveSeconds = TimeSpan.FromSeconds(5);
         static readonly TimeSpan OneSecond = TimeSpan.FromSeconds(1);
-        readonly ObservableCollection<Message> keys;
+        readonly ObservableCollection<Message> messages;
         readonly IMessageProvider messageProvider;
         readonly IConcurrencyService concurrencyService;
         readonly SingleAssignmentDisposable actionSubscription = new SingleAssignmentDisposable();
 
-        public KeysController(ObservableCollection<Message> keys, IMessageProvider messageProvider, IConcurrencyService concurrencyService)
+        public KeysController(ObservableCollection<Message> messages, IMessageProvider messageProvider, IConcurrencyService concurrencyService)
         {
-            this.keys = keys;
+            this.messages = messages;
             this.messageProvider = messageProvider;
             this.concurrencyService = concurrencyService;
         }
@@ -32,9 +32,9 @@ namespace Carnac.Logic
                     {
                         if (newMessage.Previous != null)
                         {
-                            keys.Remove(newMessage.Previous);
+                            messages.Remove(newMessage.Previous);
                         }
-                        keys.Add(newMessage);
+                        messages.Add(newMessage);
                     });
 
             var fadeOutMessageSeq = messageStream
@@ -43,17 +43,19 @@ namespace Carnac.Logic
                 .Publish();
 
             var fadeOutMessageSubscription = fadeOutMessageSeq
+                .ObserveOn(concurrencyService.MainThreadScheduler)
                 .Subscribe(msg =>
                 {
-                    var idx = keys.IndexOf(msg.Previous);
+                    var idx = messages.IndexOf(msg.Previous);
                     if(idx>-1)
-                        keys[idx] = msg;
+                        messages[idx] = msg;
                 });
 
             // Finally we just put a one second delay on the messages from the fade out stream and flag to remove.
             var removeMessageSubscription = fadeOutMessageSeq
                 .Delay(OneSecond, concurrencyService.Default)
-                .Subscribe(msg => keys.Remove(msg));
+                .ObserveOn(concurrencyService.MainThreadScheduler)
+                .Subscribe(msg => messages.Remove(msg));
 
 
             actionSubscription.Disposable = new CompositeDisposable(

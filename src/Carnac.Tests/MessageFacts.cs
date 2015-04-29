@@ -9,7 +9,6 @@ namespace Carnac.Tests
     public class MessageFacts
     {
         readonly ProcessInfo fakeProcess = new ProcessInfo("FakeProcess");
-        readonly ProcessInfo fakeProcess2 = new ProcessInfo("FakeProcess2");
 
         [Fact]
         public void message_does_not_group_different_letters()
@@ -65,7 +64,7 @@ namespace Carnac.Tests
         }
         
         [Fact]
-        public void message_groups_multiple_equal_arrow_key_presses_together()
+        public void message_groups_two_equal_arrow_key_presses_together()
         {
             // arrange
             var message = new Message(new KeyPress(fakeProcess, new InterceptKeyEventArgs(Keys.Down, KeyDirection.Down, false, false, false), false, new[] { "Down" }));
@@ -75,6 +74,18 @@ namespace Carnac.Tests
 
             // assert
             Assert.Equal("↓ x 2 ", string.Join(string.Empty, result.Text));
+        }
+
+        [Fact]
+        public void message_groups_three_equal_arrow_key_presses_together()
+        {
+            // arrange
+            var result = new Message(new KeyPress(fakeProcess, new InterceptKeyEventArgs(Keys.Down, KeyDirection.Down, false, false, false), false, new[] { "Down" }))
+                .Merge(new Message(new KeyPress(fakeProcess, new InterceptKeyEventArgs(Keys.Down, KeyDirection.Down, false, false, false), false, new[] { "Down" })))
+                .Merge(new Message(new KeyPress(fakeProcess, new InterceptKeyEventArgs(Keys.Down, KeyDirection.Down, false, false, false), false, new[] { "Down" })));
+
+            // assert
+            Assert.Equal("↓ x 3 ", string.Join(string.Empty, result.Text));
         }
 
         [Fact]
@@ -88,6 +99,21 @@ namespace Carnac.Tests
 
             // assert
             Assert.Equal("Control + R, Control + T", string.Join(string.Empty, result.Text));
+        }
+        
+        [Fact]
+        public void multiple_shortcuts_duplicate_shortcuts_are_grouped()
+        {
+            // arrange
+            var message = new Message(new KeyPress(fakeProcess, new InterceptKeyEventArgs(Keys.R, KeyDirection.Down, false, true, false), false, new[] { "Control", "R" }));
+
+            // act
+            var result = message.Merge(new Message(new KeyPress(fakeProcess, new InterceptKeyEventArgs(Keys.R, KeyDirection.Down, false, true, false), false, new[] { "Control", "R" })));
+
+            // assert
+            string actual = string.Join(string.Empty, result.Text);
+
+            Assert.Equal("Control + R x 2 ", actual);
         }
     }
 }

@@ -63,6 +63,7 @@ namespace Carnac.Logic.Models
             : this(initial.keys.Concat(appended.keys), new KeyShortcut(initial.ShortcutName))
         {
             previous = initial;
+            canBeMerged = true;
         }
 
         private Message(Message initial, bool isDeleting)

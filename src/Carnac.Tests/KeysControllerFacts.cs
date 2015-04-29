@@ -13,13 +13,11 @@ using Message = Carnac.Logic.Models.Message;
 
 namespace Carnac.Tests
 {
-    //TODO Create a known sequence of events and test against that. -LC
-
     public class KeysControllerFacts
     {
         const int MessageAOnNextTick = 100;
 
-        readonly ObservableCollection<Message> keysCollection = new ObservableCollection<Message>();
+        readonly ObservableCollection<Message> messages = new ObservableCollection<Message>();
         readonly TestScheduler testScheduler;
         readonly Message messageA = new Message(A);
 
@@ -35,7 +33,7 @@ namespace Carnac.Tests
             var concurrencyService = Substitute.For<IConcurrencyService>();
             concurrencyService.MainThreadScheduler.Returns(testScheduler);
             concurrencyService.Default.Returns(testScheduler);
-            return new KeysController(keysCollection, messageProvider, concurrencyService);
+            return new KeysController(messages, messageProvider, concurrencyService);
         }
 
         [Fact]
@@ -45,7 +43,7 @@ namespace Carnac.Tests
             sut.Start();
             testScheduler.AdvanceTo(MessageAOnNextTick + 1);  //+1 for the cost of the ObserveOn scheduling
 
-            keysCollection.ShouldContain(messageA);
+            messages.ShouldContain(messageA);
             messageA.IsDeleting.ShouldBe(false);
         }
 
@@ -57,8 +55,8 @@ namespace Carnac.Tests
             testScheduler.AdvanceBy(MessageAOnNextTick + 1);
             testScheduler.AdvanceBy(5.Seconds());
 
-            Assert.Single(keysCollection);
-            keysCollection.Single().ShouldBe(messageA.FadeOut());
+            Assert.Single(messages);
+            messages.Single().ShouldBe(messageA.FadeOut());
         }
 
         [Fact]
@@ -69,7 +67,7 @@ namespace Carnac.Tests
             testScheduler.AdvanceBy(MessageAOnNextTick + 2);
             testScheduler.AdvanceBy(6.Seconds());
 
-            keysCollection.ShouldBeEmpty();
+            messages.ShouldBeEmpty();
         }
 
         [Fact]
@@ -86,8 +84,31 @@ namespace Carnac.Tests
             sut.Start();
             testScheduler.AdvanceBy(6.Seconds());
 
-            keysCollection.Single().IsDeleting.ShouldBe(false);
-            keysCollection.Single().ShouldBe(expected);
+            messages.Single().IsDeleting.ShouldBe(false);
+            messages.Single().ShouldBe(expected);
+        }
+
+        [Fact]
+        public void MultiMerge()
+        {
+            var message1 = new Message(Down);
+            var message2 = message1.Merge(new Message(Down));
+            var message3 = message2.Merge(new Message(Down));
+
+            var expected = message3;
+            var messageSequence = testScheduler.CreateColdObservable(
+                ReactiveTest.OnNext(0.1.Seconds(), message1),
+                ReactiveTest.OnNext(0.2.Seconds(), message2),
+                ReactiveTest.OnNext(0.3.Seconds(), message3)
+                );
+
+            var sut = CreateKeysController(messageSequence);
+
+            sut.Start();
+            testScheduler.AdvanceBy(1.Seconds());
+
+            messages.Single().IsDeleting.ShouldBe(false);
+            messages.Single().ShouldBe(expected);
         }
 
         static KeyPress A
@@ -96,6 +117,15 @@ namespace Carnac.Tests
             {
                 return new KeyPress(new ProcessInfo("foo"),
                     new InterceptKeyEventArgs(Keys.A, KeyDirection.Down, false, false, false), false, new[] { "a" });
+            }
+        }
+
+        static KeyPress Down
+        {
+            get
+            {
+                return new KeyPress(new ProcessInfo("foo"),
+                    new InterceptKeyEventArgs(Keys.Down, KeyDirection.Down, false, false, false), false, new[] { "Down" });
             }
         }
 
