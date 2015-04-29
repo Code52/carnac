@@ -183,7 +183,6 @@ namespace Carnac.Logic.Models
 
         bool Equals(Message other)
         {
-
             return textCollection.SequenceEqual(other.textCollection)
                 && keys.SequenceEqual(other.keys)
                 && string.Equals(processName, other.processName)

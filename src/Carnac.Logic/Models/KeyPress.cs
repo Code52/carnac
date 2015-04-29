@@ -4,7 +4,7 @@ using Carnac.Logic.KeyMonitor;
 
 namespace Carnac.Logic.Models
 {
-    public class KeyPress : KeyPressDefinition
+    public sealed class KeyPress : KeyPressDefinition
     {
         public KeyPress(ProcessInfo process, InterceptKeyEventArgs interceptKeyEventArgs, bool winkeyPressed, IEnumerable<string> input) :
             base(interceptKeyEventArgs.Key, winkeyPressed, interceptKeyEventArgs.ShiftPressed, interceptKeyEventArgs.AltPressed, interceptKeyEventArgs.ControlPressed)
@@ -46,11 +46,7 @@ namespace Carnac.Logic.Models
                 yield return Format(text, HasModifierPressed);
             }
         }
-        public override string ToString()
-        {
-            return string.Join(" + ", Input.Select(i => Format(i, HasModifierPressed)));
-        }
-
+        
         static string Format(string text, bool isShortcut)
         {
             if (text == "Left")
@@ -63,7 +59,7 @@ namespace Carnac.Logic.Models
                 return GetString(8595);
 
             // If the space is part of a shortcut sequence
-            // present it as a primitive key. E.g. Ctrl+Spc.
+            // present it as a primitive key. E.g. Ctrl+Space.
             // Otherwise we want to preserve a space as part of
             // what is probably a sentence.
             if (text == " " && isShortcut)
@@ -78,13 +74,6 @@ namespace Carnac.Logic.Models
         }
 
         #region Equality overides
-        protected bool Equals(KeyPress other)
-        {
-            return base.Equals(other)
-                && Equals(Process, other.Process)
-                && Equals(InterceptKeyEventArgs, other.InterceptKeyEventArgs)
-                && Input.SequenceEqual(other.Input);
-        }
 
         public override bool Equals(object obj)
         {
@@ -104,6 +93,14 @@ namespace Carnac.Logic.Models
                 hashCode = (hashCode * 397) ^ (Input != null ? Input.GetHashCode() : 0);
                 return hashCode;
             }
+        }
+
+        bool Equals(KeyPress other)
+        {
+            return base.Equals(other)
+                && Equals(Process, other.Process)
+                && Equals(InterceptKeyEventArgs, other.InterceptKeyEventArgs)
+                && Input.SequenceEqual(other.Input);
         }
         #endregion
     }
