@@ -6,7 +6,7 @@ using System.Windows.Media;
 
 namespace Carnac.Logic.Models
 {
-    public class Message
+    public sealed class Message
     {
         readonly ReadOnlyCollection<string> textCollection;
         readonly ReadOnlyCollection<KeyPress> keys;
@@ -175,7 +175,8 @@ namespace Carnac.Logic.Models
         }
 
         #region Equality overrides
-        protected bool Equals(Message other)
+
+        bool Equals(Message other)
         {
 
             return textCollection.SequenceEqual(other.textCollection)
@@ -193,7 +194,7 @@ namespace Carnac.Logic.Models
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != this.GetType()) return false;
+            if (obj.GetType() != GetType()) return false;
             return Equals((Message)obj);
         }
 

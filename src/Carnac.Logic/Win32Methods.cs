@@ -5,7 +5,6 @@ namespace Carnac.Logic
 {
     public static class Win32Methods
     {
-
         public delegate IntPtr LowLevelKeyboardProc(int nCode, IntPtr wParam, IntPtr lParam);
 
         // ReSharper disable InconsistentNaming

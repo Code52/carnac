@@ -99,9 +99,7 @@ namespace Carnac.Logic
         {
             var process = GetAssociatedProcess();
 
-            var isLetter = interceptKeyEventArgs.Key >= Keys.A &&
-                           interceptKeyEventArgs.Key <= Keys.Z;
-
+            var isLetter = interceptKeyEventArgs.IsLetter();
             var inputs = ToInputs(isLetter, winKeyPressed, interceptKeyEventArgs).ToArray();
             try
             {

@@ -1,7 +1,5 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Forms;
 using Carnac.Logic.KeyMonitor;
 
 namespace Carnac.Logic.Models
@@ -14,10 +12,7 @@ namespace Carnac.Logic.Models
             Process = process;
             InterceptKeyEventArgs = interceptKeyEventArgs;
             Input = input;
-            Timestamp = DateTime.Now;
         }
-
-        public DateTime Timestamp { get; private set; }
 
         public ProcessInfo Process { get; private set; }
 
@@ -32,16 +27,6 @@ namespace Carnac.Logic.Models
                 return InterceptKeyEventArgs.AltPressed
                     || InterceptKeyEventArgs.ControlPressed
                     || WinkeyPressed;
-            }
-        }
-
-        public bool IsLetter
-        {
-            get
-            {
-                return !HasModifierPressed
-                    && InterceptKeyEventArgs.Key >= Keys.A
-                    && InterceptKeyEventArgs.Key <= Keys.Z;
             }
         }
 
@@ -80,7 +65,6 @@ namespace Carnac.Logic.Models
         protected bool Equals(KeyPress other)
         {
             return base.Equals(other)
-                && Timestamp.Equals(other.Timestamp)
                 && Equals(Process, other.Process)
                 && Equals(InterceptKeyEventArgs, other.InterceptKeyEventArgs)
                 && Input.SequenceEqual(other.Input);
@@ -99,7 +83,6 @@ namespace Carnac.Logic.Models
             unchecked
             {
                 int hashCode = base.GetHashCode();
-                hashCode = (hashCode * 397) ^ Timestamp.GetHashCode();
                 hashCode = (hashCode * 397) ^ (Process != null ? Process.GetHashCode() : 0);
                 hashCode = (hashCode * 397) ^ (InterceptKeyEventArgs != null ? InterceptKeyEventArgs.GetHashCode() : 0);
                 hashCode = (hashCode * 397) ^ (Input != null ? Input.GetHashCode() : 0);

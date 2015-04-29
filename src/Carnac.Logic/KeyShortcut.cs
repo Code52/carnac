@@ -22,13 +22,6 @@ namespace Carnac.Logic
             return keyPresses.All(keyPress => keyCombinations.Length > index && keyCombinations[index++].Equals(keyPress));
         }
 
-        public bool EndsWith(IEnumerable<KeyPressDefinition> keyPresses)
-        {
-            var index = keyCombinations.Length - keyPresses.Count();
-            bool result = keyPresses.All(keyPress => keyCombinations.Length > index && keyCombinations[index++].Equals(keyPress));
-            return result;
-        }
-
         public bool IsMatch(IEnumerable<KeyPress> keyPresses)
         {
             var index = 0;

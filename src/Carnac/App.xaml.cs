@@ -12,7 +12,6 @@ namespace Carnac
     public partial class App
     {
         readonly SettingsProvider settingsProvider;
-        readonly KeyProvider keyProvider;
         readonly IMessageProvider messageProvider;
         readonly PopupSettings settings;
         KeyShowView keyShowView;
@@ -22,8 +21,8 @@ namespace Carnac
 
         public App()
         {
+            var keyProvider = new KeyProvider(InterceptKeys.Current, new PasswordModeService(), new DesktopLockEventService());
             settingsProvider = new SettingsProvider(new RoamingAppDataStorage("Carnac"));
-            keyProvider = new KeyProvider(InterceptKeys.Current, new PasswordModeService(), new DesktopLockEventService());
             settings = settingsProvider.GetSettings<PopupSettings>();
             messageProvider = new MessageProvider(new ShortcutProvider(), keyProvider, settings, new MessageMerger());
         }
