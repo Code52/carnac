@@ -30,6 +30,22 @@ namespace Carnac.Logic.Models
             }
         }
 
+        public IEnumerable<string> GetTextParts()
+        {
+            var isFirst = true;
+            foreach (var text in Input)
+            {
+                if (!isFirst)
+                {
+                    yield return " + ";
+                }
+                else
+                {
+                    isFirst = false;
+                }
+                yield return Format(text, HasModifierPressed);
+            }
+        }
         public override string ToString()
         {
             return string.Join(" + ", Input.Select(i => Format(i, HasModifierPressed)));

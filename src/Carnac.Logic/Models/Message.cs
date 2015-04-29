@@ -143,13 +143,13 @@ namespace Carnac.Logic.Models
         {
             readonly bool requiresPrefix;
             readonly bool nextRequiresSeperator;
-            readonly string text;
+            readonly string[] textParts;
             int repeatCount;
 
             public RepeatedKeyPress(KeyPress keyPress, bool requiresPrefix = false)
             {
                 nextRequiresSeperator = keyPress.HasModifierPressed;
-                text = keyPress.ToString();
+                textParts = keyPress.GetTextParts().ToArray();
                 this.requiresPrefix = requiresPrefix;
                 repeatCount = 1;
             }
@@ -163,20 +163,19 @@ namespace Carnac.Logic.Models
 
             public bool IsRepeatedBy(KeyPress nextKeyPress)
             {
-                return text == nextKeyPress.ToString();
+                return textParts.SequenceEqual(nextKeyPress.GetTextParts());
             }
 
             public IEnumerable<string> GetTextParts()
             {
                 if (requiresPrefix)
                     yield return ", ";
-                yield return ToString();
-            }
-
-            public override string ToString()
-            {
-                if (repeatCount == 1) return text;
-                return string.Format("{0} x {1} ", text, repeatCount);
+                foreach (var textPart in textParts)
+                {
+                    yield return textPart;
+                }
+                if (repeatCount > 1)
+                    yield return string.Format(" x {0} ", repeatCount);
             }
         }
 
