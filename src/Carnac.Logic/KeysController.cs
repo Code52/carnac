@@ -1,6 +1,5 @@
 using System;
 using System.Collections.ObjectModel;
-using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using Carnac.Logic.Models;
@@ -42,6 +41,7 @@ namespace Carnac.Logic
                 .Delay(FiveSeconds, concurrencyService.Default)
                 .Select(m => m.FadeOut())
                 .Publish();
+
             var fadeOutMessageSubscription = fadeOutMessageSeq
                 .Subscribe(msg =>
                 {

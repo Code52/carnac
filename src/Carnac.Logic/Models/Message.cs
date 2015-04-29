@@ -4,19 +4,12 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Media;
 
-
-//Sentinel Message
-//New Message                   --> Scheduled to be faded out in 5s (if present)
-//Updated/Replacement Message   --> Scheduled to be faded out in 5s (if present)
-//Expiring Message              --> Scheduled to be removed in 5s
-//
 namespace Carnac.Logic.Models
 {
     public class Message
     {
-        static readonly string[] RepeatDetectionText = { "Back", "Left", "Right", "Down", "Up" };
         readonly ReadOnlyCollection<string> textCollection;
-        readonly ReadOnlyCollection<KeyPress> keyCollection;
+        readonly ReadOnlyCollection<KeyPress> keys;
         readonly string processName;
         readonly ImageSource processIcon;
         readonly string shortcutName;
@@ -24,7 +17,7 @@ namespace Carnac.Logic.Models
         readonly bool isShortcut;
         readonly bool isDeleting;
         readonly DateTime lastMessage;
-        Message _previous;
+        readonly Message previous;
 
         public Message()
         {
@@ -38,7 +31,7 @@ namespace Carnac.Logic.Models
             processIcon = key.Process.ProcessIcon;
             canBeMerged = !key.HasModifierPressed;
 
-            keyCollection = new ReadOnlyCollection<KeyPress>(new[] { key });
+            keys = new ReadOnlyCollection<KeyPress>(new[] { key });
             textCollection = new ReadOnlyCollection<string>(CreateTextSequence(new[] { key }).ToArray());
         }
 
@@ -58,7 +51,7 @@ namespace Carnac.Logic.Models
             isShortcut = true;
             canBeMerged = false;
 
-            keyCollection = new ReadOnlyCollection<KeyPress>(allKeys);
+            this.keys = new ReadOnlyCollection<KeyPress>(allKeys);
 
             var textSeq = CreateTextSequence(allKeys).ToList();
             if (!string.IsNullOrEmpty(shortcutName))
@@ -67,16 +60,16 @@ namespace Carnac.Logic.Models
         }
 
         private Message(Message initial, Message appended)
-            : this(initial.Keys.Concat(appended.Keys), new KeyShortcut(initial.ShortcutName))
+            : this(initial.keys.Concat(appended.keys), new KeyShortcut(initial.ShortcutName))
         {
-            _previous = initial;
+            previous = initial;
         }
 
         private Message(Message initial, bool isDeleting)
-            : this(initial.Keys, new KeyShortcut(initial.ShortcutName))
+            : this(initial.keys, new KeyShortcut(initial.ShortcutName))
         {
             this.isDeleting = isDeleting;
-            _previous = initial;
+            previous = initial;
             lastMessage = initial.lastMessage;
         }
 
@@ -90,15 +83,14 @@ namespace Carnac.Logic.Models
 
         public bool IsShortcut { get { return isShortcut; } }
 
-        public Message Previous {get { return _previous; }}
+        public Message Previous { get { return previous; } }
 
         public ReadOnlyCollection<string> Text { get { return textCollection; } }
-
-        public ReadOnlyCollection<KeyPress> Keys { get { return keyCollection; } }
 
         public DateTime LastMessage { get { return lastMessage; } }
 
         public bool IsDeleting { get { return isDeleting; } }
+
 
         public Message Merge(Message other)
         {
@@ -110,102 +102,69 @@ namespace Carnac.Logic.Models
             return new Message(this, true);
         }
 
-
         static IEnumerable<string> CreateTextSequence(IEnumerable<KeyPress> keys)
         {
-            return keys.Scan(Tuple.Create<KeyPress, KeyPress>(null, null), (acc, cur) => Tuple.Create(acc.Item2, cur))
-                .SelectMany(pair =>
-                {
-                    var previous = pair.Item1;
-                    var current = pair.Item2;
-                    var collatedText = Collate(current.Input);
-                    var joined = Join(collatedText, "+");
-                    var fomatted = joined.Select(txt => Format(txt, current.HasModifierPressed));
-                    //if previous has Modifier key pressed, then add ',' to text
-                    if (pair.Item1 != null && previous.HasModifierPressed)
-                        return fomatted.StartWith(",");
-                    return fomatted;
-                });
+            return keys.Aggregate(new List<RepeatedKeyPress>(),
+              (acc, curr) =>
+              {
+                  if (acc.Any())
+                  {
+                      var last = acc.Last();
+                      if (last.IsRepeatedBy(curr))
+                      {
+                          last.IncrementRepeat();
+                      }
+                      else
+                      {
+                          acc.Add(new RepeatedKeyPress(curr, last.NextRequiresSeperator));
+                      }
+                  }
+                  else
+                  {
+                      acc.Add(new RepeatedKeyPress(curr));
+                  }
+                  return acc;
+              })
+              .SelectMany(rkp => rkp.GetTextParts());
         }
 
-        static string Format(string text, bool isShortcut)
+        public override string ToString()
         {
-            if (text == "Left")
-                return GetString(8592);
-            if (text == "Up")
-                return GetString(8593);
-            if (text == "Right")
-                return GetString(8594);
-            if (text == "Down")
-                return GetString(8595);
-
-            // If the space is part of a shortcut sequence
-            // present it as a primitive key. E.g. Ctrl+Spc.
-            // Otherwise we want to preserve a space as part of
-            // what is probably a sentence.
-            if (text == " " && isShortcut)
-                return "Space";
-
-            return text;
+            return string.Format("{0} {1} {2}", ProcessName, string.Join(string.Empty, Text), ShortcutName);
         }
 
-        static string GetString(int decimalValue)
+        private sealed class RepeatedKeyPress
         {
-            return new string(new[] { (char)decimalValue });
-        }
-
-        static IEnumerable<string> Collate(IEnumerable<string> textEntries)
-        {
-            return textEntries.Aggregate(new List<RepeatedText>(),
-                (acc, curr) =>
-                {
-                    if (acc.Any() && acc.Last().IsRepeatedBy(curr))
-                    {
-                        acc.Last().IncrementRepeat();
-                    }
-                    else
-                    {
-                        acc.Add(new RepeatedText(curr));
-                    }
-                    return acc;
-                })
-                .Select(rt=>rt.ToString());
-        }
-
-        static IEnumerable<T> Join<T>(IEnumerable<T> source, T separator)
-        {
-            var srcArr = source.ToArray();
-            for (int i = 0; i < srcArr.Length; i++)
-            {
-                yield return srcArr[i];
-                if (i < srcArr.Length - 1)
-                {
-                    yield return separator;
-                }
-            }
-        }
-
-        private sealed class RepeatedText
-        {
+            readonly bool requiresPrefix;
+            readonly bool nextRequiresSeperator;
             readonly string text;
-            readonly bool canRepeat;
             int repeatCount;
 
-            public RepeatedText(string text)
+            public RepeatedKeyPress(KeyPress keyPress, bool requiresPrefix = false)
             {
-                this.text = text;
-                canRepeat = RepeatDetectionText.Contains(text);
+                nextRequiresSeperator = keyPress.HasModifierPressed;
+                text = keyPress.ToString();
+                this.requiresPrefix = requiresPrefix;
                 repeatCount = 1;
             }
+
+            public bool NextRequiresSeperator { get { return nextRequiresSeperator; } }
 
             public void IncrementRepeat()
             {
                 repeatCount++;
             }
 
-            public bool IsRepeatedBy(string otherText)
+            public bool IsRepeatedBy(KeyPress nextKeyPress)
             {
-                return canRepeat && text == otherText;
+                return text == nextKeyPress.ToString();
+            }
+
+            public IEnumerable<string> GetTextParts()
+            {
+                if (requiresPrefix)
+                    yield return ", ";
+                yield return ToString();
             }
 
             public override string ToString()
@@ -219,14 +178,14 @@ namespace Carnac.Logic.Models
         protected bool Equals(Message other)
         {
 
-            return textCollection.SequenceEqual(other.textCollection) 
-                && keyCollection.SequenceEqual(other.keyCollection)
-                && string.Equals(processName, other.processName) 
-                && Equals(processIcon, other.processIcon) 
-                && string.Equals(shortcutName, other.shortcutName) 
-                && canBeMerged.Equals(other.canBeMerged) 
-                && isShortcut.Equals(other.isShortcut) 
-                && isDeleting.Equals(other.isDeleting) 
+            return textCollection.SequenceEqual(other.textCollection)
+                && keys.SequenceEqual(other.keys)
+                && string.Equals(processName, other.processName)
+                && Equals(processIcon, other.processIcon)
+                && string.Equals(shortcutName, other.shortcutName)
+                && canBeMerged.Equals(other.canBeMerged)
+                && isShortcut.Equals(other.isShortcut)
+                && isDeleting.Equals(other.isDeleting)
                 && lastMessage.Equals(other.lastMessage);
         }
 
@@ -243,7 +202,7 @@ namespace Carnac.Logic.Models
             unchecked
             {
                 var hashCode = (textCollection != null ? textCollection.GetHashCode() : 0);
-                hashCode = (hashCode * 397) ^ (keyCollection != null ? keyCollection.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ (keys != null ? keys.GetHashCode() : 0);
                 hashCode = (hashCode * 397) ^ (processName != null ? processName.GetHashCode() : 0);
                 hashCode = (hashCode * 397) ^ (processIcon != null ? processIcon.GetHashCode() : 0);
                 hashCode = (hashCode * 397) ^ (shortcutName != null ? shortcutName.GetHashCode() : 0);

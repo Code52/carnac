@@ -8,7 +8,7 @@ namespace Carnac.Logic.Models
 {
     public class KeyPress : KeyPressDefinition
     {
-        public KeyPress(ProcessInfo process, InterceptKeyEventArgs interceptKeyEventArgs, bool winkeyPressed, IEnumerable<string> input):
+        public KeyPress(ProcessInfo process, InterceptKeyEventArgs interceptKeyEventArgs, bool winkeyPressed, IEnumerable<string> input) :
             base(interceptKeyEventArgs.Key, winkeyPressed, interceptKeyEventArgs.ShiftPressed, interceptKeyEventArgs.AltPressed, interceptKeyEventArgs.ControlPressed)
         {
             Process = process;
@@ -29,7 +29,9 @@ namespace Carnac.Logic.Models
         {
             get
             {
-                return InterceptKeyEventArgs.AltPressed || InterceptKeyEventArgs.ControlPressed || WinkeyPressed;
+                return InterceptKeyEventArgs.AltPressed
+                    || InterceptKeyEventArgs.ControlPressed
+                    || WinkeyPressed;
             }
         }
 
@@ -37,17 +39,50 @@ namespace Carnac.Logic.Models
         {
             get
             {
-                return !HasModifierPressed && InterceptKeyEventArgs.Key >= Keys.A && InterceptKeyEventArgs.Key <= Keys.Z;
+                return !HasModifierPressed
+                    && InterceptKeyEventArgs.Key >= Keys.A
+                    && InterceptKeyEventArgs.Key <= Keys.Z;
             }
+        }
+
+        public override string ToString()
+        {
+            return string.Join(" + ", Input.Select(i => Format(i, HasModifierPressed)));
+        }
+
+        static string Format(string text, bool isShortcut)
+        {
+            if (text == "Left")
+                return GetString(8592);
+            if (text == "Up")
+                return GetString(8593);
+            if (text == "Right")
+                return GetString(8594);
+            if (text == "Down")
+                return GetString(8595);
+
+            // If the space is part of a shortcut sequence
+            // present it as a primitive key. E.g. Ctrl+Spc.
+            // Otherwise we want to preserve a space as part of
+            // what is probably a sentence.
+            if (text == " " && isShortcut)
+                return "Space";
+
+            return text;
+        }
+
+        static string GetString(int decimalValue)
+        {
+            return new string(new[] { (char)decimalValue });
         }
 
         #region Equality overides
         protected bool Equals(KeyPress other)
         {
-            return base.Equals(other) 
-                && Timestamp.Equals(other.Timestamp) 
-                && Equals(Process, other.Process) 
-                && Equals(InterceptKeyEventArgs, other.InterceptKeyEventArgs) 
+            return base.Equals(other)
+                && Timestamp.Equals(other.Timestamp)
+                && Equals(Process, other.Process)
+                && Equals(InterceptKeyEventArgs, other.InterceptKeyEventArgs)
                 && Input.SequenceEqual(other.Input);
         }
 
@@ -56,7 +91,7 @@ namespace Carnac.Logic.Models
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != this.GetType()) return false;
-            return Equals((KeyPress) obj);
+            return Equals((KeyPress)obj);
         }
 
         public override int GetHashCode()
@@ -64,10 +99,10 @@ namespace Carnac.Logic.Models
             unchecked
             {
                 int hashCode = base.GetHashCode();
-                hashCode = (hashCode*397) ^ Timestamp.GetHashCode();
-                hashCode = (hashCode*397) ^ (Process != null ? Process.GetHashCode() : 0);
-                hashCode = (hashCode*397) ^ (InterceptKeyEventArgs != null ? InterceptKeyEventArgs.GetHashCode() : 0);
-                hashCode = (hashCode*397) ^ (Input != null ? Input.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ Timestamp.GetHashCode();
+                hashCode = (hashCode * 397) ^ (Process != null ? Process.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ (InterceptKeyEventArgs != null ? InterceptKeyEventArgs.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ (Input != null ? Input.GetHashCode() : 0);
                 return hashCode;
             }
         }

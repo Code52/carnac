@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Windows.Forms;
@@ -147,10 +148,11 @@ namespace Carnac.Tests
             var messages = sut.GetMessageStream().ToList().Single();
 
             // assert
-            Assert.Equal(2, messages.Count);
+            Assert.Equal(3, messages.Count);
             Assert.Equal("Ctrl + U, l [SomeShortcut]", string.Join("", messages[0].Text));
             Assert.Equal("SomeShortcut", messages[0].ShortcutName);
-            Assert.Equal("1l", string.Join("", messages[1].Text));
+            Assert.Equal("1", string.Join("", messages[1].Text));
+            Assert.Equal("1l", string.Join("", messages[2].Text));
         }
     }
 }

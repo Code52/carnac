@@ -63,20 +63,7 @@ namespace Carnac.Tests
             // assert
             Assert.Equal("↑↓", string.Join(string.Empty, result.Text));
         }
-
-        [Fact]
-        public void message_does_not_group_messages_from_different_processes_together()
-        {
-            // arrange
-            var message = new Message(new KeyPress(fakeProcess, new InterceptKeyEventArgs(Keys.Up, KeyDirection.Down, false, false, false), false, new[] { "Up" }));
-
-            // act
-            var result = message.Merge(new Message(new KeyPress(fakeProcess2, new InterceptKeyEventArgs(Keys.Down, KeyDirection.Down, false, false, false), false, new[] { "Down" })));
-
-            // assert
-            Assert.Equal("↑↓", string.Join(string.Empty, result.Text));
-        }
-
+        
         [Fact]
         public void message_groups_multiple_equal_arrow_key_presses_together()
         {
