@@ -8,13 +8,10 @@ namespace Carnac.UI
         public AvailableColor(string name, Color color)
         {
             Name = name;
-            Color = color;
             Brush = new SolidColorBrush(color);
         }
 
         public string Name { get; private set; }
-
-        public Color Color { get; private set; }
 
         public SolidColorBrush Brush { get; private set; }
     }

@@ -37,10 +37,5 @@ namespace Carnac.Logic.Internal
         {
             return GetEnumerator();
         }
-
-        public int FixedSize
-        {
-            get { return fixedSize; }
-        }
     }
 }

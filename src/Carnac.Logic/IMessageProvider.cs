@@ -5,6 +5,6 @@ namespace Carnac.Logic
 {
     public interface IMessageProvider
     {
-        IObservable<Message> GetMessageStream(IObservable<KeyPress> keyStream);
+        IObservable<Message> GetMessageStream();
     }
 }

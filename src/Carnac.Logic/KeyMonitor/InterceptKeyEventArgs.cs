@@ -20,5 +20,10 @@ namespace Carnac.Logic.KeyMonitor
         public bool ShiftPressed { get; private set; }
         public Keys Key { get; private set; }
         public KeyDirection KeyDirection { get; private set; }
+
+        public bool IsLetter()
+        {
+            return Key >= Keys.A && Key <= Keys.Z;
+        }
     }
 }

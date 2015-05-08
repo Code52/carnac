@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Reactive.Linq;
 using Carnac.Logic;
 using Carnac.Logic.KeyMonitor;
-using Carnac.Logic.Models;
 using Microsoft.Win32;
 using NSubstitute;
 using Xunit;
@@ -31,7 +28,7 @@ namespace Carnac.Tests
             var provider = new KeyProvider(player, passwordModeService, desktopLockEventService);
 
             // act
-            var processedKeys = ToEnumerable(provider, player);
+            var processedKeys = provider.GetKeyStream().ToList().Single();
 
             // assert
             Assert.Equal(new[] { "Ctrl", "Shift", "L" }, processedKeys.Single().Input);
@@ -45,7 +42,7 @@ namespace Carnac.Tests
             var provider = new KeyProvider(player, passwordModeService, desktopLockEventService);
 
             // act
-            var processedKeys = ToEnumerable(provider, player);
+            var processedKeys = provider.GetKeyStream().ToList().Single();
 
             // assert
 
@@ -60,7 +57,7 @@ namespace Carnac.Tests
             var provider = new KeyProvider(player, passwordModeService, desktopLockEventService);
 
             // act
-            var processedKeys = ToEnumerable(provider, player);
+            var processedKeys = provider.GetKeyStream().ToList().Single();
 
             // assert
             Assert.Equal(new[] { "l" }, processedKeys.Single().Input);
@@ -74,7 +71,7 @@ namespace Carnac.Tests
             var provider = new KeyProvider(player, passwordModeService, desktopLockEventService);
 
             // act
-            var processedKeys = ToEnumerable(provider, player);
+            var processedKeys = provider.GetKeyStream().ToList().Single();
 
             // assert
             Assert.Equal(new[] { "1" }, processedKeys.Single().Input);
@@ -88,7 +85,7 @@ namespace Carnac.Tests
             var provider = new KeyProvider(player, passwordModeService, desktopLockEventService);
 
             // act
-            var processedKeys = ToEnumerable(provider, player);
+            var processedKeys = provider.GetKeyStream().ToList().Single();
 
             // assert
             Assert.Equal(new[] { "!" }, processedKeys.Single().Input);
@@ -102,20 +99,10 @@ namespace Carnac.Tests
             var provider = new KeyProvider(player, passwordModeService, desktopLockEventService);
 
             // act
-            var processedKeys = ToEnumerable(provider, player);
+            var processedKeys = provider.GetKeyStream().ToList().Single();
 
             // assert
             Assert.Equal(new[] { "Win", "e" }, processedKeys.Single().Input);
-        }
-
-        static IEnumerable<KeyPress> ToEnumerable(IKeyProvider provider, KeyPlayer player)
-        {
-            var keys = new List<KeyPress>();
-
-            provider.GetKeyStream().Subscribe(keys.Add);
-            player.Play();
-
-            return keys;
         }
     }
 }

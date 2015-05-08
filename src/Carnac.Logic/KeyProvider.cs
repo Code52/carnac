@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Runtime.InteropServices;
@@ -8,11 +9,7 @@ using System.Windows.Forms;
 using Carnac.Logic.KeyMonitor;
 using Carnac.Logic.Models;
 using Microsoft.Win32;
-using System.Drawing;
 using System.Windows.Media;
-using System.Windows.Interop;
-using System.Windows;
-using System.Windows.Media.Imaging;
 
 namespace Carnac.Logic
 {
@@ -58,7 +55,7 @@ namespace Carnac.Logic
         public IObservable<KeyPress> GetKeyStream()
         {
             // We are using an observable create to tie the lifetimes of the session switch stream and the keystream
-            return Observable.Create<KeyPress>(observable =>
+            return Observable.Create<KeyPress>(observer =>
             {
                 // When desktop is locked we will not get the keyup, because we track the windows key
                 // specially we need to set it to not being pressed anymore
@@ -67,14 +64,14 @@ namespace Carnac.Logic
                 {
                     if (ss.Reason == SessionSwitchReason.SessionLock)
                         winKeyPressed = false;
-                }, observable.OnError);
+                }, observer.OnError);
 
                 var keyStreamSubsription = interceptKeysSource.GetKeyStream()
                     .Select(DetectWindowsKey)
                     .Where(k => !IsModifierKeyPress(k) && k.KeyDirection == KeyDirection.Down)
                     .Select(ToCarnacKeyPress)
                     .Where(k => !passwordModeService.CheckPasswordMode(k.InterceptKeyEventArgs))
-                    .Subscribe(observable.OnNext, observable.OnError, observable.OnCompleted);
+                    .Subscribe(observer);
 
                 return new CompositeDisposable(sessionSwitchStreamSubscription, keyStreamSubsription);
             });
@@ -102,10 +99,8 @@ namespace Carnac.Logic
         {
             var process = GetAssociatedProcess();
 
-            var isLetter = interceptKeyEventArgs.Key >= Keys.A &&
-                           interceptKeyEventArgs.Key <= Keys.Z;
-
-            var inputs = ToInputs(isLetter, winKeyPressed, interceptKeyEventArgs);
+            var isLetter = interceptKeyEventArgs.IsLetter();
+            var inputs = ToInputs(isLetter, winKeyPressed, interceptKeyEventArgs).ToArray();
             try
             {
                 string processFileName = process.MainModule.FileName;

@@ -1,5 +1,4 @@
-﻿using System.Collections.ObjectModel;
-using System.Windows;
+﻿using System.Windows;
 using Carnac.Logic;
 using Carnac.Logic.KeyMonitor;
 using Carnac.Logic.Models;
@@ -12,20 +11,18 @@ namespace Carnac
     public partial class App
     {
         readonly SettingsProvider settingsProvider;
-        readonly KeyProvider keyProvider;
         readonly IMessageProvider messageProvider;
         readonly PopupSettings settings;
         KeyShowView keyShowView;
         CarnacTrayIcon trayIcon;
         KeysController carnac;
-        ObservableCollection<Message> keyCollection;
 
         public App()
         {
+            var keyProvider = new KeyProvider(InterceptKeys.Current, new PasswordModeService(), new DesktopLockEventService());
             settingsProvider = new SettingsProvider(new RoamingAppDataStorage("Carnac"));
-            keyProvider = new KeyProvider(InterceptKeys.Current, new PasswordModeService(), new DesktopLockEventService());
             settings = settingsProvider.GetSettings<PopupSettings>();
-            messageProvider = new MessageProvider(new ShortcutProvider(), settings, new MessageMerger());
+            messageProvider = new MessageProvider(new ShortcutProvider(), keyProvider, settings, new MessageMerger());
         }
 
         protected override void OnStartup(StartupEventArgs e)
@@ -40,11 +37,11 @@ namespace Carnac
 
             trayIcon = new CarnacTrayIcon();
             trayIcon.OpenPreferences += TrayIconOnOpenPreferences;
-            keyCollection = new ObservableCollection<Message>();
-            keyShowView = new KeyShowView(new KeyShowViewModel(keyCollection, settings));
+            var keyShowViewModel = new KeyShowViewModel(settings);
+            keyShowView = new KeyShowView(keyShowViewModel);
             keyShowView.Show();
 
-            carnac = new KeysController(keyCollection, messageProvider, keyProvider, new ConcurrencyService());
+            carnac = new KeysController(keyShowViewModel.Messages, messageProvider, new ConcurrencyService());
             carnac.Start();
 
             base.OnStartup(e);

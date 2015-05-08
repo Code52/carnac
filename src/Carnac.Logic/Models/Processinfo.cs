@@ -1,5 +1,5 @@
 using System.Windows.Media;
-using System.Drawing;
+
 namespace Carnac.Logic.Models
 {
     public class ProcessInfo

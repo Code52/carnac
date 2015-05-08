@@ -10,7 +10,7 @@
         WindowStyle="None" SnapsToDevicePixels="True" FontSize="{Binding Settings.FontSize}" Focusable="False"
         Topmost="True" x:Name="This" d:DataContext="{d:DesignInstance ui:KeyShowViewModel}">
     <Window.Resources>
-        <CollectionViewSource x:Key="KeysViewSource" Source="{Binding Keys}">
+        <CollectionViewSource x:Key="KeysViewSource" Source="{Binding Messages}">
             <CollectionViewSource.SortDescriptions>
                 <componentModel:SortDescription Direction="Descending" PropertyName="LastMessage" />
             </CollectionViewSource.SortDescriptions>
@@ -77,7 +77,7 @@
                     <Border.Style>
                         <Style>
                             <Style.Triggers>
-                                <DataTrigger Value="True" Binding="{Binding IsDeleting}">
+                                <DataTrigger Value="True" Binding="{Binding IsDeleting, Mode=OneWay}">
                                     <DataTrigger.EnterActions>
                                         <BeginStoryboard>
                                             <Storyboard>
@@ -95,9 +95,9 @@
                     </Border.LayoutTransform>
                     <StackPanel Orientation="Horizontal">
                         <Image Margin="3" Width="20" Height="20"  Visibility="{Binding DataContext.Settings.ShowApplicationIcon,Source={x:Reference This},
-                            Converter={StaticResource BooleanToVisibilityConverter}}" Source="{Binding ProcessIcon}" />
+                            Converter={StaticResource BooleanToVisibilityConverter}}" Source="{Binding ProcessIcon, Mode=OneWay}" />
                         <ListBox MaxWidth="{Binding DataContext.Settings.ItemMaxWidth, Source={x:Reference This}}"
-                             HorizontalAlignment="Stretch" VerticalContentAlignment="Center" ItemsSource="{Binding Text}"
+                             HorizontalAlignment="Stretch" VerticalContentAlignment="Center" ItemsSource="{Binding Text, Mode=OneWay}"
                              FontWeight="Bold" Focusable="False" BorderBrush="{x:Null}"
                              ScrollViewer.HorizontalScrollBarVisibility="Disabled" IsHitTestVisible="False">
                         <ListBox.Background>
