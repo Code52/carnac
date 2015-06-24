@@ -7,6 +7,7 @@
     <Root>$(MSBuildProjectDirectory)\</Root>
     <CarnacProjectDir>$(Root)src\Carnac\</CarnacProjectDir>
     <OutputPath Condition="'$(OutputPath)' == ''">$(CarnacProjectDir)bin\$(Configuration)\</OutputPath>
+    <Version Condition="'$(Version)' == ''">0.0.0.9</Version>
   </PropertyGroup>
 
   <!--
@@ -102,7 +103,6 @@ Invoking the target:
       </Thumbprint>
       <DeployUrl Condition="'$(DeployUrl)' == ''"></DeployUrl>
       <SupportUrl>https://github.com/Code52/carnac</SupportUrl>
-      <Version Condition="'$(Version)' == ''">0.0.0.9</Version>
       <VersionDir>$(OutputPath)$(Version)\</VersionDir>
       <AppManifest>$(VersionDir)Carnac.exe.manifest</AppManifest>
     </PropertyGroup>
@@ -181,7 +181,6 @@ Invoking the target:
     <Message Text="===========Package - Choco===========" Importance="High" />
 
     <PropertyGroup>
-      <Version Condition="'$(Version)' == ''">0.0.0.9</Version>
       <ChocoSpecPath>$(Root)chocolatey\carnac.nuspec</ChocoSpecPath>
       <ChocoOutputDir>$(OutputPath)Chocolatey\</ChocoOutputDir>
     </PropertyGroup>
