@@ -200,4 +200,13 @@ Invoking the target:
     <Exec Command="$(Root)tools\AzCopy.exe $(OutputPath)ClickOnceApplicationFile\ $(BlobTargetUrl) /destkey:$(BlobTargetKey) /S /V /Y" />
   </Target>
 
+  <Target Name="PublishToChoco" DependsOnTargets="PackageChoco">
+    <PropertyGroup>
+      <ChocoFeedUrl Condition="'$(ChocoFeedUrl)' == ''">https://chocolatey.org/</ChocoFeedUrl>
+    </PropertyGroup>
+
+    <!--To publish to a chocolatey feed: msbuild build.proj /p:ChocoFeedUrl=https://chocolatey.org/ /p:ChocoApiKey=dUr1aN /target:PublishToChoco-->
+    <Exec Command="$(Root)src\.nuget\nuget.exe push $(ChocoOutputDir)carnac.$(Version).nupkg -apikey $(ChocoApiKey) -source $(ChocoFeedUrl)" />
+  </Target>
+
 </Project>
