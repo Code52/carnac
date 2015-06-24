@@ -94,7 +94,7 @@ Invoking the target:
     <xunit Assembly="@(TestFiles)" />
   </Target>
 
-  <Target Name="Package" DependsOnTargets="Test">
+  <Target Name="Package" DependsOnTargets="Test;PackageChoco">
     <!--http://msdn.microsoft.com/en-us/library/6wc2ccdc.aspx-->
     <PropertyGroup>
       <Thumbprint>
@@ -177,6 +177,18 @@ Invoking the target:
     <Move SourceFiles="@(FilesToRename)" DestinationFiles="@(FilesToRename->'%(RootDir)%(Directory)%(FileName)%(Extension).deploy')" />
   </Target>
 
+  <Target Name="PackageChoco" DependsOnTargets="Compile">
+    <Message Text="===========Package - Choco===========" Importance="High" />
+
+    <PropertyGroup>
+      <Version Condition="'$(Version)' == ''">0.0.0.9</Version>
+      <ChocoSpecPath>$(Root)chocolatey\carnac.nuspec</ChocoSpecPath>
+      <ChocoOutputDir>$(OutputPath)Chocolatey\</ChocoOutputDir>
+    </PropertyGroup>
+
+    <MakeDir Directories="$(ChocoOutputPath)" />
+    <Exec Command="$(Root)src\.nuget\nuget.exe pack $(ChocoSpecPath) -OutputDirectory $(ChocoOutputDir) -Version $(Version) -NoPackageAnalysis" />
+  </Target>
 
   <Target Name="PublishInstallToAzure">
 
