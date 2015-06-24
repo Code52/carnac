@@ -177,7 +177,7 @@ Invoking the target:
     <Move SourceFiles="@(FilesToRename)" DestinationFiles="@(FilesToRename->'%(RootDir)%(Directory)%(FileName)%(Extension).deploy')" />
   </Target>
 
-  <Target Name="PackageChoco" DependsOnTargets="Compile">
+  <Target Name="PackageChoco" DependsOnTargets="Test">
     <Message Text="===========Package - Choco===========" Importance="High" />
 
     <PropertyGroup>
