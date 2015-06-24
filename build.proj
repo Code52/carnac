@@ -181,7 +181,7 @@ Invoking the target:
     <Message Text="===========Package - Choco===========" Importance="High" />
 
     <PropertyGroup>
-      <ChocoSpecPath>$(Root)chocolatey\carnac.nuspec</ChocoSpecPath>
+      <ChocoSpecPath>$(Root)\src\Chocolatey\carnac.nuspec</ChocoSpecPath>
       <ChocoOutputDir>$(OutputPath)Chocolatey\</ChocoOutputDir>
     </PropertyGroup>
 
