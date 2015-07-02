@@ -181,9 +181,20 @@ Invoking the target:
     <Message Text="===========Package - Choco===========" Importance="High" />
 
     <PropertyGroup>
+      <ChocoSourceDir>$(Root)\src\Chocolatey\</ChocoSourceDir>
       <ChocoSpecPath>$(Root)\src\Chocolatey\carnac.nuspec</ChocoSpecPath>
       <ChocoOutputDir>$(OutputPath)Chocolatey\</ChocoOutputDir>
+      <GithubOrg Condition="'$(GithubOrg)' == ''">Code52</GithubOrg>
     </PropertyGroup>
+
+    <ItemGroup>
+      <RegexTransform Include="$(ChocoSourceDir)\tools\chocolateyinstall.ps1">
+        <Find><![CDATA[\$url = '.+']]></Find>
+        <ReplaceWith>$url = 'https://github.com/$(GithubOrg)/carnac/releases/download/v$(Version)/carnac.$(Version).zip'</ReplaceWith>
+        <Options>Singleline</Options>
+      </RegexTransform>
+    </ItemGroup>
+    <RegexTransform Items="@(RegexTransform)" />
 
     <MakeDir Directories="$(ChocoOutputPath)" />
     <Exec Command="$(Root)src\.nuget\nuget.exe pack $(ChocoSpecPath) -OutputDirectory $(ChocoOutputDir) -Version $(Version) -NoPackageAnalysis" />
