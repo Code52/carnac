@@ -7,29 +7,30 @@
     <Root>$(MSBuildProjectDirectory)\</Root>
     <CarnacProjectDir>$(Root)src\Carnac\</CarnacProjectDir>
     <OutputPath Condition="'$(OutputPath)' == ''">$(CarnacProjectDir)bin\$(Configuration)\</OutputPath>
+    <DeployPath>$(Root)deploy\</DeployPath>
     <Version Condition="'$(Version)' == ''">0.0.0.9</Version>
   </PropertyGroup>
 
   <!--
-============================================================
-            RegexTransform
- 
-Transforms the input Items parameter by evaluating the
-regular expression in their Find metadata and
-replacing with their ReplaceWith metadata. Optional, the
-options for the regular expression evaluation can be specified.
- 
-Example input item:
-        <RegexTransform Include="$(BuildRoot)Src\GlobalAssemblyInfo.cs">
-            <Find>AssemblyFileVersion\(".*?"\)</Find>
-            <ReplaceWith>AssemblyFileVersion("$(FileVersion)")</ReplaceWith>
-            <Options>Multiline | IgnorePatternWhitespace</Options>
-        </RegexTransform>
- 
-Invoking the target:
-    <RegexTransform Items="@(RegexTransform)" />
-============================================================
--->
+    ============================================================
+                RegexTransform
+     
+    Transforms the input Items parameter by evaluating the
+    regular expression in their Find metadata and
+    replacing with their ReplaceWith metadata. Optional, the
+    options for the regular expression evaluation can be specified.
+     
+    Example input item:
+            <RegexTransform Include="$(BuildRoot)Src\GlobalAssemblyInfo.cs">
+                <Find>AssemblyFileVersion\(".*?"\)</Find>
+                <ReplaceWith>AssemblyFileVersion("$(FileVersion)")</ReplaceWith>
+                <Options>Multiline | IgnorePatternWhitespace</Options>
+            </RegexTransform>
+     
+    Invoking the target:
+        <RegexTransform Items="@(RegexTransform)" />
+    ============================================================
+  -->
   <UsingTask TaskName="RegexTransform"
              TaskFactory="CodeTaskFactory"
              AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
@@ -74,6 +75,54 @@ Invoking the target:
     </Task>
   </UsingTask>
 
+  <!--
+    ============================================================
+                ZipDir
+     
+     Zip a directory using MSBuild for .NET 4.5
+
+    See: 
+        https://github.com/moozzyk/MSBuild-Tasks
+     
+    Invoking the target:
+        <ZipDir
+          InputBaseDirectory="@(DirToZip)"
+          OutputFileName="$(ProjectDir)$(TargetZipFile)"
+          OverwriteExistingFile="false"
+          IncludeBaseDirectory="false" />
+    ============================================================
+  -->
+  <UsingTask TaskName="ZipDir" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
+    <ParameterGroup>
+      <InputBaseDirectory ParameterType="System.String" Required="true" />
+      <OutputFileName ParameterType="System.String" Required="true" />
+      <OverwriteExistingFile ParameterType="System.Boolean" Required="false" />
+      <IncludeBaseDirectory ParameterType="System.Boolean" Required="false" />
+	</ParameterGroup>
+    <Task>
+      <Reference Include="System.IO.Compression" />
+      <Reference Include="System.IO.Compression.FileSystem" />
+      <Using Namespace="System.IO.Compression" />
+      <Code Type="Fragment" Language="cs">
+      <![CDATA[        
+        if (File.Exists(OutputFileName))
+        {
+            if (!OverwriteExistingFile)
+            {
+                return false;
+            }
+            File.Delete(OutputFileName);
+        }
+        ZipFile.CreateFromDirectory
+        (
+            InputBaseDirectory, OutputFileName, 
+            CompressionLevel.Optimal, IncludeBaseDirectory
+        );
+      ]]>
+      </Code>
+    </Task>
+  </UsingTask>
+
   <Target Name="Restore">
     <Message Text=" ===========Restoring NuGet packages===========" Importance="High" />
     <Exec Command="$(Root)src\.nuget\nuget.exe restore $(Root)src\Carnac.sln" />
@@ -95,7 +144,7 @@ Invoking the target:
     <xunit Assembly="@(TestFiles)" />
   </Target>
 
-  <Target Name="Package" DependsOnTargets="Test;PackageChoco">
+  <Target Name="Package" DependsOnTargets="Test">
     <!--http://msdn.microsoft.com/en-us/library/6wc2ccdc.aspx-->
     <PropertyGroup>
       <Thumbprint>
@@ -177,7 +226,17 @@ Invoking the target:
     <Move SourceFiles="@(FilesToRename)" DestinationFiles="@(FilesToRename->'%(RootDir)%(Directory)%(FileName)%(Extension).deploy')" />
   </Target>
 
-  <Target Name="PackageChoco" DependsOnTargets="Test">
+  <Target Name="PackageZip" DependsOnTargets="Test">
+    <Message Text="===========Package - Zip===========" Importance="High" />
+
+    <ZipDir
+      InputBaseDirectory="$(OutputPath)"
+      OutputFileName="$(Root)\carnac.$(Version).zip"
+      OverwriteExistingFile="true"
+      IncludeBaseDirectory="false" />
+  </Target>
+
+  <Target Name="PackageChoco" DependsOnTargets="PackageZip">
     <Message Text="===========Package - Choco===========" Importance="High" />
 
     <PropertyGroup>
@@ -196,7 +255,7 @@ Invoking the target:
     </ItemGroup>
     <RegexTransform Items="@(RegexTransform)" />
 
-    <MakeDir Directories="$(ChocoOutputPath)" />
+    <MakeDir Directories="$(ChocoOutputDir)" />
     <Exec Command="$(Root)src\.nuget\nuget.exe pack $(ChocoSpecPath) -OutputDirectory $(ChocoOutputDir) -Version $(Version) -NoPackageAnalysis" />
   </Target>
 
