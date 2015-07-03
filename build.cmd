@@ -6,7 +6,7 @@ if "%config%" == "" (
 
 set version=%2
 if "%version%" == "" (
-   set version=%config%
+   set version="0.0.0.0"
 )
 
-%WINDIR%\Microsoft.NET\Framework\v4.0.30319\msbuild build.proj /p:Configuration="%config%" /t:package /m /v:M /fl /flp:LogFile=msbuild.log;Verbosity=Normal /nr:false
+%WINDIR%\Microsoft.NET\Framework\v4.0.30319\msbuild build.proj /p:Configuration="%config%";Version="%version%" /t:package /m /v:M /fl /flp:LogFile=msbuild.log;Verbosity=Normal /nr:false
