@@ -144,7 +144,10 @@
     <xunit Assembly="@(TestFiles)" />
   </Target>
 
-  <Target Name="Package" DependsOnTargets="Test">
+  <Target Name="Package" DependsOnTargets="PackageZip;PackageOneClick;PackageChoco">
+  </Target>
+
+  <Target Name="PackageOneClick" DependsOnTargets="Test">
     <!--http://msdn.microsoft.com/en-us/library/6wc2ccdc.aspx-->
     <PropertyGroup>
       <Thumbprint>
@@ -152,7 +155,7 @@
       </Thumbprint>
       <DeployUrl Condition="'$(DeployUrl)' == ''"></DeployUrl>
       <SupportUrl>https://github.com/Code52/carnac</SupportUrl>
-      <VersionDir>$(OutputPath)$(Version)\</VersionDir>
+      <VersionDir>$(DeployPath)$(Version)\</VersionDir>
       <AppManifest>$(VersionDir)Carnac.exe.manifest</AppManifest>
     </PropertyGroup>
     <ItemGroup>
@@ -160,6 +163,7 @@
       <Keymaps Include="$(OutputPath)Keymaps\*.*" />
     </ItemGroup>
 
+    <MakeDir Directories="$(DeployPath)" />
     <Move SourceFiles="@(Keymaps)" DestinationFolder="$(VersionDir)Keymaps" />
     <Move SourceFiles="@(Dependencies)" DestinationFolder="$(VersionDir)" />
     <Move SourceFiles="$(OutputPath)Carnac.exe" DestinationFolder="$(VersionDir)" />
@@ -229,9 +233,10 @@
   <Target Name="PackageZip" DependsOnTargets="Test">
     <Message Text="===========Package - Zip===========" Importance="High" />
 
+    <MakeDir Directories="$(DeployPath)" />
     <ZipDir
       InputBaseDirectory="$(OutputPath)"
-      OutputFileName="$(Root)\carnac.$(Version).zip"
+      OutputFileName="$(DeployPath)\carnac.$(Version).zip"
       OverwriteExistingFile="true"
       IncludeBaseDirectory="false" />
   </Target>
@@ -242,7 +247,6 @@
     <PropertyGroup>
       <ChocoSourceDir>$(Root)\src\Chocolatey\</ChocoSourceDir>
       <ChocoSpecPath>$(Root)\src\Chocolatey\carnac.nuspec</ChocoSpecPath>
-      <ChocoOutputDir>$(OutputPath)Chocolatey\</ChocoOutputDir>
       <GithubOrg Condition="'$(GithubOrg)' == ''">Code52</GithubOrg>
     </PropertyGroup>
 
@@ -255,8 +259,8 @@
     </ItemGroup>
     <RegexTransform Items="@(RegexTransform)" />
 
-    <MakeDir Directories="$(ChocoOutputDir)" />
-    <Exec Command="$(Root)src\.nuget\nuget.exe pack $(ChocoSpecPath) -OutputDirectory $(ChocoOutputDir) -Version $(Version) -NoPackageAnalysis" />
+    <MakeDir Directories="$(DeployPath)" />
+    <Exec Command="$(Root)src\.nuget\nuget.exe pack $(ChocoSpecPath) -OutputDirectory $(DeployPath) -Version $(Version) -NoPackageAnalysis" />
   </Target>
 
   <Target Name="PublishInstallToAzure">
@@ -276,7 +280,7 @@
     </PropertyGroup>
 
     <!--To publish to a chocolatey feed: msbuild build.proj /p:ChocoFeedUrl=https://chocolatey.org/ /p:ChocoApiKey=dUr1aN /target:PublishToChoco-->
-    <Exec Command="$(Root)src\.nuget\nuget.exe push $(ChocoOutputDir)carnac.$(Version).nupkg -apikey $(ChocoApiKey) -source $(ChocoFeedUrl)" />
+    <Exec Command="$(Root)src\.nuget\nuget.exe push $(DeployPath)carnac.$(Version).nupkg -apikey $(ChocoApiKey) -source $(ChocoFeedUrl)" />
   </Target>
 
 </Project>
