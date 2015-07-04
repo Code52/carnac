@@ -1,6 +1,6 @@
 ﻿$ErrorActionPreference = 'Stop';
 $packageName = 'carnac'
-$url = 'https://github.com/downloads/Code52/carnac/Carnac.zip'
+$url = 'Download Url Here'
 $toolsDir = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
 
 # Include Carnac.exe as a GUI in the bin install and ignore vshost.exe

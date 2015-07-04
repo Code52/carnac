@@ -247,13 +247,13 @@
     <PropertyGroup>
       <ChocoSourceDir>$(Root)\src\Chocolatey\</ChocoSourceDir>
       <ChocoSpecPath>$(Root)\src\Chocolatey\carnac.nuspec</ChocoSpecPath>
-      <GithubOrg Condition="'$(GithubOrg)' == ''">Code52</GithubOrg>
+      <GithubRepo Condition="'$(GithubRepo)' == ''">Code52/carnac</GithubRepo>
     </PropertyGroup>
 
     <ItemGroup>
       <RegexTransform Include="$(ChocoSourceDir)\tools\chocolateyinstall.ps1">
         <Find><![CDATA[\$url = '.+']]></Find>
-        <ReplaceWith>$url = 'https://github.com/$(GithubOrg)/carnac/releases/download/v$(Version)/carnac.$(Version).zip'</ReplaceWith>
+        <ReplaceWith>$url = 'https://github.com/$(GithubRepo)/releases/download/v$(Version)/carnac.$(Version).zip'</ReplaceWith>
         <Options>Singleline</Options>
       </RegexTransform>
     </ItemGroup>
