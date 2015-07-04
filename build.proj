@@ -98,7 +98,7 @@
       <OutputFileName ParameterType="System.String" Required="true" />
       <OverwriteExistingFile ParameterType="System.Boolean" Required="false" />
       <IncludeBaseDirectory ParameterType="System.Boolean" Required="false" />
-	</ParameterGroup>
+    </ParameterGroup>
     <Task>
       <Reference Include="System.IO.Compression" />
       <Reference Include="System.IO.Compression.FileSystem" />
