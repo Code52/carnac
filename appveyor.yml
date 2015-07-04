@@ -1,4 +1,4 @@
-version: 1.0.{build}
+version: 0.0.0.{build}
 configuration: Debug
 assembly_info:
   patch: true
@@ -6,5 +6,19 @@ assembly_info:
   assembly_version: '{version}'
   assembly_file_version: '{version}'
   assembly_informational_version: '{version}'
+environment:
+  Version: $(APPVEYOR_BUILD_VERSION)
+  GithubRepo: $(APPVEYOR_REPO_NAME)
 build_script:
-- build.cmd
+- build.cmd Debug
+artifacts:
+- path: deploy\*.nupkg
+  name: ChocoPackage
+- path: deploy\*.zip
+  name: ZipPackage
+deploy:
+- provider: NuGet
+  server: https://www.myget.org/F/dustinvenegas/api/v2/package
+  api_key:
+    secure: YZ8Sveu3DcOr37XXEPN7Omx3lv2h7kfDH+7GKZ6emTJz3z9EqKtssiYAeu7b8wVn
+  artifact: ChocoPackage
