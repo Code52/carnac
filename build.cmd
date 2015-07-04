@@ -1,3 +1,5 @@
+@echo Off
+
 set config=%1
 if "%config%" == "" (
    set config=Debug
