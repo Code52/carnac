@@ -7,6 +7,7 @@
     <Root>$(MSBuildProjectDirectory)\</Root>
     <CarnacProjectDir>$(Root)src\Carnac\</CarnacProjectDir>
     <OutputPath Condition="'$(OutputPath)' == ''">$(CarnacProjectDir)bin\$(Configuration)\</OutputPath>
+    <Version Condition="'$(Version)' == ''">0.0.0.9</Version>
   </PropertyGroup>
 
   <!--
@@ -94,7 +95,7 @@ Invoking the target:
     <xunit Assembly="@(TestFiles)" />
   </Target>
 
-  <Target Name="Package" DependsOnTargets="Test">
+  <Target Name="Package" DependsOnTargets="Test;PackageChoco">
     <!--http://msdn.microsoft.com/en-us/library/6wc2ccdc.aspx-->
     <PropertyGroup>
       <Thumbprint>
@@ -102,7 +103,6 @@ Invoking the target:
       </Thumbprint>
       <DeployUrl Condition="'$(DeployUrl)' == ''"></DeployUrl>
       <SupportUrl>https://github.com/Code52/carnac</SupportUrl>
-      <Version Condition="'$(Version)' == ''">0.0.0.9</Version>
       <VersionDir>$(OutputPath)$(Version)\</VersionDir>
       <AppManifest>$(VersionDir)Carnac.exe.manifest</AppManifest>
     </PropertyGroup>
@@ -177,6 +177,28 @@ Invoking the target:
     <Move SourceFiles="@(FilesToRename)" DestinationFiles="@(FilesToRename->'%(RootDir)%(Directory)%(FileName)%(Extension).deploy')" />
   </Target>
 
+  <Target Name="PackageChoco" DependsOnTargets="Test">
+    <Message Text="===========Package - Choco===========" Importance="High" />
+
+    <PropertyGroup>
+      <ChocoSourceDir>$(Root)\src\Chocolatey\</ChocoSourceDir>
+      <ChocoSpecPath>$(Root)\src\Chocolatey\carnac.nuspec</ChocoSpecPath>
+      <ChocoOutputDir>$(OutputPath)Chocolatey\</ChocoOutputDir>
+      <GithubOrg Condition="'$(GithubOrg)' == ''">Code52</GithubOrg>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <RegexTransform Include="$(ChocoSourceDir)\tools\chocolateyinstall.ps1">
+        <Find><![CDATA[\$url = '.+']]></Find>
+        <ReplaceWith>$url = 'https://github.com/$(GithubOrg)/carnac/releases/download/v$(Version)/carnac.$(Version).zip'</ReplaceWith>
+        <Options>Singleline</Options>
+      </RegexTransform>
+    </ItemGroup>
+    <RegexTransform Items="@(RegexTransform)" />
+
+    <MakeDir Directories="$(ChocoOutputPath)" />
+    <Exec Command="$(Root)src\.nuget\nuget.exe pack $(ChocoSpecPath) -OutputDirectory $(ChocoOutputDir) -Version $(Version) -NoPackageAnalysis" />
+  </Target>
 
   <Target Name="PublishInstallToAzure">
 
@@ -187,6 +209,15 @@ Invoking the target:
     <Move SourceFiles="$(OutputPath)Carnac.application" DestinationFolder="$(OutputPath)ClickOnceApplicationFile\" />
     <Exec Command="$(Root)tools\AzCopy.exe $(OutputPath) $(BlobTargetUrl) /destkey:$(BlobTargetKey) /S /V /Y" />
     <Exec Command="$(Root)tools\AzCopy.exe $(OutputPath)ClickOnceApplicationFile\ $(BlobTargetUrl) /destkey:$(BlobTargetKey) /S /V /Y" />
+  </Target>
+
+  <Target Name="PublishToChoco" DependsOnTargets="PackageChoco">
+    <PropertyGroup>
+      <ChocoFeedUrl Condition="'$(ChocoFeedUrl)' == ''">https://chocolatey.org/</ChocoFeedUrl>
+    </PropertyGroup>
+
+    <!--To publish to a chocolatey feed: msbuild build.proj /p:ChocoFeedUrl=https://chocolatey.org/ /p:ChocoApiKey=dUr1aN /target:PublishToChoco-->
+    <Exec Command="$(Root)src\.nuget\nuget.exe push $(ChocoOutputDir)carnac.$(Version).nupkg -apikey $(ChocoApiKey) -source $(ChocoFeedUrl)" />
   </Target>
 
 </Project>
