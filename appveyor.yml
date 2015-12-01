@@ -19,3 +19,19 @@ artifacts:
   name: ChocoPackage
 - path: deploy\*.zip
   name: ZipPackage
+deploy:
+- provider: NuGet
+  server: https://chocolatey.org/
+  api_key:
+    secure: sMCceYyOHQxaJMpcWBGmbGkbB6aYToUWm3rqfLv1ZZaeToqM2PAz1or18hnJbon0
+  skip_symbols: true
+  artifact: ChocoPackage
+  on:
+    branch: master
+- provider: GitHub
+  auth_token:
+    secure: ImWN38cmVAwBXYkDM1L6kxkkOlrB05vD5vGMQh8bFc/GecEiwvtsemQXYmCozxBe
+  artifact: ZipPackage
+  draft: false
+  on:
+    branch: master
