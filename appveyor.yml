@@ -16,9 +16,3 @@ artifacts:
   name: ChocoPackage
 - path: deploy\*.zip
   name: ZipPackage
-deploy:
-- provider: NuGet
-  server: https://www.myget.org/F/dustinvenegas/api/v2/package
-  api_key:
-    secure: YZ8Sveu3DcOr37XXEPN7Omx3lv2h7kfDH+7GKZ6emTJz3z9EqKtssiYAeu7b8wVn
-  artifact: ChocoPackage
