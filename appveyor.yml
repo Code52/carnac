@@ -1,5 +1,5 @@
-version: 0.0.0.{build}
-configuration: Debug
+version: 1.0.0.{build}
+configuration: Release
 assembly_info:
   patch: true
   file: '**\AssemblyInfo.*'
@@ -10,15 +10,12 @@ environment:
   Version: $(APPVEYOR_BUILD_VERSION)
   GithubRepo: $(APPVEYOR_REPO_NAME)
 build_script:
-- build.cmd Debug
+- build.cmd Release
+test:
+  assemblies:
+    - '**\Carnac.Tests.dll'
 artifacts:
 - path: deploy\*.nupkg
   name: ChocoPackage
 - path: deploy\*.zip
   name: ZipPackage
-deploy:
-- provider: NuGet
-  server: https://www.myget.org/F/dustinvenegas/api/v2/package
-  api_key:
-    secure: YZ8Sveu3DcOr37XXEPN7Omx3lv2h7kfDH+7GKZ6emTJz3z9EqKtssiYAeu7b8wVn
-  artifact: ChocoPackage
