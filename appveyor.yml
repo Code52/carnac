@@ -1,5 +1,5 @@
 version: 0.0.0.{build}
-configuration: Debug
+configuration: Release
 assembly_info:
   patch: true
   file: '**\AssemblyInfo.*'
@@ -10,7 +10,7 @@ environment:
   Version: $(APPVEYOR_BUILD_VERSION)
   GithubRepo: $(APPVEYOR_REPO_NAME)
 build_script:
-- build.cmd Debug
+- build.cmd Release
 test:
   assemblies:
     - '**\Carnac.Tests.dll'
