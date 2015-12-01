@@ -11,6 +11,9 @@ environment:
   GithubRepo: $(APPVEYOR_REPO_NAME)
 build_script:
 - build.cmd Debug
+test:
+  assemblies:
+    - '**\Carnac.Tests.dll'
 artifacts:
 - path: deploy\*.nupkg
   name: ChocoPackage
