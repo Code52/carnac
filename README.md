@@ -5,7 +5,7 @@
 A keyboard logging and presentation utility for presentations, screencasts, and to help you become a better keyboard user.
 
 ### Build Status
-[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/julkdemv7hi4tg2b/branch/master?svg=true)](https://ci.appveyor.com/project/dustinvenegas/carnac/branch/master)
+[![Build status](https://ci.appveyor.com/api/projects/status/qorhqwc2favf18r4?svg=true)](https://ci.appveyor.com/project/shiftkey/carnac)
 
 ### Installation
 You can install via ClickOnce from [http://ginnivan.blob.core.windows.net/carnac/Carnac.application](http://ginnivan.blob.core.windows.net/carnac/Carnac.application)
