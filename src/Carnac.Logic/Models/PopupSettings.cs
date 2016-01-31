@@ -13,6 +13,9 @@ namespace Carnac.Logic.Models
         [DefaultValue(0.5)]
         public double ItemOpacity { get; set; }
 
+        [DefaultValue(5)]
+        public int ItemFadeDelay { get; set; }
+
         [DefaultValue("Black")]
         public string ItemBackgroundColor { get; set; }
 
@@ -49,6 +52,7 @@ namespace Carnac.Logic.Models
 
         [NotifyProperty(AlsoNotifyFor = new[] { "Margins" })]
         public int TopOffset { get; set; }
+
         [NotifyProperty(AlsoNotifyFor = new[] { "Margins" })]
         public int BottomOffset { get; set; }
 

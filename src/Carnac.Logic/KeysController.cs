@@ -3,14 +3,16 @@ using System.Collections.ObjectModel;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using Carnac.Logic.Models;
+using SettingsProviderNet;
 
 namespace Carnac.Logic
 {
     public class KeysController : IDisposable
     {
-        static readonly TimeSpan FiveSeconds = TimeSpan.FromSeconds(5);
         static readonly TimeSpan OneSecond = TimeSpan.FromSeconds(1);
+        readonly TimeSpan FadeOutDelay;
         readonly ObservableCollection<Message> messages;
+        readonly PopupSettings settings;
         readonly IMessageProvider messageProvider;
         readonly IConcurrencyService concurrencyService;
         readonly SingleAssignmentDisposable actionSubscription = new SingleAssignmentDisposable();
@@ -20,8 +22,12 @@ namespace Carnac.Logic
             this.messages = messages;
             this.messageProvider = messageProvider;
             this.concurrencyService = concurrencyService;
-        }
 
+            var settingsProvider = new SettingsProvider(new RoamingAppDataStorage("Carnac"));
+            settings = settingsProvider.GetSettings<PopupSettings>();
+            FadeOutDelay = TimeSpan.FromSeconds(settings.ItemFadeDelay);
+        }
+        
         public void Start()
         {
             var messageStream = messageProvider.GetMessageStream().Publish();
@@ -38,7 +44,7 @@ namespace Carnac.Logic
                     });
 
             var fadeOutMessageSeq = messageStream
-                .Delay(FiveSeconds, concurrencyService.Default)
+                .Delay(FadeOutDelay, concurrencyService.Default)
                 .Select(m => m.FadeOut())
                 .Publish();
 
