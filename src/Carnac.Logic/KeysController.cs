@@ -10,21 +10,19 @@ namespace Carnac.Logic
     public class KeysController : IDisposable
     {
         static readonly TimeSpan OneSecond = TimeSpan.FromSeconds(1);
-        readonly TimeSpan FadeOutDelay;
+        readonly TimeSpan FadeOutDelay = TimeSpan.FromSeconds(5);
         readonly ObservableCollection<Message> messages;
-        readonly PopupSettings settings;
         readonly IMessageProvider messageProvider;
         readonly IConcurrencyService concurrencyService;
         readonly SingleAssignmentDisposable actionSubscription = new SingleAssignmentDisposable();
 
-        public KeysController(ObservableCollection<Message> messages, IMessageProvider messageProvider, IConcurrencyService concurrencyService)
+        public KeysController(ObservableCollection<Message> messages, IMessageProvider messageProvider, IConcurrencyService concurrencyService, ISettingsProvider settingsProvider)
         {
             this.messages = messages;
             this.messageProvider = messageProvider;
             this.concurrencyService = concurrencyService;
 
-            var settingsProvider = new SettingsProvider(new RoamingAppDataStorage("Carnac"));
-            settings = settingsProvider.GetSettings<PopupSettings>();
+            var settings = settingsProvider.GetSettings<PopupSettings>();
             FadeOutDelay = TimeSpan.FromSeconds(settings.ItemFadeDelay);
         }
         

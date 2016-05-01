@@ -41,7 +41,7 @@ namespace Carnac
             keyShowView = new KeyShowView(keyShowViewModel);
             keyShowView.Show();
 
-            carnac = new KeysController(keyShowViewModel.Messages, messageProvider, new ConcurrencyService());
+            carnac = new KeysController(keyShowViewModel.Messages, messageProvider, new ConcurrencyService(), settingsProvider);
             carnac.Start();
 
             base.OnStartup(e);
