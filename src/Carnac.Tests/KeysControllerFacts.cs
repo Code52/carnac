@@ -10,6 +10,8 @@ using NSubstitute;
 using Shouldly;
 using Xunit;
 using Message = Carnac.Logic.Models.Message;
+using SettingsProviderNet;
+using Carnac.Tests.ViewModels;
 
 namespace Carnac.Tests
 {
@@ -33,7 +35,18 @@ namespace Carnac.Tests
             var concurrencyService = Substitute.For<IConcurrencyService>();
             concurrencyService.MainThreadScheduler.Returns(testScheduler);
             concurrencyService.Default.Returns(testScheduler);
-            return new KeysController(messages, messageProvider, concurrencyService);
+
+            //popupSettings.
+            //settingsProvider.GetSettings<PopupSettings>().Returns(popupSettings);
+            //settingsProvider.Received().GetSettings<PopupSettings>();
+            //PopupSettings popupSettings = Substitute.For<PopupSettings>();
+
+            var settingsProvider = Substitute.For<ISettingsProvider>();
+            var settingsViewModel = new ShellViewModelFacts.when_the_settings_file_is_defined();
+            //var popupSettings = settingsViewModel.Given().Settings;
+            settingsProvider.GetSettings<PopupSettings>().Returns(new PopupSettings());
+
+            return new KeysController(messages, messageProvider, concurrencyService, settingsProvider);
         }
 
         [Fact]
