@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using System.Windows.Forms;
 using Carnac.Logic;
 using Carnac.Logic.KeyMonitor;
@@ -36,17 +38,12 @@ namespace Carnac.Tests
             concurrencyService.MainThreadScheduler.Returns(testScheduler);
             concurrencyService.Default.Returns(testScheduler);
 
-            //popupSettings.
-            //settingsProvider.GetSettings<PopupSettings>().Returns(popupSettings);
-            //settingsProvider.Received().GetSettings<PopupSettings>();
-            //PopupSettings popupSettings = Substitute.For<PopupSettings>();
+            var settingsService = Substitute.For<ISettingsProvider>();
+            var popupSettings = new PopupSettings();
+            popupSettings.ItemFadeDelay = GetDefaultFadeDelay(popupSettings);
+            settingsService.GetSettings<PopupSettings>().Returns(popupSettings);
 
-            var settingsProvider = Substitute.For<ISettingsProvider>();
-            var settingsViewModel = new ShellViewModelFacts.when_the_settings_file_is_defined();
-            //var popupSettings = settingsViewModel.Given().Settings;
-            settingsProvider.GetSettings<PopupSettings>().Returns(new PopupSettings());
-
-            return new KeysController(messages, messageProvider, concurrencyService, settingsProvider);
+            return new KeysController(messages, messageProvider, concurrencyService, settingsService);
         }
 
         [Fact]
@@ -148,5 +145,18 @@ namespace Carnac.Tests
                ReactiveTest.OnNext(MessageAOnNextTick, messageA)
                );
         }
+
+        double GetDefaultFadeDelay(PopupSettings settings)
+        {
+            AttributeCollection attributes =
+                TypeDescriptor.GetProperties(settings)["ItemFadeDelay"].Attributes;
+            DefaultValueAttribute myAttribute =
+                (DefaultValueAttribute)attributes[typeof(DefaultValueAttribute)];
+
+            double fadeDelay;
+            double.TryParse(myAttribute.Value.ToString(), out fadeDelay);
+            return fadeDelay;
+        }
+
     }
 }

@@ -14,7 +14,7 @@ namespace Carnac.Logic.Models
         public double ItemOpacity { get; set; }
 
         [DefaultValue(5)]
-        public int ItemFadeDelay { get; set; }
+        public double ItemFadeDelay { get; set; }
 
         [DefaultValue("Black")]
         public string ItemBackgroundColor { get; set; }
