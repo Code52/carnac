@@ -10,7 +10,7 @@ namespace Carnac.Logic
     public class KeysController : IDisposable
     {
         static readonly TimeSpan OneSecond = TimeSpan.FromSeconds(1);
-        readonly TimeSpan FadeOutDelay = TimeSpan.FromSeconds(5);
+        readonly TimeSpan fadeOutDelay;
         readonly ObservableCollection<Message> messages;
         readonly IMessageProvider messageProvider;
         readonly IConcurrencyService concurrencyService;
@@ -23,7 +23,7 @@ namespace Carnac.Logic
             this.concurrencyService = concurrencyService;
 
             var settings = settingsProvider.GetSettings<PopupSettings>();
-            FadeOutDelay = TimeSpan.FromSeconds(settings.ItemFadeDelay);
+            fadeOutDelay = TimeSpan.FromSeconds(settings.ItemFadeDelay);
         }
         
         public void Start()
@@ -42,7 +42,7 @@ namespace Carnac.Logic
                     });
 
             var fadeOutMessageSeq = messageStream
-                .Delay(FadeOutDelay, concurrencyService.Default)
+                .Delay(fadeOutDelay, concurrencyService.Default)
                 .Select(m => m.FadeOut())
                 .Publish();
 
