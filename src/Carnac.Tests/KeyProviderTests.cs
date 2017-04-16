@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
 using Carnac.Logic;
 using Carnac.Logic.KeyMonitor;
 using Microsoft.Win32;
@@ -21,7 +22,7 @@ namespace Carnac.Tests
         }
 
         [Fact]
-        public async void ctrlshiftl_is_processed_correctly()
+        public async Task ctrlshiftl_is_processed_correctly()
         {
             // arrange
             var player = KeyStreams.CtrlShiftL();
@@ -35,7 +36,7 @@ namespace Carnac.Tests
         }
 
         [Fact]
-        public async void shift_is_not_outputted_when_is_being_used_as_a_modifier_key()
+        public async Task shift_is_not_outputted_when_is_being_used_as_a_modifier_key()
         {
             // arrange
             var player = KeyStreams.ShiftL();
@@ -50,7 +51,7 @@ namespace Carnac.Tests
         }
 
         [Fact]
-        public async void key_without_shift_is_lowercase()
+        public async Task key_without_shift_is_lowercase()
         {
             // arrange
             var player = KeyStreams.LetterL();
@@ -64,7 +65,7 @@ namespace Carnac.Tests
         }
 
         [Fact]
-        public async void verify_number()
+        public async Task verify_number()
         {
             // arrange
             var player = KeyStreams.Number1();
@@ -78,7 +79,7 @@ namespace Carnac.Tests
         }
 
         [Fact]
-        public async void verify_shift_number()
+        public async Task verify_shift_number()
         {
             // arrange
             var player = KeyStreams.ExclaimationMark();
@@ -92,7 +93,7 @@ namespace Carnac.Tests
         }
 
         [Fact]
-        public async void keyprovider_detects_windows_key_presses()
+        public async Task keyprovider_detects_windows_key_presses()
         {
             // arrange
             var player = KeyStreams.WinkeyE();

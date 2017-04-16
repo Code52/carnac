@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Carnac.Logic;
 using Carnac.Logic.KeyMonitor;
@@ -35,7 +36,7 @@ namespace Carnac.Tests
         }
 
         [Fact]
-        public async void key_with_modifiers_raises_a_new_message()
+        public async Task key_with_modifiers_raises_a_new_message()
         {
             // arrange
             var keySequence = KeyStreams.LetterL()
@@ -51,7 +52,7 @@ namespace Carnac.Tests
         }
 
         [Fact]
-        public async void recognises_shortcuts()
+        public async Task recognises_shortcuts()
         {
             // arrange
             var keySequence = KeyStreams.CtrlShiftL().ToObservable();
@@ -68,7 +69,7 @@ namespace Carnac.Tests
         }
 
         [Fact]
-        public async void does_not_show_key_press_on_partial_match()
+        public async Task does_not_show_key_press_on_partial_match()
         {
             // arrange
             var keySequence = KeyStreams.CtrlU().ToObservable();
@@ -86,7 +87,7 @@ namespace Carnac.Tests
         }
 
         [Fact]
-        public async void produces_two_messages_when_shortcut_is_broken()
+        public async Task produces_two_messages_when_shortcut_is_broken()
         {
             // arrange
             var keySequence = KeyStreams.CtrlU()
@@ -108,7 +109,7 @@ namespace Carnac.Tests
         }
 
         [Fact]
-        public async void does_show_shortcut_name_on_full_match()
+        public async Task does_show_shortcut_name_on_full_match()
         {
             // arrange
             var keySequence = KeyStreams.CtrlU()
@@ -129,7 +130,7 @@ namespace Carnac.Tests
         }
 
         [Fact]
-        public async void keeps_order_of_streams()
+        public async Task keeps_order_of_streams()
         {
             // arrange
             var keySequence = KeyStreams.CtrlU()
