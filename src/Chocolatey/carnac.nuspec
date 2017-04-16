@@ -5,7 +5,7 @@
     <title>carnac</title>
     <version>0.0.0.9</version>
     <authors>Code52</authors>
-    <owners>Dustin Venegas</owners>
+    <owners>Carnac contributors</owners>
     <summary>A keyboard utility for all your Windows presentation needs</summary>
     <description>
         A keyboard utility for your Windows presentations, screencasts, and more. Carnac displays what you're typing in a modal as you type it.
@@ -14,12 +14,12 @@
     </description>
     <projectUrl>https://github.com/Code52/carnac</projectUrl>
     <tags>keyboard presentation screencast</tags>
-    <copyright>2015</copyright>
+    <copyright>Copyright (c) Carnac contributors</copyright>
     <licenseUrl>https://github.com/Code52/carnac/blob/master/LICENSE.md</licenseUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <iconUrl>https://cdn.rawgit.com/Code52/carnac/35d71121123471512e5623d1e8cbfae057d047d6/src/Carnac/carnac.png</iconUrl>
     <releaseNotes>
-        Installs the from a release at [Code52 Github](https://github.com/downloads/Code52/carnac/)
+        Updates required version to .NET 4.5 and updates to Rx.NET v3
     </releaseNotes>
   </metadata>
   <files>
