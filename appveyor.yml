@@ -1,5 +1,6 @@
 version: 2.0.0.{build}
 configuration: Release
+skip_branch_with_pr: true
 assembly_info:
   patch: true
   file: '**\AssemblyInfo.*'
