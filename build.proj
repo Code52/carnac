@@ -253,7 +253,7 @@
     <ItemGroup>
       <RegexTransform Include="$(ChocoSourceDir)\tools\chocolateyinstall.ps1">
         <Find><![CDATA[\$url = '.+']]></Find>
-        <ReplaceWith>$url = 'https://github.com/$(GithubRepo)/releases/download/v$(Version)/carnac.$(Version).zip'</ReplaceWith>
+        <ReplaceWith>$url = 'https://github.com/$(GithubRepo)/releases/download/$(Version)/carnac.$(Version).zip'</ReplaceWith>
         <Options>Singleline</Options>
       </RegexTransform>
     </ItemGroup>
