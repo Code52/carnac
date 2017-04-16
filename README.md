@@ -8,7 +8,16 @@ A keyboard logging and presentation utility for presentations, screencasts, and 
 [![Build status](https://ci.appveyor.com/api/projects/status/qorhqwc2favf18r4?svg=true)](https://ci.appveyor.com/project/shiftkey/carnac)
 
 ### Installation
-You can install via ClickOnce from [http://ginnivan.blob.core.windows.net/carnac/Carnac.application](http://ginnivan.blob.core.windows.net/carnac/Carnac.application)
+
+You can install the latest version of Carnac via [Chocolatey](https://chocolatey.org/):
+
+```ps
+cinst carnac
+```
+
+Alternatively, you can grab the latest zip file from [here](https://github.com/Code52/carnac/releases/latest) and unpack it.
+
+**Note:** Carnac requires .NET 4.5.2 to work - you can install that from [here](https://www.microsoft.com/en-au/download/details.aspx?id=42643) if you don't have it already.
 
 ### Contributing
 
