@@ -1,5 +1,6 @@
 version: 2.0.0.{build}
 configuration: Release
+skip_branch_with_pr: true
 assembly_info:
   patch: true
   file: '**\AssemblyInfo.*'
@@ -30,7 +31,7 @@ deploy:
     branch: master
 - provider: GitHub
   auth_token:
-    secure: ImWN38cmVAwBXYkDM1L6kxkkOlrB05vD5vGMQh8bFc/GecEiwvtsemQXYmCozxBe
+    secure: tvr7i0kJpT3SAdYG037M6zU1g6FYXHAUUaseqBTUzasqsUo6mumdcW+huf5/351p
   artifact: ZipPackage
   draft: false
   on:
