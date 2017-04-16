@@ -1,6 +1,5 @@
-﻿<ResourceDictionary x:Class="resources_icons_xaml"
-xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+﻿<ResourceDictionary xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
     <Canvas x:Key="appbar_3d_3ds" Width="76" Height="76" Clip="F1 M 0,0L 76,0L 76,76L 0,76L 0,0">
         <Path Width="32" Height="40" Canvas.Left="23" Canvas.Top="18" Stretch="Fill" Fill="{DynamicResource BlackBrush}" Data="F1 M 27,18L 23,26L 33,30L 24,38L 33,46L 23,50L 27,58L 45,58L 55,38L 45,18L 27,18 Z "/>
     </Canvas>
@@ -1046,6 +1045,14 @@ xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
 
     <Canvas x:Key="appbar_control_stop" Width="76" Height="76" Clip="F1 M 0,0L 76,0L 76,76L 0,76L 0,0">
         <Rectangle Width="28.5" Height="28.5" Canvas.Left="23.75" Canvas.Top="23.75" Stretch="Fill" Fill="{DynamicResource BlackBrush}"/>
+    </Canvas>
+
+    <Canvas x:Key="appbar_control_skip_backward" Width="76" Height="76" Clip="F1 M 0,0L 76,0L 76,76L 0,76L 0,0">
+        <Path Width="31.667" Height="31.667" Canvas.Left="22.1665" Canvas.Top="22.1665" Stretch="Fill" Fill="{DynamicResource BlackBrush}" Data="M 53.8335,22.1665L 33.1281,38L 53.8335,53.8335L 53.8335,22.1665 Z M 29.4742,23.3844L 22.1665,23.3844L 22.1665,52.6155L 29.4742,52.6155L 29.4742,23.3844 Z "/>
+    </Canvas>
+
+    <Canvas x:Key="appbar_control_skip_forward" Width="76" Height="76" Clip="F1 M 0,0L 76,0L 76,76L 0,76L 0,0">
+        <Path Width="31.667" Height="31.667" Canvas.Left="22.1665" Canvas.Top="22.1665" Stretch="Fill" Fill="{DynamicResource BlackBrush}" Data="M 22.1665,22.1665L 42.8718,38L 22.1665,53.8335L 22.1665,22.1665 Z M 46.5257,23.3844L 53.8335,23.3844L 53.8335,52.6155L 46.5257,52.6155L 46.5257,23.3844 Z "/>
     </Canvas>
 
     <Canvas x:Key="appbar_controller_snes" Width="76" Height="76" Clip="F1 M 0,0L 76,0L 76,76L 0,76L 0,0">

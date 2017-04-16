@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Carnac.Logic;
 using Carnac.Logic.KeyMonitor;
@@ -35,7 +36,7 @@ namespace Carnac.Tests
         }
 
         [Fact]
-        public void key_with_modifiers_raises_a_new_message()
+        public async Task key_with_modifiers_raises_a_new_message()
         {
             // arrange
             var keySequence = KeyStreams.LetterL()
@@ -44,14 +45,14 @@ namespace Carnac.Tests
             var sut = CreateMessageProvider(keySequence);
 
             // act
-            var messages = sut.GetMessageStream().ToList().Single();
+            var messages = await sut.GetMessageStream().ToList();
 
             // assert
             Assert.Equal(2, messages.Count);
         }
 
         [Fact]
-        public void recognises_shortcuts()
+        public async Task recognises_shortcuts()
         {
             // arrange
             var keySequence = KeyStreams.CtrlShiftL().ToObservable();
@@ -60,7 +61,7 @@ namespace Carnac.Tests
                 .Returns(new List<KeyShortcut> { new KeyShortcut("MyShortcut", new KeyPressDefinition(Keys.L, shiftPressed: true, controlPressed: true)) });
 
             // act
-            var messages = sut.GetMessageStream().ToList().Single();
+            var messages = await sut.GetMessageStream().ToList();
 
             // assert
             Assert.Equal(1, messages.Count);
@@ -68,7 +69,7 @@ namespace Carnac.Tests
         }
 
         [Fact]
-        public void does_not_show_key_press_on_partial_match()
+        public async Task does_not_show_key_press_on_partial_match()
         {
             // arrange
             var keySequence = KeyStreams.CtrlU().ToObservable();
@@ -79,14 +80,14 @@ namespace Carnac.Tests
                     new KeyPressDefinition(Keys.L)) });
 
             // act
-            var messages = sut.GetMessageStream().ToList().Single();
+            var messages = await sut.GetMessageStream().ToList();
 
             // assert
             Assert.Equal(0, messages.Count);
         }
 
         [Fact]
-        public void produces_two_messages_when_shortcut_is_broken()
+        public async Task produces_two_messages_when_shortcut_is_broken()
         {
             // arrange
             var keySequence = KeyStreams.CtrlU()
@@ -99,7 +100,7 @@ namespace Carnac.Tests
                     new KeyPressDefinition(Keys.L)) });
 
             // act
-            var messages = sut.GetMessageStream().ToList().Single();
+            var messages = await sut.GetMessageStream().ToList();
 
             // assert
             Assert.Equal(2, messages.Count);
@@ -108,7 +109,7 @@ namespace Carnac.Tests
         }
 
         [Fact]
-        public void does_show_shortcut_name_on_full_match()
+        public async Task does_show_shortcut_name_on_full_match()
         {
             // arrange
             var keySequence = KeyStreams.CtrlU()
@@ -121,7 +122,7 @@ namespace Carnac.Tests
                     new KeyPressDefinition(Keys.L)) });
 
             // act
-            var messages = sut.GetMessageStream().ToList().Single();
+            var messages = await sut.GetMessageStream().ToList();
 
             // assert
             Assert.Equal(1, messages.Count);
@@ -129,7 +130,7 @@ namespace Carnac.Tests
         }
 
         [Fact]
-        public void keeps_order_of_streams()
+        public async Task keeps_order_of_streams()
         {
             // arrange
             var keySequence = KeyStreams.CtrlU()
@@ -145,7 +146,7 @@ namespace Carnac.Tests
                     new KeyPressDefinition(Keys.L)) });
 
             // act
-            var messages = sut.GetMessageStream().ToList().Single();
+            var messages = await sut.GetMessageStream().ToList();
 
             // assert
             Assert.Equal(3, messages.Count);
