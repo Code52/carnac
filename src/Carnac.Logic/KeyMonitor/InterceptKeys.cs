@@ -84,8 +84,11 @@ namespace Carnac.Logic.KeyMonitor
 
         static IntPtr SetHook(Win32Methods.LowLevelKeyboardProc proc)
         {
-            //TODO: This requires FullTrust to use the Process class - is there any options for doing this in MediumTrust?
-            //
+            // NOTE: This requires FullTrust to use the Process class.
+            //       There don't seem to be alternatives to achieving this in
+            //       MediumTrust environment which is fine because that's a
+            //       concept that has long been obsoleted. But just a warning
+            //       if you ever try and run Carnac in that sort of way.
             using (Process curProcess = Process.GetCurrentProcess())
             using (ProcessModule curModule = curProcess.MainModule)
             {
