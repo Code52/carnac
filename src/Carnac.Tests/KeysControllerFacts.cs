@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using System.Windows.Forms;
 using Carnac.Logic;
 using Carnac.Logic.KeyMonitor;
@@ -10,6 +12,8 @@ using NSubstitute;
 using Shouldly;
 using Xunit;
 using Message = Carnac.Logic.Models.Message;
+using SettingsProviderNet;
+using Carnac.Tests.ViewModels;
 
 namespace Carnac.Tests
 {
@@ -33,7 +37,13 @@ namespace Carnac.Tests
             var concurrencyService = Substitute.For<IConcurrencyService>();
             concurrencyService.MainThreadScheduler.Returns(testScheduler);
             concurrencyService.Default.Returns(testScheduler);
-            return new KeysController(messages, messageProvider, concurrencyService);
+
+            var settingsService = Substitute.For<ISettingsProvider>();
+            var popupSettings = new PopupSettings();
+            popupSettings.ItemFadeDelay = GetDefaultFadeDelay(popupSettings);
+            settingsService.GetSettings<PopupSettings>().Returns(popupSettings);
+
+            return new KeysController(messages, messageProvider, concurrencyService, settingsService);
         }
 
         [Fact]
@@ -135,5 +145,18 @@ namespace Carnac.Tests
                ReactiveTest.OnNext(MessageAOnNextTick, messageA)
                );
         }
+
+        double GetDefaultFadeDelay(PopupSettings settings)
+        {
+            AttributeCollection attributes =
+                TypeDescriptor.GetProperties(settings)["ItemFadeDelay"].Attributes;
+            DefaultValueAttribute myAttribute =
+                (DefaultValueAttribute)attributes[typeof(DefaultValueAttribute)];
+
+            double fadeDelay;
+            double.TryParse(myAttribute.Value.ToString(), out fadeDelay);
+            return fadeDelay;
+        }
+
     }
 }
