@@ -3,11 +3,11 @@ using Carnac.Logic.Models;
 
 namespace Carnac.Logic
 {
-    public class MessageMerger : IMessageMerger
+    public static class MessageMerger
     {
         static readonly TimeSpan OneSecond = TimeSpan.FromSeconds(1);
 
-        public Message MergeIfNeeded(Message previousMessage, Message newMessage)
+        public static Message MergeIfNeeded(Message previousMessage, Message newMessage)
         {
             return ShouldCreateNewMessage(previousMessage, newMessage)
                 ? newMessage

@@ -78,7 +78,6 @@
   <ItemGroup>
     <Compile Include="Enums\NotificationPlacement.cs" />
     <Compile Include="IConcurrencyService.cs" />
-    <Compile Include="IMessageMerger.cs" />
     <Compile Include="IMessageProvider.cs" />
     <Compile Include="Internal\FixedQueue.cs" />
     <Compile Include="IKeyProvider.cs" />

@@ -32,7 +32,7 @@ namespace Carnac.Tests
             var desktopLockEventService = Substitute.For<IDesktopLockEventService>();
             desktopLockEventService.GetSessionSwitchStream().Returns(Observable.Never<SessionSwitchEventArgs>());
             var keyProvider = new KeyProvider(source, new PasswordModeService(), desktopLockEventService);
-            return new MessageProvider(shortcutProvider, keyProvider, new PopupSettings(), new MessageMerger());
+            return new MessageProvider(shortcutProvider, keyProvider, new PopupSettings());
         }
 
         [Fact]
