@@ -97,7 +97,6 @@
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
                     <StackPanel Margin="10,0,0,0" Orientation="Vertical">
-                        
                         <ui:PreferencesField Header="Popup Text Width">
                             <Slider IsSnapToTickEnabled="True" Value="{Binding Settings.ItemMaxWidth}"
                             LargeChange="50" Maximum="1000" Minimum="0" SmallChange="10" TickFrequency="10" />
@@ -105,7 +104,6 @@
                                 <TextBox Foreground="White" Text="{Binding Settings.ItemMaxWidth}" />
                             </ui:PreferencesField.SecondaryControl>
                         </ui:PreferencesField>
-                        
                         <ui:PreferencesField Header="Popup Opacity">
                             <Slider Value="{Binding Settings.ItemOpacity}" IsSnapToTickEnabled="True"
                             LargeChange="0.1" Maximum="1" Minimum="0" SmallChange="0.05" TickFrequency="0.05" />
@@ -113,7 +111,6 @@
                                 <TextBox Foreground="White" Text="{Binding Settings.ItemOpacity}" />
                             </ui:PreferencesField.SecondaryControl>
                         </ui:PreferencesField>
-                        
                         <ui:PreferencesField Header="Popup Fade Delay">
                             <Slider Value="{Binding Settings.ItemFadeDelay}" IsSnapToTickEnabled="True"
                             LargeChange="2" Maximum="50" Minimum="1" SmallChange="1" TickFrequency="1" />
@@ -121,7 +118,6 @@
                                 <TextBox Foreground="White" Text="{Binding Settings.ItemFadeDelay}" />
                             </ui:PreferencesField.SecondaryControl>
                         </ui:PreferencesField>
-                        
                         <ui:PreferencesField Header="Font Size">
                             <Slider Value="{Binding Settings.FontSize}" IsSnapToTickEnabled="True"
                             LargeChange="2" Maximum="48" Minimum="8" SmallChange="1" TickFrequency="1" />
@@ -131,14 +127,15 @@
                         </ui:PreferencesField>
                         <ui:PreferencesField Header="Font Colour">
                             <ComboBox SelectedItem="{Binding FontColor}"
-                        		ItemsSource="{Binding AvailableColors}"
-                        		ItemTemplate="{StaticResource ColourPickerTemplate}" />
+                              ItemsSource="{Binding AvailableColors}"
+                              ItemTemplate="{StaticResource ColourPickerTemplate}" />
                         </ui:PreferencesField>
                         <ui:PreferencesField Header="Background Color">
                             <ComboBox SelectedItem="{Binding ItemBackgroundColor}"
-                        		ItemsSource="{Binding AvailableColors}"
-                        		ItemTemplate="{StaticResource ColourPickerTemplate}" />
+                              ItemsSource="{Binding AvailableColors}"
+                              ItemTemplate="{StaticResource ColourPickerTemplate}" />
                         </ui:PreferencesField>
+
                         <ui:PreferencesField Header="Shortcuts Only">
                             <CheckBox IsChecked="{Binding Settings.DetectShortcutsOnly}" />
                         </ui:PreferencesField>
