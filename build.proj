@@ -125,7 +125,7 @@
 
   <Target Name="Restore">
     <Message Text=" ===========Restoring NuGet packages===========" Importance="High" />
-    <Exec Command="&quot;$(Root)src\.nuget\nuget.exe&quot; restore $(Root)src\Carnac.sln" />
+    <Exec Command="$(Root)src\.nuget\nuget.exe restore $(Root)src\Carnac.sln" />
   </Target>
 
   <Target Name="Compile" DependsOnTargets="Restore">
@@ -260,7 +260,7 @@
     <RegexTransform Items="@(RegexTransform)" />
 
     <MakeDir Directories="$(DeployPath)" />
-    <Exec Command="&quot;$(Root)src\.nuget\nuget.exe&quot; pack $(ChocoSpecPath) -OutputDirectory $(DeployPath) -Version $(Version) -NoPackageAnalysis" />
+    <Exec Command="$(Root)src\.nuget\nuget.exe pack $(ChocoSpecPath) -OutputDirectory $(DeployPath) -Version $(Version) -NoPackageAnalysis" />
   </Target>
 
   <Target Name="PublishInstallToAzure">
