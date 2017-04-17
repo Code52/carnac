@@ -111,7 +111,7 @@
                                 <TextBox Foreground="White" Text="{Binding Settings.ItemOpacity}" />
                             </ui:PreferencesField.SecondaryControl>
                         </ui:PreferencesField>
-                        <ui:PreferencesField Header="Popup Fade Delay">
+                        <ui:PreferencesField Header="Popup Fade Delay (sec)">
                             <Slider Value="{Binding Settings.ItemFadeDelay}" IsSnapToTickEnabled="True"
                             LargeChange="2" Maximum="50" Minimum="1" SmallChange="1" TickFrequency="1" />
                             <ui:PreferencesField.SecondaryControl>
