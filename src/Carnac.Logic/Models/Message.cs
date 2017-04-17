@@ -91,11 +91,27 @@ namespace Carnac.Logic.Models
         public DateTime LastMessage { get { return lastMessage; } }
 
         public bool IsDeleting { get { return isDeleting; } }
-
-
+        
         public Message Merge(Message other)
         {
             return new Message(this, other);
+        }
+
+        static readonly TimeSpan OneSecond = TimeSpan.FromSeconds(1);
+
+        public static Message MergeIfNeeded(Message previousMessage, Message newMessage)
+        {
+            return ShouldCreateNewMessage(previousMessage, newMessage)
+                ? newMessage
+                : previousMessage.Merge(newMessage);
+        }
+
+        static bool ShouldCreateNewMessage(Message previous, Message current)
+        {
+            return previous.ProcessName != current.ProcessName ||
+                   current.LastMessage.Subtract(previous.LastMessage) > OneSecond ||
+                   !previous.CanBeMerged ||
+                   !current.CanBeMerged;
         }
 
         public Message FadeOut()
