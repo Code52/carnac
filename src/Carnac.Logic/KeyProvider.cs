@@ -172,7 +172,7 @@ namespace Carnac.Logic
                 processes.Add(handle, p);
                 return p;
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 return null;
             }
