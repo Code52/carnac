@@ -78,7 +78,6 @@
   <ItemGroup>
     <Compile Include="Enums\NotificationPlacement.cs" />
     <Compile Include="IConcurrencyService.cs" />
-    <Compile Include="IMessageMerger.cs" />
     <Compile Include="IMessageProvider.cs" />
     <Compile Include="Internal\FixedQueue.cs" />
     <Compile Include="IKeyProvider.cs" />
@@ -92,7 +91,6 @@
     <Compile Include="KeyMonitor\InterceptKeys.cs" />
     <Compile Include="KeyMonitor\KeyDirection.cs" />
     <Compile Include="KeysController.cs" />
-    <Compile Include="MessageMerger.cs" />
     <Compile Include="Models\Processinfo.cs" />
     <Compile Include="ShortcutAccumulator.cs" />
     <Compile Include="KeyPressDefinition.cs" />
