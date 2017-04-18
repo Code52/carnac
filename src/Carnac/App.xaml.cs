@@ -1,10 +1,13 @@
-﻿using System.Windows;
+﻿using System;
+using System.IO;
+using System.Windows;
 using Carnac.Logic;
 using Carnac.Logic.KeyMonitor;
 using Carnac.Logic.Models;
 using Carnac.UI;
 using Carnac.Utilities;
 using SettingsProviderNet;
+using Squirrel;
 
 namespace Carnac
 {
@@ -17,6 +20,14 @@ namespace Carnac
         CarnacTrayIcon trayIcon;
         KeysController carnac;
 
+#if DEBUG
+
+        readonly string carnacUpdateUrl =
+            $"{Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location)}\\Releases"; // This needs re-working
+#else
+        readonly string carnacUpdateUrl = "https://github.com/Code52/carnac";
+#endif
+
         public App()
         {
             var keyProvider = new KeyProvider(InterceptKeys.Current, new PasswordModeService(), new DesktopLockEventService());
@@ -25,7 +36,7 @@ namespace Carnac
             messageProvider = new MessageProvider(new ShortcutProvider(), keyProvider, settings);
         }
 
-        protected override void OnStartup(StartupEventArgs e)
+        protected override async void OnStartup(StartupEventArgs e)
         {
             // Check if there was instance before this. If there was-close the current one.  
             if (ProcessUtilities.ThisProcessIsAlreadyRunning())
@@ -43,6 +54,25 @@ namespace Carnac
 
             carnac = new KeysController(keyShowViewModel.Messages, messageProvider, new ConcurrencyService(), settingsProvider);
             carnac.Start();
+
+            try
+            {
+#if DEBUG
+                using (var mgr = new UpdateManager(carnacUpdateUrl))
+                {
+                    await mgr.UpdateApp();
+                }
+#else
+                using (var mgr = UpdateManager.GitHubUpdateManager(carnacUpdateUrl))
+                {
+                    await mgr.Result.UpdateApp();
+                }
+#endif
+            }
+            catch
+            {
+                // Do something useful with the exception
+            }
 
             base.OnStartup(e);
         }
