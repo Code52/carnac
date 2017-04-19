@@ -22,18 +22,18 @@ artifacts:
 - path: deploy\*.zip
   name: ZipPackage
 deploy:
+- provider: GitHub
+  auth_token:
+    secure: tvr7i0kJpT3SAdYG037M6zU1g6FYXHAUUaseqBTUzasqsUo6mumdcW+huf5/351p
+  artifact: ZipPackage
+  draft: false
+  on:
+    branch: master
 - provider: NuGet
   server: https://chocolatey.org/
   api_key:
     secure: sMCceYyOHQxaJMpcWBGmbGkbB6aYToUWm3rqfLv1ZZaeToqM2PAz1or18hnJbon0
   skip_symbols: true
   artifact: ChocoPackage
-  on:
-    branch: master
-- provider: GitHub
-  auth_token:
-    secure: tvr7i0kJpT3SAdYG037M6zU1g6FYXHAUUaseqBTUzasqsUo6mumdcW+huf5/351p
-  artifact: ZipPackage
-  draft: false
   on:
     branch: master
