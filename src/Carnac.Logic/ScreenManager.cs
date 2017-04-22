@@ -48,6 +48,12 @@ namespace Carnac.Logic
                         screen.Left = mode.dmPosition.x;
                     }
 
+                    // skip this value if it doesn't appear to be a valid screen
+                    if (screen.Width == 0 || screen.Height == 0)
+                    {
+                        continue;
+                    }
+
                     screens.Add(screen);
                 }
             }
