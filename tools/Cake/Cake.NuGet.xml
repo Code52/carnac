@@ -1,0 +1,89 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Cake.NuGet</name>
+    </assembly>
+    <members>
+        <member name="F:Cake.NuGet.Constants.NuGet.Source">
+            <summary>
+            The config key name for overriding the default nuget package source
+            </summary>
+        </member>
+        <member name="T:Cake.NuGet.INuGetContentResolver">
+            <summary>
+            Represents a file locator for NuGet packages that returns relevant
+            files for the current framework given the resource type.
+            </summary>
+        </member>
+        <member name="M:Cake.NuGet.INuGetContentResolver.GetFiles(Cake.Core.IO.DirectoryPath,Cake.Core.Packaging.PackageReference,Cake.Core.Packaging.PackageType)">
+            <summary>
+            Gets the relevant files for a NuGet package
+            given a path and a resource type.
+            </summary>
+            <param name="path">The path to search.</param>
+            <param name="package">The package.</param>
+            <param name="type">The resource type.</param>
+            <returns>A collection of files.</returns>
+        </member>
+        <member name="T:Cake.NuGet.INuGetPackageInstaller">
+            <summary>
+            Represents a NuGet package installer.
+            </summary>
+        </member>
+        <member name="T:Cake.NuGet.NuGetModule">
+            <summary>
+            The module responsible for registering
+            default types in the Cake.NuGet assembly.
+            </summary>
+        </member>
+        <member name="M:Cake.NuGet.NuGetModule.Register(Cake.Core.Composition.ICakeContainerRegistrar)">
+            <summary>
+            Performs custom registrations in the provided registrar.
+            </summary>
+            <param name="registrar">The container registrar.</param>
+        </member>
+        <member name="T:Cake.NuGet.NuGetPackageInstaller">
+            <summary>
+            Installer for NuGet URI resources.
+            </summary>
+        </member>
+        <member name="M:Cake.NuGet.NuGetPackageInstaller.#ctor(Cake.Core.IO.IFileSystem,Cake.Core.ICakeEnvironment,Cake.Core.IO.IProcessRunner,Cake.Core.IO.NuGet.INuGetToolResolver,Cake.NuGet.INuGetContentResolver,Cake.Core.Diagnostics.ICakeLog,Cake.Core.Configuration.ICakeConfiguration)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Cake.NuGet.NuGetPackageInstaller"/> class.
+            </summary>
+            <param name="fileSystem">The file system.</param>
+            <param name="environment">The environment.</param>
+            <param name="processRunner">The process runner.</param>
+            <param name="toolResolver">The NuGet tool resolver.</param>
+            <param name="contentResolver">The content resolver.</param>
+            <param name="log">The log.</param>
+            <param name="config">the configuration</param>
+        </member>
+        <member name="M:Cake.NuGet.NuGetPackageInstaller.CanInstall(Cake.Core.Packaging.PackageReference,Cake.Core.Packaging.PackageType)">
+            <summary>
+            Determines whether this instance can install the specified resource.
+            </summary>
+            <param name="package">The package reference.</param>
+            <param name="type">The package type.</param>
+            <returns>
+              <c>true</c> if this installer can install the
+              specified resource; otherwise <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:Cake.NuGet.NuGetPackageInstaller.Install(Cake.Core.Packaging.PackageReference,Cake.Core.Packaging.PackageType,Cake.Core.IO.DirectoryPath)">
+            <summary>
+            Installs the specified resource at the given location.
+            </summary>
+            <param name="package">The package reference.</param>
+            <param name="type">The package type.</param>
+            <param name="path">The location where to install the package.</param>
+            <returns>The installed files.</returns>
+        </member>
+        <member name="T:Cake.NuGet.V2.NuGetV2ContentResolver">
+            <summary>
+            Implementation of a file locator for NuGet packages that
+            returns relevant files for the current framework given a resource type.
+            </summary>
+        </member>
+    </members>
+</doc>
