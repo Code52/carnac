@@ -12,15 +12,17 @@ environment:
   Version: $(APPVEYOR_BUILD_VERSION)
   GithubRepo: $(APPVEYOR_REPO_NAME)
 build_script:
-- cmd: PowerShell -Version 2.0 .\build.ps1 -Configuration Release
+- cmd: PowerShell -Version 2.0 .\build.ps1 -Configuration Release -ScriptArgs '--packageversion="{version}"'
 test:
   assemblies:
     - '**\Carnac.Tests.dll'
 artifacts:
-- path: deploy\*.nupkg
+- path: deploy\Chocolatey\*.nupkg
   name: ChocoPackage
-- path: deploy\*.zip
+- path: deploy\GitHub\*.zip
   name: ZipPackage
+- path: deploy\Squirrel\*.*
+  name: SquirrelPackage
 deploy:
 - provider: GitHub
   auth_token:

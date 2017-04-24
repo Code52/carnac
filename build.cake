@@ -3,12 +3,12 @@
 
 var target = Argument("target", "Default");
 var configuration = Argument("configuration", "Debug");
+var version = Argument("packageversion", "0.0.0.0");
 
 var githubRepo = "Code52/carnac";
 var solutionFile = "./src/Carnac.sln";
 var buildDir = Directory("./src/Carnac/bin") + Directory(configuration);
 var deployDir = Directory("./deploy");
-var version = "0.0.0.9";
 
 Task("Clean")
     .Does(() =>
@@ -42,30 +42,35 @@ Task("Package-Squirrel")
 	.IsDependentOn("Run-Unit-Tests")
 	.Does(() =>
 	{
-		Information("This is where we will build the squirrel package");
 	});
 
 Task("Package-Zip")
 	.IsDependentOn("Run-Unit-Tests")
 	.Does(() =>
 	{
-		EnsureDirectoryExists(deployDir);
+		var gitHubDeployDir = deployDir + Directory("GitHub");
 
-		Zip(buildDir, deployDir + File("carnac." + version + ".zip"));
+		EnsureDirectoryExists(deployDir);
+		EnsureDirectoryExists(gitHubDeployDir);
+
+		Zip(buildDir, gitHubDeployDir + File("carnac." + version + ".zip"));
 	});
 
 Task("Package-Choco")
 	.IsDependentOn("Package-Zip")
 	.Does(() =>
 	{
-		EnsureDirectoryExists(deployDir);
-
 		var chocoSourceDir = Directory("./src/Chocolatey");
+		var chocoToolsDir = chocoSourceDir + Directory("tools");
 		var chocoSpecPath = chocoSourceDir + File("carnac.nuspec");
+		var chocoDeployDir = deployDir + Directory("Chocolatey");
+		
+		EnsureDirectoryExists(deployDir);
+		EnsureDirectoryExists(chocoDeployDir);
 
-		ReplaceRegexInFiles(chocoSourceDir + Directory("tools") + File("chocolateyinstall.ps1"), @"\$url = '.+'", "$url = 'https://github.com/" + githubRepo + "/releases/download/" + version + "/carnac." + version + ".zip'");
+		ReplaceRegexInFiles(chocoToolsDir + File("chocolateyinstall.ps1"), @"\$url = '.+'", "$url = 'https://github.com/" + githubRepo + "/releases/download/" + version + "/carnac." + version + ".zip'");
 		NuGetPack(chocoSpecPath, new NuGetPackSettings {
-			OutputDirectory = deployDir,
+			OutputDirectory = chocoDeployDir,
 			Version = version,
 			NoPackageAnalysis = true
 		});
