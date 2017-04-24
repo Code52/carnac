@@ -81,6 +81,6 @@ Task("Package")
 	});
 
 Task("Default")
-    .IsDependentOn("Run-Unit-Tests");
+    .IsDependentOn("Package");
 
 RunTarget(target);
