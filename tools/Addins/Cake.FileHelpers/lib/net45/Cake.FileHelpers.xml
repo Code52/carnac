@@ -1,0 +1,154 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Cake.FileHelpers</name>
+    </assembly>
+    <members>
+        <member name="T:Cake.FileHelpers.NamespaceDoc">
+            <summary>
+            This namespace contain types representing data used for common file operations,
+            such as reading, writing and replacing text.
+            </summary>
+        </member>
+        <member name="T:Cake.FileHelpers.FileHelperAliases">
+            <summary>
+            File helper aliases.
+            A set of aliases for <see href="http://cakebuild.net">Cake Build</see> to help with simple File operations such as Reading, Writing and Replacing text.
+            </summary>
+        </member>
+        <member name="M:Cake.FileHelpers.FileHelperAliases.FileReadText(Cake.Core.ICakeContext,Cake.Core.IO.FilePath)">
+            <summary>
+            Reads all text from a file
+            </summary>
+            <returns>The file's text.</returns>
+            <param name="context">The context.</param>
+            <param name="file">The file to read.</param>
+        </member>
+        <member name="M:Cake.FileHelpers.FileHelperAliases.FileReadLines(Cake.Core.ICakeContext,Cake.Core.IO.FilePath)">
+            <summary>
+            Reads all lines from a file
+            </summary>
+            <returns>The file's text lines.</returns>
+            <param name="context">The context.</param>
+            <param name="file">The file to read.</param>
+        </member>
+        <member name="M:Cake.FileHelpers.FileHelperAliases.FileWriteText(Cake.Core.ICakeContext,Cake.Core.IO.FilePath,System.String)">
+            <summary>
+            Writes all text to a file
+            </summary>
+            <param name="context">The context.</param>
+            <param name="file">The file to write to.</param>
+            <param name="text">The text to write.</param>
+        </member>
+        <member name="M:Cake.FileHelpers.FileHelperAliases.FileWriteLines(Cake.Core.ICakeContext,Cake.Core.IO.FilePath,System.String[])">
+            <summary>
+            Writes all text lines to a file
+            </summary>
+            <param name="context">The context.</param>
+            <param name="file">The file to write to.</param>
+            <param name="lines">The text lines to write.</param>
+        </member>
+        <member name="M:Cake.FileHelpers.FileHelperAliases.FileAppendText(Cake.Core.ICakeContext,Cake.Core.IO.FilePath,System.String)">
+            <summary>
+            Appends all text to a file
+            </summary>
+            <param name="context">The context.</param>
+            <param name="file">The file to append text to.</param>
+            <param name="text">The text to append.</param>
+        </member>
+        <member name="M:Cake.FileHelpers.FileHelperAliases.FileAppendLines(Cake.Core.ICakeContext,Cake.Core.IO.FilePath,System.String[])">
+            <summary>
+            Appends all text lines to a file
+            </summary>
+            <param name="context">The context.</param>
+            <param name="file">The file to append text to.</param>
+            <param name="lines">The text lines to append.</param>
+        </member>
+        <member name="M:Cake.FileHelpers.FileHelperAliases.FileTouch(Cake.Core.ICakeContext,Cake.Core.IO.FilePath)">
+            <summary>
+            Sets the last write time of a file to the current time
+            </summary>
+            <param name="context">The context.</param>
+            <param name="file">The file to touch</param>
+        </member>
+        <member name="M:Cake.FileHelpers.FileHelperAliases.ReplaceTextInFiles(Cake.Core.ICakeContext,System.String,System.String,System.String)">
+            <summary>
+            Replaces the text in files matched by the given globber pattern
+            </summary>
+            <returns>The files that had text replaced in them.</returns>
+            <param name="context">The context.</param>
+            <param name="globberPattern">The globber pattern to match files to replace text in.</param>
+            <param name="findText">The text to find.</param>
+            <param name="replaceText">The replacement text.</param>
+        </member>
+        <member name="M:Cake.FileHelpers.FileHelperAliases.ReplaceRegexInFiles(Cake.Core.ICakeContext,System.String,System.String,System.String)">
+            <summary>
+            Replaces the regex pattern in files matched by the given globber pattern.
+            </summary>
+            <returns>The files that had text replaced in them.</returns>
+            <param name="context">The context.</param>
+            <param name="globberPattern">The globber pattern to match files to replace text in.</param>
+            <param name="rxFindPattern">The regular expression to find.</param>
+            <param name="replaceText">The replacement text.</param>
+        </member>
+        <member name="M:Cake.FileHelpers.FileHelperAliases.ReplaceRegexInFiles(Cake.Core.ICakeContext,System.String,System.String,System.String,System.Text.RegularExpressions.RegexOptions)">
+            <summary>
+            Replaces the regex pattern in files matched by the given globber pattern.
+            </summary>
+            <returns>The files that had text replaced in them.</returns>
+            <param name="context">The context.</param>
+            <param name="globberPattern">The globber pattern to match files to replace text in.</param>
+            <param name="rxFindPattern">The regular expression to find.</param>
+            <param name="replaceText">The replacement text.</param>
+            <param name="rxOptions">The regular expression options to use.</param>
+        </member>
+        <member name="M:Cake.FileHelpers.FileHelperAliases.FindRegexInFiles(Cake.Core.ICakeContext,System.String,System.String)">
+            <summary>
+            Finds files with regular expression pattern in files matching the given globber pattern.
+            </summary>
+            <returns>The files which match the regular expression and globber pattern.</returns>
+            <param name="context">The context.</param>
+            <param name="globberPattern">The globber pattern to match files to replace text in.</param>
+            <param name="rxFindPattern">The regular expression to find.</param>
+        </member>
+        <member name="M:Cake.FileHelpers.FileHelperAliases.FindRegexInFiles(Cake.Core.ICakeContext,System.String,System.String,System.Text.RegularExpressions.RegexOptions)">
+            <summary>
+            Finds files with regular expression pattern in files matching the given globber pattern.
+            </summary>
+            <returns>The files which match the regular expression and globber pattern.</returns>
+            <param name="context">The context.</param>
+            <param name="globberPattern">The globber pattern to match files to replace text in.</param>
+            <param name="rxFindPattern">The regular expression to find.</param>
+            <param name="rxOptions">The regular expression options to use.</param>
+        </member>
+        <member name="M:Cake.FileHelpers.FileHelperAliases.FindTextInFiles(Cake.Core.ICakeContext,System.String,System.String)">
+            <summary>
+            Finds files with the given text in files matching the given globber pattern.
+            </summary>
+            <returns>The files which match the regular expression and globber pattern.</returns>
+            <param name="context">The context.</param>
+            <param name="globberPattern">The globber pattern to match files to replace text in.</param>
+            <param name="findPattern">The regular expression to find.</param>
+        </member>
+        <member name="M:Cake.FileHelpers.FileHelperAliases.FindRegexMatchesInFile(Cake.Core.ICakeContext,Cake.Core.IO.FilePath,System.String,System.Text.RegularExpressions.RegexOptions)">
+            <summary>
+            Finds the regex matches in a text file.
+            </summary>
+            <returns>The regex matches in file.</returns>
+            <param name="context">Context.</param>
+            <param name="file">The text file.</param>
+            <param name="rxFindPattern">The regex pattern to search for.</param>
+            <param name="rxOptions">The regex options.</param>
+        </member>
+        <member name="M:Cake.FileHelpers.FileHelperAliases.FindRegexMatchInFile(Cake.Core.ICakeContext,Cake.Core.IO.FilePath,System.String,System.Text.RegularExpressions.RegexOptions)">
+            <summary>
+            Finds the first regex match in a textfile.
+            </summary>
+            <returns>The first regex match in the file.</returns>
+            <param name="context">The context.</param>
+            <param name="file">The file.</param>
+            <param name="rxFindPattern">The regex pattern to search for.</param>
+            <param name="rxOptions">The regex options.</param>
+        </member>
+    </members>
+</doc>

@@ -12,7 +12,7 @@ environment:
   Version: $(APPVEYOR_BUILD_VERSION)
   GithubRepo: $(APPVEYOR_REPO_NAME)
 build_script:
-- build.cmd Release
+- cmd: PowerShell -Version 2.0 .\build.ps1 -Configuration Release
 test:
   assemblies:
     - '**\Carnac.Tests.dll'

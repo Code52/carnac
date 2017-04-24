@@ -1,3 +1,0 @@
-/Users/paul/code/paulcbetts/splat/Splat/bin/Release/Xamarin.Mac10/Xamarin.Mac,Version=v2.0.AssemblyAttribute.cs
-/Users/paul/code/paulcbetts/splat/Splat/bin/Release/Xamarin.Mac10/Splat.dll.mdb
-/Users/paul/code/paulcbetts/splat/Splat/bin/Release/Xamarin.Mac10/Splat.dll
