@@ -19,6 +19,12 @@ Alternatively, you can grab the latest zip file from [here](https://github.com/C
 
 **Note:** Carnac requires .NET 4.5.2 to work - you can install that from [here](https://www.microsoft.com/en-au/download/details.aspx?id=42643) if you don't have it already.
 
+### Usage
+
+** Enabling silent mode **
+
+If you want to stop `Carnac` from recording certain key strokes, you can enter _silent mode_ by pressing `Ctrl+Alt+P`. To exit _silent mode_ you simply press `Ctrl+Alt+P` again.
+
 ### Contributing
 
 **Getting started with Git and GitHub**
