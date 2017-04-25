@@ -31,6 +31,13 @@ deploy:
   draft: false
   on:
     branch: master
+- provider: GitHub
+  auth_token:
+    secure: tvr7i0kJpT3SAdYG037M6zU1g6FYXHAUUaseqBTUzasqsUo6mumdcW+huf5/351p
+  artifact: SquirrelPackage
+  draft: false
+  on:
+    branch: master
 - provider: NuGet
   server: https://chocolatey.org/
   api_key:
