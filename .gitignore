@@ -19,4 +19,7 @@ deploy-to-ec2*
 *.orig
 Thumbs.db
 src/Carnac.sln.ide/
-tools/
+
+# Cake - Uncomment if you are using it
+tools/**
+!tools/packages.config
