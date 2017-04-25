@@ -1,4 +1,4 @@
-version: 2.0.0.{build}
+version: 2.0.{build}
 configuration: Release
 skip_branch_with_pr: true
 skip_tags: true
@@ -12,7 +12,7 @@ environment:
   Version: $(APPVEYOR_BUILD_VERSION)
   GithubRepo: $(APPVEYOR_REPO_NAME)
 build_script:
-- cmd: PowerShell -Version 2.0 .\build.ps1 -Configuration Release -ScriptArgs '--packageversion="{version}"'
+- cmd: PowerShell -Version 2.0 .\build.ps1 -Configuration Release -ScriptArgs '--packageversion="%APPVEYOR_BUILD_VERSION%"'
 test:
   assemblies:
     - '**\Carnac.Tests.dll'
@@ -21,7 +21,7 @@ artifacts:
   name: ChocoPackage
 - path: deploy\GitHub\*.zip
   name: ZipPackage
-- path: deploy\Squirrel\*.*
+- path: deploy\Squirrel\Releases\*
   name: SquirrelPackage
 deploy:
 - provider: GitHub
