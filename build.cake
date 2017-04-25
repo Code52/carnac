@@ -13,6 +13,7 @@ var solutionFile = "./src/Carnac.sln";
 var buildDir = Directory("./src/Carnac/bin") + Directory(configuration);
 var toolsDir = Directory("./tools");
 var deployDir = Directory("./deploy");
+var zipFileHash = "";
 
 Task("Clean")
     .Does(() =>
@@ -95,11 +96,13 @@ Task("Package-Zip")
 	.Does(() =>
 	{
 		var gitHubDeployDir = deployDir + Directory("GitHub");
+		var zipFile = gitHubDeployDir + File("carnac." + version + ".zip");
 
 		EnsureDirectoryExists(deployDir);
 		EnsureDirectoryExists(gitHubDeployDir);
 
-		Zip(buildDir, gitHubDeployDir + File("carnac." + version + ".zip"));
+		Zip(buildDir, zipFile);
+		zipFileHash = CalculateFileHash(zipFile, HashAlgorithm.SHA256).ToHex();
 	});
 
 Task("Package-Choco")
@@ -108,18 +111,21 @@ Task("Package-Choco")
 	{
 		var chocoSourceDir = Directory("./src/Chocolatey");
 		var chocoToolsDir = chocoSourceDir + Directory("tools");
+		var chocoInstallFile = chocoToolsDir + File("chocolateyinstall.ps1");
 		var chocoSpecPath = chocoSourceDir + File("carnac.nuspec");
 		var chocoDeployDir = deployDir + Directory("Chocolatey");
 		
 		EnsureDirectoryExists(deployDir);
 		EnsureDirectoryExists(chocoDeployDir);
+		
+		ReplaceRegexInFiles(chocoInstallFile, @"\$url = '.+'", "$url = 'https://github.com/" + githubRepo + "/releases/download/" + version + "/carnac." + version + ".zip'");
+		ReplaceRegexInFiles(chocoInstallFile, @"\$zipFileHash = '.+'", "$zipFileHash = '" + zipFileHash + "'");
 
-		ReplaceRegexInFiles(chocoToolsDir + File("chocolateyinstall.ps1"), @"\$url = '.+'", "$url = 'https://github.com/" + githubRepo + "/releases/download/" + version + "/carnac." + version + ".zip'");
-		NuGetPack(chocoSpecPath, new NuGetPackSettings {
-			OutputDirectory = chocoDeployDir,
-			Version = version,
-			NoPackageAnalysis = true
+		ChocolateyPack(chocoSpecPath, new ChocolateyPackSettings
+		{
+			Version = version
 		});
+		MoveFiles("./*.nupkg", chocoDeployDir);
 	});
 
 Task("Package")
