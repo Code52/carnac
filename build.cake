@@ -7,9 +7,10 @@
 var target = Argument("target", "Default");
 var configuration = Argument("configuration", "Debug");
 var version = Argument("packageversion", "0.0.0");
-var gitHubRepo = Argument("gitHubRepo", "Code52/carnac");
+var githubRepo = Argument("githubrepo", "Code52/carnac");
+var githubAuthToken = Argument("authtoken", "");
 
-var gitHubRepoUrl = "https://github.com/" + gitHubRepo;
+var githubRepoUrl = "https://github.com/" + githubRepo;
 var solutionFile = "./src/Carnac.sln";
 var buildDir = Directory("./src/Carnac/bin") + Directory(configuration);
 var toolsDir = Directory("./tools");
@@ -85,7 +86,7 @@ Task("Package-Squirrel")
 		
 		// Sync latest release to build new package
 		var squirrelSyncReleasesExe = toolsDir + Directory("squirrel.windows/tools") + File("SyncReleases.exe");
-		StartProcess(squirrelSyncReleasesExe, new ProcessSettings { Arguments = "--url " + gitHubRepoUrl + " --releaseDir " + squirrelReleaseDir.Path });
+		StartProcess(squirrelSyncReleasesExe, new ProcessSettings { Arguments = "--url " + githubRepoUrl + " --releaseDir " + squirrelReleaseDir.Path + (!string.IsNullOrEmpty(githubAuthToken) ? " --token " + githubAuthToken : "") });
 
 		// Create new squirrel package
 		Squirrel(
@@ -131,7 +132,7 @@ Task("Package-Choco")
 		EnsureDirectoryExists(deployDir);
 		EnsureDirectoryExists(chocoDeployDir);
 		
-		ReplaceRegexInFiles(chocoInstallFile, @"\$url = '.+'", "$url = '" + gitHubRepoUrl + "/releases/download/" + version + "/carnac." + version + ".zip'");
+		ReplaceRegexInFiles(chocoInstallFile, @"\$url = '.+'", "$url = '" + githubRepoUrl + "/releases/download/" + version + "/carnac." + version + ".zip'");
 		ReplaceRegexInFiles(chocoInstallFile, @"\$zipFileHash = '.+'", "$zipFileHash = '" + zipFileHash + "'");
 
 		ChocolateyPack(chocoSpecPath, new ChocolateyPackSettings
