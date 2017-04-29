@@ -78,7 +78,8 @@ Task("Package-Squirrel")
 			Version = version,
 			Files = releaseFiles.Select(f => new NuSpecContent { Source = f, Target = "lib/net45" }).ToList(),
 			BasePath = buildDir,
-			OutputDirectory = squirrelDeployDir
+			OutputDirectory = squirrelDeployDir,
+			NoPackageAnalysis = true
 		};
 		NuGetPack("./src/Carnac/Carnac.nuspec", nuGetPackSettings);
 		
