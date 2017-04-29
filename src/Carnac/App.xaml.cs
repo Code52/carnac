@@ -23,7 +23,7 @@ namespace Carnac
 #if DEBUG
 
         readonly string carnacUpdateUrl =
-            $"{Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location)}\\Releases"; // This needs re-working
+            Path.GetFullPath(@"..\..\..\..\deploy\Squirrel\Releases");
 #else
         readonly string carnacUpdateUrl = "https://github.com/Code52/carnac";
 #endif
