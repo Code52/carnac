@@ -19,6 +19,12 @@ Alternatively, you can grab the latest zip file from [here](https://github.com/C
 
 **Note:** Carnac requires .NET 4.5.2 to work - you can install that from [here](https://www.microsoft.com/en-au/download/details.aspx?id=42643) if you don't have it already.
 
+### Updating
+
+We use `Squirrel.Windows` to update your `carnac` application. 
+
+The application will check for updates on start up, if a new version has been released, it will automatically install the new version and once you restart `carnac` you will be up-to-date.
+
 ### Usage
 
 ** Enabling silent mode **
