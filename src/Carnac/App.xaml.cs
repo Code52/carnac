@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Reactive.Linq;
 using System.Windows;
 using Carnac.Logic;
 using Carnac.Logic.KeyMonitor;
@@ -36,7 +37,7 @@ namespace Carnac
             messageProvider = new MessageProvider(new ShortcutProvider(), keyProvider, settings);
         }
 
-        protected override async void OnStartup(StartupEventArgs e)
+        protected override void OnStartup(StartupEventArgs e)
         {
             // Check if there was instance before this. If there was-close the current one.  
             if (ProcessUtilities.ThisProcessIsAlreadyRunning())
@@ -55,24 +56,29 @@ namespace Carnac
             carnac = new KeysController(keyShowViewModel.Messages, messageProvider, new ConcurrencyService(), settingsProvider);
             carnac.Start();
 
-            try
-            {
-#if DEBUG
-                using (var mgr = new UpdateManager(carnacUpdateUrl))
+            Observable
+                .Timer(TimeSpan.FromMinutes(5))
+                .Subscribe(async x =>
                 {
-                    await mgr.UpdateApp();
-                }
+                    try
+                    {
+#if DEBUG
+                        using (var mgr = new UpdateManager(carnacUpdateUrl))
+                        {
+                            await mgr.UpdateApp();
+                        }
 #else
                 using (var mgr = UpdateManager.GitHubUpdateManager(carnacUpdateUrl))
                 {
                     await mgr.Result.UpdateApp();
                 }
 #endif
-            }
-            catch
-            {
-                // Do something useful with the exception
-            }
+                    }
+                    catch
+                    {
+                        // Do something useful with the exception
+                    }
+                });
 
             base.OnStartup(e);
         }
