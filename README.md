@@ -23,7 +23,7 @@ Alternatively, you can grab the latest zip file from [here](https://github.com/C
 
 We use `Squirrel.Windows` to update your `carnac` application. 
 
-The application will check for updates on start up, if a new version has been released, it will automatically install the new version and once you restart `carnac` you will be up-to-date.
+The application will check for updates in the background, if a new version has been released, it will automatically install the new version and once you restart `carnac` you will be up-to-date.
 
 ### Usage
 
