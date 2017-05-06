@@ -6,7 +6,7 @@
 
 var target = Argument("target", "Default");
 var configuration = Argument("configuration", "Debug");
-var version = Argument("packageversion", "0.0.0");
+var version = Argument("packageversion", "1.0.0");
 var githubRepo = Argument("githubrepo", "Code52/carnac");
 var githubAuthToken = Argument("authtoken", "");
 
@@ -16,6 +16,9 @@ var buildDir = Directory("./src/Carnac/bin") + Directory(configuration);
 var toolsDir = Directory("./tools");
 var deployDir = Directory("./deploy");
 var zipFileHash = "";
+
+var squirrelDeployDir = deployDir + Directory("Squirrel");
+var squirrelReleaseDir = squirrelDeployDir + Directory("Releases");
 
 Task("Clean")
     .Does(() =>
@@ -53,31 +56,30 @@ Task("Package-Squirrel")
 	.IsDependentOn("Run-Unit-Tests")
 	.Does(() =>
 	{
-		var squirrelDeployDir = deployDir + Directory("Squirrel");
-		var squirrelReleaseDir = squirrelDeployDir + Directory("Releases");
+		var syncReleasesDir = toolsDir + Directory("squirrel.windows/tools");
 
 		EnsureDirectoryExists(deployDir);
 		EnsureDirectoryExists(squirrelDeployDir);
 
 		// Create nuget package
 		var releaseFiles = new HashSet<string>(
-			GetFiles(buildDir.Path + "/*.*").Select(f => f.FullPath)
-				.Concat(GetFiles((toolsDir + Directory("DeltaCompressionDotNet/lib/net45")).Path + "/*.dll").Select(f => f.FullPath)
-					.Concat(GetFiles((toolsDir + Directory("Mono.Cecil/lib/net45")).Path + "/*.dll").Select(f => f.FullPath)
-						.Concat(GetFiles((toolsDir + Directory("Splat/lib/Net45")).Path + "/*.dll").Select(f => f.FullPath)
-							.Concat(GetFiles((toolsDir + Directory("squirrel.windows/lib/Net45")).Path + "/ICSharpCode.SharpZipLib.*").Select(f => f.FullPath)
-								.Concat(GetFiles((toolsDir + Directory("squirrel.windows/lib/Net45")).Path + "/*Squirrel.dll").Select(f => f.FullPath))
+				GetFiles(buildDir.Path + "/**/*.*").Select(f => f.FullPath)
+					.Concat(GetFiles((toolsDir + Directory("DeltaCompressionDotNet/lib/net45")).Path + "/*.dll").Select(f => f.FullPath)
+						.Concat(GetFiles((toolsDir + Directory("Mono.Cecil/lib/net45")).Path + "/*.dll").Select(f => f.FullPath)
+							.Concat(GetFiles((toolsDir + Directory("Splat/lib/Net45")).Path + "/*.dll").Select(f => f.FullPath)
+								.Concat(GetFiles((toolsDir + Directory("squirrel.windows/lib/Net45")).Path + "/ICSharpCode.SharpZipLib.*").Select(f => f.FullPath)
+									.Concat(GetFiles((toolsDir + Directory("squirrel.windows/lib/Net45")).Path + "/*Squirrel.dll").Select(f => f.FullPath))
+								)
 							)
 						)
 					)
-				)
-		);
+			);
 		releaseFiles.RemoveWhere(f => f.Contains(".vshost.") || f.EndsWith(".pdb"));
 
 		var nuGetPackSettings = new NuGetPackSettings
 		{
 			Version = version,
-			Files = releaseFiles.Select(f => new NuSpecContent { Source = f, Target = "lib/net45" }).ToList(),
+			Files = releaseFiles.Select(f => new NuSpecContent { Source = f, Target = "lib/net45" + (f.Contains("Keymaps") ? "/Keymaps" : "") }).ToList(),
 			BasePath = buildDir,
 			OutputDirectory = squirrelDeployDir,
 			NoPackageAnalysis = true
@@ -85,7 +87,7 @@ Task("Package-Squirrel")
 		NuGetPack("./src/Carnac/Carnac.nuspec", nuGetPackSettings);
 		
 		// Sync latest release to build new package
-		var squirrelSyncReleasesExe = toolsDir + Directory("squirrel.windows/tools") + File("SyncReleases.exe");
+		var squirrelSyncReleasesExe = syncReleasesDir + File("SyncReleases.exe");
 		StartProcess(squirrelSyncReleasesExe, new ProcessSettings { Arguments = "--url " + githubRepoUrl + " --releaseDir " + squirrelReleaseDir.Path + (!string.IsNullOrEmpty(githubAuthToken) ? " --token " + githubAuthToken : "") });
 
 		// Create new squirrel package
@@ -99,14 +101,12 @@ Task("Package-Squirrel")
 				SetupIcon = "./src/Carnac/icon.ico",
 				ShortCutLocations = "StartMenu",
 				Silent = true
-			}, 
-			false, 
-			false
+			}
 		);
 	});
 
 Task("Package-Zip")
-	.IsDependentOn("Run-Unit-Tests")
+	.IsDependentOn("Package-Squirrel")
 	.Does(() =>
 	{
 		var gitHubDeployDir = deployDir + Directory("GitHub");
@@ -115,7 +115,7 @@ Task("Package-Zip")
 		EnsureDirectoryExists(deployDir);
 		EnsureDirectoryExists(gitHubDeployDir);
 
-		Zip(buildDir, zipFile);
+		Zip(squirrelReleaseDir, zipFile);
 		zipFileHash = CalculateFileHash(zipFile, HashAlgorithm.SHA256).ToHex();
 	});
 
@@ -131,8 +131,12 @@ Task("Package-Choco")
 		
 		EnsureDirectoryExists(deployDir);
 		EnsureDirectoryExists(chocoDeployDir);
-		
-		ReplaceRegexInFiles(chocoInstallFile, @"\$url = '.+'", "$url = '" + githubRepoUrl + "/releases/download/" + version + "/carnac." + version + ".zip'");
+
+		var url = /*configuration == "Debug"
+			? */MakeAbsolute(Directory("./deploy/GitHub").Path).FullPath/*
+			: githubRepoUrl + "/releases/download/" + version*/;
+
+		ReplaceRegexInFiles(chocoInstallFile, @"\$url = '.+'", "$url = '" + url + "/carnac." + version + ".zip'");
 		ReplaceRegexInFiles(chocoInstallFile, @"\$zipFileHash = '.+'", "$zipFileHash = '" + zipFileHash + "'");
 
 		ChocolateyPack(chocoSpecPath, new ChocolateyPackSettings

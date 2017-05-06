@@ -68,10 +68,10 @@ namespace Carnac
                             await mgr.UpdateApp();
                         }
 #else
-                using (var mgr = UpdateManager.GitHubUpdateManager(carnacUpdateUrl))
-                {
-                    await mgr.Result.UpdateApp();
-                }
+                        using (var mgr = UpdateManager.GitHubUpdateManager(carnacUpdateUrl))
+                        {
+                            await mgr.Result.UpdateApp();
+                        }
 #endif
                     }
                     catch
