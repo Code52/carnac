@@ -14,7 +14,7 @@ environment:
   GithubAuthToken:
     secure: tvr7i0kJpT3SAdYG037M6zU1g6FYXHAUUaseqBTUzasqsUo6mumdcW+huf5/351p
 build_script:
-- cmd: PowerShell -Version 2.0 .\build.ps1 -Configuration Release -ScriptArgs '--packageversion="%APPVEYOR_BUILD_VERSION%" --authtoken="%GithubAuthToken%"'
+- cmd: PowerShell -Version 2.0 .\build.ps1 -Configuration Release -Experimental -ScriptArgs '--packageversion="%APPVEYOR_BUILD_VERSION%" --authtoken="%GithubAuthToken%"'
 test:
   assemblies:
     - '**\Carnac.Tests.dll'

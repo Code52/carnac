@@ -10,7 +10,7 @@ var version = Argument("packageversion", "1.0.0");
 var githubRepo = Argument("githubrepo", "Code52/carnac");
 var githubAuthToken = Argument("authtoken", "");
 
-var githubRepoUrl = "https://github.com/" + githubRepo;
+var githubRepoUrl = $"https://github.com/{githubRepo}";
 var solutionFile = "./src/Carnac.sln";
 var buildDir = Directory("./src/Carnac/bin") + Directory(configuration);
 var toolsDir = Directory("./tools");
@@ -49,7 +49,7 @@ Task("Run-Unit-Tests")
     .IsDependentOn("Build")
     .Does(() =>
     {
-        XUnit("./src/Carnac.Tests/bin/" + configuration + "/*.Tests.dll");
+        XUnit($"./src/Carnac.Tests/bin/{configuration}/*.Tests.dll");
     });
 
 Task("Package-Squirrel")
@@ -88,11 +88,11 @@ Task("Package-Squirrel")
 		
 		// Sync latest release to build new package
 		var squirrelSyncReleasesExe = syncReleasesDir + File("SyncReleases.exe");
-		StartProcess(squirrelSyncReleasesExe, new ProcessSettings { Arguments = "--url " + githubRepoUrl + " --releaseDir " + squirrelReleaseDir.Path + (!string.IsNullOrEmpty(githubAuthToken) ? " --token " + githubAuthToken : "") });
+		StartProcess(squirrelSyncReleasesExe, new ProcessSettings { Arguments = $"--url {githubRepoUrl} --releaseDir {squirrelReleaseDir.Path}{(!string.IsNullOrEmpty(githubAuthToken) ? " --token " + githubAuthToken : "")}" });
 
 		// Create new squirrel package
 		Squirrel(
-			squirrelDeployDir + File("carnac." + version + ".nupkg"), 
+			squirrelDeployDir + File($"carnac.{version}.nupkg"), 
 			new SquirrelSettings
 			{
 				ReleaseDirectory = squirrelReleaseDir,
@@ -110,7 +110,7 @@ Task("Package-Zip")
 	.Does(() =>
 	{
 		var gitHubDeployDir = deployDir + Directory("GitHub");
-		var zipFile = gitHubDeployDir + File("carnac." + version + ".zip");
+		var zipFile = gitHubDeployDir + File($"carnac.{version}.zip");
 
 		EnsureDirectoryExists(deployDir);
 		EnsureDirectoryExists(gitHubDeployDir);
@@ -136,8 +136,8 @@ Task("Package-Choco")
 			? */MakeAbsolute(Directory("./deploy/GitHub").Path).FullPath/*
 			: githubRepoUrl + "/releases/download/" + version*/;
 
-		ReplaceRegexInFiles(chocoInstallFile, @"\$url = '.+'", "$url = '" + url + "/carnac." + version + ".zip'");
-		ReplaceRegexInFiles(chocoInstallFile, @"\$zipFileHash = '.+'", "$zipFileHash = '" + zipFileHash + "'");
+		ReplaceRegexInFiles(chocoInstallFile, @"\$url = '.+'", $"$url = '{url}/carnac.{version}.zip'");
+		ReplaceRegexInFiles(chocoInstallFile, @"\$zipFileHash = '.+'", $"$zipFileHash = '{zipFileHash}'");
 
 		ChocolateyPack(chocoSpecPath, new ChocolateyPackSettings
 		{
