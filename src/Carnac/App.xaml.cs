@@ -21,11 +21,7 @@ namespace Carnac
         CarnacTrayIcon trayIcon;
         KeysController carnac;
 
-#if DEBUG
-
-        readonly string carnacUpdateUrl =
-            Path.GetFullPath(@"..\..\..\..\deploy\Squirrel\Releases");
-#else
+#if !DEBUG
         readonly string carnacUpdateUrl = "https://github.com/Code52/carnac";
 #endif
 
@@ -56,29 +52,24 @@ namespace Carnac
             carnac = new KeysController(keyShowViewModel.Messages, messageProvider, new ConcurrencyService(), settingsProvider);
             carnac.Start();
 
+#if !DEBUG
             Observable
                 .Timer(TimeSpan.FromMinutes(5))
                 .Subscribe(async x =>
                 {
                     try
                     {
-#if DEBUG
-                        using (var mgr = new UpdateManager(carnacUpdateUrl))
-                        {
-                            await mgr.UpdateApp();
-                        }
-#else
                         using (var mgr = UpdateManager.GitHubUpdateManager(carnacUpdateUrl))
                         {
                             await mgr.Result.UpdateApp();
                         }
-#endif
-                    }
+        }
                     catch
                     {
                         // Do something useful with the exception
                     }
                 });
+#endif
 
             base.OnStartup(e);
         }
