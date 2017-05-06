@@ -62,18 +62,20 @@ Task("Package-Squirrel")
 		EnsureDirectoryExists(squirrelDeployDir);
 
 		// Create nuget package
+		var appFiles = GetFiles(buildDir.Path + "/**/*.*").Select(f => f.FullPath);
+		var deltaCompressionFiles = GetFiles($"{(toolsDir + Directory("DeltaCompressionDotNet/lib/net45")).Path}/*.dll").Select(f => f.FullPath);
+		var monoCecilFiles = GetFiles($"{(toolsDir + Directory("Mono.Cecil/lib/net45")).Path}/*.dll").Select(f => f.FullPath);
+		var splatFiles = GetFiles($"{(toolsDir + Directory("Splat/lib/Net45")).Path}/*.dll").Select(f => f.FullPath);
+		var iCSharpCodeFiles = GetFiles($"{(toolsDir + Directory("squirrel.windows/lib/Net45")).Path}/ICSharpCode.SharpZipLib.*").Select(f => f.FullPath);
+		var squirrelFiles = GetFiles($"{(toolsDir + Directory("squirrel.windows/lib/Net45")).Path}/*Squirrel.dll").Select(f => f.FullPath);
 		var releaseFiles = new HashSet<string>(
-				GetFiles(buildDir.Path + "/**/*.*").Select(f => f.FullPath)
-					.Concat(GetFiles((toolsDir + Directory("DeltaCompressionDotNet/lib/net45")).Path + "/*.dll").Select(f => f.FullPath)
-						.Concat(GetFiles((toolsDir + Directory("Mono.Cecil/lib/net45")).Path + "/*.dll").Select(f => f.FullPath)
-							.Concat(GetFiles((toolsDir + Directory("Splat/lib/Net45")).Path + "/*.dll").Select(f => f.FullPath)
-								.Concat(GetFiles((toolsDir + Directory("squirrel.windows/lib/Net45")).Path + "/ICSharpCode.SharpZipLib.*").Select(f => f.FullPath)
-									.Concat(GetFiles((toolsDir + Directory("squirrel.windows/lib/Net45")).Path + "/*Squirrel.dll").Select(f => f.FullPath))
-								)
-							)
-						)
-					)
-			);
+			appFiles
+				.Concat(deltaCompressionFiles)
+				.Concat(monoCecilFiles)
+				.Concat(splatFiles)
+				.Concat(iCSharpCodeFiles)
+				.Concat(squirrelFiles)
+		);
 		releaseFiles.RemoveWhere(f => f.Contains(".vshost.") || f.EndsWith(".pdb"));
 
 		var nuGetPackSettings = new NuGetPackSettings
@@ -132,9 +134,7 @@ Task("Package-Choco")
 		EnsureDirectoryExists(deployDir);
 		EnsureDirectoryExists(chocoDeployDir);
 
-		var url = /*configuration == "Debug"
-			? */MakeAbsolute(Directory("./deploy/GitHub").Path).FullPath/*
-			: githubRepoUrl + "/releases/download/" + version*/;
+		var url = $"{githubRepoUrl}/releases/download/{version}";
 
 		ReplaceRegexInFiles(chocoInstallFile, @"\$url = '.+'", $"$url = '{url}/carnac.{version}.zip'");
 		ReplaceRegexInFiles(chocoInstallFile, @"\$zipFileHash = '.+'", $"$zipFileHash = '{zipFileHash}'");
