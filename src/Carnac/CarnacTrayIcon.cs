@@ -2,6 +2,8 @@ using System;
 using System.Drawing;
 using System.Reflection;
 using System.Windows.Forms;
+using System.Linq;
+using System.Windows;
 using Application = System.Windows.Application;
 
 namespace Carnac
@@ -39,7 +41,16 @@ namespace Carnac
         void NotifyIconClick(object sender, MouseEventArgs mouseEventArgs)
         {
             if (mouseEventArgs.Button == MouseButtons.Left)
-                OpenPreferences();
+                if (Application.Current.Windows.Cast<Window>().Any(x=>x.Name=="PreferencesViewWindow"))
+                {
+                    Application.Current.Windows.Cast<Window>()
+                    .Where(x => x.Name == "PreferencesViewWindow")
+                    .ToArray()[0].Activate();                               //We have only one window, so the array has only one element
+                }
+                else
+                {
+                    OpenPreferences();
+                }
         }
 
         public void Dispose()
