@@ -41,6 +41,7 @@ namespace Carnac
         void NotifyIconClick(object sender, MouseEventArgs mouseEventArgs)
         {
             if (mouseEventArgs.Button == MouseButtons.Left)
+            {
                 var preferencesWindow = Application.Current.Windows.Cast<Window>().FirstOrDefault(x => x.Name == "PreferencesViewWindow");
                 if (preferencesWindow != null)
                 {
@@ -50,6 +51,7 @@ namespace Carnac
                 {
                     OpenPreferences();
                 }
+            }
         }
 
         public void Dispose()
