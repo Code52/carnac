@@ -41,11 +41,10 @@ namespace Carnac
         void NotifyIconClick(object sender, MouseEventArgs mouseEventArgs)
         {
             if (mouseEventArgs.Button == MouseButtons.Left)
-                if (Application.Current.Windows.Cast<Window>().Any(x=>x.Name=="PreferencesViewWindow"))
+                var preferencesWindow = Application.Current.Windows.Cast<Window>().FirstOrDefault(x => x.Name == "PreferencesViewWindow");
+                if (preferencesWindow != null)
                 {
-                    Application.Current.Windows.Cast<Window>()
-                    .Where(x => x.Name == "PreferencesViewWindow")
-                    .ToArray()[0].Activate();                               //We have only one window, so the array has only one element
+                    preferencesWindow.Activate();
                 }
                 else
                 {
