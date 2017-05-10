@@ -11,7 +11,8 @@
                       Foreground="{DynamicResource BlackBrush}"
                       d:DataContext="{d:DesignInstance ui:PreferencesViewModel}" mc:Ignorable="d"
                       ShowTitleBar="False" ShowMinButton="False" ShowMaxRestoreButton="False"
-                      SaveWindowPosition="True" utilities:DesignTimeHelper.Background="Black">
+                      SaveWindowPosition="True" utilities:DesignTimeHelper.Background="Black"
+                      Name="PreferencesViewWindow">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
