@@ -1,4 +1,4 @@
-version: 2.0.0.{build}
+version: 2.1.{build}
 configuration: Release
 skip_branch_with_pr: true
 skip_tags: true
@@ -11,21 +11,32 @@ assembly_info:
 environment:
   Version: $(APPVEYOR_BUILD_VERSION)
   GithubRepo: $(APPVEYOR_REPO_NAME)
+  GithubAuthToken:
+    secure: tvr7i0kJpT3SAdYG037M6zU1g6FYXHAUUaseqBTUzasqsUo6mumdcW+huf5/351p
 build_script:
-- build.cmd Release
+- cmd: PowerShell -Version 2.0 .\build.ps1 -Configuration Release -Experimental -ScriptArgs '--packageversion="%APPVEYOR_BUILD_VERSION%" --authtoken="%GithubAuthToken%"'
 test:
   assemblies:
     - '**\Carnac.Tests.dll'
 artifacts:
-- path: deploy\*.nupkg
+- path: deploy\Chocolatey\*.nupkg
   name: ChocoPackage
-- path: deploy\*.zip
+- path: deploy\GitHub\*.zip
   name: ZipPackage
+- path: deploy\Squirrel\Releases\*
+  name: SquirrelPackage
 deploy:
 - provider: GitHub
   auth_token:
     secure: tvr7i0kJpT3SAdYG037M6zU1g6FYXHAUUaseqBTUzasqsUo6mumdcW+huf5/351p
   artifact: ZipPackage
+  draft: false
+  on:
+    branch: master
+- provider: GitHub
+  auth_token:
+    secure: tvr7i0kJpT3SAdYG037M6zU1g6FYXHAUUaseqBTUzasqsUo6mumdcW+huf5/351p
+  artifact: SquirrelPackage
   draft: false
   on:
     branch: master

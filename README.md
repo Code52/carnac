@@ -15,9 +15,15 @@ You can install the latest version of Carnac via [Chocolatey](https://chocolatey
 cinst carnac
 ```
 
-Alternatively, you can grab the latest zip file from [here](https://github.com/Code52/carnac/releases/latest) and unpack it.
+Alternatively, you can grab the latest zip file from [here](https://github.com/Code52/carnac/releases/latest), unpack it and run `Setup.exe`.
 
 **Note:** Carnac requires .NET 4.5.2 to work - you can install that from [here](https://www.microsoft.com/en-au/download/details.aspx?id=42643) if you don't have it already.
+
+### Updating
+
+We use `Squirrel.Windows` to update your `carnac` application. 
+
+The application will check for updates in the background, if a new version has been released, it will automatically install the new version and once you restart `carnac` you will be up-to-date.
 
 ### Usage
 

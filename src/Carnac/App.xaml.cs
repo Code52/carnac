@@ -1,10 +1,14 @@
-﻿using System.Windows;
+﻿using System;
+using System.IO;
+using System.Reactive.Linq;
+using System.Windows;
 using Carnac.Logic;
 using Carnac.Logic.KeyMonitor;
 using Carnac.Logic.Models;
 using Carnac.UI;
 using Carnac.Utilities;
 using SettingsProviderNet;
+using Squirrel;
 
 namespace Carnac
 {
@@ -16,6 +20,10 @@ namespace Carnac
         KeyShowView keyShowView;
         CarnacTrayIcon trayIcon;
         KeysController carnac;
+
+#if !DEBUG
+        readonly string carnacUpdateUrl = "https://github.com/Code52/carnac";
+#endif
 
         public App()
         {
@@ -43,6 +51,25 @@ namespace Carnac
 
             carnac = new KeysController(keyShowViewModel.Messages, messageProvider, new ConcurrencyService(), settingsProvider);
             carnac.Start();
+
+#if !DEBUG
+            Observable
+                .Timer(TimeSpan.FromMinutes(5))
+                .Subscribe(async x =>
+                {
+                    try
+                    {
+                        using (var mgr = UpdateManager.GitHubUpdateManager(carnacUpdateUrl))
+                        {
+                            await mgr.Result.UpdateApp();
+                        }
+        }
+                    catch
+                    {
+                        // Do something useful with the exception
+                    }
+                });
+#endif
 
             base.OnStartup(e);
         }

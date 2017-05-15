@@ -76,14 +76,16 @@ namespace Carnac.UI
                                                          "Paul Jenkins",
                                                          "Dmitry Pursanov",
                                                          "Chris Sainty",
-                                                         "Andrew Tobin"
+                                                         "Andrew Tobin",
+                                                         "Henrik Andersson"
                                                      };
         readonly List<string> components = new List<string>
                                                        {
                                                          "MahApps.Metro",
                                                          "Fody",
                                                          "NSubstitute",
-                                                         "Reactive Extensions"
+                                                         "Reactive Extensions",
+                                                         "Squirrel.Windows"
                                                      };
         public string Authors
         {
