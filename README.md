@@ -27,7 +27,7 @@ The application will check for updates in the background, if a new version has b
 
 ### Usage
 
-** Enabling silent mode **
+**Enabling silent mode**
 
 If you want to stop `Carnac` from recording certain key strokes, you can enter _silent mode_ by pressing `Ctrl+Alt+P`. To exit _silent mode_ you simply press `Ctrl+Alt+P` again.
 
