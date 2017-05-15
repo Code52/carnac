@@ -117,7 +117,17 @@ Task("Package-Zip")
 		EnsureDirectoryExists(deployDir);
 		EnsureDirectoryExists(gitHubDeployDir);
 
-		Zip(squirrelReleaseDir, zipFile);
+		var files = GetFiles($"{squirrelReleaseDir.Path}\\carnac-{version}-*.nupkg")
+			.Select(f => f.FullPath)
+			.Concat(
+				new []
+				{
+					$"{squirrelReleaseDir.Path}\\RELEASES",
+					$"{squirrelReleaseDir.Path}\\Setup.exe"
+				}
+			);
+		
+		Zip(squirrelReleaseDir, zipFile, files);
 		zipFileHash = CalculateFileHash(zipFile, HashAlgorithm.SHA256).ToHex();
 	});
 
