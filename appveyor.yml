@@ -2,6 +2,7 @@ version: 2.1.{build}
 configuration: Release
 skip_branch_with_pr: true
 skip_tags: true
+image: Visual Studio 2017
 assembly_info:
   patch: true
   file: '**\AssemblyInfo.*'
