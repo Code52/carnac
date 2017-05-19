@@ -5,6 +5,28 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Keymaps\konami.yml" />
+    <None Remove="Keymaps\ncrunch.yml" />
+    <None Remove="Keymaps\resharper.yml" />
+    <None Remove="Keymaps\visual-studio.yml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Keymaps\konami.yml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Keymaps\ncrunch.yml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Keymaps\resharper.yml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Keymaps\visual-studio.yml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Fody" Version="2.0.9" />
     <PackageReference Include="PropertyChanged.Fody" Version="1.53.0" />
     <PackageReference Include="SettingsProviderNet" Version="2.1.1" />
