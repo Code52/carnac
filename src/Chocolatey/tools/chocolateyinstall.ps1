@@ -1,7 +1,7 @@
 $ErrorActionPreference = 'Stop';
 $packageName = 'carnac'
-$url = 'Download Url Here'
-$zipFileHash = 'Zip File Hash Here'
+$url = 'https://github.com/Code52/carnac/releases/download/1.0.0/carnac.1.0.0.zip'
+$zipFileHash = 'ca64d790c9e11474e6716262e05014daba3e869b7e2f438f23944f5f90a67064'
 $toolsDir = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
 $installDir = "$toolsDir\Carnac"
 

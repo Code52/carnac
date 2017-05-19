@@ -1,10 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net452</TargetFramework>
+    <TargetFramework>net462</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0" />
     <PackageReference Include="NSubstitute" Version="2.0.3" />
     <PackageReference Include="Shouldly" Version="2.8.2.0" />
     <PackageReference Include="SettingsProviderNet" Version="2.1.1" />
@@ -31,6 +32,10 @@
   <ItemGroup>
     <ProjectReference Include="..\Carnac.Logic\Carnac.Logic.csproj" />
     <ProjectReference Include="..\Carnac\Carnac.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Service Include="{82a7f48d-3b50-4b1e-b82e-3ada8210c358}" />
   </ItemGroup>
 
 </Project>
