@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Reactive.Linq;
 using Carnac.Logic.KeyMonitor;
 
-namespace Carnac.Tests
+namespace Carnac.Logic
 {
     public class KeyPlayer : List<InterceptKeyEventArgs>, IInterceptKeys
     {

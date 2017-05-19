@@ -7,8 +7,8 @@ using System.Reactive.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Forms;
+using Carnac.Logic;
 using Carnac.Logic.KeyMonitor;
-using Carnac.Tests;
 using Microsoft.CSharp;
 
 namespace KeyStreamCapture

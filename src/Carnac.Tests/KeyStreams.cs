@@ -1,4 +1,5 @@
 using System.Windows.Forms;
+using Carnac.Logic;
 using Carnac.Logic.KeyMonitor;
 
 namespace Carnac.Tests
