@@ -1,13 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26403.7
+VisualStudioVersion = 15.0.26430.6
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Carnac", "Carnac\Carnac.csproj", "{3D54543F-9FF2-4298-A621-0C66A36412CD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Carnac.Tests", "Carnac.Tests\Carnac.Tests.csproj", "{820B7770-FCD1-4987-A88C-E5DAE74F4AD6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Carnac.Tests", "Carnac.Tests\Carnac.Tests.csproj", "{820B7770-FCD1-4987-A88C-E5DAE74F4AD6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Carnac.Logic", "Carnac.Logic\Carnac.Logic.csproj", "{614470A0-432C-46EB-B0EB-DE0A9062FC22}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Carnac.Logic", "Carnac.Logic\Carnac.Logic.csproj", "{614470A0-432C-46EB-B0EB-DE0A9062FC22}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{8A90581C-CDD7-4F29-9325-1AACC5D11EE9}"
 	ProjectSection(SolutionItems) = preProject
@@ -18,6 +18,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KeyStreamCapture", "KeyStre
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D23D1BAB-8B80-4B73-893C-F669039FC44D}"
 	ProjectSection(SolutionItems) = preProject
+		..\appveyor.yml = ..\appveyor.yml
 		..\build.cake = ..\build.cake
 		..\build.ps1 = ..\build.ps1
 		..\README.md = ..\README.md

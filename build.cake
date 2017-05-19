@@ -1,4 +1,4 @@
-#tool "nuget:?package=xunit.runners&version=1.9.2";
+#tool "nuget:?package=xunit.runner.console";
 #tool "nuget:?package=Squirrel.Windows";
 
 #addin Cake.FileHelpers
@@ -49,7 +49,7 @@ Task("Run-Unit-Tests")
     .IsDependentOn("Build")
     .Does(() =>
     {
-        XUnit($"./src/Carnac.Tests/bin/{configuration}/*.Tests.dll");
+        XUnit2($"./src/Carnac.Tests/bin/{configuration}/*.Tests.dll");
     });
 
 Task("Package-Squirrel")

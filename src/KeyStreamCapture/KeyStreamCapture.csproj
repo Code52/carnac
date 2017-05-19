@@ -129,7 +129,7 @@
       <Name>Carnac.Logic</Name>
     </ProjectReference>
     <ProjectReference Include="..\Carnac.Tests\Carnac.Tests.csproj">
-      <Project>{820B7770-FCD1-4987-A88C-E5DAE74F4AD6}</Project>
+      <Project>{820b7770-fcd1-4987-a88c-e5dae74f4ad6}</Project>
       <Name>Carnac.Tests</Name>
     </ProjectReference>
   </ItemGroup>
