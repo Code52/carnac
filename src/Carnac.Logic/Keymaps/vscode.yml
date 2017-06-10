@@ -1,0 +1,456 @@
+group:          vscode
+process:        Code
+
+# Reference: https://code.visualstudio.com/docs/getstarted/keybindings
+
+shortcuts:
+    - name: Cut line (empty selection)
+      keys:
+      - Ctrl+X
+    - name: Copy line (empty selection)
+      keys:
+      - Ctrl+C
+    - name: Delete Line
+      keys:
+      - Ctrl+Shift+K
+    - name: Insert Line Below
+      keys:
+      - Ctrl+Enter
+    - name: Insert Line Above
+      keys:
+      - Ctrl+Shift+Enter
+    - name: Move Line Down
+      keys:
+      - Alt+Down
+    - name: Move Line Up
+      keys:
+      - Alt+Up
+    - name: Copy Line Down
+      keys:
+      - Shift+Alt+Down
+    - name: Copy Line Up
+      keys:
+      - Shift+Alt+Up
+    - name: Add Selection To Next Find Match
+      keys:
+      - Ctrl+D
+    - name: Move Last Selection To Next Find Match
+      keys:
+      - Ctrl+K Ctrl+D
+    - name: Undo last cursor operation
+      keys:
+      - Ctrl+U
+    - name: Insert cursor at end of each line selected
+      keys:
+      - Shift+Alt+I
+    - name: Select all occurrences of current selection
+      keys:
+      - Ctrl+Shift+L
+    - name: Select all occurrences of current word
+      keys:
+      - Ctrl+F2
+    - name: Select current line
+      keys:
+      - Ctrl+I
+    - name: Insert Cursor Below
+      keys:
+      - Ctrl+Alt+Down
+    - name: Insert Cursor Above
+      keys:
+      - Ctrl+Alt+Up
+    - name: Jump to matching bracket
+      keys:
+      - Ctrl+Shift+\
+    - name: Indent Line
+      keys:
+      - Ctrl+]
+    - name: Outdent Line
+      keys:
+      - Ctrl+[
+    - name: Go to Beginning of Line
+      keys:
+      - Home
+    - name: Go to End of Line
+      keys:
+      - End
+    - name: Go to End of File
+      keys:
+      - Ctrl+End
+    - name: Go to Beginning of File
+      keys:
+      - Ctrl+Home
+    - name: Scroll Line Down
+      keys:
+      - Ctrl+Down
+    - name: Scroll Line Up
+      keys:
+      - Ctrl+Up
+    - name: Scroll Page Down
+      keys:
+      - Alt+PageDown
+    - name: Scroll Page Up
+      keys:
+      - Alt+PageUp
+    - name: Fold (collapse) region
+      keys:
+      - Ctrl+Shift+[
+    - name: Unfold (uncollapse) region
+      keys:
+      - Ctrl+Shift+]
+    - name: Fold (collapse) all subregions
+      keys:
+      - Ctrl+K Ctrl+[
+    - name: Unfold (uncollapse) all subregions
+      keys:
+      - Ctrl+K Ctrl+]
+    - name: Fold (collapse) all regions
+      keys:
+      - Ctrl+K Ctrl+0
+    - name: Unfold (uncollapse) all regions
+      keys:
+      - Ctrl+K Ctrl+J
+    - name: Add Line Comment
+      keys:
+      - Ctrl+K Ctrl+C
+    - name: Remove Line Comment
+      keys:
+      - Ctrl+K Ctrl+U
+    - name: Toggle Line Comment
+      keys:
+      - Ctrl+/
+    - name: Toggle Block Comment
+      keys:
+      - Shift+Alt+A
+    - name: Find
+      keys:
+      - Ctrl+F
+    - name: Replace
+      keys:
+      - Ctrl+H
+    - name: Find Next
+      keys:
+      - F3
+    - name: Find Previous
+      keys:
+      - Shift+F3
+    - name: Select All Occurrences of Find Match
+      keys:
+      - Alt+Enter
+    - name: Toggle Find Case Sensitive
+      keys:
+      - Alt+C
+    - name: Toggle Find Regex
+      keys:
+      - Alt+R
+    - name: Toggle Find Whole Word
+      keys:
+      - Alt+W
+    - name: Toggle Use of Tab Key for Setting Focus
+      keys:
+      - Ctrl+M
+    - name: Toggle Render Whitespace
+      keys:
+      - unassigned
+    - name: Toggle Word Wrap
+      keys:
+      - Alt+Z
+    - name: Trigger Suggest
+      keys:
+      - Ctrl+Space
+    - name: Trigger Parameter Hints
+      keys:
+      - Ctrl+Shift+Space
+    - name: Format Document
+      keys:
+      - Shift+Alt+F
+    - name: Format Selection
+      keys:
+      - Ctrl+K Ctrl+F
+    - name: Go to Definition
+      keys:
+      - F12
+    - name: Show Hover
+      keys:
+      - Ctrl+K Ctrl+I
+    - name: Peek Definition
+      keys:
+      - Alt+F12
+    - name: Open Definition to the Side
+      keys:
+      - Ctrl+K F12
+    - name: Quick Fix
+      keys:
+      - Ctrl+.
+    - name: Show References
+      keys:
+      - Shift+F12
+    - name: Rename Symbol
+      keys:
+      - F2
+    - name: Replace with Next Value
+      keys:
+      - Ctrl+Shift+.
+    - name: Replace with Previous Value
+      keys:
+      - Ctrl+Shift+,
+    - name: Expand AST Select
+      keys:
+      - Shift+Alt+Right
+    - name: Shrink AST Select
+      keys:
+      - Shift+Alt+Left
+    - name: Trim Trailing Whitespace
+      keys:
+      - Ctrl+K Ctrl+X
+    - name: Change Language Mode
+      keys:
+      - Ctrl+K M
+    - name: Show All Symbols
+      keys:
+      - Ctrl+T
+    - name: Go to Line...
+      keys:
+      - Ctrl+G
+    - name: Go to File..., Quick Open
+      keys:
+      - Ctrl+P
+    - name: Go to Symbol...
+      keys:
+      - Ctrl+Shift+O
+    - name: Show Problems
+      keys:
+      - Ctrl+Shift+M
+    - name: Go to Next Error or Warning
+      keys:
+      - F8
+    - name: Go to Previous Error or Warning
+      keys:
+      - Shift+F8
+    - name: Show All Commands
+      keys:
+      - Ctrl+Shift+P
+    - name: Navigate Editor Group History
+      keys:
+      - Ctrl+Shift+Tab
+    - name: Go Back
+      keys:
+      - Alt+Left
+    - name: Go Forward
+      keys:
+      - Alt+Right
+    - name: New Window
+      keys:
+      - Ctrl+Shift+N
+    - name: Close Window
+      keys:
+      - Ctrl+W
+    - name: Close Editor
+      keys:
+      - Ctrl+F4
+    - name: Close Folder
+      keys:
+      - Ctrl+K F
+    - name: Cycle Between Editor Groups
+      keys:
+      - unassigned
+    - name: Split Editor
+      keys:
+      - Ctrl+\
+    - name: Focus into First Editor Group
+      keys:
+      - Ctrl+1
+    - name: Focus into Second Editor Group
+      keys:
+      - Ctrl+2
+    - name: Focus into Third Editor Group
+      keys:
+      - Ctrl+3
+    - name: Focus into Editor Group on the Left
+      keys:
+      - Ctrl+K Ctrl+Left
+    - name: Focus into Editor Group on the Right
+      keys:
+      - Ctrl+K Ctrl+Right
+    - name: Move Editor Left
+      keys:
+      - Ctrl+Shift+PageUp
+    - name: Move Editor Right
+      keys:
+      - Ctrl+Shift+PageDown
+    - name: Move Active Editor Group Left
+      keys:
+      - Ctrl+K Left
+    - name: Move Active Editor Group Right
+      keys:
+      - Ctrl+K Right
+    - name: New File
+      keys:
+      - Ctrl+N
+    - name: Open File...
+      keys:
+      - Ctrl+O
+    - name: Save
+      keys:
+      - Ctrl+S
+    - name: Save All
+      keys:
+      - Ctrl+K S
+    - name: Save As...
+      keys:
+      - Ctrl+Shift+S
+    - name: Close
+      keys:
+      - Ctrl+F4
+    - name: Close Others
+      keys:
+      - unassigned
+    - name: Close Group
+      keys:
+      - Ctrl+K W
+    - name: Close Other Groups
+      keys:
+      - unassigned
+    - name: Close Group to Left
+      keys:
+      - unassigned
+    - name: Close Group to Right
+      keys:
+      - unassigned
+    - name: Close All
+      keys:
+      - Ctrl+K Ctrl+W
+    - name: Reopen Closed Editor
+      keys:
+      - Ctrl+Shift+T
+    - name: Keep Open
+      keys:
+      - Ctrl+K Enter
+    - name: Open Next
+      keys:
+      - Ctrl+Tab
+    - name: Open Previous
+      keys:
+      - Ctrl+Shift+Tab
+    - name: Copy Path of Active File
+      keys:
+      - Ctrl+K P
+    - name: Reveal Active File in Windows
+      keys:
+      - Ctrl+K R
+    - name: Show Opened File in New Window
+      keys:
+      - Ctrl+K O
+    - name: Compare Opened File With
+      keys:
+      - unassigned
+    - name: Toggle Full Screen
+      keys:
+      - F11
+    - name: Toggle Zen Mode
+      keys:
+      - Ctrl+K Z
+    - name: Leave Zen Mode
+      keys:
+      - Escape Escape
+    - name: Zoom in
+      keys:
+      - Ctrl+=
+    - name: Zoom out
+      keys:
+      - Ctrl+-
+    - name: Reset Zoom
+      keys:
+      - Ctrl+Numpad0
+    - name: Toggle Sidebar Visibility
+      keys:
+      - Ctrl+B
+    - name: Show Explorer / Toggle Focus
+      keys:
+      - Ctrl+Shift+E
+    - name: Show Debug
+      keys:
+      - Ctrl+Shift+D
+    - name: Show Source Control
+      keys:
+      - Ctrl+Shift+G
+    - name: Show Extensions
+      keys:
+      - Ctrl+Shift+X
+    - name: Show Output
+      keys:
+      - Ctrl+Shift+U
+    - name: Quick Open View
+      keys:
+      - Ctrl+Q
+    - name: Show Search
+      keys:
+      - Ctrl+Shift+F
+    - name: Replace in Files
+      keys:
+      - Ctrl+Shift+H
+    - name: Toggle Search Details
+      keys:
+      - Ctrl+Shift+J
+    - name: Open New Command Prompt
+      keys:
+      - Ctrl+Shift+C
+    - name: Toggle Markdown Preview
+      keys:
+      - Ctrl+Shift+V
+    - name: Open Preview to the Side
+      keys:
+      - Ctrl+K V
+    - name: Toggle Integrated Terminal
+      keys:
+      - Ctrl+`
+    - name: Open User Settings
+      keys:
+      - Ctrl+,
+    - name: Open Workspace Settings
+      keys:
+      - unassigned
+    - name: Open Keyboard Shortcuts
+      keys:
+      - Ctrl+K Ctrl+S
+    - name: Open User Snippets
+      keys:
+      - unassigned
+    - name: Select Color Theme
+      keys:
+      - Ctrl+K Ctrl+T
+    - name: Configure Display Language
+      keys:
+      - unassigned
+    - name: Toggle Breakpoint
+      keys:
+      - F9
+    - name: Start
+      keys:
+      - F5
+    - name: Continue
+      keys:
+      - F5
+    - name: Start (without debugging)
+      keys:
+      - Ctrl+F5
+    - name: Pause
+      keys:
+      - F6
+    - name: Step Into
+      keys:
+      - F11
+    - name: Step Out
+      keys:
+      - Shift+F11
+    - name: Step Over
+      keys:
+      - F10
+    - name: Stop
+      keys:
+      - Shift+F5
+    - name: Show Hover
+      keys:
+      - Ctrl+K Ctrl+I
+    - name: Run Build Task
+      keys:
+      - Ctrl+Shift+B
