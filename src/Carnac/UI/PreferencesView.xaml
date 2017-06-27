@@ -7,7 +7,7 @@
                       xmlns:utilities="clr-namespace:Carnac.Utilities"
                       xmlns:carnac="clr-namespace:Carnac"
                       x:Class="Carnac.UI.PreferencesView"
-                      Width="610" Height="420" Icon="../icon.ico" 
+                      Width="610" Height="420" Icon="../icon.ico"
                       Foreground="{DynamicResource BlackBrush}"
                       d:DataContext="{d:DesignInstance ui:PreferencesViewModel}" mc:Ignorable="d"
                       ShowTitleBar="False" ShowMinButton="False" ShowMaxRestoreButton="False"
@@ -25,7 +25,7 @@
                 <ResourceDictionary
                     Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseDark.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            
+
             <DataTemplate x:Key="ColourPickerTemplate">
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Stretch"
                                 d:DataContext="{d:DesignInstance ui:AvailableColor}">
@@ -56,7 +56,7 @@
                     <StackPanel Margin="10,0,0,0" Orientation="Vertical">
                         <carnac:PositionOnMonitorSelector />
                         <ui:PreferencesField Header="Top Offset">
-                            <Slider Value="{Binding Settings.TopOffset}" IsSnapToTickEnabled="True" 
+                            <Slider Value="{Binding Settings.TopOffset}" IsSnapToTickEnabled="True"
                                 LargeChange="10"
                             Maximum="{Binding SelectedScreen.Height}" Minimum="0" SmallChange="1" TickFrequency="20" />
                             <ui:PreferencesField.SecondaryControl>
@@ -84,6 +84,10 @@
                                 <TextBox Foreground="White" Text="{Binding Settings.RightOffset}" />
                             </ui:PreferencesField.SecondaryControl>
                         </ui:PreferencesField>
+                        <Separator Height="10" Margin="0"/>
+                         <ui:PreferencesField Header="Auto Update">
+                             <CheckBox IsChecked="{Binding Settings.AutoUpdate}" Content="auto check updates from GitHub (need to restart this program)" />
+                         </ui:PreferencesField>
                     </StackPanel>
                     <StackPanel HorizontalAlignment="Right" Orientation="Horizontal" Grid.Row="1" Margin="5">
                         <Button Width="150" Margin="0 0 5 0" Content="Reset to Defaults" Command="{Binding ResetToDefaultsCommand}" />
