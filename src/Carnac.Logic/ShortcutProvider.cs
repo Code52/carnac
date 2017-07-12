@@ -15,7 +15,11 @@ namespace Carnac.Logic
         {
             string folder = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName) + @"\Keymaps\";
             string filter = "*.yml";
-            if (!Directory.Exists(folder)) return;
+            if (!Directory.Exists(folder))
+            {
+                shortcuts = new List<ShortcutCollection>();
+                return;
+            }
             string[] files = Directory.GetFiles(folder, filter);
 
             shortcuts = GetYamlMappings(files).Select(GetShortcuts).ToList();
