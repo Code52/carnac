@@ -20,7 +20,7 @@ namespace Carnac.Logic
         readonly IPasswordModeService passwordModeService;
         readonly IDesktopLockEventService desktopLockEventService;
 
-        private readonly IList<Keys> modifierKeys =
+        private static readonly IList<Keys> modifierKeys =
             new List<Keys>
                 {
                     Keys.LControlKey,
@@ -68,7 +68,7 @@ namespace Carnac.Logic
 
                 var keyStreamSubsription = interceptKeysSource.GetKeyStream()
                     .Select(DetectWindowsKey)
-                    .Where(k => !IsModifierKeyPress(k) && k.KeyDirection == KeyDirection.Down)
+                    .Where(k =>  k.KeyDirection == KeyDirection.Down)
                     .Select(ToCarnacKeyPress)
                     .Where(keypress => keypress != null)
                     .Where(k => !passwordModeService.CheckPasswordMode(k.InterceptKeyEventArgs))
@@ -91,7 +91,7 @@ namespace Carnac.Logic
             return interceptKeyEventArgs;
         }
 
-        bool IsModifierKeyPress(InterceptKeyEventArgs interceptKeyEventArgs)
+        public static bool IsModifierKeyPress(InterceptKeyEventArgs interceptKeyEventArgs)
         {
             return modifierKeys.Contains(interceptKeyEventArgs.Key);
         }
@@ -123,6 +123,15 @@ namespace Carnac.Logic
             var controlPressed = interceptKeyEventArgs.ControlPressed;
             var altPressed = interceptKeyEventArgs.AltPressed;
             var shiftPressed = interceptKeyEventArgs.ShiftPressed;
+
+            if (IsModifierKeyPress(interceptKeyEventArgs))
+            {
+                controlPressed = false;
+                altPressed = false;
+                shiftPressed = false;
+                isWinKeyPressed = false;
+            }
+
             if (controlPressed)
                 yield return "Ctrl";
             if (altPressed)
