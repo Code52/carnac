@@ -5,13 +5,14 @@ using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media.Animation;
 using Carnac.Logic;
-using Carnac.Logic.MouseMonitor;
+using Gma.System.MouseKeyHook;
 
 namespace Carnac.UI
 {
     public partial class KeyShowView
     {
         private Storyboard sb;
+        readonly IKeyboardMouseEvents m_GlobalHook = Hook.GlobalEvents();
 
         public KeyShowView(KeyShowViewModel keyShowViewModel)
         {
@@ -129,14 +130,14 @@ namespace Carnac.UI
 
         void SetupMouseEvents()
         {
-            InterceptMouse.Current.m_GlobalHook.MouseDown += OnMouseDown;
-            InterceptMouse.Current.m_GlobalHook.MouseMove += OnMouseMove;
+            m_GlobalHook.MouseDown += OnMouseDown;
+            m_GlobalHook.MouseMove += OnMouseMove;
         }
 
         void DestroyMouseEvents()
         {
-            InterceptMouse.Current.m_GlobalHook.MouseDown -= OnMouseDown;
-            InterceptMouse.Current.m_GlobalHook.MouseMove -= OnMouseMove;
+            m_GlobalHook.MouseDown -= OnMouseDown;
+            m_GlobalHook.MouseMove -= OnMouseMove;
         }
 
         private void OnMouseDown(object sender, System.Windows.Forms.MouseEventArgs e)
