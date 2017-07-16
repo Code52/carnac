@@ -40,8 +40,23 @@ namespace Carnac.UI
                 if (Settings.ItemBackgroundColor == name)
                     ItemBackgroundColor = availableColor;
 
+                if (Settings.LeftClickColor == name)
+                    LeftClickColor = availableColor;
+                if (Settings.RightClickColor == name)
+                    RightClickColor = availableColor;
+
                 AvailableColors.Add(availableColor);
             }
+
+            if (LeftClickColor == null)
+            {
+                LeftClickColor = new AvailableColor("OrangeRed", Colors.OrangeRed);
+            }
+            if (RightClickColor == null)
+            {
+                RightClickColor = new AvailableColor("RoyalBlue", Colors.RoyalBlue);
+            }
+
 
             SaveCommand = new DelegateCommand(SaveSettings);
             ResetToDefaultsCommand = new DelegateCommand(() => settingsProvider.ResetToDefaults<PopupSettings>());
@@ -77,7 +92,8 @@ namespace Carnac.UI
                                                          "Dmitry Pursanov",
                                                          "Chris Sainty",
                                                          "Andrew Tobin",
-                                                         "Henrik Andersson"
+                                                         "Henrik Andersson",
+                                                         "Boris Fritscher"
                                                      };
         readonly List<string> components = new List<string>
                                                        {
@@ -85,7 +101,8 @@ namespace Carnac.UI
                                                          "Fody",
                                                          "NSubstitute",
                                                          "Reactive Extensions",
-                                                         "Squirrel.Windows"
+                                                         "Squirrel.Windows",
+                                                         "MouseKeyHook"
                                                      };
         public string Authors
         {
@@ -100,6 +117,10 @@ namespace Carnac.UI
         public AvailableColor FontColor { get; set; }
 
         public AvailableColor ItemBackgroundColor { get; set; }
+
+        public AvailableColor LeftClickColor { get; set; }
+
+        public AvailableColor RightClickColor { get; set; }
 
         void Visit()
         {
@@ -139,6 +160,8 @@ namespace Carnac.UI
             Settings.SettingsConfigured = true;
             Settings.FontColor = FontColor.Name;
             Settings.ItemBackgroundColor = ItemBackgroundColor.Name;
+            Settings.LeftClickColor = LeftClickColor.Name;
+            Settings.RightClickColor = RightClickColor.Name;
             settingsProvider.SaveSettings(Settings);
         }
 

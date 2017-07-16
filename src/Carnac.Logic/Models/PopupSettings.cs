@@ -93,5 +93,36 @@ namespace Carnac.Logic.Models
         public bool SettingsConfigured { get; set; }
         public bool ShowOnlyModifiers { get; set; }
         public bool ShowSpaceAsUnicode { get; set; }
+
+        [DefaultValue(true)]
+        public bool ShowMouseClicks { get; set; }
+
+        [DefaultValue("OrangeRed")]
+        public string LeftClickColor { get; set; }
+
+        [DefaultValue("RoyalBlue")]
+        public string RightClickColor { get; set; }
+
+        [DefaultValue(1)]
+        public double ClickStartScale { get; set; }
+
+        [DefaultValue(4)]
+        public double ClickStopScale { get; set; }
+
+        [DefaultValue(3700)]
+        public int ClickFadeDelay { get; set; }
+
+        [DefaultValue(1)]
+        public double ClickStartBorder { get; set; }
+
+        [DefaultValue(0.8)]
+        public double ClickStartOpacity { get; set; }
+
+        [DefaultValue(2)]
+        public double ClickStopBorder { get; set; }
+
+        [DefaultValue(0)]
+        public double ClickStopOpacity { get; set; }
+        public string ClickColor { get; set; }
     }
 }

@@ -8,25 +8,24 @@ using Gma.System.MouseKeyHook;
 
 namespace Carnac.Logic.MouseMonitor
 {
-    class InterceptMouse : IInterceptKeys
+    public class InterceptMouse : IInterceptKeys
     {
 
         public static readonly InterceptMouse Current = new InterceptMouse();
+        public readonly IKeyboardMouseEvents m_GlobalHook = Hook.GlobalEvents();
         readonly IObservable<InterceptKeyEventArgs> keyStream;
         private IObserver<InterceptKeyEventArgs> observer;
         private readonly KeysConverter kc = new KeysConverter();
+        
 
         InterceptMouse()
         {
             keyStream = Observable.Create<InterceptKeyEventArgs>(observer =>
             {
                 this.observer = observer;
-                var m_GlobalHook = Hook.GlobalEvents();
-
                 m_GlobalHook.MouseClick += OnMouseClick;
                 m_GlobalHook.MouseDoubleClick += OnMouseDoubleClick;
                 m_GlobalHook.MouseWheel += HookManager_MouseWheel;
-                m_GlobalHook.MouseMove += HookManager_MouseMove;
                 Debug.Write("Subscribed to mouse");
 
                 return Disposable.Create(() =>
@@ -34,7 +33,6 @@ namespace Carnac.Logic.MouseMonitor
                     m_GlobalHook.MouseClick -= OnMouseClick;
                     m_GlobalHook.MouseDoubleClick -= OnMouseDoubleClick;
                     m_GlobalHook.MouseWheel -= HookManager_MouseWheel;
-                    m_GlobalHook.MouseMove -= HookManager_MouseMove;
                     m_GlobalHook.Dispose();
                     Debug.Write("Unsubscribed from mouse");
                 });
@@ -64,8 +62,6 @@ namespace Carnac.Logic.MouseMonitor
 
         private void OnMouseClick(object sender, MouseEventArgs e)
         {
-            Debug.WriteLine(string.Format("MouseClick \t\t {0} {1}\n", e.Button, Control.ModifierKeys));
-
             observer.OnNext(new InterceptKeyEventArgs(
                 MouseButtonsToKeys(e.Button),
                 KeyDirection.Down,
@@ -76,7 +72,6 @@ namespace Carnac.Logic.MouseMonitor
 
         private void OnMouseDoubleClick(object sender, MouseEventArgs e)
         {
-            Debug.WriteLine(string.Format("MouseDoubleClick \t\t {0}\n", e.Button));
             observer.OnNext(new InterceptKeyEventArgs(
                 MouseButtonsToKeys(e.Button),
                 KeyDirection.Down,
@@ -87,7 +82,6 @@ namespace Carnac.Logic.MouseMonitor
 
         private void HookManager_MouseWheel(object sender, MouseEventArgs e)
         {
-            Debug.WriteLine(string.Format("Wheel={0:000}", e.Delta));
             // for now using VolumeDown and Up as proxy could be refactored
             observer.OnNext(new InterceptKeyEventArgs(
                 e.Delta > 0 ? Keys.VolumeUp : Keys.VolumeDown,
@@ -95,11 +89,6 @@ namespace Carnac.Logic.MouseMonitor
                 Control.ModifierKeys == Keys.Alt,
                 Control.ModifierKeys == Keys.Control,
                 Control.ModifierKeys == Keys.Shift));
-        }
-
-        private void HookManager_MouseMove(object sender, MouseEventArgs e)
-        {
-            Debug.WriteLine(string.Format("x={0:0000}; y={1:0000}", e.X, e.Y));
         }
 
         public IObservable<InterceptKeyEventArgs> GetKeyStream()

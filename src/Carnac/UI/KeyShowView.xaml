@@ -326,10 +326,32 @@
                     </DrawingGroup.Children>
                 </DrawingGroup>
             </DrawingBrush.Drawing>
-        </DrawingBrush>        
+        </DrawingBrush>
+        <Storyboard x:Key="clickHighlighterStoryboard">
+            <DoubleAnimation From="{Binding DataContext.Settings.ClickStartScale, Source={x:Reference This}}" To="{Binding DataContext.Settings.ClickStopScale, Source={x:Reference This}}" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)" Storyboard.TargetName="clickHighlighter">
+                <DoubleAnimation.EasingFunction>
+                    <CircleEase EasingMode="EaseOut"/>
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+            <DoubleAnimation  From="{Binding DataContext.Settings.ClickStartScale, Source={x:Reference This}}" To="{Binding DataContext.Settings.ClickStopScale, Source={x:Reference This}}"  Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)" Storyboard.TargetName="clickHighlighter">
+                <DoubleAnimation.EasingFunction>
+                    <CircleEase EasingMode="EaseOut"/>
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+            <DoubleAnimation  From="{Binding DataContext.Settings.ClickStartOpacity, Source={x:Reference This}}" To="{Binding DataContext.Settings.ClickStopOpacity, Source={x:Reference This}}" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="clickHighlighter" FillBehavior="Stop">
+                <DoubleAnimation.EasingFunction>
+                    <CircleEase EasingMode="EaseIn"/>
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+            <DoubleAnimation  From="{Binding DataContext.Settings.ClickStartBorder, Source={x:Reference This}}" To="{Binding DataContext.Settings.ClickStopBorder, Source={x:Reference This}}" Storyboard.TargetProperty="StrokeThickness" Storyboard.TargetName="clickHighlighter">
+                <DoubleAnimation.EasingFunction>
+                    <CircleEase EasingMode="EaseOut"/>
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+        </Storyboard>
     </Window.Resources>
 
-
+    <Grid>
     <ListView Margin="{Binding Settings.Margins}" HorizontalAlignment="{Binding Settings.Alignment}"
               VerticalAlignment="Stretch" ItemsSource="{Binding Source={StaticResource KeysViewSource}}"
               Background="Transparent" Focusable="False" IsHitTestVisible="False" BorderBrush="Transparent"
@@ -541,4 +563,12 @@
             </DataTemplate>
         </ListView.ItemTemplate>
     </ListView>
+        <Ellipse x:Name="clickHighlighter" Stroke="{Binding Settings.ClickColor}" HorizontalAlignment="Left" Height="20" Width="20" Margin="{Binding CursorMargins}" VerticalAlignment="Top" StrokeThickness="4" RenderTransformOrigin="0.5,0.5"  Opacity="0">
+            <Ellipse.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                </TransformGroup>
+            </Ellipse.RenderTransform>
+        </Ellipse>
+    </Grid>
 </Window>

@@ -95,7 +95,7 @@
                     </StackPanel>
                 </Grid>
             </TabItem>
-            <TabItem Header="Appearance">
+            <TabItem Header="Keyboard">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition />
@@ -166,6 +166,86 @@
                 </Grid>
 
             </TabItem>
+            <TabItem Header="Mouse">
+				<Grid>
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="43*"/>
+						<ColumnDefinition Width="57*"/>
+					</Grid.ColumnDefinitions>
+					<Grid.RowDefinitions>
+						<RowDefinition />
+						<RowDefinition Height="Auto" />
+					</Grid.RowDefinitions>
+					<StackPanel Margin="10,0,0.333,0" Orientation="Vertical" Grid.ColumnSpan="2">
+						<ui:PreferencesField Header="Show mouse clicks">
+							<CheckBox IsChecked="{Binding Settings.ShowMouseClicks}" />
+						</ui:PreferencesField>
+						<ui:PreferencesField Header="Start Scale">
+							<Slider IsSnapToTickEnabled="True" Value="{Binding Settings.ClickStartScale}"
+                            LargeChange="1" Maximum="10" Minimum="0" SmallChange="0.1" TickFrequency="1" />
+							<ui:PreferencesField.SecondaryControl>
+								<TextBox Foreground="White" Text="{Binding Settings.ClickStartScale}" />
+							</ui:PreferencesField.SecondaryControl>
+						</ui:PreferencesField>
+						<ui:PreferencesField Header="Start Border">
+							<Slider IsSnapToTickEnabled="True" Value="{Binding Settings.ClickStartBorder}"
+                            LargeChange="1" Maximum="10" Minimum="0" SmallChange="0.1" TickFrequency="0.1" />
+							<ui:PreferencesField.SecondaryControl>
+								<TextBox Foreground="White" Text="{Binding Settings.ClickStartBorder}" />
+							</ui:PreferencesField.SecondaryControl>
+						</ui:PreferencesField>
+						<ui:PreferencesField Header="Start Opacity">
+							<Slider IsSnapToTickEnabled="True" Value="{Binding Settings.ClickStartOpacity}"
+                            LargeChange="0.1" Maximum="1" Minimum="0" SmallChange="0.05" TickFrequency="0.05" />
+							<ui:PreferencesField.SecondaryControl>
+								<TextBox Foreground="White" Text="{Binding Settings.ClickStartOpacity}" />
+							</ui:PreferencesField.SecondaryControl>
+						</ui:PreferencesField>
+						<ui:PreferencesField Header="Stop Scale">
+							<Slider Value="{Binding Settings.ClickStopScale}" IsSnapToTickEnabled="True"
+                            LargeChange="1" Maximum="10" Minimum="0" SmallChange="0.1" TickFrequency="1" />
+							<ui:PreferencesField.SecondaryControl>
+								<TextBox Foreground="White" Text="{Binding Settings.ClickStopScale}" />
+							</ui:PreferencesField.SecondaryControl>
+						</ui:PreferencesField>
+						<ui:PreferencesField Header="Stop Border">
+							<Slider IsSnapToTickEnabled="True" Value="{Binding Settings.ClickStopBorder}"
+                            LargeChange="1" Maximum="10" Minimum="0" SmallChange="0.1" TickFrequency="0.1" />
+							<ui:PreferencesField.SecondaryControl>
+								<TextBox Foreground="White" Text="{Binding Settings.ClickStopBorder}" />
+							</ui:PreferencesField.SecondaryControl>
+						</ui:PreferencesField>
+						<ui:PreferencesField Header="Stop Opacity">
+							<Slider IsSnapToTickEnabled="True" Value="{Binding Settings.ClickStopOpacity}"
+                            LargeChange="0.1" Maximum="1" Minimum="0" SmallChange="0.05" TickFrequency="0.05" />
+							<ui:PreferencesField.SecondaryControl>
+								<TextBox Foreground="White" Text="{Binding Settings.ClickStopOpacity}" />
+							</ui:PreferencesField.SecondaryControl>
+						</ui:PreferencesField>						
+						<ui:PreferencesField Header="Circle Fade Delay (ms)">
+							<Slider Value="{Binding Settings.ClickFadeDelay}" IsSnapToTickEnabled="True"
+                            LargeChange="1000" Maximum="5000" Minimum="100" SmallChange="100" TickFrequency="200" />
+							<ui:PreferencesField.SecondaryControl>
+								<TextBox Foreground="White" Text="{Binding Settings.ClickFadeDelay}" />
+							</ui:PreferencesField.SecondaryControl>
+						</ui:PreferencesField>
+						<ui:PreferencesField Header="Left Click Color">
+							<ComboBox SelectedItem="{Binding LeftClickColor}"
+                              ItemsSource="{Binding AvailableColors}"
+                              ItemTemplate="{StaticResource ColourPickerTemplate}" />
+						</ui:PreferencesField>
+						<ui:PreferencesField Header="Right Click Color">
+							<ComboBox SelectedItem="{Binding RightClickColor}"
+                              ItemsSource="{Binding AvailableColors}"
+                              ItemTemplate="{StaticResource ColourPickerTemplate}" />
+						</ui:PreferencesField>
+					</StackPanel>
+					<StackPanel HorizontalAlignment="Right" Orientation="Horizontal" Grid.Row="1" Margin="0,5,5.333,5.333" Grid.Column="1">
+						<Button Width="150" Margin="0 0 5 0" Content="Reset to Defaults" Command="{Binding ResetToDefaultsCommand}" />
+						<Button Width="50" Content="Save" Command="{Binding SaveCommand}" />
+					</StackPanel>
+				</Grid>
+			</TabItem>            
             <TabItem Header="About">
                 <StackPanel Margin="20,40,0,0" Orientation="Horizontal">
                     <StackPanel Width="340">
