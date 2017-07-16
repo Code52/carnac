@@ -12,7 +12,7 @@ namespace Carnac.Logic.MouseMonitor
     {
 
         public static readonly InterceptMouse Current = new InterceptMouse();
-        public readonly IKeyboardMouseEvents m_GlobalHook = Hook.GlobalEvents();
+        readonly IKeyboardMouseEvents m_GlobalHook = Hook.GlobalEvents();
         readonly IObservable<InterceptKeyEventArgs> keyStream;
         private IObserver<InterceptKeyEventArgs> observer;
         private readonly KeysConverter kc = new KeysConverter();
