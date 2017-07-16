@@ -29,7 +29,8 @@ namespace Carnac.Logic.Models
         {
             processName = key.Process.ProcessName;
             processIcon = key.Process.ProcessIcon;
-            canBeMerged = !key.HasModifierPressed;
+            // allow to aggregate all key combination as to not spam if ctrl + mousewheel is used.
+            canBeMerged = true; // !key.HasModifierPressed;
 
             keys = new ReadOnlyCollection<KeyPress>(new[] { key });
             textCollection = new ReadOnlyCollection<string>(CreateTextSequence(key).ToArray());
