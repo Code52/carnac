@@ -88,7 +88,7 @@ namespace Carnac.Logic
             if (HasCompletedValue)
                 throw new InvalidOperationException();
 
-            messages = new[] { new Message(Keys, shortcut) };
+            messages = new[] { new Message(Keys, shortcut, true) };
             HasCompletedValue = true;
         }
 
