@@ -136,22 +136,11 @@ namespace Carnac.Logic
                 if (shiftPressed)
                     yield return "Shift";
 
-                yield return interceptKeyEventArgs.Key.Sanitise();
+                yield return interceptKeyEventArgs.Key.SanitiseLower();
             }
             else
             {
-                string input;
-                var shiftModifiesInput = interceptKeyEventArgs.Key.SanitiseShift(out input);
-
-                if (!isLetter && !shiftModifiesInput && shiftPressed)
-                    yield return "Shift";
-
-                if (interceptKeyEventArgs.ShiftPressed && shiftModifiesInput)
-                    yield return input;
-                else if (isLetter && !interceptKeyEventArgs.ShiftPressed)
-                    yield return interceptKeyEventArgs.Key.ToString().ToLower();
-                else
-                    yield return interceptKeyEventArgs.Key.Sanitise();
+                yield return interceptKeyEventArgs.Key.Sanitise();
             }
         }
 
