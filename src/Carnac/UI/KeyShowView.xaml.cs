@@ -20,8 +20,7 @@ namespace Carnac.UI
             base.OnSourceInitialized(e);
 
             var hwnd = new WindowInteropHelper(this).Handle;
-            Win32Methods.SetWindowExTransparent(hwnd);
-
+            Win32Methods.SetWindowExTransparentAndNotInWindowList(hwnd);
             var timer = new Timer(100);
             timer.Elapsed +=
                 (s, x) =>
@@ -83,7 +82,7 @@ namespace Carnac.UI
 
         private void WindowLoaded(object sender, RoutedEventArgs e)
         {
-            
+
         }
 
         void SettingsLeftChanged(object sender, EventArgs e)

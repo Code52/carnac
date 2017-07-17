@@ -16,6 +16,7 @@ namespace Carnac.Logic
         public const int WM_SYSKEYUP = 261;
         public const int WM_SYSKEYDOWN = 260;
         public const int WS_EX_TRANSPARENT = 0x00000020;
+        public const int WS_EX_TOOLWINDOW = 0x00000080;
         public  const int GWL_EXSTYLE = (-20);
 
         //
@@ -40,10 +41,10 @@ namespace Carnac.Logic
         [DllImport("user32.dll")]
         static extern int SetWindowLong(IntPtr hwnd, int index, int newStyle);
 
-        public static void SetWindowExTransparent(IntPtr hwnd)
+        public static void SetWindowExTransparentAndNotInWindowList(IntPtr hwnd)
         {
             var extendedStyle = GetWindowLong(hwnd, GWL_EXSTYLE);
-            SetWindowLong(hwnd, GWL_EXSTYLE, extendedStyle | WS_EX_TRANSPARENT);
+            SetWindowLong(hwnd, GWL_EXSTYLE, extendedStyle | WS_EX_TRANSPARENT | WS_EX_TOOLWINDOW);
         }
     }
 }
