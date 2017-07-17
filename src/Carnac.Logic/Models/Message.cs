@@ -1,3 +1,4 @@
+using Carnac.Logic.MouseMonitor;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -117,6 +118,12 @@ namespace Carnac.Logic.Models
             {
                 return previousMessage.Replace(newMessage);
             }
+            // if current is modifier and previous is a mouse action ignore modifierkeypress
+            if (previousMessage.keys != null && KeyProvider.IsModifierKeyPress(newMessage.keys[0].InterceptKeyEventArgs)
+                && InterceptMouse.MouseKeys.Contains(previousMessage.keys[0].Key))
+            {
+                return previousMessage.Replace(previousMessage);
+            }
 
             if (ShouldCreateNewMessage(previousMessage, newMessage))
             {
@@ -131,7 +138,12 @@ namespace Carnac.Logic.Models
                    current.LastMessage.Subtract(previous.LastMessage) > OneSecond ||
                    KeyProvider.IsModifierKeyPress(current.keys[0].InterceptKeyEventArgs) ||
                    // accumulate also same modifier shortcuts
-                   (previous.keys[0].HasModifierPressed && !previous.keys[0].Input.SequenceEqual(current.keys[0].Input));
+                   (previous.keys[0].HasModifierPressed && !previous.keys[0].Input.SequenceEqual(current.keys[0].Input)) ||
+                   // new message for different mouse keys;
+                   ((InterceptMouse.MouseKeys.Contains(current.keys[0].Key) ||
+                   (previous.keys != null && InterceptMouse.MouseKeys.Contains(previous.keys[0].Key)))
+                   && !previous.keys[0].Input.SequenceEqual(current.keys[0].Input));
+
         }
 
         public Message FadeOut()

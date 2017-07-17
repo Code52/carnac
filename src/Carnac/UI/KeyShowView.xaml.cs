@@ -3,16 +3,22 @@ using System.Runtime.InteropServices;
 using System.Timers;
 using System.Windows;
 using System.Windows.Interop;
+using System.Windows.Media.Animation;
 using Carnac.Logic;
+using Gma.System.MouseKeyHook;
 
 namespace Carnac.UI
 {
     public partial class KeyShowView
     {
+        private Storyboard sb;
+        readonly IKeyboardMouseEvents m_GlobalHook = Hook.GlobalEvents();
+
         public KeyShowView(KeyShowViewModel keyShowViewModel)
         {
             DataContext = keyShowViewModel;
             InitializeComponent();
+            keyShowViewModel.Settings.PropertyChanged += Settings_PropertyChanged;
         }
 
         protected override void OnSourceInitialized(EventArgs e)
@@ -37,6 +43,10 @@ namespace Carnac.UI
             Left = vm.Settings.Left;
             vm.Settings.LeftChanged += SettingsLeftChanged;
             WindowState = WindowState.Maximized;
+            if (vm.Settings.ShowMouseClicks)
+            {
+                SetupMouseEvents();
+            }
         }
 
         [DllImport("user32.dll", SetLastError = true)]
@@ -82,7 +92,7 @@ namespace Carnac.UI
 
         private void WindowLoaded(object sender, RoutedEventArgs e)
         {
-
+            sb = this.FindResource("clickHighlighterStoryboard") as Storyboard;
         }
 
         void SettingsLeftChanged(object sender, EventArgs e)
@@ -91,6 +101,60 @@ namespace Carnac.UI
             var vm = ((KeyShowViewModel)DataContext);
             Left = vm.Settings.Left;
             WindowState = WindowState.Maximized;
+        }
+
+        void Settings_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            var vm = ((KeyShowViewModel)DataContext);
+            switch (e.PropertyName)
+            {
+                case "ClickFadeDelay":
+                    Duration d = TimeSpan.FromMilliseconds(vm.Settings.ClickFadeDelay);
+                    foreach(DoubleAnimation da in sb.Children)
+                    {
+                        da.Duration = d;
+                    }
+                    break;
+                case "ShowMouseClicks":
+                    if (vm.Settings.ShowMouseClicks)
+                    {
+                        SetupMouseEvents();
+                    }
+                    else
+                    {
+                        DestroyMouseEvents();
+                    }
+                    break;
+            }
+        }
+
+        void SetupMouseEvents()
+        {
+            m_GlobalHook.MouseDown += OnMouseDown;
+            m_GlobalHook.MouseMove += OnMouseMove;
+        }
+
+        void DestroyMouseEvents()
+        {
+            m_GlobalHook.MouseDown -= OnMouseDown;
+            m_GlobalHook.MouseMove -= OnMouseMove;
+        }
+
+        private void OnMouseDown(object sender, System.Windows.Forms.MouseEventArgs e)
+        {
+            var vm = ((KeyShowViewModel)DataContext);
+            vm.Settings.ClickColor = vm.Settings.LeftClickColor;
+            if (e.Button == System.Windows.Forms.MouseButtons.Right)
+            {
+                vm.Settings.ClickColor = vm.Settings.RightClickColor;
+            }
+            sb.Begin();
+        }
+
+        private void OnMouseMove(object sender, System.Windows.Forms.MouseEventArgs e)
+        {
+            var vm = ((KeyShowViewModel)DataContext);
+            vm.CursorPosition = PointFromScreen(new Point(e.X, e.Y));
         }
     }
 }
