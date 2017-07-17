@@ -128,6 +128,7 @@ namespace Carnac.Logic
             var controlPressed = interceptKeyEventArgs.ControlPressed;
             var altPressed = interceptKeyEventArgs.AltPressed;
             var shiftPressed = interceptKeyEventArgs.ShiftPressed;
+            var mouseAction = InterceptMouse.MouseKeys.Contains(interceptKeyEventArgs.Key);
             if (controlPressed)
                 yield return "Ctrl";
             if (altPressed)
@@ -135,7 +136,7 @@ namespace Carnac.Logic
             if (isWinKeyPressed)
                 yield return "Win";
 
-            if (controlPressed || altPressed)
+            if (controlPressed || altPressed || mouseAction)
             {
                 //Treat as a shortcut, don't be too smart
                 if (shiftPressed)

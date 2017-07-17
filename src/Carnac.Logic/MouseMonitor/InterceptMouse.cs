@@ -5,6 +5,7 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Windows.Forms;
 using Gma.System.MouseKeyHook;
+using System.Collections.Generic;
 
 namespace Carnac.Logic.MouseMonitor
 {
@@ -17,6 +18,16 @@ namespace Carnac.Logic.MouseMonitor
         private IObserver<InterceptKeyEventArgs> observer;
         private readonly KeysConverter kc = new KeysConverter();
         
+        public static readonly List<Keys> MouseKeys = new List<Keys>()
+        {
+            Keys.LButton,
+            Keys.MButton,
+            Keys.RButton,
+            Keys.XButton1,
+            Keys.XButton2,
+            Keys.VolumeUp,
+            Keys.VolumeDown
+        };
 
         InterceptMouse()
         {
