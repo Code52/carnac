@@ -164,6 +164,7 @@
     </Compile>
     <Compile Include="UI\DelegateCommand.cs" />
     <Compile Include="UI\PreferencesField.cs" />
+    <Compile Include="UI\ToSpecialKeyConverter.cs" />
     <Compile Include="Utilities\DesignTimeHelper.cs" />
     <Compile Include="Utilities\ConcurrencyService.cs" />
     <Compile Include="UI\AvailableColor.cs" />
