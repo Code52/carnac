@@ -13,7 +13,6 @@ namespace Carnac.Logic.Models
         readonly string processName;
         readonly ImageSource processIcon;
         readonly string shortcutName;
-        readonly bool canBeMerged;
         readonly bool isShortcut;
         readonly bool isModifier;
         readonly bool isDeleting;
@@ -30,7 +29,6 @@ namespace Carnac.Logic.Models
         {
             processName = key.Process.ProcessName;
             processIcon = key.Process.ProcessIcon;
-            canBeMerged = !key.HasModifierPressed;
             isModifier = key.HasModifierPressed;
 
             keys = new ReadOnlyCollection<KeyPress>(new[] { key });
@@ -50,9 +48,9 @@ namespace Carnac.Logic.Models
             processName = distinctProcessName.Single();
             processIcon = allKeys.First().Process.ProcessIcon;
             shortcutName = shortcut.Name;
+
             this.isShortcut = isShortcut;
             this.isModifier = allKeys.Any(k => k.HasModifierPressed);
-            canBeMerged = false;
 
             this.keys = new ReadOnlyCollection<KeyPress>(allKeys);
 
@@ -66,7 +64,6 @@ namespace Carnac.Logic.Models
             : this(initial.keys.Concat(appended.keys), new KeyShortcut(initial.ShortcutName))
         {
             previous = initial;
-            canBeMerged = true;
         }
 
         private Message(Message initial, bool isDeleting)
@@ -77,13 +74,17 @@ namespace Carnac.Logic.Models
             lastMessage = initial.lastMessage;
         }
 
+        private Message(Message initial, Message replacer, bool replace)
+            : this(replacer.keys, new KeyShortcut(replacer.ShortcutName))
+        {
+            previous = initial;
+         }
+
         public string ProcessName { get { return processName; } }
 
         public ImageSource ProcessIcon { get { return processIcon; } }
 
         public string ShortcutName { get { return shortcutName; } }
-
-        public bool CanBeMerged { get { return canBeMerged; } }
 
         public bool IsShortcut { get { return isShortcut; } }
 
@@ -102,21 +103,35 @@ namespace Carnac.Logic.Models
             return new Message(this, other);
         }
 
-        static readonly TimeSpan OneSecond = TimeSpan.FromSeconds(1);
+        public Message Replace(Message newMessage)
+        {
+            return new Message(this, newMessage, true);
+        }
+
+    static readonly TimeSpan OneSecond = TimeSpan.FromSeconds(1);
 
         public static Message MergeIfNeeded(Message previousMessage, Message newMessage)
         {
-            return ShouldCreateNewMessage(previousMessage, newMessage)
-                ? newMessage
-                : previousMessage.Merge(newMessage);
+            // replace key was after standalone modifier keypress, replace by new Message
+            if (previousMessage.keys != null && KeyProvider.IsModifierKeyPress(previousMessage.keys[0].InterceptKeyEventArgs))
+            {
+                return previousMessage.Replace(newMessage);
+            }
+
+            if (ShouldCreateNewMessage(previousMessage, newMessage))
+            {
+                return newMessage;
+            }
+            return previousMessage.Merge(newMessage);
         }
 
         static bool ShouldCreateNewMessage(Message previous, Message current)
         {
             return previous.ProcessName != current.ProcessName ||
                    current.LastMessage.Subtract(previous.LastMessage) > OneSecond ||
-                   !previous.CanBeMerged ||
-                   !current.CanBeMerged;
+                   KeyProvider.IsModifierKeyPress(current.keys[0].InterceptKeyEventArgs) ||
+                   // accumulate also same modifier shortcuts
+                   (previous.keys[0].HasModifierPressed && !previous.keys[0].Input.SequenceEqual(current.keys[0].Input));
         }
 
         public Message FadeOut()
@@ -226,7 +241,6 @@ namespace Carnac.Logic.Models
                 && string.Equals(processName, other.processName)
                 && Equals(processIcon, other.processIcon)
                 && string.Equals(shortcutName, other.shortcutName)
-                && canBeMerged.Equals(other.canBeMerged)
                 && isShortcut.Equals(other.isShortcut)
                 && isDeleting.Equals(other.isDeleting)
                 && lastMessage.Equals(other.lastMessage);
@@ -249,7 +263,6 @@ namespace Carnac.Logic.Models
                 hashCode = (hashCode * 397) ^ (processName != null ? processName.GetHashCode() : 0);
                 hashCode = (hashCode * 397) ^ (processIcon != null ? processIcon.GetHashCode() : 0);
                 hashCode = (hashCode * 397) ^ (shortcutName != null ? shortcutName.GetHashCode() : 0);
-                hashCode = (hashCode * 397) ^ canBeMerged.GetHashCode();
                 hashCode = (hashCode * 397) ^ isShortcut.GetHashCode();
                 hashCode = (hashCode * 397) ^ isDeleting.GetHashCode();
                 hashCode = (hashCode * 397) ^ lastMessage.GetHashCode();

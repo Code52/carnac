@@ -81,6 +81,10 @@ namespace Carnac.Logic
             {Keys.RShiftKey, "Shift"},
             {Keys.LWin, "Win"},
             {Keys.RWin, "Win"},
+            {Keys.LControlKey, "Ctrl"},
+            {Keys.RControlKey, "Ctrl"},
+            {Keys.Alt, "Alt"},
+            {Keys.LMenu, "Alt"},
         };
 
         static readonly Dictionary<Keys, string> SpecialCases = new Dictionary<Keys, string>
