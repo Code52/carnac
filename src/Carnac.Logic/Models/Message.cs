@@ -1,3 +1,4 @@
+using Carnac.Logic.MouseMonitor;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -132,7 +133,13 @@ namespace Carnac.Logic.Models
                    current.LastMessage.Subtract(previous.LastMessage) > OneSecond ||
                    KeyProvider.IsModifierKeyPress(current.keys[0].InterceptKeyEventArgs) ||
                    // accumulate also same modifier shortcuts
-                   (previous.keys[0].HasModifierPressed && !previous.keys[0].Input.SequenceEqual(current.keys[0].Input));
+                   (previous.keys[0].HasModifierPressed && !previous.keys[0].Input.SequenceEqual(current.keys[0].Input))
+                   !previous.CanBeMerged ||
+                   !current.CanBeMerged ||
+                   // new message for different mouse keys;
+                   ((InterceptMouse.MouseKeys.Contains(current.keys[0].Key) ||
+                   (previous.keys != null && InterceptMouse.MouseKeys.Contains(previous.keys[0].Key)))
+                   && !previous.keys[0].Input.SequenceEqual(current.keys[0].Input));;
         }
 
         public Message FadeOut()
