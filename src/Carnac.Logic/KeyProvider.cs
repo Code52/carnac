@@ -10,6 +10,8 @@ using Carnac.Logic.KeyMonitor;
 using Carnac.Logic.Models;
 using Microsoft.Win32;
 using System.Windows.Media;
+using Carnac.Logic.MouseMonitor;
+
 
 namespace Carnac.Logic
 {
@@ -66,7 +68,10 @@ namespace Carnac.Logic
                         winKeyPressed = false;
                 }, observer.OnError);
 
-                var keyStreamSubsription = interceptKeysSource.GetKeyStream()
+                var keyStreamSubsription = Observable.Merge(
+                    new IObservable<InterceptKeyEventArgs>[2] {
+                        interceptKeysSource.GetKeyStream(),
+                        InterceptMouse.Current.GetKeyStream() })
                     .Select(DetectWindowsKey)
                     .Where(k => !IsModifierKeyPress(k) && k.KeyDirection == KeyDirection.Down)
                     .Select(ToCarnacKeyPress)
@@ -123,6 +128,7 @@ namespace Carnac.Logic
             var controlPressed = interceptKeyEventArgs.ControlPressed;
             var altPressed = interceptKeyEventArgs.AltPressed;
             var shiftPressed = interceptKeyEventArgs.ShiftPressed;
+            var mouseAction = InterceptMouse.MouseKeys.Contains(interceptKeyEventArgs.Key);
             if (controlPressed)
                 yield return "Ctrl";
             if (altPressed)
@@ -130,7 +136,7 @@ namespace Carnac.Logic
             if (isWinKeyPressed)
                 yield return "Win";
 
-            if (controlPressed || altPressed)
+            if (controlPressed || altPressed || mouseAction)
             {
                 //Treat as a shortcut, don't be too smart
                 if (shiftPressed)
