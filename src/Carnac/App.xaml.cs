@@ -53,22 +53,25 @@ namespace Carnac
             carnac.Start();
 
 #if !DEBUG
-            Observable
-                .Timer(TimeSpan.FromMinutes(5))
-                .Subscribe(async x =>
-                {
-                    try
+            if (settings.AutoUpdate)
+            {
+                Observable
+                    .Timer(TimeSpan.FromMinutes(5))
+                    .Subscribe(async x =>
                     {
-                        using (var mgr = UpdateManager.GitHubUpdateManager(carnacUpdateUrl))
+                        try
                         {
-                            await mgr.Result.UpdateApp();
+                            using (var mgr = UpdateManager.GitHubUpdateManager(carnacUpdateUrl))
+                            {
+                                await mgr.Result.UpdateApp();
+                            }
                         }
-        }
-                    catch
-                    {
-                        // Do something useful with the exception
-                    }
-                });
+                        catch
+                        {
+                            // Do something useful with the exception
+                        }
+                    });
+            }
 #endif
 
             base.OnStartup(e);
