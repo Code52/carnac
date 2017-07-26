@@ -30,6 +30,9 @@ namespace Carnac.Logic.Models
         [NotifyProperty(AlsoNotifyFor = new[] { "ScaleTransform", "Alignment" })]
         public NotificationPlacement Placement { get; set; }
 
+        [DefaultValue(false)]
+        public bool AutoUpdate { get; set; }
+
         //Used to determine which from it's leftmost co-ord
         double left;
         public double Left
@@ -85,5 +88,6 @@ namespace Carnac.Logic.Models
         public bool DetectShortcutsOnly { get; set; }
         public bool ShowApplicationIcon { get; set; }
         public bool SettingsConfigured { get; set; }
+        public bool ShowOnlyModifiers { get; set; }
     }
 }

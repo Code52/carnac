@@ -37,7 +37,22 @@ namespace Carnac.Logic
                 .Where(c => c.HasCompletedValue)
                 .SelectMany(c => c.GetMessages())
                 .Scan(new Message(), (acc, key) => Message.MergeIfNeeded(acc, key))
-                .Where(m => !settings.DetectShortcutsOnly || m.IsShortcut);
+                .Where(m =>
+                {
+                    if (settings.DetectShortcutsOnly && settings.ShowOnlyModifiers)
+                    {
+                        return m.IsShortcut && m.IsModifier;
+                    }
+                    if (settings.DetectShortcutsOnly)
+                    {
+                        return m.IsShortcut;
+                    }
+                    if (settings.ShowOnlyModifiers)
+                    {
+                        return m.IsModifier;
+                    }
+                    return true;
+                });
         }
     }
 }
