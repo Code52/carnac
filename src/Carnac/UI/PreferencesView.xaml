@@ -95,7 +95,7 @@
                     </StackPanel>
                 </Grid>
             </TabItem>
-            <TabItem Header="Appearances">
+            <TabItem Header="Appearance">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition />
@@ -140,6 +140,7 @@
                               ItemsSource="{Binding AvailableColors}"
                               ItemTemplate="{StaticResource ColourPickerTemplate}" />
                         </ui:PreferencesField>
+                        
                         <ui:PreferencesField Header="Show Space as ␣">
                             <CheckBox IsChecked="{Binding Settings.ShowSpaceAsIcon}" Content="shows space as ' ␣ ' instead of '   '" />
                         </ui:PreferencesField>
