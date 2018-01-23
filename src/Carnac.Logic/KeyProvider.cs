@@ -21,7 +21,9 @@ namespace Carnac.Logic
         readonly Dictionary<int, Process> processes;
         readonly IPasswordModeService passwordModeService;
         readonly IDesktopLockEventService desktopLockEventService;
-        readonly Regex filterRegex;
+        readonly PopupSettings settings;
+        string currentFilter = null;
+        Regex filterRegex;
 
         private readonly IList<Keys> modifierKeys =
             new List<Keys>
@@ -59,15 +61,33 @@ namespace Carnac.Logic
             this.passwordModeService = passwordModeService;
             this.desktopLockEventService = desktopLockEventService;
 
-            PopupSettings popupSettings = settingsProvider.GetSettings<PopupSettings>();
-            if (!String.IsNullOrEmpty(popupSettings?.ProcessFilterExpression))
+            settings = settingsProvider.GetSettings<PopupSettings>();
+        }
+
+        private bool EnsureProcessFilter()
+        {
+            if (settings?.ProcessFilterExpression != currentFilter)
             {
-                try
+                currentFilter = settings.ProcessFilterExpression;
+
+                if (!String.IsNullOrEmpty(currentFilter))
                 {
-                    filterRegex = new Regex(popupSettings.ProcessFilterExpression, RegexOptions.IgnoreCase, TimeSpan.FromSeconds(1));
+                    try
+                    {
+                        filterRegex = new Regex(currentFilter, RegexOptions.IgnoreCase | RegexOptions.Compiled, TimeSpan.FromSeconds(1));
+                    }
+                    catch
+                    {
+                        filterRegex = null;
+                    }
                 }
-                catch { }
+                else
+                {
+                    filterRegex = null;
+                }
             }
+
+            return (filterRegex != null);
         }
 
         public IObservable<KeyPress> GetKeyStream()
@@ -123,7 +143,7 @@ namespace Carnac.Logic
             }
 
             // see if this process is one being filtered for
-            if (filterRegex != null)
+            if (EnsureProcessFilter())
             {
                 if (!filterRegex.IsMatch(process.ProcessName))
                 {
