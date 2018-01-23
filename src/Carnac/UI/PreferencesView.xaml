@@ -7,7 +7,7 @@
                       xmlns:utilities="clr-namespace:Carnac.Utilities"
                       xmlns:carnac="clr-namespace:Carnac"
                       x:Class="Carnac.UI.PreferencesView"
-                      Width="610" Height="420" Icon="../icon.ico"
+                      Width="610" Height="430" Icon="../icon.ico"
                       Foreground="{DynamicResource BlackBrush}"
                       d:DataContext="{d:DesignInstance ui:PreferencesViewModel}" mc:Ignorable="d"
                       ShowTitleBar="False" ShowMinButton="False" ShowMaxRestoreButton="False"
@@ -149,6 +149,12 @@
 						</ui:PreferencesField>
 						<ui:PreferencesField Header="Show Application Icon">
                             <CheckBox IsChecked="{Binding Settings.ShowApplicationIcon}" />
+                        </ui:PreferencesField>
+                        <ui:PreferencesField Header="Process Filter">
+                            <StackPanel Orientation="Vertical">
+                                <TextBox Text="{Binding Settings.ProcessFilterExpression}"></TextBox>
+                                <TextBlock HorizontalAlignment="Right">Only show keys from processes matching this regular expression</TextBlock>
+                            </StackPanel>
                         </ui:PreferencesField>
                     </StackPanel>
                     <StackPanel HorizontalAlignment="Right" Orientation="Horizontal" Grid.Row="1" Margin="5">

@@ -10,6 +10,8 @@ using Carnac.Logic.KeyMonitor;
 using Carnac.Logic.Models;
 using Microsoft.Win32;
 using System.Windows.Media;
+using SettingsProviderNet;
+using System.Text.RegularExpressions;
 
 namespace Carnac.Logic
 {
@@ -19,6 +21,7 @@ namespace Carnac.Logic
         readonly Dictionary<int, Process> processes;
         readonly IPasswordModeService passwordModeService;
         readonly IDesktopLockEventService desktopLockEventService;
+        readonly Regex filterRegex;
 
         private readonly IList<Keys> modifierKeys =
             new List<Keys>
@@ -44,12 +47,27 @@ namespace Carnac.Logic
         [DllImport("user32.dll")]
         private static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
 
-        public KeyProvider(IInterceptKeys interceptKeysSource, IPasswordModeService passwordModeService, IDesktopLockEventService desktopLockEventService)
+        public KeyProvider(IInterceptKeys interceptKeysSource, IPasswordModeService passwordModeService, IDesktopLockEventService desktopLockEventService, ISettingsProvider settingsProvider)
         {
+            if (settingsProvider == null)
+            {
+                throw new ArgumentNullException(nameof(settingsProvider));
+            }
+
             processes = new Dictionary<int, Process>();
             this.interceptKeysSource = interceptKeysSource;
             this.passwordModeService = passwordModeService;
             this.desktopLockEventService = desktopLockEventService;
+
+            PopupSettings popupSettings = settingsProvider.GetSettings<PopupSettings>();
+            if (!String.IsNullOrEmpty(popupSettings?.ProcessFilterExpression))
+            {
+                try
+                {
+                    filterRegex = new Regex(popupSettings.ProcessFilterExpression, RegexOptions.IgnoreCase, TimeSpan.FromSeconds(1));
+                }
+                catch { }
+            }
         }
 
         public IObservable<KeyPress> GetKeyStream()
@@ -102,6 +120,15 @@ namespace Carnac.Logic
             if (process == null)
             {
                 return null;
+            }
+
+            // see if this process is one being filtered for
+            if (filterRegex != null)
+            {
+                if (!filterRegex.IsMatch(process.ProcessName))
+                {
+                    return null;
+                }
             }
 
             var isLetter = interceptKeyEventArgs.IsLetter();

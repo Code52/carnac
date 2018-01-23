@@ -5,6 +5,7 @@ using Carnac.Logic;
 using Carnac.Logic.KeyMonitor;
 using Microsoft.Win32;
 using NSubstitute;
+using SettingsProviderNet;
 using Xunit;
 
 namespace Carnac.Tests
@@ -13,12 +14,14 @@ namespace Carnac.Tests
     {
         readonly IPasswordModeService passwordModeService;
         readonly IDesktopLockEventService desktopLockEventService;
+        readonly ISettingsProvider settingsProvider;
 
         public KeyProviderTests()
         {
             passwordModeService = new PasswordModeService();
             desktopLockEventService = Substitute.For<IDesktopLockEventService>();
             desktopLockEventService.GetSessionSwitchStream().Returns(Observable.Never<SessionSwitchEventArgs>());
+            settingsProvider = Substitute.For<ISettingsProvider>();
         }
 
         [Fact]
@@ -26,7 +29,7 @@ namespace Carnac.Tests
         {
             // arrange
             var player = KeyStreams.CtrlShiftL();
-            var provider = new KeyProvider(player, passwordModeService, desktopLockEventService);
+            var provider = new KeyProvider(player, passwordModeService, desktopLockEventService, settingsProvider);
 
             // act
             var processedKeys = await provider.GetKeyStream().ToList();
@@ -40,7 +43,7 @@ namespace Carnac.Tests
         {
             // arrange
             var player = KeyStreams.ShiftL();
-            var provider = new KeyProvider(player, passwordModeService, desktopLockEventService);
+            var provider = new KeyProvider(player, passwordModeService, desktopLockEventService, settingsProvider);
 
             // act
             var processedKeys = await provider.GetKeyStream().ToList();
@@ -55,7 +58,7 @@ namespace Carnac.Tests
         {
             // arrange
             var player = KeyStreams.LetterL();
-            var provider = new KeyProvider(player, passwordModeService, desktopLockEventService);
+            var provider = new KeyProvider(player, passwordModeService, desktopLockEventService, settingsProvider);
 
             // act
             var processedKeys = await provider.GetKeyStream().ToList();
@@ -69,7 +72,7 @@ namespace Carnac.Tests
         {
             // arrange
             var player = KeyStreams.Number1();
-            var provider = new KeyProvider(player, passwordModeService, desktopLockEventService);
+            var provider = new KeyProvider(player, passwordModeService, desktopLockEventService, settingsProvider);
 
             // act
             var processedKeys = await provider.GetKeyStream().ToList();
@@ -83,7 +86,7 @@ namespace Carnac.Tests
         {
             // arrange
             var player = KeyStreams.ExclaimationMark();
-            var provider = new KeyProvider(player, passwordModeService, desktopLockEventService);
+            var provider = new KeyProvider(player, passwordModeService, desktopLockEventService, settingsProvider);
 
             // act
             var processedKeys = await provider.GetKeyStream().ToList();
@@ -97,7 +100,7 @@ namespace Carnac.Tests
         {
             // arrange
             var player = KeyStreams.WinkeyE();
-            var provider = new KeyProvider(player, passwordModeService, desktopLockEventService);
+            var provider = new KeyProvider(player, passwordModeService, desktopLockEventService, settingsProvider);
 
             // act
             var processedKeys = await provider.GetKeyStream().ToList();
