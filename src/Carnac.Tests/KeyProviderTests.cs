@@ -1,8 +1,10 @@
-﻿using System.Linq;
+﻿using System.Diagnostics;
+using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Carnac.Logic;
 using Carnac.Logic.KeyMonitor;
+using Carnac.Logic.Models;
 using Microsoft.Win32;
 using NSubstitute;
 using SettingsProviderNet;
@@ -107,6 +109,37 @@ namespace Carnac.Tests
 
             // assert
             Assert.Equal(new[] { "Win", "e" }, processedKeys.Single().Input);
+        }
+
+        [Fact]
+        public async Task output_with_matching_filter()
+        {
+            // arrange
+            string currentProcessName = Process.GetCurrentProcess().ProcessName;
+            settingsProvider.GetSettings<PopupSettings>().Returns(new PopupSettings() { ProcessFilterExpression = currentProcessName });
+            var player = KeyStreams.LetterL();
+            var provider = new KeyProvider(player, passwordModeService, desktopLockEventService, settingsProvider);
+
+            // act
+            var processedKeys = await provider.GetKeyStream().ToList();
+
+            // assert
+            Assert.Equal(new[] { "l" }, processedKeys.Single().Input);
+        }
+
+        [Fact]
+        public async Task no_output_with_no_match_filter()
+        {
+            // arrange
+            settingsProvider.GetSettings<PopupSettings>().Returns(new PopupSettings() { ProcessFilterExpression = "notepad" });
+            var player = KeyStreams.LetterL();
+            var provider = new KeyProvider(player, passwordModeService, desktopLockEventService, settingsProvider);
+
+            // act
+            var processedKeys = await provider.GetKeyStream().ToList();
+
+            // assert
+            Assert.Equal(0, processedKeys.Count);
         }
     }
 }
