@@ -78,6 +78,7 @@ namespace Carnac.Logic
             {Keys.RShiftKey, "Shift"},
             {Keys.LWin, "Win"},
             {Keys.RWin, "Win"},
+            {Keys.Next, "PageDown"}
         };
 
         public static Keys? ToKey(string keyText)
