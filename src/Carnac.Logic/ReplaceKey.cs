@@ -78,6 +78,7 @@ namespace Carnac.Logic
             {Keys.RShiftKey, "Shift"},
             {Keys.LWin, "Win"},
             {Keys.RWin, "Win"},
+            {Keys.Next, "PageDown"}
         };
 
         public static Keys? ToKey(string keyText)
@@ -101,7 +102,7 @@ namespace Carnac.Logic
 
         public static string Sanitise(this Keys key)
         {
-            return Replacements.ContainsKey(key) ? Replacements[key] : string.Format(key.ToString());
+             return Replacements.ContainsKey(key) ? Replacements[key] : string.Format(key.ToString());
         }
 
         public static bool SanitiseShift(this Keys key, out string sanitisedKeyInput)
