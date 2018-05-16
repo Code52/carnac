@@ -17,6 +17,7 @@ namespace Carnac.Logic.Models
         readonly bool isShortcut;
         readonly bool isModifier;
         readonly bool isDeleting;
+        static bool abbrevRepeatedKeystrokes;
         readonly DateTime lastMessage;
         readonly Message previous;
 
@@ -97,18 +98,19 @@ namespace Carnac.Logic.Models
 
         public bool IsModifier { get { return isModifier; } }
 
-        public Message Merge(Message other)
+        public Message Merge(Message other, bool abbrevRepeatedKeystrokes)
         {
             return new Message(this, other);
         }
 
         static readonly TimeSpan OneSecond = TimeSpan.FromSeconds(1);
 
-        public static Message MergeIfNeeded(Message previousMessage, Message newMessage)
+        public static Message MergeIfNeeded(Message previousMessage, Message newMessage, bool settingsAbbrevRepeatedKeystrokes)
         {
+            Message.abbrevRepeatedKeystrokes = settingsAbbrevRepeatedKeystrokes;
             return ShouldCreateNewMessage(previousMessage, newMessage)
                 ? newMessage
-                : previousMessage.Merge(newMessage);
+                : previousMessage.Merge(newMessage, abbrevRepeatedKeystrokes);
         }
 
         static bool ShouldCreateNewMessage(Message previous, Message current)
@@ -137,7 +139,7 @@ namespace Carnac.Logic.Models
                   if (acc.Any())
                   {
                       var last = acc.Last();
-                      if (last.IsRepeatedBy(curr))
+                      if (last.IsRepeatedBy(curr) && abbrevRepeatedKeystrokes)
                       {
                           last.IncrementRepeat();
                       }

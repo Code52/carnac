@@ -150,6 +150,9 @@
 						<ui:PreferencesField Header="Show Application Icon">
                             <CheckBox IsChecked="{Binding Settings.ShowApplicationIcon}" />
                         </ui:PreferencesField>
+                        <ui:PreferencesField Header="Abbr. Repeated Letters">
+                            <CheckBox IsChecked="{Binding Settings.AbbrevRepeatedKeystrokes}" />
+                        </ui:PreferencesField>
                     </StackPanel>
                     <StackPanel HorizontalAlignment="Right" Orientation="Horizontal" Grid.Row="1" Margin="5">
                         <Button Width="150" Margin="0 0 5 0" Content="Reset to Defaults" Command="{Binding ResetToDefaultsCommand}" />

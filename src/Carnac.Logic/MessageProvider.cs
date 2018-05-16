@@ -36,7 +36,7 @@ namespace Carnac.Logic
                 .Scan(new ShortcutAccumulator(), (acc, key) => acc.ProcessKey(shortcutProvider, key))
                 .Where(c => c.HasCompletedValue)
                 .SelectMany(c => c.GetMessages())
-                .Scan(new Message(), (acc, key) => Message.MergeIfNeeded(acc, key))
+                .Scan(new Message(), (acc, key) => Message.MergeIfNeeded(acc, key, settings.AbbrevRepeatedKeystrokes))
                 .Where(m =>
                 {
                     if (settings.DetectShortcutsOnly && settings.ShowOnlyModifiers)

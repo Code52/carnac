@@ -87,6 +87,19 @@ namespace Carnac.Logic.Models
 
         public bool DetectShortcutsOnly { get; set; }
         public bool ShowApplicationIcon { get; set; }
+        public bool AbbrevRepeatedKeystrokes
+        {
+            get
+            {
+                return _AbbrevRepeatedKeystrokes;
+            }
+            set
+            {
+
+                _AbbrevRepeatedKeystrokes = value;
+            }
+        }
+        private bool _AbbrevRepeatedKeystrokes { get; set; }
         public bool SettingsConfigured { get; set; }
         public bool ShowOnlyModifiers { get; set; }
     }
