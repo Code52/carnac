@@ -73,12 +73,15 @@ namespace Carnac.Logic.MouseMonitor
 
         private void OnMouseClick(object sender, MouseEventArgs e)
         {
+            bool alt = (Control.ModifierKeys & Keys.Alt) != 0;
+            bool control = (Control.ModifierKeys & Keys.Control) != 0;
+            bool shift = (Control.ModifierKeys & Keys.Shift) != 0;
             observer.OnNext(new InterceptKeyEventArgs(
                 MouseButtonsToKeys(e.Button),
                 KeyDirection.Down,
-                Control.ModifierKeys == Keys.Alt,
-                Control.ModifierKeys == Keys.Control,
-                Control.ModifierKeys == Keys.Shift));
+                alt,
+                control,
+                shift));
         }
 
         private void OnMouseDoubleClick(object sender, MouseEventArgs e)

@@ -99,6 +99,9 @@ namespace Carnac.Logic.Models
         [DefaultValue("RoyalBlue")]
         public string RightClickColor { get; set; }
 
+        [DefaultValue("Yellow")]
+        public string ScrollClickColor { get; set; }
+
         [DefaultValue(1)]
         public double ClickStartScale { get; set; }
 
