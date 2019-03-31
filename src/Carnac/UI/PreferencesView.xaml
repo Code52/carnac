@@ -147,7 +147,7 @@
                             <CheckBox IsChecked="{Binding Settings.ShowOnlyModifiers}" Content="Only show keys that have ctrl, shift, alt or windows" />
                         </ui:PreferencesField>
                         <ui:PreferencesField Header="Show Application Icon">
-                            <CheckBox IsChecked="{Binding Settings.ShowApplicationIcon}" Content="Display the icon of the active application/>
+                            <CheckBox IsChecked="{Binding Settings.ShowApplicationIcon}" Content="Display the icon of the active application" />
                         </ui:PreferencesField>
                     </StackPanel>
                     <StackPanel HorizontalAlignment="Right" Orientation="Horizontal" Grid.Row="1" Margin="5">
