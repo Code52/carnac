@@ -1,0 +1,230 @@
+group: google-chrome
+process: chrome
+
+# Reference: https://support.google.com/chrome/answer/157179?hl=en
+
+shortcuts:
+  # Tab and window shortcuts
+  - name: Open a new window
+    keys:
+      - Ctrl+n
+  - name: Open a new window in Incognito mode
+    keys:
+      - Ctrl+Shift+n
+  - name: Open a new tab, and jump to it
+    keys:
+      - Ctrl+t
+  - name: Reopen the last closed tab, and jump to it
+    keys:
+      - Ctrl+Shift+t
+  - name: Jump to the next open tab
+    keys:
+      - Ctrl+Tab
+      - Ctrl+PageDown
+  - name: Jump to the previous open tab
+    keys:
+      - Ctrl+Shift+Tab
+      - Ctrl+PageUp
+  - name: Go back
+    keys:
+      - Alt+Left
+  - name: Go forward
+    keys:
+      - Alt+Right
+  - name: Jump to first tab
+    keys:
+      - Ctrl+1
+  - name: Jump to second tab
+    keys:
+      - Ctrl+2
+  - name: Jump to third tab
+    keys:
+      - Ctrl+3
+  - name: Jump to fourth tab
+    keys:
+      - Ctrl+4
+  - name: Jump to fifth tab
+    keys:
+      - Ctrl+5
+  - name: Jump to sixth tab
+    keys:
+      - Ctrl+6
+  - name: Jump to seventh tab
+    keys:
+      - Ctrl+7
+  - name: Jump to eighth tab
+    keys:
+      - Ctrl+8
+  - name: Jump to the last tab
+    keys:
+      - Ctrl+9
+  - name: Open your home page in the current tab
+    keys:
+      - Alt+Home
+  - name: Open the previous page from your browsing history in the current tab
+    keys:
+      - Alt+Left arrow
+  - name: Open the next page from your browsing history in the current tab
+    keys:
+      - Alt+Right arrow
+  - name: Close the current tab
+    keys:
+      - Ctrl+w
+      - Ctrl+F4
+  - name: Close the current window
+    keys:
+      - Ctrl+Shift+w
+  - name: Minimize the current window
+    keys:
+      - Alt+Space+n
+  - name: Maximize the current window
+    keys:
+      - Alt+Space+x
+  - name: Close the current window
+    keys:
+      - Alt+F4
+  - name: Quit Google Chrome
+    keys:
+      - Ctrl+Shift+q
+
+  # Google Chrome feature shortcuts
+  - name: Open the Chrome menu
+    keys:
+      - Alt+f
+      - Alt+e
+      - F10+Enter
+  - name: Show or hide the Bookmarks bar
+    keys:
+      - Ctrl+Shift+b
+  - name: Open the Bookmarks Manager
+    keys:
+      - Ctrl+Shift+o
+  - name: Open the History page in a new tab
+    keys:
+      - Ctrl+h
+  - name: Open the Downloads page in a new tab
+    keys:
+      - Ctrl+j
+  - name: Open the Chrome Task Manager
+    keys:
+      - Shift+Esc
+  - name: Set focus on the first item in the Chrome toolbar
+    keys:
+      - Shift+Alt+t
+  - name: Set focus on the last item in the Chrome toolbar
+    keys:
+      - F10
+  - name: Switch focus to unfocused dialog (if showing)
+    keys:
+      - F6
+  - name: Open the Find Bar to search the current page
+    keys:
+      - Ctrl+f
+      - F3
+  - name: Jump to the next match to your Find Bar search
+    keys:
+      - Ctrl+g
+  - name: Jump to the previous match to your Find Bar search
+    keys:
+      - Ctrl+Shift+g
+  - name: Open Developer Tools
+    keys:
+      - Ctrl+Shift+j
+      - F12
+  - name: Open the Clear Browsing Data options
+    keys:
+      - Ctrl+Shift+Delete
+  - name: Open the Chrome Help Center in a new tab
+    keys:
+      - F1
+  - name: Log in a different user or browse as a Guest
+    keys:
+      - Ctrl+Shift+m
+  - name: Open a feedback form
+    keys:
+      - Alt+Shift+i
+
+  # Adress bar shortcuts
+  - name: Jump to the address bar
+    keys:
+      - Ctrl+l
+      - Alt+d
+      - F6
+  - name: Search from anywhere on the page
+    keys:
+      - Ctrl+k
+      - Ctrl+e
+
+  # Webpage shortcuts
+  - name: Open options to print the current page
+    keys:
+      - Ctrl+p
+  - name: Open options to save the current page
+    keys:
+      - Ctrl+s
+  - name: Reload the current page
+    keys:
+      - F5
+      - Ctrl+r
+  - name: Reload the current page, ignoring cached content
+    keys:
+      - Shift+F5
+      - Ctrl+Shift+r
+  - name: Stop the page loading
+    keys:
+      - Esc
+  - name: Browse clickable items moving forward
+    keys:
+      - Tab
+  - name: Browse clickable items moving backward
+    keys:
+      - Shift+Tab
+  - name: Open a file from your computer in Chrome
+    keys:
+      - Ctrl+o
+  - name: Display non-editable HTML source code for the current page
+    keys:
+      - Ctrl+u
+  - name: Save your current webpage as a bookmark
+    keys:
+      - Ctrl+d
+  - name: Save all open tabs as bookmarks in a new folder
+    keys:
+      - Ctrl+Shift+d
+  - name: Turn full-screen mode on or off
+    keys:
+      - F11
+  - name: Make everything on the page bigger
+    keys:
+      - Ctrl and +
+  - name: Make everything on the page smaller
+    keys:
+      - Ctrl and -
+  - name: Return everything on the page to default size
+    keys:
+      - Ctrl+0
+  - name: Scroll down a webpage, a screen at a time
+    keys:
+      - PageDown
+  - name: Scroll up a webpage, a screen at a time
+    keys:
+      - Shift+Space
+      - PageUp
+  - name: Go to the top of the page
+    keys:
+      - Home
+  - name: Go to the bottom of the page
+    keys:
+      - End
+  - name: Move your cursor to the front of the previous word in a text field
+    keys:
+      - Ctrl+Left arrow
+  - name: Move your cursor to the back of the next word in a text field
+    keys:
+      - Ctrl+Right arrow
+  - name: Delete the previous word in a text field
+    keys:
+      - Ctrl+Backspace
+  - name: Open the Home page in the current tab
+    keys:
+      - Alt+Home

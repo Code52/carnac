@@ -123,6 +123,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Compile Include="IconUtilities.cs" />
+    <Content Include="Keymaps\chrome.yml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="Keymaps\ncrunch.yml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
