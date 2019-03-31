@@ -144,7 +144,7 @@
                                         <MultiDataTrigger.Conditions>
                                             <Condition Binding="{Binding .}" Value=" " />
                                             <Condition
-                                                Binding="{Binding DataContext.Settings.ShowSpaceAsIcon, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                Binding="{Binding DataContext.Settings.ShowSpaceAsUnicode, RelativeSource={RelativeSource AncestorType=Window}}"
                                                 Value="True" />
                                         </MultiDataTrigger.Conditions>
                                         <Setter TargetName="regular" Property="TextBlock.Text" Value="␣" />
@@ -153,7 +153,7 @@
                                         <MultiDataTrigger.Conditions>
                                             <Condition Binding="{Binding .}" Value=" " />
                                             <Condition
-                                                Binding="{Binding DataContext.Settings.ShowSpaceAsIcon, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                Binding="{Binding DataContext.Settings.ShowSpaceAsUnicode, RelativeSource={RelativeSource AncestorType=Window}}"
                                                 Value="False" />
                                         </MultiDataTrigger.Conditions>
                                         <Setter TargetName="regular" Property="Control.MinWidth" Value="10"/>

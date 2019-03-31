@@ -89,6 +89,6 @@ namespace Carnac.Logic.Models
         public bool ShowApplicationIcon { get; set; }
         public bool SettingsConfigured { get; set; }
         public bool ShowOnlyModifiers { get; set; }
-        public bool ShowSpaceAsIcon { get; set; }
+        public bool ShowSpaceAsUnicode { get; set; }
     }
 }
