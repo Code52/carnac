@@ -3,18 +3,14 @@ configuration: Release
 skip_branch_with_pr: true
 skip_tags: true
 assembly_info:
-  patch: true
-  file: '**\AssemblyInfo.*'
-  assembly_version: '{version}'
-  assembly_file_version: '{version}'
-  assembly_informational_version: '{version}'
+  patch: false
 environment:
   Version: $(APPVEYOR_BUILD_VERSION)
   GithubRepo: $(APPVEYOR_REPO_NAME)
   GithubAuthToken:
     secure: N+4Z+ppud7de8Cn78ZteRln/5FTqpJw9JUi2V51G9P5JIr9Nw7a8VNpfGW3+rG1w
 build_script:
-- cmd: PowerShell -Version 2.0 .\build.ps1 -Configuration Release -Experimental -ScriptArgs '--packageversion="%APPVEYOR_BUILD_VERSION%" --authtoken="%GithubAuthToken%"'
+- cmd: PowerShell -Version 2.0 .\build.ps1 -Configuration Release -Experimental -ScriptArgs '--authtoken="%GithubAuthToken%"'
 test:
   assemblies:
     - '**\Carnac.Tests.dll'
