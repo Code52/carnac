@@ -33,6 +33,7 @@ deploy:
   draft: false
   on:
     branch: master
+    APPVEYOR_REPO_TAG: true
 - provider: GitHub
   auth_token:
     secure: tvr7i0kJpT3SAdYG037M6zU1g6FYXHAUUaseqBTUzasqsUo6mumdcW+huf5/351p
@@ -40,6 +41,7 @@ deploy:
   draft: false
   on:
     branch: master
+    APPVEYOR_REPO_TAG: true
 - provider: NuGet
   server: https://chocolatey.org/
   api_key:
@@ -48,3 +50,4 @@ deploy:
   artifact: ChocoPackage
   on:
     branch: master
+    APPVEYOR_REPO_TAG: true
