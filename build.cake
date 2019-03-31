@@ -1,8 +1,8 @@
 #tool "nuget:?package=xunit.runners&version=1.9.2";
 #tool "nuget:?package=Squirrel.Windows";
 
-#addin Cake.FileHelpers
-#addin Cake.Squirrel
+#addin "nuget:?package=Cake.FileHelpers&version=1.0.4";
+#addin "nuget:?package=Cake.Squirrel&version=0.12.0";
 
 var target = Argument("target", "Default");
 var configuration = Argument("configuration", "Debug");
