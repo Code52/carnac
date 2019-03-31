@@ -146,6 +146,9 @@
                         <ui:PreferencesField Header="Only keys with Modifiers">
                             <CheckBox IsChecked="{Binding Settings.ShowOnlyModifiers}" Content="Only show keys that have ctrl, shift, alt or windows" />
                         </ui:PreferencesField>
+                        <ui:PreferencesField Header="Show Space as ␣">
+                            <CheckBox IsChecked="{Binding Settings.ShowSpaceAsUnicode}" Content="Show Space as Unicode character '␣'" />
+                        </ui:PreferencesField>
                         <ui:PreferencesField Header="Show Application Icon">
                             <CheckBox IsChecked="{Binding Settings.ShowApplicationIcon}" Content="Display the icon of the active application" />
                         </ui:PreferencesField>

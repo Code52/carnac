@@ -140,9 +140,24 @@
                                                Padding="0" />
                                 </StackPanel>
                                 <DataTemplate.Triggers>
-                                    <DataTrigger Value=" " Binding="{Binding .}">
-                                        <Setter TargetName="regular" Property="Control.MinWidth" Value="10" />
-                                    </DataTrigger>
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition Binding="{Binding .}" Value=" " />
+                                            <Condition
+                                                Binding="{Binding DataContext.Settings.ShowSpaceAsUnicode, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                Value="True" />
+                                        </MultiDataTrigger.Conditions>
+                                        <Setter TargetName="regular" Property="TextBlock.Text" Value="␣" />
+                                    </MultiDataTrigger>
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition Binding="{Binding .}" Value=" " />
+                                            <Condition
+                                                Binding="{Binding DataContext.Settings.ShowSpaceAsUnicode, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                Value="False" />
+                                        </MultiDataTrigger.Conditions>
+                                        <Setter TargetName="regular" Property="Control.MinWidth" Value="10"/>
+                                    </MultiDataTrigger>
                                     <DataTrigger Value="Return" Binding="{Binding .}">
                                         <Setter TargetName="KeyCapBorder" Property="Control.Visibility" Value="Visible" />
                                         <Setter TargetName="KeyCap" Property="Text" Value="↵" />
