@@ -19,6 +19,7 @@ var zipFileHash = "";
 
 var squirrelDeployDir = deployDir + Directory("Squirrel");
 var squirrelReleaseDir = squirrelDeployDir + Directory("Releases");
+var gitHubDeployDir = deployDir + Directory("GitHub");
 
 Task("Clean")
     .Does(() =>
@@ -111,7 +112,6 @@ Task("Package-Zip")
 	.IsDependentOn("Package-Squirrel")
 	.Does(() =>
 	{
-		var gitHubDeployDir = deployDir + Directory("GitHub");
 		var zipFile = gitHubDeployDir + File($"carnac.{version}.zip");
 
 		EnsureDirectoryExists(deployDir);
@@ -165,7 +165,28 @@ Task("Package")
 		EnsureDirectoryExists(deployDir);
 	});
 
+Task("Create-Checksums-File")
+    .IsDependentOn("Package")
+    .Does(() =>
+    {
+        var checksumDir = deployDir + Directory("Checksums");
+        EnsureDirectoryExists(checksumDir);
+
+        var files = GetFiles($"{squirrelReleaseDir.Path}\\*")
+            .Concat(GetFiles($"{gitHubDeployDir.Path}\\*"));
+
+        var checksumFile = checksumDir + File($"sha256sums.txt");
+        var sha256sums = new List<string>();
+        foreach(var file in files)
+        {
+            var fileName = file.GetFilename();
+            var fileHash = CalculateFileHash(file, HashAlgorithm.SHA256).ToHex();
+            sha256sums.Add($"{fileHash} {fileName}");
+        }
+        FileAppendLines(checksumFile, sha256sums.ToArray());
+    });
+
 Task("Default")
-    .IsDependentOn("Package");
+    .IsDependentOn("Create-Checksums-File");
 
 RunTarget(target);

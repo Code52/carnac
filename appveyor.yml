@@ -25,6 +25,8 @@ artifacts:
   name: ZipPackage
 - path: deploy\Squirrel\Releases\*
   name: SquirrelPackage
+- path: deploy\Checksums\*.txt
+  name: Checksums
 deploy:
 - provider: GitHub
   auth_token:
@@ -38,6 +40,14 @@ deploy:
   auth_token:
     secure: N+4Z+ppud7de8Cn78ZteRln/5FTqpJw9JUi2V51G9P5JIr9Nw7a8VNpfGW3+rG1w
   artifact: SquirrelPackage
+  draft: false
+  on:
+    branch: master
+    APPVEYOR_REPO_TAG: true
+- provider: GitHub
+  auth_token:
+    secure: N+4Z+ppud7de8Cn78ZteRln/5FTqpJw9JUi2V51G9P5JIr9Nw7a8VNpfGW3+rG1w
+  artifact: Checksums
   draft: false
   on:
     branch: master
