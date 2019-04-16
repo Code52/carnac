@@ -115,7 +115,7 @@ namespace Carnac.Tests
         public async Task output_with_matching_filter()
         {
             // arrange
-            string currentProcessName = Process.GetCurrentProcess().ProcessName;
+            string currentProcessName = AssociatedProcessUtilities.GetAssociatedProcess().ProcessName;
             settingsProvider.GetSettings<PopupSettings>().Returns(new PopupSettings() { ProcessFilterExpression = currentProcessName });
             var player = KeyStreams.LetterL();
             var provider = new KeyProvider(player, passwordModeService, desktopLockEventService, settingsProvider);

@@ -18,7 +18,6 @@ namespace Carnac.Logic
     public class KeyProvider : IKeyProvider
     {
         readonly IInterceptKeys interceptKeysSource;
-        readonly Dictionary<int, Process> processes;
         readonly IPasswordModeService passwordModeService;
         readonly IDesktopLockEventService desktopLockEventService;
         readonly PopupSettings settings;
@@ -43,12 +42,6 @@ namespace Carnac.Logic
 
         private bool winKeyPressed;
 
-        [DllImport("User32.dll")]
-        private static extern int GetForegroundWindow();
-
-        [DllImport("user32.dll")]
-        private static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
-
         public KeyProvider(IInterceptKeys interceptKeysSource, IPasswordModeService passwordModeService, IDesktopLockEventService desktopLockEventService, ISettingsProvider settingsProvider)
         {
             if (settingsProvider == null)
@@ -56,7 +49,6 @@ namespace Carnac.Logic
                 throw new ArgumentNullException(nameof(settingsProvider));
             }
 
-            processes = new Dictionary<int, Process>();
             this.interceptKeysSource = interceptKeysSource;
             this.passwordModeService = passwordModeService;
             this.desktopLockEventService = desktopLockEventService;
@@ -136,7 +128,7 @@ namespace Carnac.Logic
 
         KeyPress ToCarnacKeyPress(InterceptKeyEventArgs interceptKeyEventArgs)
         {
-            var process = GetAssociatedProcess();
+            var process = AssociatedProcessUtilities.GetAssociatedProcess();
             if (process == null)
             {
                 return null;
@@ -199,29 +191,6 @@ namespace Carnac.Logic
                     yield return interceptKeyEventArgs.Key.ToString().ToLower();
                 else
                     yield return interceptKeyEventArgs.Key.Sanitise();
-            }
-        }
-
-        Process GetAssociatedProcess()
-        {
-            var handle = GetForegroundWindow();
-
-            if (processes.ContainsKey(handle))
-            {
-                return processes[handle];
-            }
-
-            uint processId;
-            GetWindowThreadProcessId(new IntPtr(handle), out processId);
-            try
-            {
-                var p = Process.GetProcessById(Convert.ToInt32(processId));
-                processes.Add(handle, p);
-                return p;
-            }
-            catch (ArgumentException)
-            {
-                return null;
             }
         }
     }
