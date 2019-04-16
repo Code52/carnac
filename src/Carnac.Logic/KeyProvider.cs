@@ -135,7 +135,8 @@ namespace Carnac.Logic
             }
 
             // see if this process is one being filtered for
-            if (ShouldFilterProcess(out Regex filterRegex) && !filterRegex.IsMatch(process.ProcessName))
+            Regex filterRegex;
+            if (ShouldFilterProcess(out filterRegex) && !filterRegex.IsMatch(process.ProcessName))
             {
                 return null;
             }
