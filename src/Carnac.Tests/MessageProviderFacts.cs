@@ -10,6 +10,7 @@ using Carnac.Logic.KeyMonitor;
 using Carnac.Logic.Models;
 using Microsoft.Win32;
 using NSubstitute;
+using SettingsProviderNet;
 using Xunit;
 
 namespace Carnac.Tests
@@ -30,8 +31,9 @@ namespace Carnac.Tests
             var source = Substitute.For<IInterceptKeys>();
             source.GetKeyStream().Returns(keysStreamSource);
             var desktopLockEventService = Substitute.For<IDesktopLockEventService>();
+            var settingsProvider = Substitute.For<ISettingsProvider>();
             desktopLockEventService.GetSessionSwitchStream().Returns(Observable.Never<SessionSwitchEventArgs>());
-            var keyProvider = new KeyProvider(source, new PasswordModeService(), desktopLockEventService);
+            var keyProvider = new KeyProvider(source, new PasswordModeService(), desktopLockEventService, settingsProvider);
             return new MessageProvider(shortcutProvider, keyProvider, new PopupSettings());
         }
 

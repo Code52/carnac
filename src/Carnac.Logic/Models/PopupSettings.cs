@@ -65,6 +65,9 @@ namespace Carnac.Logic.Models
         [NotifyProperty(AlsoNotifyFor = new[] { "Margins" })]
         public int RightOffset { get; set; }
 
+        [DefaultValue("")]
+        public string ProcessFilterExpression { get; set;  }
+
         public double ScaleTransform
         {
             get { return Placement == NotificationPlacement.TopLeft || Placement == NotificationPlacement.TopRight ? 1 : -1; }
