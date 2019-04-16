@@ -22,7 +22,6 @@ namespace Carnac.Logic
         readonly IDesktopLockEventService desktopLockEventService;
         readonly PopupSettings settings;
         string currentFilter = null;
-        Regex filterRegex;
 
         private readonly IList<Keys> modifierKeys =
             new List<Keys>
@@ -56,13 +55,14 @@ namespace Carnac.Logic
             settings = settingsProvider.GetSettings<PopupSettings>();
         }
 
-        private bool EnsureProcessFilter()
+        private bool ShouldFilterProcess(out Regex filterRegex)
         {
+            filterRegex = null;
             if (settings?.ProcessFilterExpression != currentFilter)
             {
-                currentFilter = settings.ProcessFilterExpression;
+                currentFilter = settings?.ProcessFilterExpression;
 
-                if (!String.IsNullOrEmpty(currentFilter))
+                if (!string.IsNullOrEmpty(currentFilter))
                 {
                     try
                     {
@@ -135,12 +135,9 @@ namespace Carnac.Logic
             }
 
             // see if this process is one being filtered for
-            if (EnsureProcessFilter())
+            if (ShouldFilterProcess(out var filterRegex) && !filterRegex.IsMatch(process.ProcessName))
             {
-                if (!filterRegex.IsMatch(process.ProcessName))
-                {
-                    return null;
-                }
+                return null;
             }
 
             var isLetter = interceptKeyEventArgs.IsLetter();
