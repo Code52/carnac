@@ -1,12 +1,14 @@
 #tool "nuget:?package=xunit.runners&version=1.9.2";
 #tool "nuget:?package=Squirrel.Windows";
+#tool "nuget:?package=GitVersion.CommandLine";
 
 #addin "nuget:?package=Cake.FileHelpers&version=1.0.4";
 #addin "nuget:?package=Cake.Squirrel&version=0.12.0";
+#addin "nuget:?package=Newtonsoft.Json";
+using Newtonsoft.Json;
 
 var target = Argument("target", "Default");
 var configuration = Argument("configuration", "Debug");
-var version = Argument("packageversion", "1.0.0");
 var githubRepo = Argument("githubrepo", "Code52/carnac");
 var githubAuthToken = Argument("authtoken", "");
 
@@ -20,6 +22,27 @@ var zipFileHash = "";
 var squirrelDeployDir = deployDir + Directory("Squirrel");
 var squirrelReleaseDir = squirrelDeployDir + Directory("Releases");
 var gitHubDeployDir = deployDir + Directory("GitHub");
+GitVersion gitVersionInfo;
+string nugetVersion;
+
+Setup(context => 
+{
+	gitVersionInfo = GitVersion(new GitVersionSettings {
+		UpdateAssemblyInfo = true,
+		OutputType = GitVersionOutput.Json
+	});
+	nugetVersion = gitVersionInfo.NuGetVersion;
+
+	Information("Output from GitVersion:");
+	Information(JsonConvert.SerializeObject(gitVersionInfo, Formatting.Indented));
+
+	if (BuildSystem.IsRunningOnAppVeyor) {
+		BuildSystem.AppVeyor.UpdateBuildVersion(nugetVersion);
+	}
+
+	Information($"Building {githubRepo} v{nugetVersion}");
+	Information($"Informational version {gitVersionInfo.InformationalVersion}");
+});
 
 Task("Clean")
     .Does(() =>
@@ -81,7 +104,7 @@ Task("Package-Squirrel")
 
 		var nuGetPackSettings = new NuGetPackSettings
 		{
-			Version = version,
+			Version = nugetVersion,
 			Files = releaseFiles.Select(f => new NuSpecContent { Source = f, Target = "lib/net45" + (f.Contains("Keymaps") ? "/Keymaps" : "") }).ToList(),
 			BasePath = buildDir,
 			OutputDirectory = squirrelDeployDir,
@@ -95,7 +118,7 @@ Task("Package-Squirrel")
 
 		// Create new squirrel package
 		Squirrel(
-			squirrelDeployDir + File($"carnac.{version}.nupkg"), 
+			squirrelDeployDir + File($"carnac.{nugetVersion}.nupkg"), 
 			new SquirrelSettings
 			{
 				ReleaseDirectory = squirrelReleaseDir,
@@ -112,12 +135,12 @@ Task("Package-Zip")
 	.IsDependentOn("Package-Squirrel")
 	.Does(() =>
 	{
-		var zipFile = gitHubDeployDir + File($"carnac.{version}.zip");
+		var zipFile = gitHubDeployDir + File($"carnac.{nugetVersion}.zip");
 
 		EnsureDirectoryExists(deployDir);
 		EnsureDirectoryExists(gitHubDeployDir);
 
-		var files = GetFiles($"{squirrelReleaseDir.Path}\\carnac-{version}-*.nupkg")
+		var files = GetFiles($"{squirrelReleaseDir.Path}\\carnac-{nugetVersion}-*.nupkg")
 			.Select(f => f.FullPath)
 			.Concat(
 				new []
@@ -144,14 +167,14 @@ Task("Package-Choco")
 		EnsureDirectoryExists(deployDir);
 		EnsureDirectoryExists(chocoDeployDir);
 
-		var url = $"{githubRepoUrl}/releases/download/{version}";
+		var url = $"{githubRepoUrl}/releases/download/{nugetVersion}";
 
-		ReplaceRegexInFiles(chocoInstallFile, @"\$url = '.+'", $"$url = '{url}/carnac.{version}.zip'");
+		ReplaceRegexInFiles(chocoInstallFile, @"\$url = '.+'", $"$url = '{url}/carnac.{nugetVersion}.zip'");
 		ReplaceRegexInFiles(chocoInstallFile, @"\$zipFileHash = '.+'", $"$zipFileHash = '{zipFileHash}'");
 
 		ChocolateyPack(chocoSpecPath, new ChocolateyPackSettings
 		{
-			Version = version
+			Version = nugetVersion
 		});
 		MoveFiles("./*.nupkg", chocoDeployDir);
 	});
