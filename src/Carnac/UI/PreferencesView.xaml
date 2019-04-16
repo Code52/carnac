@@ -155,7 +155,7 @@
                         <ui:PreferencesField Header="Process Filter">
                             <StackPanel Orientation="Vertical">
                                 <TextBox Text="{Binding Settings.ProcessFilterExpression}"></TextBox>
-                                <TextBlock HorizontalAlignment="Right">Only show keys from processes matching this regular expression</TextBlock>
+                                <TextBlock HorizontalAlignment="Left">Only show keys from processes matching this regular expression</TextBlock>
                             </StackPanel>
                         </ui:PreferencesField>
                     </StackPanel>
