@@ -26,7 +26,7 @@ artifacts:
 deploy:
 - provider: GitHub
   auth_token:
-    secure: N+4Z+ppud7de8Cn78ZteRln/5FTqpJw9JUi2V51G9P5JIr9Nw7a8VNpfGW3+rG1w
+    secure: wzcaj3QeW13CSo26Gshrzwzk9ftvfgqalsqEppaIESO5M2/HcqxVhIi21NHoIBui
   artifact: ZipPackage
   draft: false
   on:
@@ -34,7 +34,7 @@ deploy:
     APPVEYOR_REPO_TAG: true
 - provider: GitHub
   auth_token:
-    secure: N+4Z+ppud7de8Cn78ZteRln/5FTqpJw9JUi2V51G9P5JIr9Nw7a8VNpfGW3+rG1w
+    secure: wzcaj3QeW13CSo26Gshrzwzk9ftvfgqalsqEppaIESO5M2/HcqxVhIi21NHoIBui
   artifact: SquirrelPackage
   draft: false
   on:
@@ -42,7 +42,7 @@ deploy:
     APPVEYOR_REPO_TAG: true
 - provider: GitHub
   auth_token:
-    secure: N+4Z+ppud7de8Cn78ZteRln/5FTqpJw9JUi2V51G9P5JIr9Nw7a8VNpfGW3+rG1w
+    secure: wzcaj3QeW13CSo26Gshrzwzk9ftvfgqalsqEppaIESO5M2/HcqxVhIi21NHoIBui
   artifact: Checksums
   draft: false
   on:
