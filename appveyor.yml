@@ -1,7 +1,7 @@
 version: 2.2.{build}
 configuration: Release
 skip_branch_with_pr: true
-skip_tags: true
+skip_tags: false
 assembly_info:
   patch: false
 environment:
