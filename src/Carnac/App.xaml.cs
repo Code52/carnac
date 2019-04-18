@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Net;
 using System.Reactive.Linq;
 using System.Windows;
 using Carnac.Logic;
@@ -35,6 +36,7 @@ namespace Carnac
 
         protected override void OnStartup(StartupEventArgs e)
         {
+            ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12;
             // Check if there was instance before this. If there was-close the current one.  
             if (ProcessUtilities.ThisProcessIsAlreadyRunning())
             {
