@@ -36,6 +36,8 @@ namespace Carnac.UI
             var vm = ((KeyShowViewModel)DataContext);
             Left = vm.Settings.Left;
             vm.Settings.LeftChanged += SettingsLeftChanged;
+            Top = vm.Settings.Top;
+            vm.Settings.TopChanged += SettingsTopChanged;
             WindowState = WindowState.Maximized;
         }
 
@@ -90,6 +92,14 @@ namespace Carnac.UI
             WindowState = WindowState.Normal;
             var vm = ((KeyShowViewModel)DataContext);
             Left = vm.Settings.Left;
+            WindowState = WindowState.Maximized;
+        }
+
+        void SettingsTopChanged(object sender, EventArgs e)
+        {
+            WindowState = WindowState.Normal;
+            var vm = ((KeyShowViewModel)DataContext);
+            Top = vm.Settings.Top;
             WindowState = WindowState.Maximized;
         }
     }

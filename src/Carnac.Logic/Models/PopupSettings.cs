@@ -53,6 +53,25 @@ namespace Carnac.Logic.Models
             if (handler != null) handler(this, e);
         }
 
+        double top;
+        public double Top
+        {
+            get { return top; }
+            set
+            {
+                top = value;
+                OnTopChanged(EventArgs.Empty);
+            }
+        }
+
+        public event EventHandler TopChanged;
+
+        protected void OnTopChanged(EventArgs e)
+        {
+            var handler = TopChanged;
+            if (handler != null) handler(this, e);
+        }
+
         [NotifyProperty(AlsoNotifyFor = new[] { "Margins" })]
         public int TopOffset { get; set; }
 
