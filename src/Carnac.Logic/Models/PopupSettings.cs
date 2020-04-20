@@ -97,6 +97,12 @@ namespace Carnac.Logic.Models
         [DefaultValue(true)]
         public bool ShowMouseClicks { get; set; }
 
+        [DefaultValue(true)]
+        public bool ShowMouseClickKeys { get; set; }
+
+        [DefaultValue(true)]
+        public bool ShowMouseScrollKeys { get; set; }
+
         [DefaultValue(40)]
         public int MouseKeySize { get; set; }
 

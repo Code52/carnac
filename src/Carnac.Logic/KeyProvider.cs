@@ -146,6 +146,16 @@ namespace Carnac.Logic
                 return null;
             }
 
+            if (!settings.ShowMouseClickKeys && (interceptKeyEventArgs.Key == Keys.LButton || interceptKeyEventArgs.Key == Keys.MButton || interceptKeyEventArgs.Key == Keys.RButton || interceptKeyEventArgs.Key == Keys.XButton1 || interceptKeyEventArgs.Key == Keys.XButton2))
+            {
+                return null;
+            }
+
+            if (!settings.ShowMouseScrollKeys && (interceptKeyEventArgs.Key == Keys.VolumeUp || interceptKeyEventArgs.Key == Keys.VolumeDown))
+            {
+                return null;
+            }
+
             var isLetter = interceptKeyEventArgs.IsLetter();
             var inputs = ToInputs(isLetter, winKeyPressed, interceptKeyEventArgs).ToArray();
             try

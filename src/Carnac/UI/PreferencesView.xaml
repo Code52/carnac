@@ -180,6 +180,12 @@
 						<ui:PreferencesField Header="Show mouse clicks">
 							<CheckBox IsChecked="{Binding Settings.ShowMouseClicks}" />
 						</ui:PreferencesField>
+                        <ui:PreferencesField Header="Show clicks as keys">
+                            <CheckBox IsChecked="{Binding Settings.ShowMouseClickKeys}" />
+                        </ui:PreferencesField>
+                        <ui:PreferencesField Header="Show scroll as keys">
+                            <CheckBox IsChecked="{Binding Settings.ShowMouseScrollKeys}" />
+                        </ui:PreferencesField>
                         <ui:PreferencesField Header="Mouse Key Size">
                             <Slider Value="{Binding Settings.MouseKeySize}" IsSnapToTickEnabled="True"
                             LargeChange="2" Maximum="300" Minimum="8" SmallChange="1" TickFrequency="1" />
