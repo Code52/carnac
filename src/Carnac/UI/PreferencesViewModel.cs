@@ -44,6 +44,8 @@ namespace Carnac.UI
                     LeftClickColor = availableColor;
                 if (Settings.RightClickColor == name)
                     RightClickColor = availableColor;
+                if (Settings.ScrollClickColor == name)
+                    ScrollClickColor = availableColor;
 
                 AvailableColors.Add(availableColor);
             }
@@ -55,6 +57,10 @@ namespace Carnac.UI
             if (RightClickColor == null)
             {
                 RightClickColor = new AvailableColor("RoyalBlue", Colors.RoyalBlue);
+            }
+            if (ScrollClickColor == null)
+            {
+                ScrollClickColor = new AvailableColor("Yellow", Colors.RoyalBlue);
             }
 
 
@@ -122,6 +128,8 @@ namespace Carnac.UI
 
         public AvailableColor RightClickColor { get; set; }
 
+        public AvailableColor ScrollClickColor { get; set; }
+
         void Visit()
         {
             try
@@ -162,6 +170,7 @@ namespace Carnac.UI
             Settings.ItemBackgroundColor = ItemBackgroundColor.Name;
             Settings.LeftClickColor = LeftClickColor.Name;
             Settings.RightClickColor = RightClickColor.Name;
+            Settings.ScrollClickColor = ScrollClickColor.Name;
             settingsProvider.SaveSettings(Settings);
         }
 

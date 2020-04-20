@@ -166,6 +166,10 @@ namespace Carnac.UI
             {
                 vm.Settings.ClickColor = vm.Settings.RightClickColor;
             }
+            else if (e.Button == System.Windows.Forms.MouseButtons.Middle)
+            {
+                vm.Settings.ClickColor = vm.Settings.ScrollClickColor;
+            }
             sb.Begin();
         }
 
