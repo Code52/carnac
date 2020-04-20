@@ -46,6 +46,10 @@ namespace Carnac.UI
                     RightClickColor = availableColor;
                 if (Settings.ScrollClickColor == name)
                     ScrollClickColor = availableColor;
+                if (Settings.XButton1ClickColor == name)
+                    XButton1ClickColor = availableColor;
+                if (Settings.XButton2ClickColor == name)
+                    XButton2ClickColor = availableColor;
 
                 AvailableColors.Add(availableColor);
             }
@@ -60,7 +64,15 @@ namespace Carnac.UI
             }
             if (ScrollClickColor == null)
             {
-                ScrollClickColor = new AvailableColor("Yellow", Colors.RoyalBlue);
+                ScrollClickColor = new AvailableColor("Gold", Colors.Gold);
+            }
+            if (XButton1ClickColor == null)
+            {
+                XButton1ClickColor = new AvailableColor("Peru", Colors.Peru);
+            }
+            if (XButton2ClickColor == null)
+            {
+                XButton2ClickColor = new AvailableColor("Plum", Colors.Plum);
             }
 
 
@@ -130,6 +142,10 @@ namespace Carnac.UI
 
         public AvailableColor ScrollClickColor { get; set; }
 
+        public AvailableColor XButton1ClickColor { get; set; }
+
+        public AvailableColor XButton2ClickColor { get; set; }
+
         void Visit()
         {
             try
@@ -171,6 +187,8 @@ namespace Carnac.UI
             Settings.LeftClickColor = LeftClickColor.Name;
             Settings.RightClickColor = RightClickColor.Name;
             Settings.ScrollClickColor = ScrollClickColor.Name;
+            Settings.XButton1ClickColor = XButton1ClickColor.Name;
+            Settings.XButton2ClickColor = XButton2ClickColor.Name;
             settingsProvider.SaveSettings(Settings);
         }
 

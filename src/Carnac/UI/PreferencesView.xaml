@@ -251,6 +251,16 @@
                               ItemsSource="{Binding AvailableColors}"
                               ItemTemplate="{StaticResource ColourPickerTemplate}" />
                         </ui:PreferencesField>
+                        <ui:PreferencesField Header="XButton1 Click Color">
+                            <ComboBox SelectedItem="{Binding XButton1ClickColor}"
+                              ItemsSource="{Binding AvailableColors}"
+                              ItemTemplate="{StaticResource ColourPickerTemplate}" />
+                        </ui:PreferencesField>
+                        <ui:PreferencesField Header="XButton2 Click Color">
+                            <ComboBox SelectedItem="{Binding XButton2ClickColor}"
+                              ItemsSource="{Binding AvailableColors}"
+                              ItemTemplate="{StaticResource ColourPickerTemplate}" />
+                        </ui:PreferencesField>
                     </StackPanel>
 					<StackPanel HorizontalAlignment="Right" Orientation="Horizontal" Grid.Row="1" Margin="0,5,5.333,5.333" Grid.Column="1">
 						<Button Width="150" Margin="0 0 5 0" Content="Reset to Defaults" Command="{Binding ResetToDefaultsCommand}" />

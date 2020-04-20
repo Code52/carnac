@@ -170,6 +170,14 @@ namespace Carnac.UI
             {
                 vm.Settings.ClickColor = vm.Settings.ScrollClickColor;
             }
+            else if (e.Button == System.Windows.Forms.MouseButtons.XButton1)
+            {
+                vm.Settings.ClickColor = vm.Settings.XButton1ClickColor;
+            }
+            else if (e.Button == System.Windows.Forms.MouseButtons.XButton2)
+            {
+                vm.Settings.ClickColor = vm.Settings.XButton2ClickColor;
+            }
             sb.Begin();
         }
 
