@@ -228,7 +228,7 @@
 							<ui:PreferencesField.SecondaryControl>
 								<TextBox Foreground="White" Text="{Binding Settings.ClickStopOpacity}" />
 							</ui:PreferencesField.SecondaryControl>
-						</ui:PreferencesField>						
+						</ui:PreferencesField>
 						<ui:PreferencesField Header="Circle Fade Delay (ms)">
 							<Slider Value="{Binding Settings.ClickFadeDelay}" IsSnapToTickEnabled="True"
                             LargeChange="1000" Maximum="5000" Minimum="100" SmallChange="100" TickFrequency="200" />
@@ -252,7 +252,7 @@
 						<Button Width="50" Content="Save" Command="{Binding SaveCommand}" />
 					</StackPanel>
 				</Grid>
-			</TabItem>            
+			</TabItem>
             <TabItem Header="About">
                 <StackPanel Margin="20,40,0,0" Orientation="Horizontal">
                     <StackPanel Width="340">

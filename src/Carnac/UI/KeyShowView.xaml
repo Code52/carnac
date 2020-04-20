@@ -520,7 +520,6 @@
                                             <Setter TargetName="KeyCap" Property="Control.Visibility" Value="Collapsed" />
                                             <Setter TargetName="icon" Property="Rectangle.Fill"
                                     Value="{StaticResource XButton2}" />
-  
                                         </DataTrigger>
                                     </DataTemplate.Triggers>
                             </DataTemplate>
