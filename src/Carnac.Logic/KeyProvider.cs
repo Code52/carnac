@@ -195,28 +195,5 @@ namespace Carnac.Logic
                 yield return interceptKeyEventArgs.Key.Sanitise();
             }
         }
-
-        Process GetAssociatedProcess()
-        {
-            var handle = GetForegroundWindow();
-
-            if (processes.ContainsKey(handle))
-            {
-                return processes[handle];
-            }
-
-            uint processId;
-            GetWindowThreadProcessId(new IntPtr(handle), out processId);
-            try
-            {
-                var p = Process.GetProcessById(Convert.ToInt32(processId));
-                processes.Add(handle, p);
-                return p;
-            }
-            catch (ArgumentException)
-            {
-                return null;
-            }
-        }
     }
 }

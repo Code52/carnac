@@ -14,6 +14,7 @@ namespace Carnac.Logic.Models
         readonly string processName;
         readonly ImageSource processIcon;
         readonly string shortcutName;
+        readonly bool canBeMerged;
         readonly bool isShortcut;
         readonly bool isModifier;
         readonly bool isDeleting;
@@ -30,6 +31,7 @@ namespace Carnac.Logic.Models
         {
             processName = key.Process.ProcessName;
             processIcon = key.Process.ProcessIcon;
+            canBeMerged = !key.HasModifierPressed;
             isModifier = key.HasModifierPressed;
 
             keys = new ReadOnlyCollection<KeyPress>(new[] { key });
@@ -52,6 +54,7 @@ namespace Carnac.Logic.Models
 
             this.isShortcut = isShortcut;
             this.isModifier = allKeys.Any(k => k.HasModifierPressed);
+            canBeMerged = false;
 
             this.keys = new ReadOnlyCollection<KeyPress>(allKeys);
 
@@ -65,6 +68,7 @@ namespace Carnac.Logic.Models
             : this(initial.keys.Concat(appended.keys), new KeyShortcut(initial.ShortcutName))
         {
             previous = initial;
+            canBeMerged = true;
         }
 
         private Message(Message initial, bool isDeleting)
@@ -86,6 +90,8 @@ namespace Carnac.Logic.Models
         public ImageSource ProcessIcon { get { return processIcon; } }
 
         public string ShortcutName { get { return shortcutName; } }
+
+        public bool CanBeMerged { get { return canBeMerged; } }
 
         public bool IsShortcut { get { return isShortcut; } }
 
