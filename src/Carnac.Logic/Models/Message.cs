@@ -14,6 +14,7 @@ namespace Carnac.Logic.Models
         readonly string processName;
         readonly ImageSource processIcon;
         readonly string shortcutName;
+        readonly bool canBeMerged;
         readonly bool isShortcut;
         readonly bool isModifier;
         readonly bool isDeleting;
@@ -66,6 +67,7 @@ namespace Carnac.Logic.Models
             : this(initial.keys.Concat(appended.keys), new KeyShortcut(initial.ShortcutName))
         {
             previous = initial;
+            canBeMerged = true;
         }
 
         private Message(Message initial, bool isDeleting)
@@ -87,6 +89,8 @@ namespace Carnac.Logic.Models
         public ImageSource ProcessIcon { get { return processIcon; } }
 
         public string ShortcutName { get { return shortcutName; } }
+
+        public bool CanBeMerged { get { return canBeMerged; } }
 
         public bool IsShortcut { get { return isShortcut; } }
 
@@ -133,13 +137,13 @@ namespace Carnac.Logic.Models
                    current.LastMessage.Subtract(previous.LastMessage) > OneSecond ||
                    KeyProvider.IsModifierKeyPress(current.keys[0].InterceptKeyEventArgs) ||
                    // accumulate also same modifier shortcuts
-                   (previous.keys[0].HasModifierPressed && !previous.keys[0].Input.SequenceEqual(current.keys[0].Input))
+                   (previous.keys[0].HasModifierPressed && !previous.keys[0].Input.SequenceEqual(current.keys[0].Input)) ||
                    !previous.CanBeMerged ||
                    !current.CanBeMerged ||
                    // new message for different mouse keys;
                    ((InterceptMouse.MouseKeys.Contains(current.keys[0].Key) ||
                    (previous.keys != null && InterceptMouse.MouseKeys.Contains(previous.keys[0].Key)))
-                   && !previous.keys[0].Input.SequenceEqual(current.keys[0].Input));;
+                   && !previous.keys[0].Input.SequenceEqual(current.keys[0].Input));
         }
 
         public Message FadeOut()
