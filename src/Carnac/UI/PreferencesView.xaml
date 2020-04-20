@@ -180,7 +180,14 @@
 						<ui:PreferencesField Header="Show mouse clicks">
 							<CheckBox IsChecked="{Binding Settings.ShowMouseClicks}" />
 						</ui:PreferencesField>
-						<ui:PreferencesField Header="Start Scale">
+                        <ui:PreferencesField Header="Mouse Key Size">
+                            <Slider Value="{Binding Settings.MouseKeySize}" IsSnapToTickEnabled="True"
+                            LargeChange="2" Maximum="300" Minimum="8" SmallChange="1" TickFrequency="1" />
+                            <ui:PreferencesField.SecondaryControl>
+                                <TextBox Foreground="White" Text="{Binding Settings.MouseKeySize}" />
+                            </ui:PreferencesField.SecondaryControl>
+                        </ui:PreferencesField>
+                        <ui:PreferencesField Header="Start Scale">
 							<Slider IsSnapToTickEnabled="True" Value="{Binding Settings.ClickStartScale}"
                             LargeChange="1" Maximum="10" Minimum="0" SmallChange="0.1" TickFrequency="1" />
 							<ui:PreferencesField.SecondaryControl>

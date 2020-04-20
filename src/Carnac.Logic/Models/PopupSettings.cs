@@ -97,6 +97,9 @@ namespace Carnac.Logic.Models
         [DefaultValue(true)]
         public bool ShowMouseClicks { get; set; }
 
+        [DefaultValue(40)]
+        public int MouseKeySize { get; set; }
+
         [DefaultValue("OrangeRed")]
         public string LeftClickColor { get; set; }
 
