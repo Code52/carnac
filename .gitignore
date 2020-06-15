@@ -23,4 +23,4 @@ src/Carnac.sln.ide/
 # Cake - Uncomment if you are using it
 tools/**
 !tools/packages.config
-/src/.vs/Carnac/v15/Server/sqlite3
+.vs/
