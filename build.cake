@@ -2,8 +2,8 @@
 #tool "nuget:?package=Squirrel.Windows";
 #tool "nuget:?package=GitVersion.CommandLine";
 
-#addin "nuget:?package=Cake.FileHelpers&version=1.0.4";
-#addin "nuget:?package=Cake.Squirrel&version=0.12.0";
+#addin "nuget:?package=Cake.FileHelpers&version=3.2.1";
+#addin "nuget:?package=Cake.Squirrel&version=0.15.1";
 #addin "nuget:?package=Newtonsoft.Json";
 using Newtonsoft.Json;
 
