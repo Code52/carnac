@@ -8,7 +8,7 @@ environment:
   Version: $(APPVEYOR_BUILD_VERSION)
   GithubRepo: $(APPVEYOR_REPO_NAME)
   GithubAuthToken:
-    secure: wzcaj3QeW13CSo26Gshrzwzk9ftvfgqalsqEppaIESO5M2/HcqxVhIi21NHoIBui
+    secure: qgh2y38nOEG/eAnQe0EwNSqMDSXf9akPDwJI5Yasvyiemh5GBbbzkDIleAhGak6i
 build_script:
 - cmd: PowerShell -Version 2.0 .\build.ps1 -Configuration Release -Experimental -ScriptArgs '--authtoken="%GithubAuthToken%"'
 test:
@@ -26,7 +26,7 @@ artifacts:
 deploy:
 - provider: GitHub
   auth_token:
-    secure: wzcaj3QeW13CSo26Gshrzwzk9ftvfgqalsqEppaIESO5M2/HcqxVhIi21NHoIBui
+    secure: qgh2y38nOEG/eAnQe0EwNSqMDSXf9akPDwJI5Yasvyiemh5GBbbzkDIleAhGak6i
   artifact: ZipPackage
   draft: false
   on:
@@ -34,7 +34,7 @@ deploy:
     APPVEYOR_REPO_TAG: true
 - provider: GitHub
   auth_token:
-    secure: wzcaj3QeW13CSo26Gshrzwzk9ftvfgqalsqEppaIESO5M2/HcqxVhIi21NHoIBui
+    secure: qgh2y38nOEG/eAnQe0EwNSqMDSXf9akPDwJI5Yasvyiemh5GBbbzkDIleAhGak6i
   artifact: SquirrelPackage
   draft: false
   on:
@@ -42,7 +42,7 @@ deploy:
     APPVEYOR_REPO_TAG: true
 - provider: GitHub
   auth_token:
-    secure: wzcaj3QeW13CSo26Gshrzwzk9ftvfgqalsqEppaIESO5M2/HcqxVhIi21NHoIBui
+    secure: qgh2y38nOEG/eAnQe0EwNSqMDSXf9akPDwJI5Yasvyiemh5GBbbzkDIleAhGak6i
   artifact: Checksums
   draft: false
   on:
