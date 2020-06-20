@@ -1,4 +1,4 @@
-image: Visual Studio 2017
+image: Visual Studio 2019
 version: 2.2.{build}
 configuration: Release
 skip_branch_with_pr: true
