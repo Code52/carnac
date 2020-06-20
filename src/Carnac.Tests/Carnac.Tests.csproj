@@ -1,105 +1,35 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{820B7770-FCD1-4987-A88C-E5DAE74F4AD6}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Carnac.Tests</RootNamespace>
-    <AssemblyName>Carnac.Tests</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
+    <TargetFramework>net45</TargetFramework>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\src\</SolutionDir>
-    <TargetFrameworkProfile />
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
+    <AssemblyTitle>Carnac.Tests</AssemblyTitle>
+    <Product>Carnac.Tests</Product>
+    <Copyright>Copyright © Carnac contributors 2020</Copyright>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.Reactive.Testing">
-      <HintPath>..\packages\Microsoft.Reactive.Testing.3.1.1\lib\net45\Microsoft.Reactive.Testing.dll</HintPath>
-    </Reference>
-    <Reference Include="NSubstitute, Version=2.0.2.0, Culture=neutral, PublicKeyToken=92dd2e9066daa5ca, processorArchitecture=MSIL">
-      <HintPath>..\packages\NSubstitute.2.0.2\lib\net40\NSubstitute.dll</HintPath>
-    </Reference>
-    <Reference Include="SettingsProviderNet, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\SettingsProviderNet.2.1.1\lib\net40\SettingsProviderNet.dll</HintPath>
-    </Reference>
-    <Reference Include="Shouldly, Version=2.8.2.0, Culture=neutral, PublicKeyToken=6042cbcb05cbc941, processorArchitecture=MSIL">
-      <HintPath>..\packages\Shouldly.2.8.2\lib\net40\Shouldly.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Reactive.Core">
-      <HintPath>..\packages\System.Reactive.Core.3.1.1\lib\net45\System.Reactive.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Reactive.Interfaces, Version=3.0.1000.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\System.Reactive.Interfaces.3.1.1\lib\net45\System.Reactive.Interfaces.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Reactive.Linq">
-      <HintPath>..\packages\System.Reactive.Linq.3.1.1\lib\net45\System.Reactive.Linq.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Reactive.Windows.Threading, Version=3.0.1000.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Reactive.Windows.Threading.3.1.1\lib\net45\System.Reactive.Windows.Threading.dll</HintPath>
-    </Reference>
+    <PackageReference Include="Microsoft.CSharp" Version="4.*" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Reactive.Testing" Version="3.1.1" />
+    <PackageReference Include="NSubstitute" Version="2.0.2" />
+    <PackageReference Include="SettingsProviderNet" Version="2.1.1" />
+    <PackageReference Include="Shouldly" Version="2.8.2" />
+    <PackageReference Include="System.Reactive" Version="3.1.1" />
+    <PackageReference Include="System.Reactive.Core" Version="3.1.1" />
+    <PackageReference Include="System.Reactive.Interfaces" Version="3.1.1" />
+    <PackageReference Include="System.Reactive.Linq" Version="3.1.1" />
+    <PackageReference Include="System.Reactive.PlatformServices" Version="3.1.1" />
+    <PackageReference Include="System.Reactive.Windows.Threading" Version="3.1.1" />
+    <PackageReference Include="xunit" Version="1.9.2" />
+  </ItemGroup>
+  <ItemGroup>
     <Reference Include="System.Windows.Forms" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="xunit, Version=1.9.2.1705, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
-      <HintPath>..\packages\xunit.1.9.2\lib\net20\xunit.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="KeyPlayer.cs" />
-    <Compile Include="KeysControllerFacts.cs" />
-    <Compile Include="KeyStreams.cs" />
-    <Compile Include="MessageFacts.cs" />
-    <Compile Include="MessageProviderFacts.cs" />
-    <Compile Include="RxTestExtensions.cs" />
-    <Compile Include="SpecificationFor.cs" />
-    <Compile Include="KeyProviderTests.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ViewModels\ShellViewModelFacts.cs" />
+    <ProjectReference Include="..\Carnac.Logic\Carnac.Logic.csproj" />
+    <ProjectReference Include="..\Carnac\Carnac.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Carnac.Logic\Carnac.Logic.csproj">
-      <Project>{614470A0-432C-46EB-B0EB-DE0A9062FC22}</Project>
-      <Name>Carnac.Logic</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Carnac\Carnac.csproj">
-      <Project>{3D54543F-9FF2-4298-A621-0C66A36412CD}</Project>
-      <Name>Carnac</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>
