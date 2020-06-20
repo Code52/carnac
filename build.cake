@@ -80,7 +80,7 @@ Task("Package-Squirrel")
 	.IsDependentOn("Run-Unit-Tests")
 	.Does(() =>
 	{
-		var syncReleasesDir = toolsDir + Directory("squirrel.windows/tools");
+		var syncReleasesDir = toolsDir + Directory("squirrel.windows.1.9.1/tools");
 
 		EnsureDirectoryExists(deployDir);
 		EnsureDirectoryExists(squirrelDeployDir);
