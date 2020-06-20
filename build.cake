@@ -110,7 +110,7 @@ Task("Package-Squirrel")
 			OutputDirectory = squirrelDeployDir,
 			NoPackageAnalysis = true
 		};
-		NuGetPack("./src/Carnac/Carnac.csproj", nuGetPackSettings);
+		NuGetPack("./src/Carnac/Carnac.nuspec", nuGetPackSettings);
 		
 		// Sync latest release to build new package
 		var squirrelSyncReleasesExe = syncReleasesDir + File("SyncReleases.exe");

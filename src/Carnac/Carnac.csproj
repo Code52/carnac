@@ -14,12 +14,6 @@
     <Copyright>Copyright (c) Carnac contributors 2020</Copyright>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <ExtrasEnableWpfProjectSetup>true</ExtrasEnableWpfProjectSetup>
-    <Authors>Code52</Authors>
-    <PackageIconUrl>https://cdn.rawgit.com/Code52/carnac/35d71121123471512e5623d1e8cbfae057d047d6/src/Carnac/carnac.png</PackageIconUrl>
-    <PackageId>carnac</PackageId>
-    <PackageLicenseUrl>https://github.com/Code52/carnac/blob/master/LICENSE.md</PackageLicenseUrl>
-    <PackageProjectUrl>https://github.com/Code52/carnac</PackageProjectUrl>
-    <PackageTags>keyboard presentation screencast</PackageTags>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject>Carnac.App</StartupObject>
