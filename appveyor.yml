@@ -14,7 +14,7 @@ environment:
   GithubAuthToken:
     secure: qgh2y38nOEG/eAnQe0EwNSqMDSXf9akPDwJI5Yasvyiemh5GBbbzkDIleAhGak6i
 build_script:
-- cmd: PowerShell -Version 2.0 .\build.ps1 -Configuration Release -Experimental -ScriptArgs '--authtoken="%GithubAuthToken%"'
+- ps: .\build.ps1 -Configuration Release -Experimental
 test:
   assemblies:
     - '**\Carnac.Tests.dll'
