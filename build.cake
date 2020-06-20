@@ -2,8 +2,8 @@
 #tool "nuget:?package=Squirrel.Windows";
 #tool "nuget:?package=GitVersion.CommandLine";
 
-#addin "nuget:?package=Cake.FileHelpers&version=1.0.4";
-#addin "nuget:?package=Cake.Squirrel&version=0.12.0";
+#addin "nuget:?package=Cake.FileHelpers&version=3.2.1";
+#addin "nuget:?package=Cake.Squirrel&version=0.15.1";
 #addin "nuget:?package=Newtonsoft.Json";
 using Newtonsoft.Json;
 
@@ -80,7 +80,7 @@ Task("Package-Squirrel")
 	.IsDependentOn("Run-Unit-Tests")
 	.Does(() =>
 	{
-		var syncReleasesDir = toolsDir + Directory("squirrel.windows/tools");
+		var syncReleasesDir = toolsDir + Directory("squirrel.windows.1.9.1/tools");
 
 		EnsureDirectoryExists(deployDir);
 		EnsureDirectoryExists(squirrelDeployDir);
