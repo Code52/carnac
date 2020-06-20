@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Windows;
 using Carnac.Logic.Enums;
+using PropertyChanged;
 
 namespace Carnac.Logic.Models
 {
@@ -47,6 +48,7 @@ namespace Carnac.Logic.Models
 
         public event EventHandler LeftChanged;
 
+        [SuppressPropertyChangedWarnings]
         protected void OnLeftChanged(EventArgs e)
         {
             var handler = LeftChanged;
