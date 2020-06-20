@@ -1,3 +1,4 @@
+image: Visual Studio 2017
 version: 2.2.{build}
 configuration: Release
 skip_branch_with_pr: true
