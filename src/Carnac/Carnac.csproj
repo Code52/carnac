@@ -11,7 +11,7 @@
     <Description>
         A keyboard utility for your Windows presentations, screencasts, and more. Carnac displays what you're typing in a modal as you type it.
     </Description>
-    <Copyright>Copyright (c) Carnac contributors</Copyright>
+    <Copyright>Copyright (c) Carnac contributors 2020</Copyright>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <ExtrasEnableWpfProjectSetup>true</ExtrasEnableWpfProjectSetup>
     <Authors>Code52</Authors>

@@ -6,7 +6,7 @@
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <AssemblyTitle>Carnac.Logic</AssemblyTitle>
     <Product>Carnac.Logic</Product>
-    <Copyright>Copyright © Carnac contributors 2012</Copyright>
+    <Copyright>Copyright © Carnac contributors 2020</Copyright>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
   <ItemGroup>
