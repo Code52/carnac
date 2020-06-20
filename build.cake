@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 var target = Argument("target", "Default");
 var configuration = Argument("configuration", "Debug");
 var githubRepo = Argument("githubrepo", "Code52/carnac");
-var githubAuthToken = Argument("authtoken", "");
+var githubAuthToken = Argument("GithubAuthToken", "");
 
 var githubRepoUrl = $"https://github.com/{githubRepo}";
 var solutionFile = "./src/Carnac.sln";
