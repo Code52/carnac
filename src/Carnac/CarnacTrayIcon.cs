@@ -8,7 +8,7 @@ using Application = System.Windows.Application;
 
 namespace Carnac
 {
-    public class CarnacTrayIcon : IDisposable
+    public sealed class CarnacTrayIcon : IDisposable
     {
         readonly NotifyIcon trayIcon;
 

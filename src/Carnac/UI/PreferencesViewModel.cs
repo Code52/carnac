@@ -172,6 +172,7 @@ namespace Carnac.UI
             }
 
             Settings.Left = SelectedScreen.Left;
+            Settings.Top = SelectedScreen.Top;
         }
     }
 }

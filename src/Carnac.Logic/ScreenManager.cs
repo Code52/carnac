@@ -70,7 +70,6 @@ namespace Carnac.Logic
                 {
                     s.RelativeWidth = 200 * (s.Width / maxWidth);
                     s.RelativeHeight = s.RelativeWidth * (s.Height / s.Width);
-                    s.Top *= (s.RelativeHeight / s.Height);
                 }
             }
 
