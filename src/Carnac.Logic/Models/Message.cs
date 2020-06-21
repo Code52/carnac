@@ -137,9 +137,24 @@ namespace Carnac.Logic.Models
                   if (acc.Any())
                   {
                       var last = acc.Last();
-                      if (last.IsRepeatedBy(curr))
+                      var secondLast = acc.Count() > 1 ? acc.SkipLast(1).Last() : null;
+                      var thirdLast = acc.Count() > 2 ? acc.SkipLast(2).Last() : null;
+                      if (last.IsRepeatedBy(curr) &&
+                         // not a letter or a letter with a modifier or repeated letter
+                         (!(curr.InterceptKeyEventArgs.IsLetter() || curr.GetTextParts().First() == ".") || curr.HasModifierPressed || last.RepeatCount > 2))
                       {
                           last.IncrementRepeat();
+                      }
+                      else if (last.IsRepeatedBy(curr) &&
+                          // a letter is repeated 4 times now count it x times
+                          (curr.InterceptKeyEventArgs.IsLetter() || curr.GetTextParts().First() == ".") && secondLast != null && secondLast.IsRepeatedBy(curr)
+                          && thirdLast != null && thirdLast.IsRepeatedBy(curr))
+                      {
+                          acc.Remove(last);
+                          acc.Remove(secondLast);
+                          thirdLast.IncrementRepeat();
+                          thirdLast.IncrementRepeat();
+                          thirdLast.IncrementRepeat();
                       }
                       else
                       {
@@ -176,6 +191,8 @@ namespace Carnac.Logic.Models
             }
 
             public bool NextRequiresSeperator { get { return nextRequiresSeperator; } }
+
+            public int RepeatCount { get { return repeatCount; } }
 
             public void IncrementRepeat()
             {
