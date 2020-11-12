@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Media;
+using Carnac.Logic.MouseMonitor;
 
 namespace Carnac.Logic.Models
 {
@@ -30,7 +31,8 @@ namespace Carnac.Logic.Models
         {
             processName = key.Process.ProcessName;
             processIcon = key.Process.ProcessIcon;
-            canBeMerged = !key.HasModifierPressed;
+            // allow to aggregate all key combination as to not spam if ctrl + mousewheel is used.
+            canBeMerged = true; // !key.HasModifierPressed;
             isModifier = key.HasModifierPressed;
 
             keys = new ReadOnlyCollection<KeyPress>(new[] { key });
@@ -109,6 +111,28 @@ namespace Carnac.Logic.Models
             return ShouldCreateNewMessage(previousMessage, newMessage)
                 ? newMessage
                 : previousMessage.Merge(newMessage);
+            /*
+             *  Code used when mouse and show modifiers standalone are mixed together
+             */
+            /*
+            // replace key was after standalone modifier keypress, replace by new Message
+            if (previousMessage.keys != null && KeyProvider.IsModifierKeyPress(previousMessage.keys[0].InterceptKeyEventArgs))
+            {
+                return previousMessage.Replace(newMessage);
+            }
+            // if current is modifier and previous is a mouse action ignore modifierkeypress
+            if (previousMessage.keys != null && KeyProvider.IsModifierKeyPress(newMessage.keys[0].InterceptKeyEventArgs)
+                && InterceptMouse.MouseKeys.Contains(previousMessage.keys[0].Key))
+            {
+                return previousMessage.Replace(previousMessage);
+            }
+            
+            if (ShouldCreateNewMessage(previousMessage, newMessage))
+            {
+                return newMessage;
+            }
+            return previousMessage.Merge(newMessage);
+            */
         }
 
         static bool ShouldCreateNewMessage(Message previous, Message current)
@@ -116,7 +140,11 @@ namespace Carnac.Logic.Models
             return previous.ProcessName != current.ProcessName ||
                    current.LastMessage.Subtract(previous.LastMessage) > OneSecond ||
                    !previous.CanBeMerged ||
-                   !current.CanBeMerged;
+                   !current.CanBeMerged ||
+                   // new message for different mouse keys;
+                   ((InterceptMouse.MouseKeys.Contains(current.keys[0].Key) ||
+                   (previous.keys != null && InterceptMouse.MouseKeys.Contains(previous.keys[0].Key)))
+                   && !previous.keys[0].Input.SequenceEqual(current.keys[0].Input)); ;
         }
 
         public Message FadeOut()
