@@ -40,8 +40,41 @@ namespace Carnac.UI
                 if (Settings.ItemBackgroundColor == name)
                     ItemBackgroundColor = availableColor;
 
+                if (Settings.LeftClickColor == name)
+                    LeftClickColor = availableColor;
+                if (Settings.RightClickColor == name)
+                    RightClickColor = availableColor;
+                if (Settings.ScrollClickColor == name)
+                    ScrollClickColor = availableColor;
+                if (Settings.XButton1ClickColor == name)
+                    XButton1ClickColor = availableColor;
+                if (Settings.XButton2ClickColor == name)
+                    XButton2ClickColor = availableColor;
+
                 AvailableColors.Add(availableColor);
             }
+
+            if (LeftClickColor == null)
+            {
+                LeftClickColor = new AvailableColor("OrangeRed", Colors.OrangeRed);
+            }
+            if (RightClickColor == null)
+            {
+                RightClickColor = new AvailableColor("RoyalBlue", Colors.RoyalBlue);
+            }
+            if (ScrollClickColor == null)
+            {
+                ScrollClickColor = new AvailableColor("Gold", Colors.Gold);
+            }
+            if (XButton1ClickColor == null)
+            {
+                XButton1ClickColor = new AvailableColor("Peru", Colors.Peru);
+            }
+            if (XButton2ClickColor == null)
+            {
+                XButton2ClickColor = new AvailableColor("Plum", Colors.Plum);
+            }
+
 
             SaveCommand = new DelegateCommand(SaveSettings);
             ResetToDefaultsCommand = new DelegateCommand(() => settingsProvider.ResetToDefaults<PopupSettings>());
@@ -77,7 +110,8 @@ namespace Carnac.UI
                                                          "Dmitry Pursanov",
                                                          "Chris Sainty",
                                                          "Andrew Tobin",
-                                                         "Henrik Andersson"
+                                                         "Henrik Andersson",
+                                                         "Boris Fritscher"
                                                      };
         readonly List<string> components = new List<string>
                                                        {
@@ -85,7 +119,8 @@ namespace Carnac.UI
                                                          "Fody",
                                                          "NSubstitute",
                                                          "Reactive Extensions",
-                                                         "Squirrel.Windows"
+                                                         "Squirrel.Windows",
+                                                         "MouseKeyHook"
                                                      };
         public string Authors
         {
@@ -100,6 +135,16 @@ namespace Carnac.UI
         public AvailableColor FontColor { get; set; }
 
         public AvailableColor ItemBackgroundColor { get; set; }
+
+        public AvailableColor LeftClickColor { get; set; }
+
+        public AvailableColor RightClickColor { get; set; }
+
+        public AvailableColor ScrollClickColor { get; set; }
+
+        public AvailableColor XButton1ClickColor { get; set; }
+
+        public AvailableColor XButton2ClickColor { get; set; }
 
         void Visit()
         {
@@ -139,6 +184,11 @@ namespace Carnac.UI
             Settings.SettingsConfigured = true;
             Settings.FontColor = FontColor.Name;
             Settings.ItemBackgroundColor = ItemBackgroundColor.Name;
+            Settings.LeftClickColor = LeftClickColor.Name;
+            Settings.RightClickColor = RightClickColor.Name;
+            Settings.ScrollClickColor = ScrollClickColor.Name;
+            Settings.XButton1ClickColor = XButton1ClickColor.Name;
+            Settings.XButton2ClickColor = XButton2ClickColor.Name;
             settingsProvider.SaveSettings(Settings);
         }
 

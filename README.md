@@ -1,4 +1,10 @@
-## Carnac the Magnificent Keyboard Utility
+## Carnac the Magnificent Keyboard Utility & Mouse Highlighter*
+
+This is a Fork of Carnac which adds mouse click highlights with circles, as well as key icons. The current version can be manually downloaded and tested from the [release page](https://github.com/bfritscher/carnac/releases) (maybe own they it will get merged?). This project is not actively maintained, but patched together in my spare time and based on my needs when giving tutorials.
+
+
+## Orignial Readme
+
 
 [![Join the chat at https://gitter.im/Code52/carnac](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Code52/carnac?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
@@ -21,7 +27,7 @@ Alternatively, you can grab the latest zip file from [here](https://github.com/C
 
 ### Updating
 
-We use `Squirrel.Windows` to update your `carnac` application. 
+We use `Squirrel.Windows` to update your `carnac` application.
 
 The application will check for updates in the background, if a new version has been released, it will automatically install the new version and once you restart `carnac` you will be up-to-date.
 
@@ -46,7 +52,7 @@ Once you're familiar with Git and GitHub, clone the repository and run the ```.\
 This blog series covers a series of refactorings which have recently happened in Carnac to make better use of Rx.
 If you are learning Rx and want to be shown through Carnac's codebase then this blog series may help you.
 
-[Part 1 - Refactoring the InterceptKeys class ](http://jake.ginnivan.net/blog/carnac-improvements/part-1/)  
-[Part 2 - Refactoring the MessageProvider class](http://jake.ginnivan.net/blog/carnac-improvements/part-2/)  
-[Part 3 - Introducing the MessageController class](http://jake.ginnivan.net/blog/carnac-improvements/part-3/)  
+[Part 1 - Refactoring the InterceptKeys class ](http://jake.ginnivan.net/blog/carnac-improvements/part-1/)
+[Part 2 - Refactoring the MessageProvider class](http://jake.ginnivan.net/blog/carnac-improvements/part-2/)
+[Part 3 - Introducing the MessageController class](http://jake.ginnivan.net/blog/carnac-improvements/part-3/)
 

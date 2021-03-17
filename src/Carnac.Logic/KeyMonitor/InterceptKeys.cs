@@ -62,6 +62,7 @@ namespace Carnac.Logic.KeyMonitor
             bool keyUp = wParam == (IntPtr)Win32Methods.WM_KEYUP;
             int vkCode = Marshal.ReadInt32(lParam);
             var key = (Keys)vkCode;
+
             //http://msdn.microsoft.com/en-us/library/windows/desktop/ms646286(v=vs.85).aspx
             if (key != Keys.RMenu && key != Keys.LMenu && wParam == (IntPtr)Win32Methods.WM_SYSKEYDOWN)
             {
@@ -72,6 +73,10 @@ namespace Carnac.Logic.KeyMonitor
             {
                 alt = true;
                 keyUp = true;
+            }
+            if (wParam == (IntPtr)Win32Methods.WM_SYSKEYDOWN && key == Keys.LMenu)
+            {
+                keyDown = true;
             }
 
             return new InterceptKeyEventArgs(
