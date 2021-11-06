@@ -3,7 +3,7 @@
 This is a Fork of Carnac which adds mouse click highlights with circles, as well as key icons. The current version can be manually downloaded and tested from the [release page](https://github.com/bfritscher/carnac/releases). This project is not actively maintained, but patched together in my spare time and based on my needs when giving tutorials.
 
 
-## Orignial Readme
+## Original Readme
 
 
 [![Join the chat at https://gitter.im/Code52/carnac](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Code52/carnac?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
@@ -46,7 +46,7 @@ If you want to stop `Carnac` from recording certain key strokes, you can enter _
  * [The simple guide to GIT guide](http://rogerdudler.github.com/git-guide/)
  * [Open an issue](https://github.com/Code52/carnac/issues) if you encounter a bug or have a suggestion for improvements/features
 
-Once you're familiar with Git and GitHub, clone the repository and run the ```.\build.cmd``` script to compile the code and run all the unit tests. You can use this script to test your changes quickly.
+Once you're familiar with Git and GitHub, clone the repository and run the `.\build.cmd` script to compile the code and run all the unit tests. You can use this script to test your changes quickly.
 
 ### Resources
 This blog series covers a series of refactorings which have recently happened in Carnac to make better use of Rx.
