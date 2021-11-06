@@ -16,6 +16,7 @@
             </CollectionViewSource.SortDescriptions>
         </CollectionViewSource>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <ui:ToSpecialKeyConverter x:Key="ToSpecialKeyConverter"/>
 
         <DrawingBrush x:Key="Layer1" Stretch="Uniform">
             <DrawingBrush.Drawing>
@@ -55,9 +56,304 @@
                 </DrawingGroup>
             </DrawingBrush.Drawing>
         </DrawingBrush>
+        <DrawingBrush x:Key="LButton" Stretch="Uniform">
+            <DrawingBrush.Drawing>
+                <DrawingGroup>
+                    <DrawingGroup.Children>
+                        <!-- LButton-->
+                        <GeometryDrawing
+                            Geometry="m 46.391602,51.716399 0,-7.377479 c -3.043273,-1.255393 -5.160701,-4.035957 -5.160701,-7.267024 l 0,-13.721688 c 0,-3.231067 2.117225,-6.011631 5.160701,-7.267023 l 0,-14.5461655 -3.432794,0 c -14.497903,0 -26.250782,11.3736575 -26.250782,25.4038915 l 0,24.775488 29.683576,0 z">
+                            <GeometryDrawing.Brush>
+                                <SolidColorBrush Color="{Binding DataContext.Settings.LeftClickColor, Source={x:Reference This}}" />
+                            </GeometryDrawing.Brush>
+                        </GeometryDrawing>
+                        <!-- RButton-->
+                        <GeometryDrawing
+                            Geometry="m 53.66105,16.082983 c 3.043272,1.255393 5.160701,4.035957 5.160701,7.267024 l 0,13.721688 c 0,3.231067 -2.117225,6.011631 -5.160701,7.267023 l 0,7.377681 29.683576,0 0,-24.775488 c 0,-14.030234 -11.752879,-25.4038915 -26.250782,-25.4038915 l -3.432794,0 0,14.5459635 z">
+                            <GeometryDrawing.Brush>
+                                <SolidColorBrush Color="{Binding DataContext.Settings.ItemBackgroundColor, Source={x:Reference This}}" />
+                            </GeometryDrawing.Brush>
+                        </GeometryDrawing>
+                        <!-- Bottom Part-->
+                        <GeometryDrawing
+                            Geometry="m 16.708026,53.836655 0,19.222236 c 0,14.030437 11.752879,25.404095 26.250782,25.404095 l 14.135036,0 c 14.497903,0 26.250782,-11.373658 26.250782,-25.404095 l 0,-19.222236 -66.6366,0 z">
+                            <GeometryDrawing.Brush>
+                                <SolidColorBrush Color="{Binding DataContext.Settings.ItemBackgroundColor, Source={x:Reference This}}" />
+                            </GeometryDrawing.Brush>
+                        </GeometryDrawing>
+                    </DrawingGroup.Children>
+                </DrawingGroup>
+            </DrawingBrush.Drawing>
+        </DrawingBrush>
+        <DrawingBrush x:Key="RButton" Stretch="Uniform">
+            <DrawingBrush.Drawing>
+                <DrawingGroup>
+                    <DrawingGroup.Children>
+                        <!-- LButton-->
+                        <GeometryDrawing
+                            Geometry="m 46.391602,51.716399 0,-7.377479 c -3.043273,-1.255393 -5.160701,-4.035957 -5.160701,-7.267024 l 0,-13.721688 c 0,-3.231067 2.117225,-6.011631 5.160701,-7.267023 l 0,-14.5461655 -3.432794,0 c -14.497903,0 -26.250782,11.3736575 -26.250782,25.4038915 l 0,24.775488 29.683576,0 z">
+                            <GeometryDrawing.Brush>
+                                <SolidColorBrush Color="{Binding DataContext.Settings.ItemBackgroundColor, Source={x:Reference This}}" />
+                            </GeometryDrawing.Brush>
+                        </GeometryDrawing>
+                        <!-- RButton-->
+                        <GeometryDrawing
+                            Geometry="m 53.66105,16.082983 c 3.043272,1.255393 5.160701,4.035957 5.160701,7.267024 l 0,13.721688 c 0,3.231067 -2.117225,6.011631 -5.160701,7.267023 l 0,7.377681 29.683576,0 0,-24.775488 c 0,-14.030234 -11.752879,-25.4038915 -26.250782,-25.4038915 l -3.432794,0 0,14.5459635 z">
+                            <GeometryDrawing.Brush>
+                                <SolidColorBrush Color="{Binding DataContext.Settings.RightClickColor, Source={x:Reference This}}" />
+                            </GeometryDrawing.Brush>
+                        </GeometryDrawing>
+                        <!-- Bottom Part-->
+                        <GeometryDrawing
+                            Geometry="m 16.708026,53.836655 0,19.222236 c 0,14.030437 11.752879,25.404095 26.250782,25.404095 l 14.135036,0 c 14.497903,0 26.250782,-11.373658 26.250782,-25.404095 l 0,-19.222236 -66.6366,0 z">
+                            <GeometryDrawing.Brush>
+                                <SolidColorBrush Color="{Binding DataContext.Settings.ItemBackgroundColor, Source={x:Reference This}}" />
+                            </GeometryDrawing.Brush>
+                        </GeometryDrawing>
+                    </DrawingGroup.Children>
+                </DrawingGroup>
+            </DrawingBrush.Drawing>
+        </DrawingBrush>
+        <DrawingBrush x:Key="MButton" Stretch="Uniform">
+            <DrawingBrush.Drawing>
+                <DrawingGroup>
+                    <DrawingGroup.Children>
+                        <!-- LButton-->
+                        <GeometryDrawing
+                            Geometry="m 46.391602,51.716399 0,-7.377479 c -3.043273,-1.255393 -5.160701,-4.035957 -5.160701,-7.267024 l 0,-13.721688 c 0,-3.231067 2.117225,-6.011631 5.160701,-7.267023 l 0,-14.5461655 -3.432794,0 c -14.497903,0 -26.250782,11.3736575 -26.250782,25.4038915 l 0,24.775488 29.683576,0 z">
+                            <GeometryDrawing.Brush>
+                                <SolidColorBrush Color="{Binding DataContext.Settings.ItemBackgroundColor, Source={x:Reference This}}" />
+                            </GeometryDrawing.Brush>
+                        </GeometryDrawing>
+                        <!-- RButton-->
+                        <GeometryDrawing
+                            Geometry="m 53.66105,16.082983 c 3.043272,1.255393 5.160701,4.035957 5.160701,7.267024 l 0,13.721688 c 0,3.231067 -2.117225,6.011631 -5.160701,7.267023 l 0,7.377681 29.683576,0 0,-24.775488 c 0,-14.030234 -11.752879,-25.4038915 -26.250782,-25.4038915 l -3.432794,0 0,14.5459635 z">
+                            <GeometryDrawing.Brush>
+                                <SolidColorBrush Color="{Binding DataContext.Settings.ItemBackgroundColor, Source={x:Reference This}}" />
+                            </GeometryDrawing.Brush>
+                        </GeometryDrawing>
+                        <!-- MButtonTop-->
+                        <GeometryDrawing
+                            Geometry="m 50.026326,19.406614 c -3.178363,0 -5.753713,2.57928 -5.753713,5.757645 l 0,4.947484 11.507426,0 0,-4.947484 c 0,-3.178365 -2.57535,-5.757645 -5.753713,-5.757645 z">
+                            <GeometryDrawing.Brush>
+                                <SolidColorBrush Color="{Binding DataContext.Settings.ScrollClickColor, Source={x:Reference This}}" />
+                            </GeometryDrawing.Brush>
+                        </GeometryDrawing>
+                        <!-- MButtonBottom-->
+                        <GeometryDrawing
+                            Geometry="m 55.780039,30.111743 -11.507426,0 0,4.943552 c 0,3.178363 2.57535,5.757645 5.753713,5.757645 3.178363,0 5.753713,-2.579282 5.753713,-5.757645 l 0,-4.943552 z">
+                            <GeometryDrawing.Brush>
+                                <SolidColorBrush Color="{Binding DataContext.Settings.ScrollClickColor, Source={x:Reference This}}" />
+                            </GeometryDrawing.Brush>
+                        </GeometryDrawing>
+                        <!-- Bottom Part-->
+                        <GeometryDrawing
+                            Geometry="m 16.708026,53.836655 0,19.222236 c 0,14.030437 11.752879,25.404095 26.250782,25.404095 l 14.135036,0 c 14.497903,0 26.250782,-11.373658 26.250782,-25.404095 l 0,-19.222236 -66.6366,0 z">
+                            <GeometryDrawing.Brush>
+                                <SolidColorBrush Color="{Binding DataContext.Settings.ItemBackgroundColor, Source={x:Reference This}}" />
+                            </GeometryDrawing.Brush>
+                        </GeometryDrawing>
+                    </DrawingGroup.Children>
+                </DrawingGroup>
+            </DrawingBrush.Drawing>
+        </DrawingBrush>
+        <DrawingBrush x:Key="MWheelUp" Stretch="Uniform">
+            <DrawingBrush.Drawing>
+                <DrawingGroup>
+                    <DrawingGroup.Children>
+                        <!-- LButton-->
+                        <GeometryDrawing
+                            Geometry="m 46.391602,51.716399 0,-7.377479 c -3.043273,-1.255393 -5.160701,-4.035957 -5.160701,-7.267024 l 0,-13.721688 c 0,-3.231067 2.117225,-6.011631 5.160701,-7.267023 l 0,-14.5461655 -3.432794,0 c -14.497903,0 -26.250782,11.3736575 -26.250782,25.4038915 l 0,24.775488 29.683576,0 z">
+                            <GeometryDrawing.Brush>
+                                <SolidColorBrush Color="{Binding DataContext.Settings.ItemBackgroundColor, Source={x:Reference This}}" />
+                            </GeometryDrawing.Brush>
+                        </GeometryDrawing>
+                        <!-- RButton-->
+                        <GeometryDrawing
+                            Geometry="m 53.66105,16.082983 c 3.043272,1.255393 5.160701,4.035957 5.160701,7.267024 l 0,13.721688 c 0,3.231067 -2.117225,6.011631 -5.160701,7.267023 l 0,7.377681 29.683576,0 0,-24.775488 c 0,-14.030234 -11.752879,-25.4038915 -26.250782,-25.4038915 l -3.432794,0 0,14.5459635 z">
+                            <GeometryDrawing.Brush>
+                                <SolidColorBrush Color="{Binding DataContext.Settings.ItemBackgroundColor, Source={x:Reference This}}" />
+                            </GeometryDrawing.Brush>
+                        </GeometryDrawing>
+                        <!-- MButtonTop-->
+                        <GeometryDrawing
+                            Geometry="m 50.026326,19.406614 c -3.178363,0 -5.753713,2.57928 -5.753713,5.757645 l 0,4.947484 11.507426,0 0,-4.947484 c 0,-3.178365 -2.57535,-5.757645 -5.753713,-5.757645 z">
+                            <GeometryDrawing.Brush>
+                                <SolidColorBrush Color="{Binding DataContext.Settings.ScrollClickColor, Source={x:Reference This}}" />
+                            </GeometryDrawing.Brush>
+                        </GeometryDrawing>
+                        <!-- MButtonBottom-->
+                        <GeometryDrawing
+                            Geometry="m 55.780039,30.111743 -11.507426,0 0,4.943552 c 0,3.178363 2.57535,5.757645 5.753713,5.757645 3.178363,0 5.753713,-2.579282 5.753713,-5.757645 l 0,-4.943552 z">
+                            <GeometryDrawing.Brush>
+                                <SolidColorBrush Color="{Binding DataContext.Settings.ItemBackgroundColor, Source={x:Reference This}}" />
+                            </GeometryDrawing.Brush>
+                        </GeometryDrawing>
+                        <!-- Bottom Part-->
+                        <GeometryDrawing
+                            Geometry="m 16.708026,53.836655 0,19.222236 c 0,14.030437 11.752879,25.404095 26.250782,25.404095 l 14.135036,0 c 14.497903,0 26.250782,-11.373658 26.250782,-25.404095 l 0,-19.222236 -66.6366,0 z">
+                            <GeometryDrawing.Brush>
+                                <SolidColorBrush Color="{Binding DataContext.Settings.ItemBackgroundColor, Source={x:Reference This}}" />
+                            </GeometryDrawing.Brush>
+                        </GeometryDrawing>
+                    </DrawingGroup.Children>
+                </DrawingGroup>
+            </DrawingBrush.Drawing>
+        </DrawingBrush>
+        <DrawingBrush x:Key="MWheelDown" Stretch="Uniform">
+            <DrawingBrush.Drawing>
+                <DrawingGroup>
+                    <DrawingGroup.Children>
+                        <!-- LButton-->
+                        <GeometryDrawing
+                            Geometry="m 46.391602,51.716399 0,-7.377479 c -3.043273,-1.255393 -5.160701,-4.035957 -5.160701,-7.267024 l 0,-13.721688 c 0,-3.231067 2.117225,-6.011631 5.160701,-7.267023 l 0,-14.5461655 -3.432794,0 c -14.497903,0 -26.250782,11.3736575 -26.250782,25.4038915 l 0,24.775488 29.683576,0 z">
+                            <GeometryDrawing.Brush>
+                                <SolidColorBrush Color="{Binding DataContext.Settings.ItemBackgroundColor, Source={x:Reference This}}" />
+                            </GeometryDrawing.Brush>
+                        </GeometryDrawing>
+                        <!-- RButton-->
+                        <GeometryDrawing
+                            Geometry="m 53.66105,16.082983 c 3.043272,1.255393 5.160701,4.035957 5.160701,7.267024 l 0,13.721688 c 0,3.231067 -2.117225,6.011631 -5.160701,7.267023 l 0,7.377681 29.683576,0 0,-24.775488 c 0,-14.030234 -11.752879,-25.4038915 -26.250782,-25.4038915 l -3.432794,0 0,14.5459635 z">
+                            <GeometryDrawing.Brush>
+                                <SolidColorBrush Color="{Binding DataContext.Settings.ItemBackgroundColor, Source={x:Reference This}}" />
+                            </GeometryDrawing.Brush>
+                        </GeometryDrawing>
+                        <!-- MButtonTop-->
+                        <GeometryDrawing
+                            Geometry="m 50.026326,19.406614 c -3.178363,0 -5.753713,2.57928 -5.753713,5.757645 l 0,4.947484 11.507426,0 0,-4.947484 c 0,-3.178365 -2.57535,-5.757645 -5.753713,-5.757645 z">
+                            <GeometryDrawing.Brush>
+                                <SolidColorBrush Color="{Binding DataContext.Settings.ItemBackgroundColor, Source={x:Reference This}}" />
+                            </GeometryDrawing.Brush>
+                        </GeometryDrawing>
+                        <!-- MButtonBottom-->
+                        <GeometryDrawing
+                            Geometry="m 55.780039,30.111743 -11.507426,0 0,4.943552 c 0,3.178363 2.57535,5.757645 5.753713,5.757645 3.178363,0 5.753713,-2.579282 5.753713,-5.757645 l 0,-4.943552 z">
+                            <GeometryDrawing.Brush>
+                                <SolidColorBrush Color="{Binding DataContext.Settings.ScrollClickColor, Source={x:Reference This}}" />
+                            </GeometryDrawing.Brush>
+                        </GeometryDrawing>
+                        <!-- Bottom Part-->
+                        <GeometryDrawing
+                            Geometry="m 16.708026,53.836655 0,19.222236 c 0,14.030437 11.752879,25.404095 26.250782,25.404095 l 14.135036,0 c 14.497903,0 26.250782,-11.373658 26.250782,-25.404095 l 0,-19.222236 -66.6366,0 z">
+                            <GeometryDrawing.Brush>
+                                <SolidColorBrush Color="{Binding DataContext.Settings.ItemBackgroundColor, Source={x:Reference This}}" />
+                            </GeometryDrawing.Brush>
+                        </GeometryDrawing>
+                    </DrawingGroup.Children>
+                </DrawingGroup>
+            </DrawingBrush.Drawing>
+        </DrawingBrush>
+        <DrawingBrush x:Key="XButton1" Stretch="Uniform">
+            <DrawingBrush.Drawing>
+                <DrawingGroup>
+                    <DrawingGroup.Children>
+                        <!-- LButton-->
+                        <GeometryDrawing
+                            Geometry="m 46.391602,51.716399 0,-7.377479 c -3.043273,-1.255393 -5.160701,-4.035957 -5.160701,-7.267024 l 0,-13.721688 c 0,-3.231067 2.117225,-6.011631 5.160701,-7.267023 l 0,-14.5461655 -3.432794,0 c -14.497903,0 -26.250782,11.3736575 -26.250782,25.4038915 l 0,24.775488 29.683576,0 z">
+                            <GeometryDrawing.Brush>
+                                <SolidColorBrush Color="{Binding DataContext.Settings.ItemBackgroundColor, Source={x:Reference This}}" />
+                            </GeometryDrawing.Brush>
+                        </GeometryDrawing>
+                        <!-- RButton-->
+                        <GeometryDrawing
+                            Geometry="m 53.66105,16.082983 c 3.043272,1.255393 5.160701,4.035957 5.160701,7.267024 l 0,13.721688 c 0,3.231067 -2.117225,6.011631 -5.160701,7.267023 l 0,7.377681 29.683576,0 0,-24.775488 c 0,-14.030234 -11.752879,-25.4038915 -26.250782,-25.4038915 l -3.432794,0 0,14.5459635 z">
+                            <GeometryDrawing.Brush>
+                                <SolidColorBrush Color="{Binding DataContext.Settings.ItemBackgroundColor, Source={x:Reference This}}" />
+                            </GeometryDrawing.Brush>
+                        </GeometryDrawing>
+                        <!-- XButton1-->
+                        <GeometryDrawing
+                            Geometry="m 12.886028,48.446033 c 0.0031,0.904655 3.827831,0.871751 3.827831,0.871751 L 16.697146,27.71558 c 0,0 -3.812807,0.02662 -3.813517,0.928656 -7.09e-4,0.902035 -6.94e-4,18.897144 0.0024,19.801797 z">
+                            <GeometryDrawing.Brush>
+                                <SolidColorBrush Color="{Binding DataContext.Settings.XButton1ClickColor, Source={x:Reference This}}" />
+                            </GeometryDrawing.Brush>
+                        </GeometryDrawing>
+                        <!-- XButton2-->
+                        <GeometryDrawing
+                            Geometry="m 87.113974,48.446033 c -0.003,0.904655 -3.827831,0.871751 -3.827831,0.871751 l 0.01671,-21.602204 c 0,0 3.812807,0.02662 3.813516,0.928656 7.09e-4,0.902035 6.93e-4,18.897144 -0.0024,19.801797 z">
+                            <GeometryDrawing.Brush>
+                                <SolidColorBrush Color="{Binding DataContext.Settings.ItemBackgroundColor, Source={x:Reference This}}" />
+                            </GeometryDrawing.Brush>
+                        </GeometryDrawing>
+                        <!-- Bottom Part-->
+                        <GeometryDrawing
+                            Geometry="m 16.708026,53.836655 0,19.222236 c 0,14.030437 11.752879,25.404095 26.250782,25.404095 l 14.135036,0 c 14.497903,0 26.250782,-11.373658 26.250782,-25.404095 l 0,-19.222236 -66.6366,0 z">
+                            <GeometryDrawing.Brush>
+                                <SolidColorBrush Color="{Binding DataContext.Settings.ItemBackgroundColor, Source={x:Reference This}}" />
+                            </GeometryDrawing.Brush>
+                        </GeometryDrawing>
+                    </DrawingGroup.Children>
+                </DrawingGroup>
+            </DrawingBrush.Drawing>
+        </DrawingBrush>
+        <DrawingBrush x:Key="XButton2" Stretch="Uniform">
+            <DrawingBrush.Drawing>
+                <DrawingGroup>
+                    <DrawingGroup.Children>
+                        <!-- LButton-->
+                        <GeometryDrawing
+                            Geometry="m 46.391602,51.716399 0,-7.377479 c -3.043273,-1.255393 -5.160701,-4.035957 -5.160701,-7.267024 l 0,-13.721688 c 0,-3.231067 2.117225,-6.011631 5.160701,-7.267023 l 0,-14.5461655 -3.432794,0 c -14.497903,0 -26.250782,11.3736575 -26.250782,25.4038915 l 0,24.775488 29.683576,0 z">
+                            <GeometryDrawing.Brush>
+                                <SolidColorBrush Color="{Binding DataContext.Settings.ItemBackgroundColor, Source={x:Reference This}}" />
+                            </GeometryDrawing.Brush>
+                        </GeometryDrawing>
+                        <!-- RButton-->
+                        <GeometryDrawing
+                            Geometry="m 53.66105,16.082983 c 3.043272,1.255393 5.160701,4.035957 5.160701,7.267024 l 0,13.721688 c 0,3.231067 -2.117225,6.011631 -5.160701,7.267023 l 0,7.377681 29.683576,0 0,-24.775488 c 0,-14.030234 -11.752879,-25.4038915 -26.250782,-25.4038915 l -3.432794,0 0,14.5459635 z">
+                            <GeometryDrawing.Brush>
+                                <SolidColorBrush Color="{Binding DataContext.Settings.ItemBackgroundColor, Source={x:Reference This}}" />
+                            </GeometryDrawing.Brush>
+                        </GeometryDrawing>
+                        <!-- XButton1-->
+                        <GeometryDrawing
+                            Geometry="m 12.886028,48.446033 c 0.0031,0.904655 3.827831,0.871751 3.827831,0.871751 L 16.697146,27.71558 c 0,0 -3.812807,0.02662 -3.813517,0.928656 -7.09e-4,0.902035 -6.94e-4,18.897144 0.0024,19.801797 z">
+                            <GeometryDrawing.Brush>
+                                <SolidColorBrush Color="{Binding DataContext.Settings.ItemBackgroundColor, Source={x:Reference This}}" />
+                            </GeometryDrawing.Brush>
+                        </GeometryDrawing>
+                        <!-- XButton2-->
+                        <GeometryDrawing
+                            Geometry="m 87.113974,48.446033 c -0.003,0.904655 -3.827831,0.871751 -3.827831,0.871751 l 0.01671,-21.602204 c 0,0 3.812807,0.02662 3.813516,0.928656 7.09e-4,0.902035 6.93e-4,18.897144 -0.0024,19.801797 z">
+                            <GeometryDrawing.Brush>
+                                <SolidColorBrush Color="{Binding DataContext.Settings.XButton2ClickColor, Source={x:Reference This}}" />
+                            </GeometryDrawing.Brush>
+                        </GeometryDrawing>
+                        <!-- Bottom Part-->
+                        <GeometryDrawing
+                            Geometry="m 16.708026,53.836655 0,19.222236 c 0,14.030437 11.752879,25.404095 26.250782,25.404095 l 14.135036,0 c 14.497903,0 26.250782,-11.373658 26.250782,-25.404095 l 0,-19.222236 -66.6366,0 z">
+                            <GeometryDrawing.Brush>
+                                <SolidColorBrush Color="{Binding DataContext.Settings.ItemBackgroundColor, Source={x:Reference This}}" />
+                            </GeometryDrawing.Brush>
+                        </GeometryDrawing>
+                    </DrawingGroup.Children>
+                </DrawingGroup>
+            </DrawingBrush.Drawing>
+        </DrawingBrush>
+        <Storyboard x:Key="clickHighlighterStoryboard">
+            <DoubleAnimation From="{Binding DataContext.Settings.ClickStartScale, Source={x:Reference This}}" To="{Binding DataContext.Settings.ClickStopScale, Source={x:Reference This}}" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)" Storyboard.TargetName="clickHighlighter">
+                <DoubleAnimation.EasingFunction>
+                    <CircleEase EasingMode="EaseOut"/>
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+            <DoubleAnimation  From="{Binding DataContext.Settings.ClickStartScale, Source={x:Reference This}}" To="{Binding DataContext.Settings.ClickStopScale, Source={x:Reference This}}"  Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)" Storyboard.TargetName="clickHighlighter">
+                <DoubleAnimation.EasingFunction>
+                    <CircleEase EasingMode="EaseOut"/>
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+            <DoubleAnimation  From="{Binding DataContext.Settings.ClickStartOpacity, Source={x:Reference This}}" To="{Binding DataContext.Settings.ClickStopOpacity, Source={x:Reference This}}" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="clickHighlighter" FillBehavior="Stop">
+                <DoubleAnimation.EasingFunction>
+                    <CircleEase EasingMode="EaseIn"/>
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+            <DoubleAnimation  From="{Binding DataContext.Settings.ClickStartBorder, Source={x:Reference This}}" To="{Binding DataContext.Settings.ClickStopBorder, Source={x:Reference This}}" Storyboard.TargetProperty="StrokeThickness" Storyboard.TargetName="clickHighlighter">
+                <DoubleAnimation.EasingFunction>
+                    <CircleEase EasingMode="EaseOut"/>
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+        </Storyboard>
     </Window.Resources>
 
-
+    <Grid>
     <ListView Margin="{Binding Settings.Margins}" HorizontalAlignment="{Binding Settings.Alignment}"
               VerticalAlignment="Stretch" ItemsSource="{Binding Source={StaticResource KeysViewSource}}"
               Background="Transparent" Focusable="False" IsHitTestVisible="False" BorderBrush="Transparent"
@@ -126,7 +422,7 @@
                                             <SolidColorBrush Color="{Binding DataContext.Settings.FontColor, Source={x:Reference This}}" />
                                         </Border.Background>
                                         <StackPanel Orientation="Horizontal">
-                                            <Rectangle x:Name="icon" VerticalAlignment="Center" />
+                                            <Rectangle x:Name="icon" VerticalAlignment="Center" Margin="2" Width="{Binding DataContext.Settings.MouseKeySize, Source={x:Reference This}}" Height="{Binding DataContext.Settings.MouseKeySize, Source={x:Reference This}}"/>
                                             <TextBlock x:Name="KeyCap" Text="{Binding  }">
                                                 <TextBlock.Foreground>
                                                     <SolidColorBrush Color="{Binding DataContext.Settings.ItemBackgroundColor, Source={x:Reference This}}" />
@@ -135,7 +431,7 @@
                                         </StackPanel>
                                     </Border>
 
-                          
+
                                     <TextBlock x:Name="regular" Margin="0" VerticalAlignment="Center" Text="{Binding }"
                                                Padding="0" />
                                 </StackPanel>
@@ -164,26 +460,7 @@
                                         <Setter TargetName="regular" Property="Control.Visibility" Value="Collapsed" />
                                     </DataTrigger>
 
-                                    <DataTrigger Value="Back" Binding="{Binding .}">
-                                        <Setter TargetName="KeyCapBorder" Property="Control.Visibility" Value="Visible" />
-                                        <Setter TargetName="regular" Property="Control.Visibility" Value="Collapsed" />
-                                    </DataTrigger>
-
-                                    <DataTrigger Value="Escape" Binding="{Binding .}">
-                                        <Setter TargetName="KeyCapBorder" Property="Control.Visibility" Value="Visible" />
-                                        <Setter TargetName="regular" Property="Control.Visibility" Value="Collapsed" />
-                                    </DataTrigger>
-
-                                    <DataTrigger Value="Alt" Binding="{Binding .}">
-                                        <Setter TargetName="KeyCapBorder" Property="Control.Visibility" Value="Visible" />
-                                        <Setter TargetName="regular" Property="Control.Visibility" Value="Collapsed" />
-                                    </DataTrigger>
-                                    <DataTrigger Value="Ctrl" Binding="{Binding .}">
-                                        <Setter TargetName="KeyCapBorder" Property="Control.Visibility" Value="Visible" />
-                                        <Setter TargetName="regular" Property="Control.Visibility" Value="Collapsed" />
-                                    </DataTrigger>
-
-                                    <DataTrigger Value="Shift" Binding="{Binding .}">
+                                    <DataTrigger Value="SPECIAL_KEY" Binding="{Binding ., Converter={StaticResource ToSpecialKeyConverter}}">
                                         <Setter TargetName="KeyCapBorder" Property="Control.Visibility" Value="Visible" />
                                         <Setter TargetName="regular" Property="Control.Visibility" Value="Collapsed" />
                                     </DataTrigger>
@@ -194,10 +471,57 @@
                                         <Setter TargetName="KeyCap" Property="Control.Visibility" Value="Collapsed" />
                                         <Setter TargetName="icon" Property="Rectangle.Fill"
                                                 Value="{StaticResource Layer1}" />
-                                        <Setter TargetName="icon" Property="Rectangle.Width" Value="50" />
-                                        <Setter TargetName="icon" Property="Rectangle.Height" Value="50" />
-                                    </DataTrigger>
-                                </DataTemplate.Triggers>
+                                            </DataTrigger>
+                                    <DataTrigger Value="LButton" Binding="{Binding .}">
+                                        <Setter TargetName="regular" Property="Control.Visibility" Value="Collapsed" />
+                                        <Setter TargetName="KeyCapBorder" Property="Control.Visibility" Value="Visible" />
+                                        <Setter TargetName="KeyCap" Property="Control.Visibility" Value="Collapsed" />
+                                        <Setter TargetName="icon" Property="Rectangle.Fill"
+                                            Value="{StaticResource LButton}" />
+                                            </DataTrigger>
+                                    <DataTrigger Value="RButton" Binding="{Binding .}">
+                                        <Setter TargetName="regular" Property="Control.Visibility" Value="Collapsed" />
+                                        <Setter TargetName="KeyCapBorder" Property="Control.Visibility" Value="Visible" />
+                                        <Setter TargetName="KeyCap" Property="Control.Visibility" Value="Collapsed" />
+                                                <Setter TargetName="icon" Property="Rectangle.Fill"
+                                        Value="{StaticResource RButton}" />
+                                            </DataTrigger>
+                                    <DataTrigger Value="MButton" Binding="{Binding .}">
+                                        <Setter TargetName="regular" Property="Control.Visibility" Value="Collapsed" />
+                                        <Setter TargetName="KeyCapBorder" Property="Control.Visibility" Value="Visible" />
+                                        <Setter TargetName="KeyCap" Property="Control.Visibility" Value="Collapsed" />
+                                                <Setter TargetName="icon" Property="Rectangle.Fill"
+                                    Value="{StaticResource MButton}" />
+                                            </DataTrigger>
+                                    <DataTrigger Value="VolumeUp" Binding="{Binding .}">
+                                            <Setter TargetName="regular" Property="Control.Visibility" Value="Collapsed" />
+                                            <Setter TargetName="KeyCapBorder" Property="Control.Visibility" Value="Visible" />
+                                            <Setter TargetName="KeyCap" Property="Control.Visibility" Value="Collapsed" />
+                                                <Setter TargetName="icon" Property="Rectangle.Fill"
+                                    Value="{StaticResource MWheelUp}" />
+                                            </DataTrigger>
+                                        <DataTrigger Value="VolumeDown" Binding="{Binding .}">
+                                            <Setter TargetName="regular" Property="Control.Visibility" Value="Collapsed" />
+                                            <Setter TargetName="KeyCapBorder" Property="Control.Visibility" Value="Visible" />
+                                            <Setter TargetName="KeyCap" Property="Control.Visibility" Value="Collapsed" />
+                                                <Setter TargetName="icon" Property="Rectangle.Fill"
+                                    Value="{StaticResource MWheelDown}" />
+                                            </DataTrigger>
+                                        <DataTrigger Value="XButton1" Binding="{Binding .}">
+                                            <Setter TargetName="regular" Property="Control.Visibility" Value="Collapsed" />
+                                            <Setter TargetName="KeyCapBorder" Property="Control.Visibility" Value="Visible" />
+                                            <Setter TargetName="KeyCap" Property="Control.Visibility" Value="Collapsed" />
+                                                <Setter TargetName="icon" Property="Rectangle.Fill"
+                                    Value="{StaticResource XButton1}" />
+                                            </DataTrigger>
+                                        <DataTrigger Value="XButton2" Binding="{Binding .}">
+                                            <Setter TargetName="regular" Property="Control.Visibility" Value="Collapsed" />
+                                            <Setter TargetName="KeyCapBorder" Property="Control.Visibility" Value="Visible" />
+                                            <Setter TargetName="KeyCap" Property="Control.Visibility" Value="Collapsed" />
+                                            <Setter TargetName="icon" Property="Rectangle.Fill"
+                                    Value="{StaticResource XButton2}" />
+                                        </DataTrigger>
+                                    </DataTemplate.Triggers>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
@@ -206,4 +530,12 @@
             </DataTemplate>
         </ListView.ItemTemplate>
     </ListView>
+        <Ellipse x:Name="clickHighlighter" Stroke="{Binding Settings.ClickColor}" HorizontalAlignment="Left" Height="20" Width="20" Margin="{Binding CursorMargins}" VerticalAlignment="Top" StrokeThickness="4" RenderTransformOrigin="0.5,0.5"  Opacity="0">
+            <Ellipse.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                </TransformGroup>
+            </Ellipse.RenderTransform>
+        </Ellipse>
+    </Grid>
 </Window>

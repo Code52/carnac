@@ -12,6 +12,8 @@ using Microsoft.Win32;
 using System.Windows.Media;
 using SettingsProviderNet;
 using System.Text.RegularExpressions;
+using Carnac.Logic.MouseMonitor;
+
 
 namespace Carnac.Logic
 {
@@ -23,7 +25,7 @@ namespace Carnac.Logic
         readonly PopupSettings settings;
         string currentFilter = null;
 
-        private readonly IList<Keys> modifierKeys =
+        private static readonly IList<Keys> modifierKeys =
             new List<Keys>
                 {
                     Keys.LControlKey,
@@ -96,9 +98,12 @@ namespace Carnac.Logic
                         winKeyPressed = false;
                 }, observer.OnError);
 
-                var keyStreamSubsription = interceptKeysSource.GetKeyStream()
+                var keyStreamSubsription = Observable.Merge(
+                    new IObservable<InterceptKeyEventArgs>[2] {
+                        interceptKeysSource.GetKeyStream(),
+                        InterceptMouse.Current.GetKeyStream() })
                     .Select(DetectWindowsKey)
-                    .Where(k => !IsModifierKeyPress(k) && k.KeyDirection == KeyDirection.Down)
+                    .Where(k =>  k.KeyDirection == KeyDirection.Down)
                     .Select(ToCarnacKeyPress)
                     .Where(keypress => keypress != null)
                     .Where(k => !passwordModeService.CheckPasswordMode(k.InterceptKeyEventArgs))
@@ -121,7 +126,7 @@ namespace Carnac.Logic
             return interceptKeyEventArgs;
         }
 
-        bool IsModifierKeyPress(InterceptKeyEventArgs interceptKeyEventArgs)
+        public static bool IsModifierKeyPress(InterceptKeyEventArgs interceptKeyEventArgs)
         {
             return modifierKeys.Contains(interceptKeyEventArgs.Key);
         }
@@ -137,6 +142,16 @@ namespace Carnac.Logic
             // see if this process is one being filtered for
             Regex filterRegex;
             if (ShouldFilterProcess(out filterRegex) && !filterRegex.IsMatch(process.ProcessName))
+            {
+                return null;
+            }
+
+            if (!settings.ShowMouseClickKeys && (interceptKeyEventArgs.Key == Keys.LButton || interceptKeyEventArgs.Key == Keys.MButton || interceptKeyEventArgs.Key == Keys.RButton || interceptKeyEventArgs.Key == Keys.XButton1 || interceptKeyEventArgs.Key == Keys.XButton2))
+            {
+                return null;
+            }
+
+            if (!settings.ShowMouseScrollKeys && (interceptKeyEventArgs.Key == Keys.VolumeUp || interceptKeyEventArgs.Key == Keys.VolumeDown))
             {
                 return null;
             }
@@ -160,6 +175,16 @@ namespace Carnac.Logic
             var controlPressed = interceptKeyEventArgs.ControlPressed;
             var altPressed = interceptKeyEventArgs.AltPressed;
             var shiftPressed = interceptKeyEventArgs.ShiftPressed;
+
+            if (IsModifierKeyPress(interceptKeyEventArgs))
+            {
+                controlPressed = false;
+                altPressed = false;
+                shiftPressed = false;
+                isWinKeyPressed = false;
+            }
+
+            var mouseAction = InterceptMouse.MouseKeys.Contains(interceptKeyEventArgs.Key);
             if (controlPressed)
                 yield return "Ctrl";
             if (altPressed)
@@ -167,28 +192,17 @@ namespace Carnac.Logic
             if (isWinKeyPressed)
                 yield return "Win";
 
-            if (controlPressed || altPressed)
+            if (controlPressed || altPressed || mouseAction)
             {
                 //Treat as a shortcut, don't be too smart
                 if (shiftPressed)
                     yield return "Shift";
 
-                yield return interceptKeyEventArgs.Key.Sanitise();
+                yield return interceptKeyEventArgs.Key.SanitiseLower();
             }
             else
             {
-                string input;
-                var shiftModifiesInput = interceptKeyEventArgs.Key.SanitiseShift(out input);
-
-                if (!isLetter && !shiftModifiesInput && shiftPressed)
-                    yield return "Shift";
-
-                if (interceptKeyEventArgs.ShiftPressed && shiftModifiesInput)
-                    yield return input;
-                else if (isLetter && !interceptKeyEventArgs.ShiftPressed)
-                    yield return interceptKeyEventArgs.Key.ToString().ToLower();
-                else
-                    yield return interceptKeyEventArgs.Key.Sanitise();
+                yield return interceptKeyEventArgs.Key.Sanitise();
             }
         }
     }
