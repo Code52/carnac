@@ -1,0 +1,152 @@
+group: kdenlive
+process: kdenlive
+
+# Reference: https://userbase.kde.org/Kdenlive/Manual/Useful_Information/Shortcuts
+
+shortcuts:
+  # defaults
+  - name: Cut Clip
+    keys: 
+      - Shift+r
+  - name: Play/Pause
+    keys:
+      - Space
+  - name: Play zone
+    keys:
+      - Ctrl+Space
+  - name: Render/Export
+    keys:
+      - Ctrl+Enter
+  - name: Switch Monitor
+    keys:
+      - t
+  - name: Forward
+    keys:
+      - l 	
+  - name: Rewind
+    keys:
+      - j
+  - name: Forward 1 frame
+    keys:
+      - Right
+  - name: Rewind 1 frame
+    keys:
+      - Left
+  - name: Forward 1 second
+    keys:
+      - Shift+Right
+  - name: Rewind 1 second
+    keys:
+      - Shift+Left
+  - name: Toggle Full Screen Mode
+    keys:
+      - Ctrl+Shift+f
+  - name: Go to Clip End
+    keys:
+      - End
+  - name: Go to Clip Start
+    keys:
+      - Home
+  - name: Go to Next Snap Point
+    keys:
+      - Alt+Right
+  - name: Go to Previous Snap Point
+    keys:
+      - Alt+Left
+  - name: Go to Project End
+    keys:
+      -  Ctrl+End	
+  - name: Go to Project Start
+    keys:
+      - Ctrl+Home
+  - name: Go to Zone End
+    keys:
+      - Shift+o
+  - name: Go to Zone Start
+    keys:
+      - Shift+i
+  - name: Group Clips
+    keys:
+      - Ctrl+g
+  - name: Ungroup Clips
+    keys:
+      - Ctrl + Shift + G
+  - name: Set Zone In
+    keys:
+      - i
+  - name: Set Zone Out
+    keys:
+      - o
+  - name: Ripple Delete
+    keys:
+      - Ctrl+x
+
+  # not in kde userbase
+  - name: Open Project Settings
+    keys:
+      - Ctrl+n
+  - name: Spacer Tool
+    keys:
+      - m
+  - name: Selection Tool
+    keys:
+      - s
+  - name: Razor Tool
+    keys:
+      - x
+  - name: Insert Clip
+    keys:
+      - v
+  - name: Overwrite Clip
+    keys:
+      - b
+  - name: Lift
+    keys:
+      - z
+  - name: Extract/Ripple Delete
+    keys:
+      - Shift+x
+  - name: Select clip at playhead
+    keys:
+      - Alt++
+  - name: Add subtitle
+    keys:
+      - Shift+s
+  - name: Align playhead to mouse position
+    keys:
+      - P
+  - name: Zoom In
+    keys:
+      - Ctrl++
+  - name: Zoom In
+    keys:
+      - Ctrl+=
+  - name: Zoom Out
+    keys:
+      - Ctrl+-
+  - name: Save
+    keys:
+      - Ctrl+s
+  - name: Save As
+    keys:
+      - Ctrl+Shift+s
+
+  # mouse keys
+  - name: 
+    keys:
+      - LButton
+  - name: 
+    keys:
+      - MButton
+  - name: 
+    keys:
+      - RButton
+  - name: 
+    keys:
+      - XButton1
+  - name: 
+    keys:
+      - XButton2
+  - name: 
+    keys:
+      - Shift
