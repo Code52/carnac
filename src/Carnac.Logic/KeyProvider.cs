@@ -21,7 +21,6 @@ namespace Carnac.Logic
         readonly IPasswordModeService passwordModeService;
         readonly IDesktopLockEventService desktopLockEventService;
         readonly PopupSettings settings;
-        string currentFilter = null;
 
         private readonly IList<Keys> modifierKeys =
             new List<Keys>
@@ -55,31 +54,29 @@ namespace Carnac.Logic
             settings = settingsProvider.GetSettings<PopupSettings>();
         }
 
-        private bool ShouldFilterProcess(out Regex filterRegex)
+        private Regex GetRegEx()
         {
-            filterRegex = null;
-            if (settings?.ProcessFilterExpression != currentFilter)
+            if (settings?.ProcessFilterExpression == null)
             {
-                currentFilter = settings?.ProcessFilterExpression;
-
-                if (!string.IsNullOrEmpty(currentFilter))
-                {
-                    try
-                    {
-                        filterRegex = new Regex(currentFilter, RegexOptions.IgnoreCase | RegexOptions.Compiled, TimeSpan.FromSeconds(1));
-                    }
-                    catch
-                    {
-                        filterRegex = null;
-                    }
-                }
-                else
-                {
-                    filterRegex = null;
-                }
+                return null;
             }
 
-            return (filterRegex != null);
+            return GetRegEx(settings?.ProcessFilterExpression);
+        }
+
+        private Regex GetShellRegEx()
+        {
+            if (settings?.ShellFilterExpression == null)
+            {
+                return null;
+            }
+
+            return GetRegEx(settings?.ShellFilterExpression);
+        }
+
+        private static Regex GetRegEx(string processFilterExpression)
+        {
+            return new Regex(processFilterExpression, RegexOptions.IgnoreCase | RegexOptions.Compiled, TimeSpan.FromSeconds(1));
         }
 
         public IObservable<KeyPress> GetKeyStream()
@@ -129,16 +126,26 @@ namespace Carnac.Logic
         KeyPress ToCarnacKeyPress(InterceptKeyEventArgs interceptKeyEventArgs)
         {
             var process = AssociatedProcessUtilities.GetAssociatedProcess();
+
             if (process == null)
             {
                 return null;
             }
 
-            // see if this process is one being filtered for
-            Regex filterRegex;
-            if (ShouldFilterProcess(out filterRegex) && !filterRegex.IsMatch(process.ProcessName))
+            Debug.WriteLine("processName: " + process.ProcessName);
+
+            var filterRegex = GetRegEx();
+
+            // If there's a filter, process it.
+            if (filterRegex != null && !filterRegex.IsMatch(process.ProcessName))
             {
-                return null;
+                // If there's no match, check if parent is a shell, and if so, check for child processes names.
+                var parentFilterRegex = GetShellRegEx();
+                if (parentFilterRegex == null) return null;
+                if (!parentFilterRegex.IsMatch(process.ProcessName) || !ProcessEntry.HasChildProcessMatching(process, filterRegex))
+                {
+                    return null;
+                }
             }
 
             var isLetter = interceptKeyEventArgs.IsLetter();

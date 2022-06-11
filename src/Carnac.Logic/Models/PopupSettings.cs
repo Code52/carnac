@@ -93,5 +93,8 @@ namespace Carnac.Logic.Models
         public bool SettingsConfigured { get; set; }
         public bool ShowOnlyModifiers { get; set; }
         public bool ShowSpaceAsUnicode { get; set; }
+
+        [DefaultValue("cmd|powershell")]
+        public string ShellFilterExpression { get; set; }
     }
 }
