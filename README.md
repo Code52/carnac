@@ -16,6 +16,8 @@ There's no builds for this repository. You have to build it locally. Clone it an
 
     powershell .\build.ps1
 
+Update: I created a release for testing: https://github.com/kasajian/carnac/releases
+
 ## Carnac the Magnificent Keyboard Utility
 
 [![Join the chat at https://gitter.im/Code52/carnac](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Code52/carnac?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
