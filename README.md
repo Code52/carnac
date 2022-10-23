@@ -12,7 +12,7 @@ A keyboard logging and presentation utility for presentations, screencasts, and 
 You can install the latest version of Carnac via [Chocolatey](https://chocolatey.org/):
 
 ```ps
-cinst carnac
+choco install carnac
 ```
 
 Alternatively, you can grab the latest zip file from [here](https://github.com/Code52/carnac/releases/latest), unpack it and run `Setup.exe`.
